@@ -7,13 +7,15 @@ namespace yage {
 namespace core {
 
 class Window {
+	friend class App;
 private:
-	GtkWidget *gtk;
+	GtkWidget *gtk_;
 
 public:
 	Window();
 	~Window();
-	void show() const;
+	void show();
+	bool is_valid();
 };
 
 } /* core */
