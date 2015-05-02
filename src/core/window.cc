@@ -133,6 +133,7 @@ gboolean Window::event_on_window(GtkWidget *widget, GdkEvent *evt, Window *windo
 
 	switch (evt->type) {
 		case GDK_KEY_PRESS:
+		case GDK_KEY_RELEASE:
 			msg.type = Message::type_kbd;
 			window_on_key(msg, evt);
 			break;
