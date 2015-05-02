@@ -6,22 +6,36 @@
 namespace yage {
 namespace core {
 
+struct Message;
+
 class Window {
-	friend gboolean event_on_window(GtkWidget *widget, GdkEvent *evt, Window *window);
 private:
+	static GAsyncQueue *msg_queue_;
+	static size_t window_num_;
 	GtkWidget *widget_draw_;
+
+	static gboolean event_on_window(GtkWidget *widget,
+			GdkEvent *evt,
+			Window *window);
+	static void evt_window_destroy(GtkWidget *widget, Window *window);
+
 
 public:
 	static void init();
+	static bool poll(Message &msg, bool wait = true);
+
 	Window();
 	~Window();
 	void show();
+	void hide();
+	void destroy();
 	bool is_valid();
 };
 
 struct Message {
 	enum {
-		type_kbd = 1,
+		type_nop = 0,
+		type_kbd,
 		type_mouse,
 		type_window
 	} type;
@@ -42,7 +56,11 @@ struct Message {
 		struct {
 			double x, y;
 
-			bool is_press 		: 1;
+			enum {
+				type_press = 1,
+				type_release,
+				type_move
+			} type;
 			bool is_left 		: 1;
 			bool is_right 		: 1;
 			bool is_middle 		: 1;
