@@ -122,7 +122,6 @@ void Window::evt_window_destroy(GtkWidget *widget, Window *window)
 
 	window->widget_draw_ = nullptr;
 	--Window::window_num_;
-
 	g_async_queue_push(Window::msg_queue_, &msg);
 }
 
@@ -165,27 +164,37 @@ gboolean Window::event_on_window(GtkWidget *widget, GdkEvent *evt, Window *windo
 			msg.type = Message::type_window;
 			msg.window.type = msg.window.type_leave;
 			break;
+
 		default:
-			fprintf(stderr, "Evt %d\n", evt->type);
+			fprintf(stderr, "Unhandled event %d\n", evt->type);
 			break;
 	}
 
 	if (msg.type != msg.type_nop) {
 		g_async_queue_push(Window::msg_queue_, &msg);
 	}
-	return true;
+	return false;
 }
 
-bool Window::poll(Message &msg, bool wait)
+/**
+ * Get a message from pool.
+ *
+ * @param block: If no message availiable, whether block until new message comes.
+ * @param [out] msg: The arrived message will be written here
+ * @return Returns false when there are no window left, thus no messages can be
+ * 	generated. Returns true when new message can arrive in the future.
+ */
+bool Window::poll(Message &msg, bool block)
 {
-	gpointer pmsg = wait ? g_async_queue_pop(Window::msg_queue_)
-			     : g_async_queue_try_pop(Window::msg_queue_);
+	if (Window::window_num_ == 0) return false;
+	gpointer pmsg = block ? g_async_queue_pop(Window::msg_queue_)
+			      : g_async_queue_try_pop(Window::msg_queue_);
 	if (pmsg == nullptr) {
 		msg.type = msg.type_nop;
-		if (Window::window_num_ == 0) return false;
+	} else {
+		msg = *reinterpret_cast<Message *>(pmsg);
+		delete reinterpret_cast<Message *>(pmsg);
 	}
-	msg = *reinterpret_cast<Message *>(pmsg);
-	delete reinterpret_cast<Message *>(pmsg);
 	return true;
 }
 

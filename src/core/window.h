@@ -22,7 +22,7 @@ private:
 
 public:
 	static void init();
-	static bool poll(Message &msg, bool wait = true);
+	static bool poll(Message &msg, bool block = true);
 
 	Window();
 	~Window();
