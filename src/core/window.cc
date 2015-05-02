@@ -1,4 +1,5 @@
 #include "window.h"
+#include <glib.h>
 
 namespace {
 using namespace yage::core;
@@ -47,12 +48,7 @@ void window_on_button(Message &msg, const GdkEvent *evt)
 	msg.mouse.modkey_alt = evt->button.state & GDK_MOD1_MASK;
 }
 
-} /* empty namespace */
-
-namespace yage {
-namespace core {
-
-gboolean Window::event_on_window(GtkWidget *widget, GdkEvent *evt, Window *window)
+gboolean event_on_window(GtkWidget *widget, GdkEvent *evt, Window *window)
 {
 	Message msg;
 	msg.source = window;
@@ -98,22 +94,43 @@ gboolean Window::event_on_window(GtkWidget *widget, GdkEvent *evt, Window *windo
 	return false;
 }
 
+gpointer event_thread(gpointer data)
+{
+	gtk_main();
+	return nullptr;
+}
+
+} /* empty namespace */
+
+namespace yage {
+namespace core {
+
 void Window::init()
 {
 	gtk_init(NULL, NULL);
+
+	// GTK won't fully initialize until now, running a new thread to
+	// handle event result in crash.
+	//
+	// Create a new window to fully initialize GTK.
+	GtkWidget *window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_widget_show(window);
+	gtk_main_iteration();
+	gtk_widget_destroy(window);
+	g_thread_new("YaGE GTK event handler", event_thread, nullptr);
 }
 
 Window::Window()
 {
-	 GtkWidget *widget_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	 gtk_widget_set_events(widget_window, gtk_widget_get_events(widget_window)
-			 | GDK_BUTTON_PRESS_MASK
-			 | GDK_POINTER_MOTION_MASK);
+	GtkWidget *widget_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_widget_set_events(widget_window, gtk_widget_get_events(widget_window)
+			| GDK_BUTTON_PRESS_MASK
+			| GDK_POINTER_MOTION_MASK);
 
-	 g_signal_connect(widget_window, "event", G_CALLBACK(Window::event_on_window), this);
+	g_signal_connect(widget_window, "event", G_CALLBACK(event_on_window), this);
 
-	 widget_draw_ = gtk_drawing_area_new();
-	 gtk_container_add(GTK_CONTAINER(widget_window), widget_draw_);
+	widget_draw_ = gtk_drawing_area_new();
+	gtk_container_add(GTK_CONTAINER(widget_window), widget_draw_);
 }
 
 Window::~Window()

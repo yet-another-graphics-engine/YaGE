@@ -7,13 +7,9 @@ namespace yage {
 namespace core {
 
 class Window {
-	friend class App;
+	friend gboolean event_on_window(GtkWidget *widget, GdkEvent *evt, Window *window);
 private:
 	GtkWidget *widget_draw_;
-	static gboolean event_on_window(GtkWidget *widget,
-			GdkEvent *event,
-			Window *window);
-
 
 public:
 	static void init();

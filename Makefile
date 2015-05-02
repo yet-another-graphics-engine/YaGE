@@ -1,4 +1,4 @@
-CXXFLAGS=`pkg-config --cflags gtk+-3.0` -g --std=c++11 -Wall
+CXXFLAGS=`pkg-config --cflags gtk+-3.0 glib-2.0` -g --std=c++11 -Wall
 LDFLAGS=`pkg-config --libs gtk+-3.0`
 CXX=clang++
 
