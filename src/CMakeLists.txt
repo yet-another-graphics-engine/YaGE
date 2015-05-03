@@ -54,6 +54,11 @@ add_executable(yagetest test.cc)
 target_link_libraries(yagetest yage)
 target_link_libraries(yagetest ${GTK3_LIBRARIES})
 
+if(MSVC)
+    target_link_libraries(yagetest "-lgtk-win32-3.0")
+endif()
+
+
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 	FIND_PACKAGE(X11 REQUIRED)
     target_link_libraries(yagetest ${X11_LIBRARIES})
