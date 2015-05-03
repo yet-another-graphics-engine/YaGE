@@ -93,8 +93,8 @@ void test_draw(void)
 
 int main(int argc, char *argv[])
 {
-	Window::init();
-	test_window_count();
-	test_message();
+	Window::init(test_window_count);
+	/* test_window_count(); */
+	/* test_message(); */
 	return 0;
 }

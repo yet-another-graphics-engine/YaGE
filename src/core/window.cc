@@ -10,6 +10,11 @@ gpointer gui_thread(gpointer data) {
   return nullptr;
 }
 
+gpointer main_thread(gpointer data) {
+  reinterpret_cast<gpointer (*)()>(data)();
+  gtk_main_quit();
+  return nullptr;
+}
 /*
  * Static variables.
  */
@@ -103,9 +108,14 @@ gboolean Window::exec_destroy(gpointer *param)
   return false;
 }
 
-void Window::init() {
+void Window::init(void (*new_main)(void)){
   msg_queue_ = g_async_queue_new();
-  g_thread_new("YaGE event", gui_thread, nullptr);
+  if (new_main) {
+    g_thread_new("YaGE main", main_thread, reinterpret_cast<gpointer>(new_main));
+    gui_thread(nullptr);
+  } else {
+    g_thread_new("YaGE event", gui_thread, nullptr);
+  }
 }
 
 Window::Window() {
@@ -122,6 +132,10 @@ void Window::hide() {
 
 void Window::destroy() {
   runner_.call(exec_destroy, {this});
+}
+
+void Window::quit() {
+  gtk_main_quit();
 }
 
 Window::~Window() {

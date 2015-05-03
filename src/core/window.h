@@ -34,8 +34,9 @@ private:
   static gboolean exec_destroy(gpointer *param);
 
 public:
-  static void init();
+  static void init(void (*new_main)() = nullptr);
   static bool poll(Message &msg, bool block = true);
+  static void quit();
 
   Window();
   ~Window();
