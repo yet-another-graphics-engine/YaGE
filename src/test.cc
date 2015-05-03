@@ -76,7 +76,7 @@ void test_window_count(void)
 int main(int argc, char *argv[])
 {
 	Window::init();
-	test_message();
+	//test_message();
 	test_window_count();
 	return 0;
 }
