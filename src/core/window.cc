@@ -130,6 +130,7 @@ gboolean Window::event_on_window(GtkWidget *widget, GdkEvent *evt, Window *windo
 	Message &msg = *(new Message);
 	msg.source = window;
 	msg.type = msg.type_nop;
+	bool ret = false;
 
 	switch (evt->type) {
 		case GDK_KEY_PRESS:
@@ -138,22 +139,31 @@ gboolean Window::event_on_window(GtkWidget *widget, GdkEvent *evt, Window *windo
 			window_on_key(msg, evt);
 			break;
 
+		// GDK_MOTION_NOTIFY
+		// GDK_BUTTON_RELEASE
+		// GDK_BUTTON_PRESS:
+		//
+		// if we let GTK to process the event, there will be
+		// the same event come immediately.
 		case GDK_MOTION_NOTIFY:
 			msg.type = Message::type_mouse;
 			msg.mouse.type = msg.mouse.type_move;
 			window_on_motion(msg, evt);
+			ret = true;
 			break;
 
 		case GDK_BUTTON_RELEASE:
 			msg.type = Message::type_mouse;
 			msg.mouse.type = msg.mouse.type_release;
 			window_on_button(msg, evt);
+			ret = true;
 			break;
 
 		case GDK_BUTTON_PRESS:
 			msg.type = Message::type_mouse;
 			msg.mouse.type = msg.mouse.type_press;
 			window_on_button(msg, evt);
+			ret = true;
 			break;
 
 		case GDK_ENTER_NOTIFY:
@@ -174,7 +184,7 @@ gboolean Window::event_on_window(GtkWidget *widget, GdkEvent *evt, Window *windo
 	if (msg.type != msg.type_nop) {
 		g_async_queue_push(Window::msg_queue_, &msg);
 	}
-	return false;
+	return ret;
 }
 
 /**
