@@ -33,21 +33,24 @@ gboolean Window::exec_window(gpointer *param)
 
   GtkWidget *widget_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_events(widget_window, gtk_widget_get_events(widget_window)
-      | GDK_FOCUS_CHANGE);
+      | GDK_FOCUS_CHANGE | GDK_KEY_PRESS | GDK_KEY_RELEASE);
 
   g_signal_connect(widget_window,
                   "destroy", G_CALLBACK(window_on_destroy), this_);
   g_signal_connect(widget_window,
-                  "focus-in-event", G_CALLBACK(window_on_focus), this_);
+                  "focus-in-event",       G_CALLBACK(window_on_focus), this_);
   g_signal_connect(widget_window,
-                  "focus-out-event", G_CALLBACK(window_on_focus), this_);
+                  "focus-out-event",      G_CALLBACK(window_on_focus), this_);
+  g_signal_connect(widget_window,
+                  "key-press-event",      G_CALLBACK(window_on_key), this_);
+  g_signal_connect(widget_window,
+                  "key-release-event",    G_CALLBACK(window_on_key), this_);
 
   GtkWidget *&widget_draw_ = this_->widget_draw_;
   widget_draw_ = gtk_drawing_area_new();
   gtk_widget_add_events(widget_draw_, GDK_BUTTON_PRESS_MASK |
-                                      GDK_POINTER_MOTION_MASK |
-                                      GDK_KEY_PRESS |
-                                      GDK_KEY_RELEASE);
+                                      GDK_BUTTON_RELEASE_MASK |
+                                      GDK_POINTER_MOTION_MASK);
 
   g_signal_connect(widget_draw_,
                   "button-press-event",   G_CALLBACK(draw_on_button), this_);
@@ -55,10 +58,6 @@ gboolean Window::exec_window(gpointer *param)
                   "button-release-event", G_CALLBACK(draw_on_button), this_);
   g_signal_connect(widget_draw_,
                   "motion-notify-event",  G_CALLBACK(draw_on_motion), this_);
-  g_signal_connect(widget_draw_,
-                  "key-press-event",      G_CALLBACK(draw_on_key), this_);
-  g_signal_connect(widget_draw_,
-                  "key-release-event",    G_CALLBACK(draw_on_key), this_);
   g_signal_connect(widget_draw_,
                   "configure-event",      G_CALLBACK(draw_on_conf), this_);
   g_signal_connect(widget_draw_,

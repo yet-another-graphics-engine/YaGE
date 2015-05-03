@@ -60,7 +60,7 @@ namespace message_handler {
 void push_queue(Message &msg);
 void window_on_destroy(GtkWidget *widget, Window *source);
 gboolean window_on_focus(GtkWidget *widget, GdkEvent *event, Window *source);
-gboolean draw_on_key(GtkWidget *widget, GdkEvent *event, Window *source);
+gboolean window_on_key(GtkWidget *widget, GdkEvent *event, Window *source);
 gboolean draw_on_button(GtkWidget *widget, GdkEvent *event, Window *source);
 gboolean draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *source);
 gboolean draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, Window *source);

@@ -34,7 +34,7 @@ gboolean window_on_focus(GtkWidget *widget, GdkEvent *event, Window *source)
   return false;
 }
 
-gboolean draw_on_key(GtkWidget *widget, GdkEvent *event, Window *source)
+gboolean window_on_key(GtkWidget *widget, GdkEvent *event, Window *source)
 {
   Message &msg = *(new Message);
   msg.source = source;
