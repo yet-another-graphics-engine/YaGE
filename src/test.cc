@@ -73,10 +73,29 @@ void test_window_count(void)
 	fprintf(stderr, "test_window_count: Bye!\n");
 }
 
+void test_draw(void)
+{
+	Window w;
+	w.show();
+
+	Message msg;
+	while (Window::poll(msg)) {
+		if (msg.type != msg.type_mouse) continue;
+		if (msg.mouse.type != msg.mouse.type_move) continue;
+		if (!msg.mouse.is_left) continue;
+        cairo_t *cr = cairo_create(w.cairo_surface_);
+        cairo_rectangle(cr, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
+        cairo_fill(cr);
+        cairo_destroy(cr);
+        gtk_widget_queue_draw_area(w.widget_draw_, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
+    }
+}
+
 int main(int argc, char *argv[])
 {
 	Window::init();
-	//test_message();
-	test_window_count();
+	test_draw();
+	/* test_message(); */
+	/* test_window_count(); */
 	return 0;
 }

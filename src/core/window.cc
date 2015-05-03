@@ -29,6 +29,7 @@ void Window::init() {
 
 Window::Window() {
   using namespace yage::core::message_handler;
+  cairo_surface_ = nullptr;
 
   GtkWidget *widget_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_events(widget_window, gtk_widget_get_events(widget_window)
@@ -57,6 +58,10 @@ Window::Window() {
                   "key-press-event",      G_CALLBACK(draw_on_key), this);
   g_signal_connect(widget_draw_,
                   "key-release-event",    G_CALLBACK(draw_on_key), this);
+  g_signal_connect(widget_draw_,
+                  "configure-event",      G_CALLBACK(draw_on_conf), this);
+  g_signal_connect(widget_draw_,
+                  "draw",                 G_CALLBACK(draw_on_draw), this);
 
   gtk_container_add(GTK_CONTAINER(widget_window), widget_draw_);
 

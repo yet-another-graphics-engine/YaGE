@@ -107,6 +107,30 @@ gboolean draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *source)
   return true;
 }
 
+gboolean draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, Window *source)
+{
+  if (source->cairo_surface_) cairo_surface_destroy(source->cairo_surface_);
+  source->cairo_surface_ = gdk_window_create_similar_surface(
+      gtk_widget_get_window(widget),
+      CAIRO_CONTENT_COLOR,
+      gtk_widget_get_allocated_width(widget),
+      gtk_widget_get_allocated_height(widget));
+  // XXX clear?
+  cairo_t *cr;
+  cr = cairo_create(source->cairo_surface_);
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+  return true;
+}
+
+gboolean draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source)
+{
+  cairo_set_source_surface(cairo, source->cairo_surface_, 0, 0);
+  cairo_paint(cairo);
+  return false;
+}
+
 } /* msg_handler */
 } /* core */
 } /* yage */
