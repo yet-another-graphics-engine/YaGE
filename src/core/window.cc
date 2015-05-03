@@ -15,6 +15,7 @@ gpointer main_thread(gpointer data) {
   gtk_main_quit();
   return nullptr;
 }
+
 /*
  * Static variables.
  */
@@ -108,6 +109,17 @@ gboolean Window::exec_destroy(gpointer *param)
   return false;
 }
 
+gboolean Window::exec_set_title(gpointer *param)
+{
+  Window *this_ = reinterpret_cast<Window *>(param[0]);
+  const gchar *title = reinterpret_cast<const gchar *>(param[1]);
+  gtk_window_set_title(GTK_WINDOW(gtk_widget_get_toplevel(this_->widget_draw_)),
+                       title);
+
+  runner_.signal();
+  return false;
+}
+
 void Window::init(void (*new_main)(void)){
   msg_queue_ = g_async_queue_new();
   if (new_main) {
@@ -132,6 +144,11 @@ void Window::hide() {
 
 void Window::destroy() {
   runner_.call(exec_destroy, {this});
+}
+
+void Window::set_title(const gchar *title) {
+  runner_.call(exec_set_title, {this,
+      reinterpret_cast<gpointer>(const_cast<gchar *>(title))});
 }
 
 void Window::quit() {

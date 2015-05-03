@@ -32,6 +32,7 @@ private:
   static gboolean exec_show(gpointer *param);
   static gboolean exec_hide(gpointer *param);
   static gboolean exec_destroy(gpointer *param);
+  static gboolean exec_set_title(gpointer *param);
 
 public:
   static void init(void (*new_main)() = nullptr);
@@ -44,6 +45,7 @@ public:
   void hide();
   void destroy();
   bool is_valid();
+  void set_title(const gchar *title);
 };
 
 } /* core */

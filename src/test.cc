@@ -59,6 +59,9 @@ void test_window_count(void)
 {
 	Window w;
 	w.show();
+	w.set_title("Window count test");
+    char buf[20];
+    int n = 0;
 
 	Message msg;
 	while (Window::poll(msg)) {
@@ -67,6 +70,8 @@ void test_window_count(void)
 		if (msg.mouse.is_left) {
 			Window *new_win = new Window;
 			new_win->show();
+			snprintf(buf, sizeof(buf), "Window %d", ++n);
+			new_win->set_title(buf);
 		}
 		if (msg.mouse.is_right) msg.source->destroy();
 	}
@@ -93,8 +98,8 @@ void test_draw(void)
 
 int main(int argc, char *argv[])
 {
-	Window::init(test_window_count);
-	/* test_window_count(); */
-	/* test_message(); */
+	Window::init();
+	test_window_count();
+	test_message();
 	return 0;
 }
