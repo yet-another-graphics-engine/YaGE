@@ -94,7 +94,7 @@ gboolean Window::exec_hide(gpointer *param)
 {
   Window *this_ = reinterpret_cast<Window *>(param[0]);
 
-  gtk_widget_show_all(this_->widget_window_);
+  gtk_widget_hide(this_->widget_window_);
 
   runner_.signal();
   return false;

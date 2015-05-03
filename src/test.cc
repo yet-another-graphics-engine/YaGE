@@ -99,8 +99,9 @@ void test_draw(void)
 void test_size()
 {
 	Window w;
+	w.set_resizable(true);
 	w.show();
-    bool resize = false;
+    bool resize = true;
     int x = 300, y = 300;
 
 	Message msg;
@@ -140,6 +141,11 @@ void test_size()
           w.get_size(x, y);
           fprintf(stderr, "nx = %d, ny = %d\n", x, y);
           break;
+
+        case '!':
+          w.hide();
+          sleep(1);
+          w.show();
       }
     }
 }
