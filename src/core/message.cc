@@ -25,7 +25,7 @@ gboolean window_on_focus(GtkWidget *widget, GdkEvent *event, Window *source)
 {
   Message &msg = *(new Message);
   msg.source = source;
-  msg.type = Message::type_window;
+  msg.type = msg.type_window;
 
   msg.window.type = event->focus_change.in ?
                     msg.window.type_enter :
@@ -38,7 +38,7 @@ gboolean window_on_key(GtkWidget *widget, GdkEvent *event, Window *source)
 {
   Message &msg = *(new Message);
   msg.source = source;
-  msg.type = Message::type_kbd;
+  msg.type = msg.type_kbd;
 
   msg.kbd.is_press = (event->key.type == GDK_KEY_PRESS);
   msg.kbd.keyval = event->key.keyval;
@@ -65,7 +65,7 @@ gboolean draw_on_button(GtkWidget *widget, GdkEvent *event, Window *source)
 {
   Message &msg = *(new Message);
   msg.source = source;
-  msg.type = Message::type_mouse;
+  msg.type = msg.type_mouse;
   msg.mouse.type = (event->any.type == GDK_BUTTON_PRESS ?
                                       msg.mouse.type_press :
                                       msg.mouse.type_release);
@@ -89,7 +89,7 @@ gboolean draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *source)
 {
   Message &msg = *(new Message);
   msg.source = source;
-  msg.type = Message::type_mouse;
+  msg.type = msg.type_mouse;
   msg.mouse.type = msg.mouse.type_move;
 
   msg.mouse.x = event->motion.x;
@@ -109,6 +109,12 @@ gboolean draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *source)
 
 gboolean draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, Window *source)
 {
+  Message &msg = *(new Message);
+  msg.source = source;
+  msg.type = msg.type_window;
+  msg.window.type = msg.window.type_resize;
+  push_queue(msg);
+
   if (source->cairo_surface_) cairo_surface_destroy(source->cairo_surface_);
   source->cairo_surface_ = gdk_window_create_similar_surface(
       gtk_widget_get_window(widget),

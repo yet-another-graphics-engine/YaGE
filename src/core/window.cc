@@ -39,7 +39,10 @@ gboolean Window::exec_window(gpointer *param)
 
   GtkWidget *&widget_window_ = this_->widget_window_;
   widget_window_ = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_resizable(GTK_WINDOW(this_->widget_window_), false);
+
+  gtk_window_set_resizable(GTK_WINDOW(widget_window_), false);
+  gtk_window_set_default_size(GTK_WINDOW(widget_window_), 640, 480);
+
   gtk_widget_set_events(widget_window_, gtk_widget_get_events(widget_window_)
       | GDK_FOCUS_CHANGE | GDK_KEY_PRESS | GDK_KEY_RELEASE);
 

@@ -50,7 +50,8 @@ struct Message {
       enum {
         type_enter = 1,
         type_leave,
-        type_destroy
+        type_destroy,
+        type_resize
       } type;
     } window;
   };

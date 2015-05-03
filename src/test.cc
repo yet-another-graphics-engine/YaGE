@@ -99,9 +99,8 @@ void test_draw(void)
 void test_size()
 {
 	Window w;
-	w.set_resizable(true);
+    bool resize = false;
 	w.show();
-    bool resize = true;
     int x = 300, y = 300;
 
 	Message msg;
@@ -153,6 +152,6 @@ void test_size()
 int main(int argc, char *argv[])
 {
 	Window::init();
-	test_size();
+    test_size();
 	return 0;
 }
