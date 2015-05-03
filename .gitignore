@@ -1,3 +1,7 @@
 .ycm_extra_conf.pyc
 *.swp
 bin/
+
+.DS_Store
+build/
+.idea
