@@ -16,6 +16,11 @@ else()
     endif()
 endif()
 
+if(MSVC)
+    set_property(TARGET main APPEND_STRING PROPERTY COMPILE_FLAGS /Wall)
+elseif()
+    set_property(TARGET main APPEND_STRING PROPERTY COMPILE_FLAGS -Wall)
+endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     add_definitions("-DUSE_X11")
