@@ -17,9 +17,9 @@ else()
 endif()
 
 if(MSVC)
-    set_property(TARGET main APPEND_STRING PROPERTY COMPILE_FLAGS /Wall)
+    add_definitions(/Wall)
 elseif()
-    set_property(TARGET main APPEND_STRING PROPERTY COMPILE_FLAGS -Wall)
+    add_definitions(-Wall)
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -47,7 +47,7 @@ LINK_DIRECTORIES(${GTK3_LIBRARY_DIRS})
 
 # Add other flags to the compiler
 ADD_DEFINITIONS(${GTK3_CFLAGS_OTHER})
-message(STATUS ${CMAKE_BINARY_DIR})
+
 project(yagetest)
 add_executable(yagetest test.cc)
 
