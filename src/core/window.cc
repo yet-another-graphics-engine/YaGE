@@ -1,47 +1,48 @@
-#include "window.h"
 #include <glib.h>
-#include "../platform/unix.h"
-
-namespace {
-
-gpointer event_thread(gpointer data) {
-  gtk_main();
-  return nullptr;
-}
-
-}  // will be replaced soon
+#include "window.h"
 
 namespace yage {
 namespace core {
 
+gpointer gui_thread(gpointer data) {
+  gtk_init(NULL, NULL);
+  gtk_main();
+  return nullptr;
+}
+
+/*
+ * Static variables.
+ */
 GAsyncQueue *Window::msg_queue_ = nullptr;
 
 size_t Window::window_num_ = 0;
 
-void Window::init() {
-#ifdef USE_X11
-  yage::platform::enable_x11_thread_support();
-#endif
-  gtk_init(NULL, NULL);
-  msg_queue_ = g_async_queue_new();
-  g_thread_new("YaGE GTK event handler", event_thread, nullptr);
-}
+yage::util::Runner Window::runner_;
 
-Window::Window() {
+/*
+ * Functions do real GUI work.
+ * These function are all executed in GUI thread.
+ * These function should return false, to signal GTK that the source should be
+ * removed.
+ */
+gboolean Window::exec_window(gpointer *param)
+{
+  Window *this_ = reinterpret_cast<Window *>(param[0]);
+  this_->cairo_surface_ = nullptr;
   using namespace yage::core::message_handler;
-  cairo_surface_ = nullptr;
 
   GtkWidget *widget_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_events(widget_window, gtk_widget_get_events(widget_window)
       | GDK_FOCUS_CHANGE);
 
   g_signal_connect(widget_window,
-                  "destroy", G_CALLBACK(window_on_destroy), this);
+                  "destroy", G_CALLBACK(window_on_destroy), this_);
   g_signal_connect(widget_window,
-                  "focus-in-event", G_CALLBACK(window_on_focus), this);
+                  "focus-in-event", G_CALLBACK(window_on_focus), this_);
   g_signal_connect(widget_window,
-                  "focus-out-event", G_CALLBACK(window_on_focus), this);
+                  "focus-out-event", G_CALLBACK(window_on_focus), this_);
 
+  GtkWidget *&widget_draw_ = this_->widget_draw_;
   widget_draw_ = gtk_drawing_area_new();
   gtk_widget_add_events(widget_draw_, GDK_BUTTON_PRESS_MASK |
                                       GDK_POINTER_MOTION_MASK |
@@ -49,40 +50,83 @@ Window::Window() {
                                       GDK_KEY_RELEASE);
 
   g_signal_connect(widget_draw_,
-                  "button-press-event",   G_CALLBACK(draw_on_button), this);
+                  "button-press-event",   G_CALLBACK(draw_on_button), this_);
   g_signal_connect(widget_draw_,
-                  "button-release-event", G_CALLBACK(draw_on_button), this);
+                  "button-release-event", G_CALLBACK(draw_on_button), this_);
   g_signal_connect(widget_draw_,
-                  "motion-notify-event",  G_CALLBACK(draw_on_motion), this);
+                  "motion-notify-event",  G_CALLBACK(draw_on_motion), this_);
   g_signal_connect(widget_draw_,
-                  "key-press-event",      G_CALLBACK(draw_on_key), this);
+                  "key-press-event",      G_CALLBACK(draw_on_key), this_);
   g_signal_connect(widget_draw_,
-                  "key-release-event",    G_CALLBACK(draw_on_key), this);
+                  "key-release-event",    G_CALLBACK(draw_on_key), this_);
   g_signal_connect(widget_draw_,
-                  "configure-event",      G_CALLBACK(draw_on_conf), this);
+                  "configure-event",      G_CALLBACK(draw_on_conf), this_);
   g_signal_connect(widget_draw_,
-                  "draw",                 G_CALLBACK(draw_on_draw), this);
+                  "draw",                 G_CALLBACK(draw_on_draw), this_);
 
   gtk_container_add(GTK_CONTAINER(widget_window), widget_draw_);
 
   ++Window::window_num_;
-  fprintf(stderr, "New window=%p widget=%p\n", this, this->widget_draw_);
+  fprintf(stderr, "New window=%p widget=%p\n", this_, widget_draw_);
+
+  runner_.signal();
+  return false;
+}
+
+gboolean Window::exec_show(gpointer *param)
+{
+  Window *this_ = reinterpret_cast<Window *>(param[0]);
+
+  gtk_widget_show_all(gtk_widget_get_toplevel(this_->widget_draw_));
+
+  runner_.signal();
+  return false;
+}
+
+gboolean Window::exec_hide(gpointer *param)
+{
+  Window *this_ = reinterpret_cast<Window *>(param[0]);
+
+  gtk_widget_show_all(gtk_widget_get_toplevel(this_->widget_draw_));
+
+  runner_.signal();
+  return false;
+}
+
+gboolean Window::exec_destroy(gpointer *param)
+{
+  Window *this_ = reinterpret_cast<Window *>(param[0]);
+
+  if (this_->widget_draw_)
+    gtk_widget_destroy(gtk_widget_get_toplevel(this_->widget_draw_));
+
+  runner_.signal();
+  return false;
+}
+
+void Window::init() {
+  msg_queue_ = g_async_queue_new();
+  g_thread_new("YaGE event", gui_thread, nullptr);
+}
+
+Window::Window() {
+  runner_.call(exec_window, {this});
+}
+
+void Window::show() {
+  runner_.call(exec_show, {this});
+}
+
+void Window::hide() {
+  runner_.call(exec_hide, {this});
+}
+
+void Window::destroy() {
+  runner_.call(exec_destroy, {this});
 }
 
 Window::~Window() {
   destroy();
-}
-
-void Window::show() {
-  gtk_widget_show_all(gtk_widget_get_toplevel(widget_draw_));
-}
-
-void Window::hide() {
-  gtk_widget_hide(gtk_widget_get_toplevel(widget_draw_));
-}
-
-void Window::destroy() {
-  if (widget_draw_) gtk_widget_destroy(gtk_widget_get_toplevel(widget_draw_));
 }
 
 bool Window::is_valid() {

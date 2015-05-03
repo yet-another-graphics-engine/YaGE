@@ -2,6 +2,7 @@
 #define WINDOW_H_YDVLBPKF
 #include <gtk/gtk.h>
 #include "message.h"
+#include "../util/runner.h"
 
 void test_draw(); // only for test; will be removed after drawing framework's finish
 
@@ -19,14 +20,20 @@ class Window {
   friend gboolean yage::core::message_handler::draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source);
   friend void ::test_draw();
 
-  private:
+private:
+  static yage::util::Runner runner_;
   static GAsyncQueue *msg_queue_;
   static size_t window_num_;
 
   GtkWidget *widget_draw_;
   cairo_surface_t *cairo_surface_;
 
-  public:
+  static gboolean exec_window(gpointer *param);
+  static gboolean exec_show(gpointer *param);
+  static gboolean exec_hide(gpointer *param);
+  static gboolean exec_destroy(gpointer *param);
+
+public:
   static void init();
   static bool poll(Message &msg, bool block = true);
 
