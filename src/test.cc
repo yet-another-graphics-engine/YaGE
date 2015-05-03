@@ -151,7 +151,11 @@ void test_size()
 
 int main(int argc, char *argv[])
 {
+#ifdef __APPLE__
+    Window::init(test_size);
+#else
 	Window::init();
     test_size();
+#endif
 	return 0;
 }
