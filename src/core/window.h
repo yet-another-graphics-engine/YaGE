@@ -26,6 +26,7 @@ private:
   static size_t window_num_;
 
   GtkWidget *widget_draw_;
+  GtkWidget *widget_window_;
   cairo_surface_t *cairo_surface_;
 
   static gboolean exec_window(gpointer *param);
@@ -33,6 +34,7 @@ private:
   static gboolean exec_hide(gpointer *param);
   static gboolean exec_destroy(gpointer *param);
   static gboolean exec_set_title(gpointer *param);
+  static gboolean exec_set_resizable(gpointer *param);
 
 public:
   static void init(void (*new_main)() = nullptr);
@@ -46,6 +48,7 @@ public:
   void destroy();
   bool is_valid();
   void set_title(const gchar *title);
+  void set_resizable(bool resizable);
 };
 
 } /* core */
