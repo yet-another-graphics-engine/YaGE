@@ -133,6 +133,30 @@ gboolean Window::exec_set_resizable(gpointer *param)
   return false;
 }
 
+gboolean Window::exec_set_size(gpointer *param)
+{
+  Window *this_ = reinterpret_cast<Window *>(param[0]);
+  int width = *reinterpret_cast<const int *>(param[1]);
+  int height = *reinterpret_cast<const int *>(param[2]);
+
+  gtk_window_resize(GTK_WINDOW(this_->widget_window_), width, height);
+
+  runner_.signal();
+  return false;
+}
+
+gboolean Window::exec_get_size(gpointer *param)
+{
+  Window *this_ = reinterpret_cast<Window *>(param[0]);
+  int &width = *reinterpret_cast<int *>(param[1]);
+  int &height = *reinterpret_cast<int *>(param[2]);
+
+  gtk_window_get_size(GTK_WINDOW(this_->widget_window_), &width, &height);
+
+  runner_.signal();
+  return false;
+}
+
 void Window::init(void (*new_main)(void)){
   msg_queue_ = g_async_queue_new();
   if (new_main) {
@@ -167,6 +191,18 @@ void Window::set_title(const gchar *title) {
 void Window::set_resizable(bool resizable) {
   runner_.call(exec_set_resizable, {this,
       reinterpret_cast<gpointer>(&resizable)});
+}
+
+void Window::set_size(int width, int height) {
+  runner_.call(exec_set_size, {this,
+      reinterpret_cast<gpointer>(&width),
+      reinterpret_cast<gpointer>(&height)});
+}
+
+void Window::get_size(int &width, int &height) {
+  runner_.call(exec_get_size, {this,
+      reinterpret_cast<gpointer>(&width),
+      reinterpret_cast<gpointer>(&height)});
 }
 
 void Window::quit() {

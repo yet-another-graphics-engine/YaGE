@@ -96,10 +96,57 @@ void test_draw(void)
     }
 }
 
+void test_size()
+{
+	Window w;
+	w.show();
+    bool resize = false;
+    int x = 300, y = 300;
+
+	Message msg;
+	while (Window::poll(msg)) {
+	  if (msg.type != msg.type_kbd) continue;
+	  if (!msg.kbd.is_press) continue;
+
+      switch (msg.kbd.keyval) {
+        case 't':
+          resize = !resize;
+          w.set_resizable(resize);
+          fprintf(stderr, "Allow resize: %d\n", resize);
+          break;
+
+        case 'x':
+          x -= 100;
+          w.set_size(x, y);
+          break;
+
+        case 'X':
+          x += 100;
+          w.set_size(x, y);
+          break;
+
+        case 'y':
+          y -= 100;
+          w.set_size(x, y);
+          break;
+
+        case 'Y':
+          y += 100;
+          w.set_size(x, y);
+          break;
+
+        case 'q':
+          fprintf(stderr, "x = %d, y = %d, ", x, y);
+          w.get_size(x, y);
+          fprintf(stderr, "nx = %d, ny = %d\n", x, y);
+          break;
+      }
+    }
+}
+
 int main(int argc, char *argv[])
 {
 	Window::init();
-	test_window_count();
-	test_message();
+	test_size();
 	return 0;
 }

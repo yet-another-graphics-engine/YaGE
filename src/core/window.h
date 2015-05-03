@@ -35,6 +35,8 @@ private:
   static gboolean exec_destroy(gpointer *param);
   static gboolean exec_set_title(gpointer *param);
   static gboolean exec_set_resizable(gpointer *param);
+  static gboolean exec_set_size(gpointer *param);
+  static gboolean exec_get_size(gpointer *param);
 
 public:
   static void init(void (*new_main)() = nullptr);
@@ -49,6 +51,8 @@ public:
   bool is_valid();
   void set_title(const gchar *title);
   void set_resizable(bool resizable);
+  void set_size(int width, int height);
+  void get_size(int &width, int &height);
 };
 
 } /* core */
