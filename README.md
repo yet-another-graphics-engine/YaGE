@@ -8,6 +8,8 @@ YaGE 是一套基于 Cairo / GTK 的跨平台图形库。
 
 Windows 静态库：[![Build status](https://ci.appveyor.com/api/projects/status/32xh81qo1512n1ml?svg=true)](https://ci.appveyor.com/project/xdqi/wmzhere)
 
+Linux 静态库：[![Build Status](https://travis-ci.org/yet-another-graphics-engine/YaGE.svg)](https://travis-ci.org/yet-another-graphics-engine/YaGE)
+
 ## 编译方法
 
 ### Microsoft Windows
@@ -35,7 +37,9 @@ X:\YaGE\build> cmake ..
 
 #### 使用 MinGW / MSYS
 
-同样的，安装 CMake 和 GTK+3 并添加到 `PATH`。切换到本项目根目录
+同样的，安装 CMake 和 GTK+3 并添加到 `PATH`。
+
+打开 MSYS Shell，切换到本项目根目录，执行以下命令
 
 ```
 / $ cd YaGE
@@ -54,7 +58,7 @@ X:\YaGE\build> cmake ..
 
 安装必要包
 
-`sudo apt-get install -y build-essential git libgtk-3-dev xorg-dev cmake`
+`sudo apt-get install -y build-essential git libgtk-3-dev cmake pkg-config`
 
 安装后，运行以下命令
 
@@ -72,7 +76,7 @@ $ make
 
 安装必要包
 
-`sudo pacman -S gtk3 cmake`
+`sudo pacman -S gtk3 cmake pkg-config`
 
 安装后，运行以下命令
 
@@ -90,9 +94,9 @@ $ make
 
 安装 [Xcode](https://developer.apple.com/xcode/)
 
-安装 [brew](http://brew.sh/): `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+安装 [Homebrew](http://brew.sh/): `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 
-安装必要包：`brew install git cmake gtk+3 cairo`
+安装必要包：`brew install git cmake gtk+3 cairo pkg-config`
 
 安装后，运行以下命令
 
