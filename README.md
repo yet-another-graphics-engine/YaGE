@@ -31,7 +31,7 @@ X:\YaGE\build> cmake ..
 
 最后打开 `build` 文件夹中生成的 `YaGE.sln` 进行项目的生成。
 
-项目库文件将生成在 `build\lib` 文件夹中，名为 `yege.lib`，将其复制到 VS 安装目录的 `VC\Lib` 中即可使用。
+项目库文件将生成在 `build\lib` 文件夹中，名为 `yage.lib`，将其复制到 VS 安装目录的 `VC\Lib` 中即可使用。
 
 #### 使用 MinGW / MSYS
 
@@ -45,7 +45,7 @@ X:\YaGE\build> cmake ..
 /YaGE/build $ make
 ```
 
-项目库文件将生成在 `build\lib` 文件夹中，名为 `libyege.a`，将其复制到 MinGW 安装目录的 `Lib` 中即可使用。
+项目库文件将生成在 `build\lib` 文件夹中，名为 `libyage.a`，将其复制到 MinGW 安装目录的 `Lib` 中即可使用。
 
 
 ### GNU/Linux
@@ -66,7 +66,7 @@ $ cd build
 $ cmake ..
 $ make
 ```
-项目库文件将生成在 `build/lib` 文件夹中，名为 `libyege.a`，将其复制到 `/usr/local/lib` 中即可使用。
+项目库文件将生成在 `build/lib` 文件夹中，名为 `libyage.a`，将其复制到 `/usr/local/lib` 中即可使用。
 
 #### Arch Linux
 
@@ -90,4 +90,4 @@ $ cd build
 $ cmake ..
 $ make
 ```
-项目库文件将生成在 `build/lib` 文件夹中，名为 `libyege.a`，将其复制到 `/usr/local/lib` 中即可使用。
+项目库文件将生成在 `build/lib` 文件夹中，名为 `libyage.a`，将其复制到 `/usr/local/lib` 中即可使用。
