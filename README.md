@@ -6,7 +6,7 @@ YaGE 是一套基于 Cairo / GTK 的跨平台图形库。
 
 ## 状态
 
-Windows 静态库：[![Build status](https://ci.appveyor.com/api/projects/status/32xh81qo1512n1ml?svg=true)](https://ci.appveyor.com/project/xdqi/wmzhere)
+Windows 静态库：[![Build status](https://ci.appveyor.com/api/projects/status/09s1wlhb9wa4bu5q?svg=true)](https://ci.appveyor.com/project/xdqi/yage)
 
 Linux 静态库：[![Build Status](https://travis-ci.org/yet-another-graphics-engine/YaGE.svg)](https://travis-ci.org/yet-another-graphics-engine/YaGE)
 
@@ -63,7 +63,7 @@ X:\YaGE\build> cmake ..
 安装后，运行以下命令
 
 ```
-$ git clone https://git.kirito.me/wmzhere/YaGE
+$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
 $ cd YaGE
 $ mkdir build
 $ cd build
@@ -81,7 +81,7 @@ $ make
 安装后，运行以下命令
 
 ```
-$ git clone https://git.kirito.me/wmzhere/YaGE
+$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
 $ cd YaGE
 $ mkdir build
 $ cd build
@@ -101,7 +101,7 @@ $ make
 安装后，运行以下命令
 
 ```
-$ git clone https://git.kirito.me/wmzhere/YaGE
+$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
 $ cd YaGE
 $ mkdir build
 $ cd build
