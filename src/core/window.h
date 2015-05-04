@@ -9,15 +9,7 @@ void test_draw(); // only for test; will be removed after drawing framework's fi
 namespace yage {
 namespace core {
 
-class Window;
-
-struct Message;
-
 class Window {
-  friend void yage::core::message_handler::push_queue(Message &msg);
-  friend void yage::core::message_handler::window_on_destroy(GtkWidget *widget, Window *source);
-  friend gboolean yage::core::message_handler::draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, Window *source);
-  friend gboolean yage::core::message_handler::draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source);
   friend void ::test_draw();
 
 private:
@@ -37,6 +29,35 @@ private:
   static gboolean exec_set_resizable(gpointer *param);
   static gboolean exec_set_size(gpointer *param);
   static gboolean exec_get_size(gpointer *param);
+
+  static void msg_push_queue(Message &msg);
+
+  static void msg_window_on_destroy(    GtkWidget *widget,
+                                        Window *source);
+
+  static gboolean msg_window_on_focus(  GtkWidget *widget,
+                                        GdkEvent *event,
+                                        Window *source);
+
+  static gboolean msg_window_on_key(    GtkWidget *widget,
+                                        GdkEvent *event,
+                                        Window *source);
+
+  static gboolean msg_draw_on_button(   GtkWidget *widget,
+                                        GdkEvent *event,
+                                        Window *source);
+
+  static gboolean msg_draw_on_motion(   GtkWidget *widget,
+                                        GdkEvent *event,
+                                        Window *source);
+
+  static gboolean msg_draw_on_conf(     GtkWidget *widget,
+                                        GdkEventConfigure *event,
+                                        Window *source);
+
+  static gboolean msg_draw_on_draw(     GtkWidget *widget,
+                                        cairo_t *cairo,
+                                        Window *source);
 
 public:
   static void init(void (*new_main)() = nullptr);

@@ -35,7 +35,6 @@ gboolean Window::exec_window(gpointer *param)
 {
   Window *this_ = reinterpret_cast<Window *>(param[0]);
   this_->cairo_surface_ = nullptr;
-  using namespace yage::core::message_handler;
 
   GtkWindow *&gtk_window_ = this_->gtk_window_;
   gtk_window_ = reinterpret_cast<GtkWindow*>(gtk_window_new(GTK_WINDOW_TOPLEVEL));
@@ -48,39 +47,39 @@ gboolean Window::exec_window(gpointer *param)
                                 GDK_HINT_MIN_SIZE);
   gtk_window_set_resizable(gtk_window_, false);
 
+  // Setup signals for main window
   gtk_widget_add_events(GTK_WIDGET(gtk_window_),
                         GDK_FOCUS_CHANGE | GDK_KEY_PRESS | GDK_KEY_RELEASE);
+  g_signal_connect(gtk_window_, "destroy",
+                   G_CALLBACK(msg_window_on_destroy), this_);
+  g_signal_connect(gtk_window_, "focus-in-event",
+                   G_CALLBACK(msg_window_on_focus), this_);
+  g_signal_connect(gtk_window_, "focus-out-event",
+                   G_CALLBACK(msg_window_on_focus), this_);
+  g_signal_connect(gtk_window_, "key-press-event",
+                   G_CALLBACK(msg_window_on_key), this_);
+  g_signal_connect(gtk_window_, "key-release-event",
+                   G_CALLBACK(msg_window_on_key), this_);
 
-  g_signal_connect(gtk_window_,
-                  "destroy", G_CALLBACK(window_on_destroy), this_);
-  g_signal_connect(gtk_window_,
-                  "focus-in-event",       G_CALLBACK(window_on_focus), this_);
-  g_signal_connect(gtk_window_,
-                  "focus-out-event",      G_CALLBACK(window_on_focus), this_);
-  g_signal_connect(gtk_window_,
-                  "key-press-event",      G_CALLBACK(window_on_key), this_);
-  g_signal_connect(gtk_window_,
-                  "key-release-event",    G_CALLBACK(window_on_key), this_);
-
+  // Setup drawing_area
   GtkWidget *&gtk_draw_ = this_->gtk_draw_;
   gtk_draw_ = gtk_drawing_area_new();
   gtk_widget_add_events(gtk_draw_, GDK_BUTTON_PRESS_MASK |
                                    GDK_BUTTON_RELEASE_MASK |
                                    GDK_POINTER_MOTION_MASK);
-
-  g_signal_connect(gtk_draw_,
-                  "button-press-event",   G_CALLBACK(draw_on_button), this_);
-  g_signal_connect(gtk_draw_,
-                  "button-release-event", G_CALLBACK(draw_on_button), this_);
-  g_signal_connect(gtk_draw_,
-                  "motion-notify-event",  G_CALLBACK(draw_on_motion), this_);
-  g_signal_connect(gtk_draw_,
-                  "configure-event",      G_CALLBACK(draw_on_conf), this_);
-  g_signal_connect(gtk_draw_,
-                  "draw",                 G_CALLBACK(draw_on_draw), this_);
-
+  g_signal_connect(gtk_draw_, "button-press-event",
+                   G_CALLBACK(msg_draw_on_button), this_);
+  g_signal_connect(gtk_draw_, "button-release-event",
+                   G_CALLBACK(msg_draw_on_button), this_);
+  g_signal_connect(gtk_draw_, "motion-notify-event",
+                   G_CALLBACK(msg_draw_on_motion), this_);
+  g_signal_connect(gtk_draw_, "configure-event",
+                   G_CALLBACK(msg_draw_on_conf), this_);
+  g_signal_connect(gtk_draw_, "draw",
+                   G_CALLBACK(msg_draw_on_draw), this_);
   gtk_container_add(GTK_CONTAINER(gtk_window_), gtk_draw_);
 
+  // Add window counter
   ++Window::window_num_;
   fprintf(stderr, "New window=%p widget=%p\n", this_, gtk_draw_);
 
@@ -136,7 +135,7 @@ gboolean Window::exec_set_resizable(gpointer *param)
   bool resizable = *reinterpret_cast<const bool *>(param[1]);
 
   gtk_window_set_resizable(this_->gtk_window_, resizable);
-  fprintf(stderr, "resizeable: %d\n", resizable);
+
   if (resizable) {
     GdkGeometry geo;
     geo.min_width = 1;
@@ -192,6 +191,10 @@ void Window::init(void (*new_main)(void)){
   }
 }
 
+/*
+ * Proxy functions
+ * Request to execute worker functions in GUI thread and wait for the return.
+ */
 Window::Window() {
   runner_.call(exec_window, {this});
 }
@@ -210,24 +213,24 @@ void Window::destroy() {
 
 void Window::set_title(const gchar *title) {
   runner_.call(exec_set_title, {this,
-      reinterpret_cast<gpointer>(const_cast<gchar *>(title))});
+               reinterpret_cast<gpointer>(const_cast<gchar *>(title))});
 }
 
 void Window::set_resizable(bool resizable) {
   runner_.call(exec_set_resizable, {this,
-      reinterpret_cast<gpointer>(&resizable)});
+               reinterpret_cast<gpointer>(&resizable)});
 }
 
 void Window::set_size(int width, int height) {
   runner_.call(exec_set_size, {this,
-      reinterpret_cast<gpointer>(&width),
-      reinterpret_cast<gpointer>(&height)});
+               reinterpret_cast<gpointer>(&width),
+               reinterpret_cast<gpointer>(&height)});
 }
 
 void Window::get_size(int &width, int &height) {
   runner_.call(exec_get_size, {this,
-      reinterpret_cast<gpointer>(&width),
-      reinterpret_cast<gpointer>(&height)});
+               reinterpret_cast<gpointer>(&width),
+               reinterpret_cast<gpointer>(&height)});
 }
 
 void Window::quit() {
@@ -253,7 +256,7 @@ bool Window::is_valid() {
 bool Window::poll(Message &msg, bool block) {
   if (Window::window_num_ == 0) return false;
   gpointer pmsg = block ? g_async_queue_pop(Window::msg_queue_)
-            : g_async_queue_try_pop(Window::msg_queue_);
+                        : g_async_queue_try_pop(Window::msg_queue_);
   if (pmsg == nullptr) {
     msg.type = msg.type_nop;
   } else {

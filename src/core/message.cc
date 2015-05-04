@@ -2,14 +2,13 @@
 
 namespace yage {
 namespace core {
-namespace message_handler {
 
-void push_queue(Message &msg)
+void Window::msg_push_queue(Message &msg)
 {
   g_async_queue_push(Window::msg_queue_, &msg);
 }
 
-void window_on_destroy(GtkWidget *widget, Window *source)
+void Window::msg_window_on_destroy(GtkWidget *widget, Window *source)
 {
   source->gtk_draw_ = nullptr;
   source->gtk_window_ = nullptr;
@@ -19,10 +18,10 @@ void window_on_destroy(GtkWidget *widget, Window *source)
   msg.source = source;
   msg.type = msg.type_window;
   msg.window.type = msg.window.type_destroy;
-  push_queue(msg);
+  msg_push_queue(msg);
 }
 
-gboolean window_on_focus(GtkWidget *widget, GdkEvent *event, Window *source)
+gboolean Window::msg_window_on_focus(GtkWidget *widget, GdkEvent *event, Window *source)
 {
   Message &msg = *(new Message);
   msg.source = source;
@@ -31,11 +30,11 @@ gboolean window_on_focus(GtkWidget *widget, GdkEvent *event, Window *source)
   msg.window.type = event->focus_change.in ?
                     msg.window.type_enter :
                     msg.window.type_leave;
-  push_queue(msg);
+  msg_push_queue(msg);
   return false;
 }
 
-gboolean window_on_key(GtkWidget *widget, GdkEvent *event, Window *source)
+gboolean Window::msg_window_on_key(GtkWidget *widget, GdkEvent *event, Window *source)
 {
   Message &msg = *(new Message);
   msg.source = source;
@@ -50,7 +49,7 @@ gboolean window_on_key(GtkWidget *widget, GdkEvent *event, Window *source)
   msg.kbd.modkey_ctrl = event->key.state & GDK_CONTROL_MASK;
   msg.kbd.modkey_alt = event->key.state & GDK_MOD1_MASK;
 
-  push_queue(msg);
+  msg_push_queue(msg);
   return false;
 }
 
@@ -62,7 +61,7 @@ gboolean window_on_key(GtkWidget *widget, GdkEvent *event, Window *source)
 // if we let GTK to process the event, there will be
 // the same event come immediately.
 
-gboolean draw_on_button(GtkWidget *widget, GdkEvent *event, Window *source)
+gboolean Window::msg_draw_on_button(GtkWidget *widget, GdkEvent *event, Window *source)
 {
   Message &msg = *(new Message);
   msg.source = source;
@@ -82,11 +81,11 @@ gboolean draw_on_button(GtkWidget *widget, GdkEvent *event, Window *source)
   msg.mouse.modkey_ctrl = event->button.state & GDK_CONTROL_MASK;
   msg.mouse.modkey_alt = event->button.state & GDK_MOD1_MASK;
 
-  push_queue(msg);
+  msg_push_queue(msg);
   return true;
 }
 
-gboolean draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *source)
+gboolean Window::msg_draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *source)
 {
   Message &msg = *(new Message);
   msg.source = source;
@@ -104,17 +103,17 @@ gboolean draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *source)
   msg.mouse.modkey_ctrl = event->motion.state & GDK_CONTROL_MASK;
   msg.mouse.modkey_alt = event->motion.state & GDK_MOD1_MASK;
 
-  push_queue(msg);
+  msg_push_queue(msg);
   return true;
 }
 
-gboolean draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, Window *source)
+gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, Window *source)
 {
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_window;
   msg.window.type = msg.window.type_resize;
-  push_queue(msg);
+  msg_push_queue(msg);
 
   if (source->cairo_surface_) cairo_surface_destroy(source->cairo_surface_);
   source->cairo_surface_ = gdk_window_create_similar_surface(
@@ -131,14 +130,13 @@ gboolean draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, Window *sourc
   return true;
 }
 
-gboolean draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source)
+gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source)
 {
   cairo_set_source_surface(cairo, source->cairo_surface_, 0, 0);
   cairo_paint(cairo);
   return false;
 }
 
-} /* msg_handler */
 } /* core */
 } /* yage */
 
