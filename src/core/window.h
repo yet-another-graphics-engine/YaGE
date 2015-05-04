@@ -25,8 +25,8 @@ private:
   static GAsyncQueue *msg_queue_;
   static size_t window_num_;
 
-  GtkWidget *widget_draw_;
-  GtkWidget *widget_window_;
+  GtkWidget *gtk_draw_;
+  GtkWindow *gtk_window_;
   cairo_surface_t *cairo_surface_;
 
   static gboolean exec_window(gpointer *param);

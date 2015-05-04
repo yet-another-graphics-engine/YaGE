@@ -11,7 +11,8 @@ void push_queue(Message &msg)
 
 void window_on_destroy(GtkWidget *widget, Window *source)
 {
-  source->widget_draw_ = nullptr;
+  source->gtk_draw_ = nullptr;
+  source->gtk_window_ = nullptr;
   --Window::window_num_;
 
   Message &msg = *(new Message);

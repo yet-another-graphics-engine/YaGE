@@ -5,7 +5,7 @@ namespace yage {
 namespace core {
 
 gpointer gui_thread(gpointer data) {
-  gtk_init(NULL, NULL);
+  gtk_init(nullptr, nullptr);
   gtk_main();
   return nullptr;
 }
@@ -37,47 +37,52 @@ gboolean Window::exec_window(gpointer *param)
   this_->cairo_surface_ = nullptr;
   using namespace yage::core::message_handler;
 
-  GtkWidget *&widget_window_ = this_->widget_window_;
-  widget_window_ = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+  GtkWindow *&gtk_window_ = this_->gtk_window_;
+  gtk_window_ = reinterpret_cast<GtkWindow*>(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 
-  gtk_window_set_resizable(GTK_WINDOW(widget_window_), false);
-  gtk_window_set_default_size(GTK_WINDOW(widget_window_), 640, 480);
+  // Default: not resizable
+  GdkGeometry geo;
+  geo.min_width = 640;
+  geo.min_height = 480;
+  gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
+                                GDK_HINT_MIN_SIZE);
+  gtk_window_set_resizable(gtk_window_, false);
 
-  gtk_widget_set_events(widget_window_, gtk_widget_get_events(widget_window_)
-      | GDK_FOCUS_CHANGE | GDK_KEY_PRESS | GDK_KEY_RELEASE);
+  gtk_widget_add_events(GTK_WIDGET(gtk_window_),
+                        GDK_FOCUS_CHANGE | GDK_KEY_PRESS | GDK_KEY_RELEASE);
 
-  g_signal_connect(widget_window_,
+  g_signal_connect(gtk_window_,
                   "destroy", G_CALLBACK(window_on_destroy), this_);
-  g_signal_connect(widget_window_,
+  g_signal_connect(gtk_window_,
                   "focus-in-event",       G_CALLBACK(window_on_focus), this_);
-  g_signal_connect(widget_window_,
+  g_signal_connect(gtk_window_,
                   "focus-out-event",      G_CALLBACK(window_on_focus), this_);
-  g_signal_connect(widget_window_,
+  g_signal_connect(gtk_window_,
                   "key-press-event",      G_CALLBACK(window_on_key), this_);
-  g_signal_connect(widget_window_,
+  g_signal_connect(gtk_window_,
                   "key-release-event",    G_CALLBACK(window_on_key), this_);
 
-  GtkWidget *&widget_draw_ = this_->widget_draw_;
-  widget_draw_ = gtk_drawing_area_new();
-  gtk_widget_add_events(widget_draw_, GDK_BUTTON_PRESS_MASK |
-                                      GDK_BUTTON_RELEASE_MASK |
-                                      GDK_POINTER_MOTION_MASK);
+  GtkWidget *&gtk_draw_ = this_->gtk_draw_;
+  gtk_draw_ = gtk_drawing_area_new();
+  gtk_widget_add_events(gtk_draw_, GDK_BUTTON_PRESS_MASK |
+                                   GDK_BUTTON_RELEASE_MASK |
+                                   GDK_POINTER_MOTION_MASK);
 
-  g_signal_connect(widget_draw_,
+  g_signal_connect(gtk_draw_,
                   "button-press-event",   G_CALLBACK(draw_on_button), this_);
-  g_signal_connect(widget_draw_,
+  g_signal_connect(gtk_draw_,
                   "button-release-event", G_CALLBACK(draw_on_button), this_);
-  g_signal_connect(widget_draw_,
+  g_signal_connect(gtk_draw_,
                   "motion-notify-event",  G_CALLBACK(draw_on_motion), this_);
-  g_signal_connect(widget_draw_,
+  g_signal_connect(gtk_draw_,
                   "configure-event",      G_CALLBACK(draw_on_conf), this_);
-  g_signal_connect(widget_draw_,
+  g_signal_connect(gtk_draw_,
                   "draw",                 G_CALLBACK(draw_on_draw), this_);
 
-  gtk_container_add(GTK_CONTAINER(widget_window_), widget_draw_);
+  gtk_container_add(GTK_CONTAINER(gtk_window_), gtk_draw_);
 
   ++Window::window_num_;
-  fprintf(stderr, "New window=%p widget=%p\n", this_, widget_draw_);
+  fprintf(stderr, "New window=%p widget=%p\n", this_, gtk_draw_);
 
   runner_.signal();
   return false;
@@ -87,7 +92,7 @@ gboolean Window::exec_show(gpointer *param)
 {
   Window *this_ = reinterpret_cast<Window *>(param[0]);
 
-  gtk_widget_show_all(this_->widget_window_);
+  gtk_widget_show_all(GTK_WIDGET(this_->gtk_window_));
 
   runner_.signal();
   return false;
@@ -97,7 +102,7 @@ gboolean Window::exec_hide(gpointer *param)
 {
   Window *this_ = reinterpret_cast<Window *>(param[0]);
 
-  gtk_widget_hide(this_->widget_window_);
+  gtk_widget_hide(GTK_WIDGET(this_->gtk_window_));
 
   runner_.signal();
   return false;
@@ -107,8 +112,8 @@ gboolean Window::exec_destroy(gpointer *param)
 {
   Window *this_ = reinterpret_cast<Window *>(param[0]);
 
-  if (this_->widget_window_)
-    gtk_widget_destroy(this_->widget_window_);
+  if (this_->gtk_window_)
+    gtk_widget_destroy(GTK_WIDGET(this_->gtk_window_));
 
   runner_.signal();
   return false;
@@ -119,7 +124,7 @@ gboolean Window::exec_set_title(gpointer *param)
   Window *this_ = reinterpret_cast<Window *>(param[0]);
   const gchar *title = reinterpret_cast<const gchar *>(param[1]);
 
-  gtk_window_set_title(GTK_WINDOW(this_->widget_window_), title);
+  gtk_window_set_title(this_->gtk_window_, title);
 
   runner_.signal();
   return false;
@@ -130,7 +135,15 @@ gboolean Window::exec_set_resizable(gpointer *param)
   Window *this_ = reinterpret_cast<Window *>(param[0]);
   bool resizable = *reinterpret_cast<const bool *>(param[1]);
 
-  gtk_window_set_resizable(GTK_WINDOW(this_->widget_window_), resizable);
+  gtk_window_set_resizable(this_->gtk_window_, resizable);
+  fprintf(stderr, "resizeable: %d\n", resizable);
+  if (resizable) {
+    GdkGeometry geo;
+    geo.min_width = 1;
+    geo.min_height = 1;
+    gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
+                                  GDK_HINT_MIN_SIZE);
+  }
 
   runner_.signal();
   return false;
@@ -142,7 +155,16 @@ gboolean Window::exec_set_size(gpointer *param)
   int width = *reinterpret_cast<const int *>(param[1]);
   int height = *reinterpret_cast<const int *>(param[2]);
 
-  gtk_window_resize(GTK_WINDOW(this_->widget_window_), width, height);
+  gtk_window_resize(this_->gtk_window_, width, height);
+  if (gtk_window_get_resizable(this_->gtk_window_)) {
+    gtk_window_resize(this_->gtk_window_, width, height);
+  } else {
+    GdkGeometry geo;
+    geo.min_width = width;
+    geo.min_height = height;
+    gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
+                                  GDK_HINT_MIN_SIZE);
+  }
 
   runner_.signal();
   return false;
@@ -154,7 +176,7 @@ gboolean Window::exec_get_size(gpointer *param)
   int &width = *reinterpret_cast<int *>(param[1]);
   int &height = *reinterpret_cast<int *>(param[2]);
 
-  gtk_window_get_size(GTK_WINDOW(this_->widget_window_), &width, &height);
+  gtk_window_get_size(this_->gtk_window_, &width, &height);
 
   runner_.signal();
   return false;
@@ -217,7 +239,7 @@ Window::~Window() {
 }
 
 bool Window::is_valid() {
-  return widget_draw_ != nullptr && widget_window_ != nullptr;
+  return gtk_draw_ != nullptr && gtk_window_ != nullptr;
 }
 
 /**
