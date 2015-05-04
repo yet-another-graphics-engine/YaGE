@@ -22,10 +22,6 @@ elseif()
     add_definitions(-Wall)
 endif()
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    add_definitions("-DUSE_X11")
-endif()
-
 # specify output path
 # from http://stackoverflow.com/a/6595001
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -58,8 +54,3 @@ if(MSVC)
     target_link_libraries(yagetest "-lgtk-win32-3.0")
 endif()
 
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-	FIND_PACKAGE(X11 REQUIRED)
-    target_link_libraries(yagetest ${X11_LIBRARIES})
-endif()
