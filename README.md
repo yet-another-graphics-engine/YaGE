@@ -70,7 +70,21 @@ $ make
 
 #### Arch Linux
 
-`to be continued`
+安装必要包
+
+`sudo pacman -S gtk3 cmake`
+
+安装后，运行以下命令
+
+```
+$ git clone https://git.kirito.me/wmzhere/YaGE
+$ cd YaGE
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+```
+项目库文件将生成在 `build/lib` 文件夹中，名为 `libyage.a`，将其复制到 `/usr/local/lib` 中即可使用。
 
 ### Mac OS X
 
