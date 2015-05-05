@@ -37,7 +37,7 @@ struct Message {
         type_release,
         type_move
       } type;
-      bool is_left    : 1;
+      bool is_left      : 1;
       bool is_right     : 1;
       bool is_middle    : 1;
 
@@ -56,18 +56,6 @@ struct Message {
     } window;
   };
 };
-
-namespace message_handler {
-void push_queue(Message &msg);
-void window_on_destroy(GtkWidget *widget, Window *source);
-gboolean window_on_focus(GtkWidget *widget, GdkEvent *event, Window *source);
-gboolean window_on_key(GtkWidget *widget, GdkEvent *event, Window *source);
-gboolean draw_on_button(GtkWidget *widget, GdkEvent *event, Window *source);
-gboolean draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *source);
-gboolean draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, Window *source);
-gboolean draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source);
-} /* message_handler */
-
 
 } /* core */
 } /* yage */

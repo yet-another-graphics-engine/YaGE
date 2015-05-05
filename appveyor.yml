@@ -1,0 +1,11 @@
+version: 1.0.{build}
+before_build:
+- curl -O http://win32builder.gnome.org/gtk+-bundle_3.6.4-20130921_win32.zip
+- 7z x gtk+-bundle_3.6.4-20130921_win32.zip -oC:\GTK
+- set PATH=C:\GTK\bin;%PATH%
+- md build
+- cd build
+- cmake .. -G "Visual Studio 12 2013"
+build:
+  project: C:/projects/yage/build/src/yage.vcxproj
+  verbosity: detailed
