@@ -17,7 +17,7 @@ else()
 endif()
 
 if(MSVC)
-    add_definitions(/Wall)
+    add_definitions(/W3)
 elseif()
     add_definitions(-Wall)
 endif()
