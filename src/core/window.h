@@ -3,10 +3,15 @@
 #include <gtk/gtk.h>
 #include "message.h"
 #include "../util/runner.h"
+//#include "../draw/canvas.h"
+
 
 void test_draw(); // only for test; will be removed after drawing framework's finish
 
 namespace yage {
+namespace draw {
+  class Canvas;
+}
 namespace core {
 
 class Window {
@@ -19,7 +24,7 @@ private:
 
   GtkWidget *gtk_draw_;
   GtkWindow *gtk_window_;
-  cairo_surface_t *cairo_surface_;
+  yage::draw::Canvas *canvas_;
 
   static gboolean exec_window(gpointer *param);
   static gboolean exec_show(gpointer *param);
@@ -74,6 +79,7 @@ public:
   void set_resizable(bool resizable);
   void set_size(int width, int height);
   void get_size(int &width, int &height);
+  yage::draw::Canvas &pro_get_canvas(void);
 };
 
 } /* core */

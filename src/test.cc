@@ -1,4 +1,7 @@
 #include "core/window.h"
+#include "draw/canvas.h"
+#include "draw/circle.h"
+#include "draw/color.h"
 #include <cstdlib>
 using namespace yage::core;
 
@@ -88,11 +91,19 @@ void test_draw(void)
     if (msg.type != msg.type_mouse) continue;
     if (msg.mouse.type != msg.mouse.type_move) continue;
     if (!msg.mouse.is_left) continue;
-    cairo_t *cr = cairo_create(w.cairo_surface_);
-    cairo_rectangle(cr, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
-    cairo_fill(cr);
-    cairo_destroy(cr);
-    gtk_widget_queue_draw_area(w.gtk_draw_, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
+    yage::draw::Canvas& canvas = w.pro_get_canvas();
+    using yage::draw::Circle;
+    using yage::draw::Point;
+    using yage::draw::Color;
+    Circle *circle = new Circle();
+    Point *point = new Point(300, 200);
+    circle->set_center(*point);
+    Color *color = new Color(1, 0, 0, 1);
+    circle->set_bgcolor(*color);
+    Color *color1 = new Color(0, 1, 0, 1);
+    circle->set_fgcolor(*color1);
+    circle->set_radius(100);
+    canvas.draw_circle(*circle);
   }
 }
 
@@ -236,7 +247,7 @@ void test_fix_size()
 
 int main(int argc, char *argv[])
 {
-  Window::init();
-  test_fix_size();
+  Window::init(test_draw);
+  //test_fix_size();
   return 0;
 }

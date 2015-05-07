@@ -1,5 +1,6 @@
 #include <glib.h>
 #include "window.h"
+#include "../draw/canvas.h"
 
 namespace yage {
 namespace core {
@@ -34,7 +35,8 @@ yage::util::Runner Window::runner_;
 gboolean Window::exec_window(gpointer *param)
 {
   Window *this_ = reinterpret_cast<Window *>(param[0]);
-  this_->cairo_surface_ = nullptr;
+  this_->canvas_ = nullptr;
+
 
   GtkWindow *&gtk_window_ = this_->gtk_window_;
   gtk_window_ = reinterpret_cast<GtkWindow*>(gtk_window_new(GTK_WINDOW_TOPLEVEL));
@@ -264,6 +266,10 @@ bool Window::poll(Message &msg, bool block) {
     delete reinterpret_cast<Message *>(pmsg);
   }
   return true;
+}
+
+yage::draw::Canvas &Window::pro_get_canvas() {
+  return *canvas_;
 }
 
 }  // namespace core

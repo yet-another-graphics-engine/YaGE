@@ -1,7 +1,10 @@
 #include "message.h"
+#include "../draw/canvas.h"
 
 namespace yage {
 namespace core {
+
+using yage::draw::Canvas;
 
 void Window::msg_push_queue(Message &msg)
 {
@@ -115,24 +118,14 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
   msg.window.type = msg.window.type_resize;
   msg_push_queue(msg);
 
-  if (source->cairo_surface_) cairo_surface_destroy(source->cairo_surface_);
-  source->cairo_surface_ = gdk_window_create_similar_surface(
-      gtk_widget_get_window(widget),
-      CAIRO_CONTENT_COLOR,
-      gtk_widget_get_allocated_width(widget),
-      gtk_widget_get_allocated_height(widget));
-  // XXX clear?
-  cairo_t *cr;
-  cr = cairo_create(source->cairo_surface_);
-  cairo_set_source_rgb (cr, 1, 1, 1);
-  cairo_paint (cr);
-  cairo_destroy (cr);
+  if (source->canvas_) delete source->canvas_;
+  source->canvas_ = new Canvas(widget);
   return true;
 }
 
 gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source)
 {
-  cairo_set_source_surface(cairo, source->cairo_surface_, 0, 0);
+  cairo_set_source_surface(cairo, source->canvas_->pro_get_cairo_surface(), 0, 0);
   cairo_paint(cairo);
   return false;
 }
