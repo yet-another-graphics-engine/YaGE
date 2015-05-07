@@ -2,6 +2,8 @@
 #define MESSAGE_H_JDF1VFPO
 #include <cstdint>
 #include <gtk/gtk.h>
+#include "window.h"
+
 namespace yage {
 namespace core {
 
@@ -60,5 +62,4 @@ struct Message {
 } /* core */
 } /* yage */
 
-#include "window.h"
 #endif /* end of include guard: MESSAGE_H_JDF1VFPO */

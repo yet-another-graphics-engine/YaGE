@@ -233,6 +233,21 @@ void Window::get_size(int &width, int &height) {
                reinterpret_cast<gpointer>(&height)});
 }
 
+GtkWindow *Window::pro_get_gtk_window()
+{
+  return gtk_window_;
+}
+
+GtkWidget *Window::pro_get_gtk_draw()
+{
+  return gtk_draw_;
+}
+
+cairo_surface_t *Window::pro_get_cairo_suface()
+{
+  return cairo_surface_;
+}
+
 void Window::quit() {
   gtk_main_quit();
 }
