@@ -1,6 +1,7 @@
 #include "core/window.h"
 #include <cstdlib>
 using namespace yage::core;
+extern "C" int yage_main(void);
 
 #define P_PROP(type, name, format) fprintf(stderr, #name"="#format", ", msg.type.name)
 #define P_NAME(type) \
@@ -234,9 +235,8 @@ void test_fix_size()
   }
 }
 
-int main(int argc, char *argv[])
+int yage_main()
 {
-  Window::init();
-  test_draw();
+  test_message();
   return 0;
 }

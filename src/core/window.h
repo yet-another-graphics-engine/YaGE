@@ -2,7 +2,6 @@
 #define WINDOW_H_YDVLBPKF
 #include <gtk/gtk.h>
 #include "message.h"
-#include "../util/runner.h"
 
 namespace yage {
 namespace core {
@@ -11,7 +10,6 @@ struct Message;
 
 class Window {
 private:
-  static yage::util::Runner runner_;
   static GAsyncQueue *msg_queue_;
   static size_t window_num_;
 
@@ -58,7 +56,7 @@ private:
                                         Window *source);
 
 public:
-  static void init(void (*new_main)() = nullptr);
+  static int init(int (*new_main)());
   static bool poll(Message &msg, bool block = true);
   static void quit();
 
