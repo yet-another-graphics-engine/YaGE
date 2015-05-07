@@ -85,25 +85,25 @@ void test_draw(void)
 {
   Window w;
   w.show();
-
+    yage::draw::Canvas& canvas = w.pro_get_canvas();
+    using yage::draw::Circle;
+    using yage::draw::Point;
+    using yage::draw::Color;
+    yage::draw::Ellipse *e = new yage::draw::Ellipse();
+    Point *point = new Point(300, 200);
+    e->set_center(*point);
+    Color *color = new Color(1, 0, 0, 1);
+    e->set_bgcolor(*color);
+    Color *color1 = new Color(0, 1, 0, 1);
+    e->set_fgcolor(*color1);
+    e->set_xradius(100);
+    e->set_yradius(200);
+    canvas.draw_ellipse(*e);
   Message msg;
   while (Window::poll(msg)) {
     if (msg.type != msg.type_mouse) continue;
     if (msg.mouse.type != msg.mouse.type_move) continue;
     if (!msg.mouse.is_left) continue;
-    yage::draw::Canvas& canvas = w.pro_get_canvas();
-    using yage::draw::Circle;
-    using yage::draw::Point;
-    using yage::draw::Color;
-    Circle *circle = new Circle();
-    Point *point = new Point(300, 200);
-    circle->set_center(*point);
-    Color *color = new Color(1, 0, 0, 1);
-    circle->set_bgcolor(*color);
-    Color *color1 = new Color(0, 1, 0, 1);
-    circle->set_fgcolor(*color1);
-    circle->set_radius(100);
-    canvas.draw_circle(*circle);
   }
 }
 

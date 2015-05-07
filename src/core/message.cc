@@ -119,7 +119,7 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
   msg_push_queue(msg);
 
   if (source->canvas_) delete source->canvas_;
-  source->canvas_ = new Canvas(widget);
+  source->canvas_ = new Canvas(*source);
   return true;
 }
 

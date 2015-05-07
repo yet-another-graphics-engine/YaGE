@@ -3,7 +3,9 @@
 namespace yage {
 namespace draw {
 
-Canvas::Canvas(GtkWidget *widget) : BasicShape("", "canvas") {
+Canvas::Canvas(Window &window) : BasicShape("", "canvas") , window_(&window) {
+    GtkWidget *widget = window.pro_get_gtk_draw();
+
     surface_ = gdk_window_create_similar_surface(
             gtk_widget_get_window(widget),
             CAIRO_CONTENT_COLOR,
@@ -32,6 +34,7 @@ void Canvas::init_brush(void)  {
 
 void Canvas::finish_brush(void)  {
     cairo_restore(brush_);
+    if (window_) window_->pro_redraw();
 }
 
 void Canvas::shape_fill( BasicShape &shape)  {
@@ -41,6 +44,8 @@ void Canvas::shape_fill( BasicShape &shape)  {
                           shape.get_fgcolor().getb(),
                           shape.get_fgcolor().geta());
     cairo_fill_preserve(brush_);
+
+    cairo_scale(brush_, 1.0, 1.0);
 
     cairo_set_source_rgba(brush_,
                           shape.get_bgcolor().getr(),
@@ -60,8 +65,10 @@ void Canvas::draw_elliptic_arc(EllipticArc &elliparc, BasicShape *shape)  {
     }
     cairo_set_line_width(brush_, shape->get_thickness());
     cairo_translate(brush_, elliparc.get_center().getx(), elliparc.get_center().gety()); // make center of ellipse arc (0,0)
+    init_brush();
     cairo_scale(brush_, elliparc.get_xradius(), elliparc.get_yradius());  // scale ellipse to a circle having radius of 1
     cairo_arc(brush_, 0.0, 0.0, 1.0, elliparc.get_startangle(), elliparc.get_endangle()); // draw the 'circle arc'
+    finish_brush();
     shape_fill(*shape);
     finish_brush();
 }

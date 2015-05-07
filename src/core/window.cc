@@ -99,6 +99,16 @@ gboolean Window::exec_show(gpointer *param)
   return false;
 }
 
+gboolean Window::exec_redraw(gpointer *param)
+{
+  Window *this_ = reinterpret_cast<Window *>(param[0]);
+
+  gtk_widget_queue_draw(GTK_WIDGET(this_->gtk_draw_));
+
+  runner_.signal();
+  return false;
+}
+
 gboolean Window::exec_hide(gpointer *param)
 {
   Window *this_ = reinterpret_cast<Window *>(param[0]);
@@ -235,6 +245,10 @@ void Window::get_size(int &width, int &height) {
                reinterpret_cast<gpointer>(&height)});
 }
 
+void Window::pro_redraw() {
+  runner_.call(exec_redraw, {this});
+}
+
 void Window::quit() {
   gtk_main_quit();
 }
@@ -270,6 +284,10 @@ bool Window::poll(Message &msg, bool block) {
 
 yage::draw::Canvas &Window::pro_get_canvas() {
   return *canvas_;
+}
+
+GtkWidget *Window::pro_get_gtk_draw(void) {
+    return  gtk_draw_;
 }
 
 }  // namespace core

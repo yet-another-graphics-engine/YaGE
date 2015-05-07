@@ -17,18 +17,21 @@ class Text;
 
 namespace yage {
 namespace draw {
+using namespace core;
 
 class Canvas : public BasicShape {
 private:
     cairo_surface_t *surface_;
     cairo_t *brush_;
+    Window *window_;
 
     void init_brush(void);
     void finish_brush(void);
     void shape_fill(BasicShape &shape) ;
+
 public:
     // Create a canvas based on GTK-packaged yage::core::Window
-    Canvas(GtkWidget *widget);
+    Canvas(Window &window);
     // Create a 'virtual' canvas based on memory buffer
     Canvas(int width, int height);
     ~Canvas();

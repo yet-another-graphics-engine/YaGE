@@ -34,6 +34,7 @@ private:
   static gboolean exec_set_resizable(gpointer *param);
   static gboolean exec_set_size(gpointer *param);
   static gboolean exec_get_size(gpointer *param);
+  static gboolean exec_redraw(gpointer *param);
 
   static void msg_push_queue(Message &msg);
 
@@ -79,7 +80,9 @@ public:
   void set_resizable(bool resizable);
   void set_size(int width, int height);
   void get_size(int &width, int &height);
+  void pro_redraw();
   yage::draw::Canvas &pro_get_canvas(void);
+  GtkWidget *pro_get_gtk_draw(void);
 };
 
 } /* core */
