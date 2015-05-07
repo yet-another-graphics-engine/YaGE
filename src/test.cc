@@ -1,4 +1,5 @@
 #include "core/window.h"
+#include "dialog/message_dlg.h"
 #include <cstdlib>
 using namespace yage::core;
 extern "C" int yage_main(void);
@@ -235,8 +236,36 @@ void test_fix_size()
   }
 }
 
+void test_dialog()
+{
+  using namespace yage::dialog;
+  Window w;
+  w.show();
+  Message msg;
+
+  while (Window::poll(msg)) {
+    if (msg.type != msg.type_kbd) continue;
+    if (!msg.kbd.is_press) continue;
+
+    switch (msg.kbd.keyval) {
+      case 'm':
+        MessageDlg dlg(MessageDlg::button_type_yes_no, MessageDlg::icon_type_question, w);
+        dlg.set_title("<u>title</u>");
+        dlg.set_message("<i>message: press a button</i>");
+        MessageDlg another_dlg(MessageDlg::button_type_ok, MessageDlg::icon_type_info);
+        another_dlg.set_title("result");
+        if (dlg.show() == MessageDlg::result_type_yes) {
+          another_dlg.set_message("yes");
+        } else {
+          another_dlg.set_message("no");
+        }
+        another_dlg.show();
+    }
+  }
+}
+
 int yage_main()
 {
-  test_message();
+  test_dialog();
   return 0;
 }
