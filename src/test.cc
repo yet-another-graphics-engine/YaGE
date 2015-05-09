@@ -1,4 +1,5 @@
 #include "core/window.h"
+#include "dialog/message_dlg.h"
 #include <cstdlib>
 using namespace yage::core;
 extern "C" int yage_main(void);
@@ -89,11 +90,11 @@ void test_draw(void)
     if (msg.type != msg.type_mouse) continue;
     if (msg.mouse.type != msg.mouse.type_move) continue;
     if (!msg.mouse.is_left) continue;
-    cairo_t *cr = cairo_create(w.cairo_surface_);
+    cairo_t *cr = cairo_create(w.pro_get_cairo_suface());
     cairo_rectangle(cr, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
     cairo_fill(cr);
     cairo_destroy(cr);
-    gtk_widget_queue_draw_area(w.gtk_draw_, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
+    gtk_widget_queue_draw_area(w.pro_get_gtk_draw(), msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
   }
 }
 
@@ -235,8 +236,36 @@ void test_fix_size()
   }
 }
 
+void test_dialog()
+{
+  using namespace yage::dialog;
+  Window w;
+  w.show();
+  Message msg;
+
+  while (Window::poll(msg)) {
+    if (msg.type != msg.type_kbd) continue;
+    if (!msg.kbd.is_press) continue;
+
+    switch (msg.kbd.keyval) {
+      case 'm':
+        MessageDlg dlg(MessageDlg::button_type_yes_no, MessageDlg::icon_type_question, w);
+        dlg.set_title("<u>title</u>");
+        dlg.set_message("<i>message: press a button</i>");
+        MessageDlg another_dlg(MessageDlg::button_type_ok, MessageDlg::icon_type_info);
+        another_dlg.set_title("result");
+        if (dlg.show() == MessageDlg::result_type_yes) {
+          another_dlg.set_message("yes");
+        } else {
+          another_dlg.set_message("no");
+        }
+        another_dlg.show();
+    }
+  }
+}
+
 int yage_main()
 {
-  test_message();
-  return 1;
+  test_dialog();
+  return 0;
 }
