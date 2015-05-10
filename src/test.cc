@@ -1,6 +1,7 @@
 #include "core/window.h"
 #include "dialog/message_dlg.h"
 #include "dialog/file_chooser_dlg.h"
+#include "dialog/color_chooser_dialog.h"
 #include <cstdlib>
 using namespace yage::core;
 using namespace yage::dialog;
@@ -262,6 +263,15 @@ void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
   }
 }
 
+void test_dialog_color(Window &w)
+{
+  ColorChooserDlg color_dlg("color", w);
+  yage::util::Color c;
+  if (color_dlg.show(c)) {
+    fprintf(stderr, "Color: %lf %lf %lf %lf\n", c.r, c.g, c.b, c.a);
+  }
+}
+
 void test_dialog()
 {
   Window w;
@@ -273,24 +283,28 @@ void test_dialog()
     if (!msg.kbd.is_press) continue;
 
     switch (msg.kbd.keyval) {
-      case 'm':
+      case 'a':
         test_dialog_msg(w);
         break;
 
-      case 'o':
+      case 'b':
         test_dialog_fc(FileChooserDlg::action_type_open, w);
         break;
 
-      case 's':
+      case 'c':
         test_dialog_fc(FileChooserDlg::action_type_save, w);
         break;
 
-      case 'c':
+      case 'd':
         test_dialog_fc(FileChooserDlg::action_type_create_folder, w);
         break;
 
-      case 'd':
+      case 'e':
         test_dialog_fc(FileChooserDlg::action_type_select_folder, w);
+        break;
+
+      case 'f':
+        test_dialog_color(w);
         break;
     }
   }
