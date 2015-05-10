@@ -9,6 +9,7 @@ class Player {
         std::string url_;
     public:
         Player();
+        virtual ~Player() = 0;
         virtual bool play(void) = 0;
         virtual void pause(void) = 0;
         virtual void stop(void) = 0;

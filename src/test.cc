@@ -1,6 +1,9 @@
 #include "core/window.h"
 #include "dialog/message_dlg.h"
+#include "platform/player.h"
+#include <thread>
 #include <cstdlib>
+#include <iostream>
 using namespace yage::core;
 extern "C" int yage_main(void);
 
@@ -72,7 +75,11 @@ void test_window_count(void)
     if (msg.mouse.is_left) {
       Window *new_win = new Window;
       new_win->show();
+      #ifndef _MSC_VER
       snprintf(buf, sizeof(buf), "Window %d", ++n);
+      #else
+      _snprintf(buf, sizeof(buf), "Window %d", ++n);
+      #endif
       new_win->set_title(buf);
     }
     if (msg.mouse.is_right) msg.source->destroy();
@@ -145,7 +152,7 @@ void test_resize()
 
       case '!':
         w.hide();
-        sleep(1);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
         w.show();
     }
   }
@@ -264,8 +271,31 @@ void test_dialog()
   }
 }
 
+void test_audio(void) {
+    using yage::platform::Player;
+    std::cerr << "Load file IGNITE from Internet" << std::endl;
+    Player *player = Player::create_player("https://kirito.me/ignite.mp3");
+    std::cerr << "Play IGNITE" << std::endl;
+	player->play();
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::cerr << "Load file Date A Live from Internet" << std::endl;
+	Player *player2 = Player::create_player("https://kirito.me/date_a_live.mp3");
+    std::cerr << "Play Date A Live" << std::endl;
+	player2->play();
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::cerr << "Stop IGNITE" << std::endl;
+    player->stop();
+    std::cerr << "Destroy music IGNITE object" << std::endl;
+	delete player;
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::cerr << "Stop Date A Live" << std::endl;
+	player2->stop();
+    std::cerr << "Destroy music Date A Live object" << std::endl;
+	delete player2;
+}
+
 int yage_main()
 {
-  test_dialog();
+  test_audio();
   return 0;
 }

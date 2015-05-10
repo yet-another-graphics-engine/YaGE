@@ -11,7 +11,7 @@ namespace platform {
 
 class WinPlayer : public Player {
 private:
-	static DWORD WINAPI player_msg_proc_(LPVOID lpParameter);
+	static DWORD WINAPI player_worker_(LPVOID lpParameter);
 	template <class T>
 	static T * addressof_(T & v) {
 		return reinterpret_cast<T *>(&const_cast<char&>(reinterpret_cast<const volatile char &>(v)));
@@ -20,11 +20,11 @@ private:
 	DWORD thread_id_;
 	HANDLE thread_handle_;
 	CComPtr<IWMPPlayer> player_;
-	CComPtr<IWMPControls> control_;	
-	
+	CComPtr<IWMPControls> control_;
+
 public:
 	WinPlayer(std::string url);
-	~WinPlayer();
+	virtual ~WinPlayer();
 	virtual bool play(void);
 	virtual void pause(void);
 	virtual void stop(void);
