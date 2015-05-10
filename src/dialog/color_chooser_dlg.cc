@@ -1,4 +1,4 @@
-#include "color_chooser_dialog.h"
+#include "color_chooser_dlg.h"
 #include "../yage.h"
 
 namespace yage {

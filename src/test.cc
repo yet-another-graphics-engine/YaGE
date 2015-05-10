@@ -1,7 +1,7 @@
 #include "core/window.h"
 #include "dialog/message_dlg.h"
 #include "dialog/file_chooser_dlg.h"
-#include "dialog/color_chooser_dialog.h"
+#include "dialog/color_chooser_dlg.h"
 #include <cstdlib>
 using namespace yage::core;
 using namespace yage::dialog;
