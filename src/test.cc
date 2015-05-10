@@ -2,9 +2,12 @@
 #include "dialog/message_dlg.h"
 #include "platform/player.h"
 #include <thread>
+#include "dialog/file_chooser_dlg.h"
+#include "dialog/color_chooser_dlg.h"
 #include <cstdlib>
 #include <iostream>
 using namespace yage::core;
+using namespace yage::dialog;
 extern "C" int yage_main(void);
 
 #define P_PROP(type, name, format) fprintf(stderr, #name"="#format", ", msg.type.name)
@@ -243,6 +246,39 @@ void test_fix_size()
   }
 }
 
+void test_dialog_msg(Window &w)
+{
+  MessageDlg msg_dlg(MessageDlg::button_type_yes_no, MessageDlg::icon_type_question, w);
+  msg_dlg.set_title("<u>title</u>");
+  msg_dlg.set_message("<i>message: press a button</i>");
+  MessageDlg msg_dlg1(MessageDlg::button_type_ok, MessageDlg::icon_type_info);
+  msg_dlg1.set_title("result");
+  if (msg_dlg.show() == MessageDlg::result_type_yes) {
+    msg_dlg1.set_message("yes");
+  } else {
+    msg_dlg1.set_message("no");
+  }
+  msg_dlg1.show();
+}
+
+void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
+{
+  FileChooserDlg fc_dlg(type, "fc_dlg", w);
+  std::string path;
+  if (fc_dlg.show(path)) {
+    fprintf(stderr, "Path: %s\n", path.c_str());
+  }
+}
+
+void test_dialog_color(Window &w)
+{
+  ColorChooserDlg color_dlg("color", w);
+  yage::util::Color c;
+  if (color_dlg.show(c)) {
+    fprintf(stderr, "Color: %lf %lf %lf %lf\n", c.r, c.g, c.b, c.a);
+  }
+}
+
 void test_dialog()
 {
   using namespace yage::dialog;
@@ -255,18 +291,29 @@ void test_dialog()
     if (!msg.kbd.is_press) continue;
 
     switch (msg.kbd.keyval) {
-      case 'm':
-        MessageDlg dlg(MessageDlg::button_type_yes_no, MessageDlg::icon_type_question, w);
-        dlg.set_title("<u>title</u>");
-        dlg.set_message("<i>message: press a button</i>");
-        MessageDlg another_dlg(MessageDlg::button_type_ok, MessageDlg::icon_type_info);
-        another_dlg.set_title("result");
-        if (dlg.show() == MessageDlg::result_type_yes) {
-          another_dlg.set_message("yes");
-        } else {
-          another_dlg.set_message("no");
-        }
-        another_dlg.show();
+      case 'a':
+        test_dialog_msg(w);
+        break;
+
+      case 'b':
+        test_dialog_fc(FileChooserDlg::action_type_open, w);
+        break;
+
+      case 'c':
+        test_dialog_fc(FileChooserDlg::action_type_save, w);
+        break;
+
+      case 'd':
+        test_dialog_fc(FileChooserDlg::action_type_create_folder, w);
+        break;
+
+      case 'e':
+        test_dialog_fc(FileChooserDlg::action_type_select_folder, w);
+        break;
+
+      case 'f':
+        test_dialog_color(w);
+        break;
     }
   }
 }
