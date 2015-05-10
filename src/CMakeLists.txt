@@ -28,7 +28,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-set(LIB_SOURCE_FILES yage.cc core/message.cc core/window.cc util/runner.cc dialog/message_dlg.cc)
+set(LIB_SOURCE_FILES yage.cc core/message.cc core/window.cc util/runner.cc dialog/message_dlg.cc dialog/file_chooser_dlg.cc)
 add_library(yage STATIC ${LIB_SOURCE_FILES})
 
 # CMake x GTK from https://gist.github.com/fracek/3323924
