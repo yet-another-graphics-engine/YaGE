@@ -330,8 +330,17 @@ void test_audio(void) {
     std::cerr << "Play Date A Live" << std::endl;
 	player2->play();
 	std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::cerr << "Pause IGNITE" << std::endl;
+    player->pause();
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+	player->play();
+    std::cerr << "Resume IGNITE" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(3));
     std::cerr << "Stop IGNITE" << std::endl;
     player->stop();
+    std::cerr << "Play IGNITE" << std::endl;
+    player->play();
+    std::this_thread::sleep_for(std::chrono::seconds(3));
     std::cerr << "Destroy music IGNITE object" << std::endl;
 	delete player;
 	std::this_thread::sleep_for(std::chrono::seconds(2));

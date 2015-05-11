@@ -39,6 +39,7 @@ endif()
 if(APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
     find_library(AVFOUNDATION_LIBRARY AVFoundation)
+    find_library(COREMEDIA_LIBRARY CoreMedia)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ObjC++")
 endif()
 
@@ -62,7 +63,7 @@ add_executable(yagetest test.cc)
 target_link_libraries(yagetest yage)
 
 if (APPLE)
-    target_link_libraries(yagetest ${FOUNDATION_LIBRARY} ${AVFOUNDATION_LIBRARY})
+    target_link_libraries(yagetest ${FOUNDATION_LIBRARY} ${AVFOUNDATION_LIBRARY} ${COREMEDIA_LIBRARY})
 endif()
 
 if (MSVC) # library required by MSVC is pretty different than others

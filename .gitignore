@@ -3,5 +3,5 @@ src/.ycm_extra_conf.*
 bin/
 
 .DS_Store
-build/
+build*/
 .idea
