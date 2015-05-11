@@ -16,7 +16,12 @@ class Picture;
 class Text;
 
 namespace yage {
+namespace core {
+class Window;
+}
+
 namespace draw {
+
 using namespace core;
 
 class Canvas : public ShapeProperty {

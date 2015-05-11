@@ -3,5 +3,7 @@
 namespace yage {
 namespace draw {
 
+BasePoly::BasePoly() {}
+
 } // namespace draw
 } // namespace yage

@@ -2,14 +2,15 @@
 #include "draw/canvas.h"
 #include "draw/circle.h"
 #include "draw/color.h"
-#include "dialog/message_dlg.h"
 #include "platform/player.h"
+#include "dialog/message_dlg.h"
 #include "dialog/file_chooser_dlg.h"
 #include "dialog/color_chooser_dlg.h"
 
 #include <cstdlib>
 #include <thread>
 #include <iostream>
+
 using namespace yage::core;
 using namespace yage::dialog;
 extern "C" int yage_main(void);
@@ -124,11 +125,6 @@ void test_draw(void)
     if (msg.type != msg.type_mouse) continue;
     if (msg.mouse.type != msg.mouse.type_move) continue;
     if (!msg.mouse.is_left) continue;
-    cairo_t *cr = cairo_create(w.cairo_surface_);
-    cairo_rectangle(cr, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
-    cairo_fill(cr);
-    cairo_destroy(cr);
-    gtk_widget_queue_draw_area(w.gtk_draw_, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
   }
 }
 

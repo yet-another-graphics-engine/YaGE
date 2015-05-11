@@ -3,9 +3,12 @@
 #include <gtk/gtk.h>
 #include "message.h"
 #include "../util/runner.h"
-//#include "../draw/canvas.h"
 
 namespace yage {
+namespace draw {
+  class Canvas;
+}
+
 namespace core {
 
 struct Message;
@@ -27,6 +30,7 @@ private:
   static gboolean exec_set_resizable(gpointer *param);
   static gboolean exec_set_size(gpointer *param);
   static gboolean exec_get_size(gpointer *param);
+  static gboolean exec_redraw(gpointer *param);
 
   static void msg_push_queue(Message &msg);
 

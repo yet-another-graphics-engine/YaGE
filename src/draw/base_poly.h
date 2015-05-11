@@ -10,6 +10,7 @@ class BasePoly {
 	public:
 		using Vertexes = std::vector<Point>; ///< Type for the container of all vertexes
 		Vertexes vertex;	///< All vertexes
+		BasePoly();
 };
 
 } // namespace draw

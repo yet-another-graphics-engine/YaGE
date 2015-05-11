@@ -36,8 +36,6 @@ GAsyncQueue *Window::msg_queue_ = nullptr;
 
 size_t Window::window_num_ = 0;
 
-yage::util::Runner Window::runner_;
-
 /*
  * Functions do real GUI work.
  * These function are all executed in GUI thread.
@@ -116,7 +114,7 @@ gboolean Window::exec_redraw(gpointer *param)
 
   gtk_widget_queue_draw(GTK_WIDGET(this_->gtk_draw_));
 
-  runner_.signal();
+  gtk_runner.signal();
   return false;
 }
 
@@ -257,8 +255,12 @@ GtkWidget *Window::pro_get_gtk_draw()
   return gtk_draw_;
 }
 
+yage::draw::Canvas &Window::pro_get_canvas(void) {
+  return *canvas_;
+}
+
 void Window::pro_redraw() {
-  runner_.call(exec_redraw, {this});
+  gtk_runner.call(exec_redraw, {this});
 }
 
 void Window::quit() {
