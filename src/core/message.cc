@@ -1,5 +1,8 @@
 #include "message.h"
 #include "../draw/canvas.h"
+#ifdef _MSC_VER
+#pragma warning(disable:4800)
+#endif
 
 namespace yage {
 namespace core {

@@ -86,7 +86,7 @@ void test_window_count(void)
       #ifndef _MSC_VER
       snprintf(buf, sizeof(buf), "Window %d", ++n);
       #else
-      _snprintf(buf, sizeof(buf), "Window %d", ++n);
+      _snprintf_s(buf, _countof(buf), sizeof(buf), "Window %d", ++n);
       #endif
       new_win->set_title(buf);
     }
