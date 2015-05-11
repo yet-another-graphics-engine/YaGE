@@ -1,11 +1,16 @@
 #include "core/window.h"
-#include "dialog/message_dlg.h"
+#include "draw/canvas.h"
+#include "draw/circle.h"
+#include "draw/color.h"
 #include "platform/player.h"
-#include <thread>
+#include "dialog/message_dlg.h"
 #include "dialog/file_chooser_dlg.h"
 #include "dialog/color_chooser_dlg.h"
+
 #include <cstdlib>
+#include <thread>
 #include <iostream>
+
 using namespace yage::core;
 using namespace yage::dialog;
 extern "C" int yage_main(void);
@@ -94,17 +99,32 @@ void test_draw(void)
 {
   Window w;
   w.show();
-
+  yage::draw::Canvas& canvas = w.pro_get_canvas();
+  using yage::draw::Circle;
+  using yage::draw::Point;
+  using yage::draw::Color;
+  yage::draw::Ellipse e("");
+  Point point(300, 200);
+  e.set_center(point);
+  Color color(1, 0, 0, 1);
+  e.set_bgcolor(color);
+  Color color1(0, 1, 0, 1);
+  e.set_fgcolor(color1);
+  e.set_xradius(100);
+  e.set_yradius(200);
+  canvas.draw_ellipse(e);
+  Point point2(500, 400);
+  yage::draw::Rect rect("");
+  rect.set_points(point, point2);
+  rect.set_bgcolor(color1);
+  rect.set_fgcolor(color);
+  canvas.draw_rect(rect);
+  w.pro_redraw();
   Message msg;
   while (Window::poll(msg)) {
     if (msg.type != msg.type_mouse) continue;
     if (msg.mouse.type != msg.mouse.type_move) continue;
     if (!msg.mouse.is_left) continue;
-    cairo_t *cr = cairo_create(w.pro_get_cairo_suface());
-    cairo_rectangle(cr, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
-    cairo_fill(cr);
-    cairo_destroy(cr);
-    gtk_widget_queue_draw_area(w.pro_get_gtk_draw(), msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
   }
 }
 
@@ -352,6 +372,6 @@ void test_audio(void) {
 
 int yage_main()
 {
-  test_audio();
+  test_draw();
   return 0;
 }

@@ -1,6 +1,7 @@
 #include <glib.h>
 #include "../yage.h"
 #include "window.h"
+#include "../draw/canvas.h"
 
 namespace yage {
 namespace core {
@@ -44,7 +45,7 @@ size_t Window::window_num_ = 0;
 gboolean Window::exec_window(gpointer *param)
 {
   Window *this_ = reinterpret_cast<Window *>(param[0]);
-  this_->cairo_surface_ = nullptr;
+  this_->canvas_ = nullptr;
 
   GtkWindow *&gtk_window_ = this_->gtk_window_;
   gtk_window_ = reinterpret_cast<GtkWindow*>(gtk_window_new(GTK_WINDOW_TOPLEVEL));
@@ -102,6 +103,16 @@ gboolean Window::exec_show(gpointer *param)
   Window *this_ = reinterpret_cast<Window *>(param[0]);
 
   gtk_widget_show_all(GTK_WIDGET(this_->gtk_window_));
+
+  gtk_runner.signal();
+  return false;
+}
+
+gboolean Window::exec_redraw(gpointer *param)
+{
+  Window *this_ = reinterpret_cast<Window *>(param[0]);
+
+  gtk_widget_queue_draw(GTK_WIDGET(this_->gtk_draw_));
 
   gtk_runner.signal();
   return false;
@@ -191,6 +202,7 @@ gboolean Window::exec_get_size(gpointer *param)
   return false;
 }
 
+
 /*
  * Proxy functions
  * Request to execute worker functions in GUI thread and wait for the return.
@@ -243,9 +255,12 @@ GtkWidget *Window::pro_get_gtk_draw()
   return gtk_draw_;
 }
 
-cairo_surface_t *Window::pro_get_cairo_suface()
-{
-  return cairo_surface_;
+yage::draw::Canvas &Window::pro_get_canvas(void) {
+  return *canvas_;
+}
+
+void Window::pro_redraw() {
+  gtk_runner.call(exec_redraw, {this});
 }
 
 void Window::quit() {

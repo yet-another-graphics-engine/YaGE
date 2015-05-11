@@ -2,8 +2,13 @@
 #define WINDOW_H_YDVLBPKF
 #include <gtk/gtk.h>
 #include "message.h"
+#include "../util/runner.h"
 
 namespace yage {
+namespace draw {
+  class Canvas;
+}
+
 namespace core {
 
 struct Message;
@@ -15,7 +20,7 @@ private:
 
   GtkWidget *gtk_draw_;
   GtkWindow *gtk_window_;
-  cairo_surface_t *cairo_surface_;
+  yage::draw::Canvas *canvas_;
 
   static gboolean exec_window(gpointer *param);
   static gboolean exec_show(gpointer *param);
@@ -25,6 +30,7 @@ private:
   static gboolean exec_set_resizable(gpointer *param);
   static gboolean exec_set_size(gpointer *param);
   static gboolean exec_get_size(gpointer *param);
+  static gboolean exec_redraw(gpointer *param);
 
   static void msg_push_queue(Message &msg);
 
@@ -70,10 +76,11 @@ public:
   void set_resizable(bool resizable);
   void set_size(int width, int height);
   void get_size(int &width, int &height);
-
+ 
+  GtkWidget *pro_get_gtk_draw(void);
   GtkWindow *pro_get_gtk_window();
-  GtkWidget *pro_get_gtk_draw();
-  cairo_surface_t *pro_get_cairo_suface();
+  void pro_redraw();
+  yage::draw::Canvas &pro_get_canvas(void);
 };
 
 } /* core */
