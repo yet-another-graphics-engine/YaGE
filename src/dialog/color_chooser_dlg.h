@@ -3,7 +3,7 @@
 #include <gtk/gtk.h>
 #include "../core/window.h"
 #include "../core/message.h"
-#include "../util/color.h"
+#include "../draw/color.h"
 
 namespace yage {
 namespace dialog {
@@ -15,7 +15,7 @@ public:
   ~ColorChooserDlg();
   ColorChooserDlg(const char *title);
   ColorChooserDlg(const char *title, Window &window);
-  bool show(yage::util::Color &color);
+  bool show(yage::draw::Color &color);
 
 private:
   GtkColorChooser *gtk_dialog_;

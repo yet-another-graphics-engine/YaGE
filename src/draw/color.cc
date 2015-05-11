@@ -55,5 +55,12 @@ double Color::geta() const
 }
 
 
+void Color::set_color(double r, double g, double b, double a) {
+    r_ = r;
+    g_ = g;
+    b_ = b;
+    a_ = a;
+}
+
 } // namespace draw
 } // namespace yage

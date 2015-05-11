@@ -21,6 +21,8 @@ class Color {
 		double getg() const;
 		double getb() const;
 		double geta() const;
+
+		void set_color(double r, double g, double b, double a = 1);
 };
 
 } // namespace draw

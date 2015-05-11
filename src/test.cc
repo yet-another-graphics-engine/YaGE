@@ -293,9 +293,9 @@ void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
 void test_dialog_color(Window &w)
 {
   ColorChooserDlg color_dlg("color", w);
-  yage::util::Color c;
+  yage::draw::Color c;
   if (color_dlg.show(c)) {
-    fprintf(stderr, "Color: %lf %lf %lf %lf\n", c.r, c.g, c.b, c.a);
+    fprintf(stderr, "Color: %lf %lf %lf %lf\n", c.getr(), c.getg(), c.getb(), c.geta());
   }
 }
 
@@ -372,6 +372,6 @@ void test_audio(void) {
 
 int yage_main()
 {
-  test_draw();
+  test_dialog();
   return 0;
 }

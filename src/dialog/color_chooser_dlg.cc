@@ -48,7 +48,7 @@ gboolean ColorChooserDlg::exec_create(gpointer *param)
 gboolean ColorChooserDlg::exec_show(gpointer *param)
 {
   auto this_ = reinterpret_cast<ColorChooserDlg *>(param[0]);
-  auto &yage_color = *reinterpret_cast<yage::util::Color *>(param[1]);
+  auto &yage_color = *reinterpret_cast<yage::draw::Color *>(param[1]);
   auto &ret = *reinterpret_cast<gint *>(param[2]);
 
   gint run_ret = gtk_dialog_run(GTK_DIALOG(this_->gtk_dialog_));
@@ -57,10 +57,7 @@ gboolean ColorChooserDlg::exec_show(gpointer *param)
 
     GdkRGBA gdk_color;
     gtk_color_chooser_get_rgba(this_->gtk_dialog_, &gdk_color);
-    yage_color.r = gdk_color.red;
-    yage_color.g = gdk_color.green;
-    yage_color.b = gdk_color.blue;
-    yage_color.a = gdk_color.alpha;
+    yage_color.set_color(gdk_color.red, gdk_color.green, gdk_color.blue, gdk_color.alpha);
   } else {
     ret = false;
   }
@@ -69,7 +66,7 @@ gboolean ColorChooserDlg::exec_show(gpointer *param)
   return false;
 }
 
-bool ColorChooserDlg::show(yage::util::Color &color)
+bool ColorChooserDlg::show(yage::draw::Color &color)
 {
   bool ret;
   gtk_runner.call(exec_show, {this, &color, &ret});
