@@ -2,8 +2,17 @@
 #include "draw/canvas.h"
 #include "draw/circle.h"
 #include "draw/color.h"
+#include "dialog/message_dlg.h"
+#include "platform/player.h"
+#include "dialog/file_chooser_dlg.h"
+#include "dialog/color_chooser_dlg.h"
+
 #include <cstdlib>
+#include <thread>
+#include <iostream>
 using namespace yage::core;
+using namespace yage::dialog;
+extern "C" int yage_main(void);
 
 #define P_PROP(type, name, format) fprintf(stderr, #name"="#format", ", msg.type.name)
 #define P_NAME(type) \
@@ -73,7 +82,11 @@ void test_window_count(void)
     if (msg.mouse.is_left) {
       Window *new_win = new Window;
       new_win->show();
+      #ifndef _MSC_VER
       snprintf(buf, sizeof(buf), "Window %d", ++n);
+      #else
+      _snprintf(buf, sizeof(buf), "Window %d", ++n);
+      #endif
       new_win->set_title(buf);
     }
     if (msg.mouse.is_right) msg.source->destroy();
@@ -111,6 +124,11 @@ void test_draw(void)
     if (msg.type != msg.type_mouse) continue;
     if (msg.mouse.type != msg.mouse.type_move) continue;
     if (!msg.mouse.is_left) continue;
+    cairo_t *cr = cairo_create(w.cairo_surface_);
+    cairo_rectangle(cr, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
+    cairo_fill(cr);
+    cairo_destroy(cr);
+    gtk_widget_queue_draw_area(w.gtk_draw_, msg.mouse.x - 3, msg.mouse.y - 3, 6, 6);
   }
 }
 
@@ -161,7 +179,7 @@ void test_resize()
 
       case '!':
         w.hide();
-        sleep(1);
+        std::this_thread::sleep_for(std::chrono::seconds(1));
         w.show();
     }
   }
@@ -252,9 +270,112 @@ void test_fix_size()
   }
 }
 
-int main(int argc, char *argv[])
+void test_dialog_msg(Window &w)
 {
-  Window::init(test_draw);
-  //test_fix_size();
+  MessageDlg msg_dlg(MessageDlg::button_type_yes_no, MessageDlg::icon_type_question, w);
+  msg_dlg.set_title("<u>title</u>");
+  msg_dlg.set_message("<i>message: press a button</i>");
+  MessageDlg msg_dlg1(MessageDlg::button_type_ok, MessageDlg::icon_type_info);
+  msg_dlg1.set_title("result");
+  if (msg_dlg.show() == MessageDlg::result_type_yes) {
+    msg_dlg1.set_message("yes");
+  } else {
+    msg_dlg1.set_message("no");
+  }
+  msg_dlg1.show();
+}
+
+void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
+{
+  FileChooserDlg fc_dlg(type, "fc_dlg", w);
+  std::string path;
+  if (fc_dlg.show(path)) {
+    fprintf(stderr, "Path: %s\n", path.c_str());
+  }
+}
+
+void test_dialog_color(Window &w)
+{
+  ColorChooserDlg color_dlg("color", w);
+  yage::util::Color c;
+  if (color_dlg.show(c)) {
+    fprintf(stderr, "Color: %lf %lf %lf %lf\n", c.r, c.g, c.b, c.a);
+  }
+}
+
+void test_dialog()
+{
+  using namespace yage::dialog;
+  Window w;
+  w.show();
+  Message msg;
+
+  while (Window::poll(msg)) {
+    if (msg.type != msg.type_kbd) continue;
+    if (!msg.kbd.is_press) continue;
+
+    switch (msg.kbd.keyval) {
+      case 'a':
+        test_dialog_msg(w);
+        break;
+
+      case 'b':
+        test_dialog_fc(FileChooserDlg::action_type_open, w);
+        break;
+
+      case 'c':
+        test_dialog_fc(FileChooserDlg::action_type_save, w);
+        break;
+
+      case 'd':
+        test_dialog_fc(FileChooserDlg::action_type_create_folder, w);
+        break;
+
+      case 'e':
+        test_dialog_fc(FileChooserDlg::action_type_select_folder, w);
+        break;
+
+      case 'f':
+        test_dialog_color(w);
+        break;
+    }
+  }
+}
+
+void test_audio(void) {
+    using yage::platform::Player;
+    std::cerr << "Load file IGNITE from Internet" << std::endl;
+    Player *player = Player::create_player("https://kirito.me/ignite.mp3");
+    std::cerr << "Play IGNITE" << std::endl;
+	player->play();
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::cerr << "Load file Date A Live from Internet" << std::endl;
+	Player *player2 = Player::create_player("https://kirito.me/date_a_live.mp3");
+    std::cerr << "Play Date A Live" << std::endl;
+	player2->play();
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::cerr << "Pause IGNITE" << std::endl;
+    player->pause();
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+	player->play();
+    std::cerr << "Resume IGNITE" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::cerr << "Stop IGNITE" << std::endl;
+    player->stop();
+    std::cerr << "Play IGNITE" << std::endl;
+    player->play();
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::cerr << "Destroy music IGNITE object" << std::endl;
+	delete player;
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::cerr << "Stop Date A Live" << std::endl;
+	player2->stop();
+    std::cerr << "Destroy music Date A Live object" << std::endl;
+	delete player2;
+}
+
+int yage_main()
+{
+  test_draw();
   return 0;
 }

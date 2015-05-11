@@ -5,20 +5,13 @@
 #include "../util/runner.h"
 //#include "../draw/canvas.h"
 
-
-void test_draw(); // only for test; will be removed after drawing framework's finish
-
 namespace yage {
-namespace draw {
-  class Canvas;
-}
 namespace core {
 
-class Window {
-  friend void ::test_draw();
+struct Message;
 
+class Window {
 private:
-  static yage::util::Runner runner_;
   static GAsyncQueue *msg_queue_;
   static size_t window_num_;
 
@@ -34,7 +27,6 @@ private:
   static gboolean exec_set_resizable(gpointer *param);
   static gboolean exec_set_size(gpointer *param);
   static gboolean exec_get_size(gpointer *param);
-  static gboolean exec_redraw(gpointer *param);
 
   static void msg_push_queue(Message &msg);
 
@@ -66,7 +58,7 @@ private:
                                         Window *source);
 
 public:
-  static void init(void (*new_main)() = nullptr);
+  static int init(int (*new_main)());
   static bool poll(Message &msg, bool block = true);
   static void quit();
 
@@ -80,9 +72,11 @@ public:
   void set_resizable(bool resizable);
   void set_size(int width, int height);
   void get_size(int &width, int &height);
+ 
+  GtkWidget *pro_get_gtk_draw(void);
+  GtkWindow *pro_get_gtk_window();
   void pro_redraw();
   yage::draw::Canvas &pro_get_canvas(void);
-  GtkWidget *pro_get_gtk_draw(void);
 };
 
 } /* core */

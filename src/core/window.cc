@@ -1,20 +1,32 @@
 #include <glib.h>
+#include "../yage.h"
 #include "window.h"
 #include "../draw/canvas.h"
 
 namespace yage {
 namespace core {
 
-gpointer gui_thread(gpointer data) {
-  gtk_init(nullptr, nullptr);
-  gtk_main();
+gpointer user_thread(gpointer *param) {
+  auto func = reinterpret_cast<int (*)()>(param[0]);
+  auto &ret = *reinterpret_cast<int *>(param[1]);
+
+  ret = func();
+  gtk_main_quit();
   return nullptr;
 }
 
-gpointer main_thread(gpointer data) {
-  reinterpret_cast<gpointer (*)()>(data)();
-  gtk_main_quit();
-  return nullptr;
+int Window::init(int (*new_main)()) {
+
+  msg_queue_ = g_async_queue_new();
+  gtk_init(nullptr, nullptr);
+
+  int ret = 0;
+  gpointer param[] = {reinterpret_cast<gpointer>(new_main), &ret};
+  g_thread_new("YaGE user", reinterpret_cast<GThreadFunc>(user_thread), param);
+  gtk_main();
+
+  // user_thread() will set the value of ret
+  return ret;
 }
 
 /*
@@ -36,7 +48,6 @@ gboolean Window::exec_window(gpointer *param)
 {
   Window *this_ = reinterpret_cast<Window *>(param[0]);
   this_->canvas_ = nullptr;
-
 
   GtkWindow *&gtk_window_ = this_->gtk_window_;
   gtk_window_ = reinterpret_cast<GtkWindow*>(gtk_window_new(GTK_WINDOW_TOPLEVEL));
@@ -85,7 +96,7 @@ gboolean Window::exec_window(gpointer *param)
   ++Window::window_num_;
   fprintf(stderr, "New window=%p widget=%p\n", this_, gtk_draw_);
 
-  runner_.signal();
+  gtk_runner.signal();
   return false;
 }
 
@@ -95,7 +106,7 @@ gboolean Window::exec_show(gpointer *param)
 
   gtk_widget_show_all(GTK_WIDGET(this_->gtk_window_));
 
-  runner_.signal();
+  gtk_runner.signal();
   return false;
 }
 
@@ -115,7 +126,7 @@ gboolean Window::exec_hide(gpointer *param)
 
   gtk_widget_hide(GTK_WIDGET(this_->gtk_window_));
 
-  runner_.signal();
+  gtk_runner.signal();
   return false;
 }
 
@@ -126,7 +137,7 @@ gboolean Window::exec_destroy(gpointer *param)
   if (this_->gtk_window_)
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_window_));
 
-  runner_.signal();
+  gtk_runner.signal();
   return false;
 }
 
@@ -137,7 +148,7 @@ gboolean Window::exec_set_title(gpointer *param)
 
   gtk_window_set_title(this_->gtk_window_, title);
 
-  runner_.signal();
+  gtk_runner.signal();
   return false;
 }
 
@@ -156,7 +167,7 @@ gboolean Window::exec_set_resizable(gpointer *param)
                                   GDK_HINT_MIN_SIZE);
   }
 
-  runner_.signal();
+  gtk_runner.signal();
   return false;
 }
 
@@ -177,7 +188,7 @@ gboolean Window::exec_set_size(gpointer *param)
                                   GDK_HINT_MIN_SIZE);
   }
 
-  runner_.signal();
+  gtk_runner.signal();
   return false;
 }
 
@@ -189,60 +200,61 @@ gboolean Window::exec_get_size(gpointer *param)
 
   gtk_window_get_size(this_->gtk_window_, &width, &height);
 
-  runner_.signal();
+  gtk_runner.signal();
   return false;
 }
 
-void Window::init(void (*new_main)(void)){
-  msg_queue_ = g_async_queue_new();
-  if (new_main) {
-    g_thread_new("YaGE main", main_thread, reinterpret_cast<gpointer>(new_main));
-    gui_thread(nullptr);
-  } else {
-    g_thread_new("YaGE event", gui_thread, nullptr);
-  }
-}
 
 /*
  * Proxy functions
  * Request to execute worker functions in GUI thread and wait for the return.
  */
 Window::Window() {
-  runner_.call(exec_window, {this});
+  gtk_runner.call(exec_window, {this});
 }
 
 void Window::show() {
-  runner_.call(exec_show, {this});
+  gtk_runner.call(exec_show, {this});
 }
 
 void Window::hide() {
-  runner_.call(exec_hide, {this});
+  gtk_runner.call(exec_hide, {this});
 }
 
 void Window::destroy() {
-  runner_.call(exec_destroy, {this});
+  gtk_runner.call(exec_destroy, {this});
 }
 
 void Window::set_title(const gchar *title) {
-  runner_.call(exec_set_title, {this,
+  gtk_runner.call(exec_set_title, {this,
                reinterpret_cast<gpointer>(const_cast<gchar *>(title))});
 }
 
 void Window::set_resizable(bool resizable) {
-  runner_.call(exec_set_resizable, {this,
+  gtk_runner.call(exec_set_resizable, {this,
                reinterpret_cast<gpointer>(&resizable)});
 }
 
 void Window::set_size(int width, int height) {
-  runner_.call(exec_set_size, {this,
+  gtk_runner.call(exec_set_size, {this,
                reinterpret_cast<gpointer>(&width),
                reinterpret_cast<gpointer>(&height)});
 }
 
 void Window::get_size(int &width, int &height) {
-  runner_.call(exec_get_size, {this,
+  gtk_runner.call(exec_get_size, {this,
                reinterpret_cast<gpointer>(&width),
                reinterpret_cast<gpointer>(&height)});
+}
+
+GtkWindow *Window::pro_get_gtk_window()
+{
+  return gtk_window_;
+}
+
+GtkWidget *Window::pro_get_gtk_draw()
+{
+  return gtk_draw_;
 }
 
 void Window::pro_redraw() {
@@ -280,14 +292,6 @@ bool Window::poll(Message &msg, bool block) {
     delete reinterpret_cast<Message *>(pmsg);
   }
   return true;
-}
-
-yage::draw::Canvas &Window::pro_get_canvas() {
-  return *canvas_;
-}
-
-GtkWidget *Window::pro_get_gtk_draw(void) {
-    return  gtk_draw_;
 }
 
 }  // namespace core

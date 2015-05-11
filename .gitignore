@@ -1,4 +1,4 @@
-.ycm_extra_conf.pyc
+src/.ycm_extra_conf.*
 *.swp
 bin/
 
