@@ -1,15 +1,21 @@
+#ifndef PLAYER_MACOSX_H_
+#define PLAYER_MACOSX_H_
+
 #include "../player.h"
 
-@class AVAudioPlayer;
-@class NSData;
+#ifdef __OBJC__
+@class AVPlayer;
+#else
+struct AVPlayer;
+#error An Objective-C++ compiler is required. Add "-ObjC++" in your CFLAGS and "-framework Foundation -framework AVFoundation" in your LDFLAGS.
+#endif
 
 namespace yage {
 namespace platform {
 class OSXPlayer : public Player {
     private:
-        AVAudioPlayer *player_;
-        //NSError *error_;
-        NSData *content_;
+        AVPlayer *player_;
+        bool online_play_;
     public:
         OSXPlayer(std::string url);
         virtual ~OSXPlayer();
@@ -21,3 +27,5 @@ class OSXPlayer : public Player {
 
 }
 }
+
+#endif

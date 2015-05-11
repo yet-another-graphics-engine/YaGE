@@ -28,7 +28,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-set(LIB_SOURCE_FILES yage.cc core/message.cc core/window.cc util/runner.cc dialog/message_dlg.cc platform/player.cc)
+set(LIB_SOURCE_FILES yage.cc core/message.cc core/window.cc util/runner.cc dialog/message_dlg.cc platform/player.cc dialog/file_chooser_dlg.cc dialog/color_chooser_dlg.cc)
 
 if(WIN32)
     list(APPEND LIB_SOURCE_FILES platform/player/win32.cc)
@@ -41,6 +41,7 @@ endif()
 if(APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
     find_library(AVFOUNDATION_LIBRARY AVFoundation)
+    find_library(COREMEDIA_LIBRARY CoreMedia)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ObjC++")
 endif()
 
@@ -71,7 +72,7 @@ add_executable(yagetest test.cc)
 target_link_libraries(yagetest yage)
 
 if (APPLE)
-    target_link_libraries(yagetest ${FOUNDATION_LIBRARY} ${AVFOUNDATION_LIBRARY})
+    target_link_libraries(yagetest ${FOUNDATION_LIBRARY} ${AVFOUNDATION_LIBRARY} ${COREMEDIA_LIBRARY})
 endif()
 
 if (MSVC) # library required by MSVC is pretty different than others

@@ -7,5 +7,5 @@ before_build:
 - cd build
 - cmake .. -G "Visual Studio 12 2013"
 build:
-  project: C:/projects/yage/build/src/yage.vcxproj
+  project: C:/projects/yage/build/YaGE.sln
   verbosity: detailed

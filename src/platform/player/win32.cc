@@ -5,13 +5,15 @@
 namespace yage {
 
 namespace util {
-wchar_t* char_to_wchar(const char *str) {
+
+wchar_t *char_to_wchar(const char *str) {
     int length = strlen(str) + 1;
     wchar_t *t = new wchar_t[length];
-    memset(t, 0, length*sizeof(wchar_t));
+    memset(t, 0, length * sizeof(wchar_t));
     MultiByteToWideChar(CP_ACP, 0, str, strlen(str), t, length);
     return t;
 }
+
 }
 
 namespace platform {
@@ -21,6 +23,7 @@ static const WPARAM YAGE_PLAYER_PLAY = 1L;
 static const WPARAM YAGE_PLAYER_PAUSE = 2L;
 static const WPARAM YAGE_PLAYER_STOP = 3L;
 static const WPARAM YAGE_PLAYER_PLAYING = 4L;
+static const WPARAM YAGE_PLAYER_FINALIZE = 5L;
 
 struct player_init_message {
     WinPlayer* this_;
@@ -65,36 +68,39 @@ DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
                 TranslateMessage(&msg);
                 DispatchMessageW(&msg);
                 if (msg.message == YAGE_PLAYER_MESSAGE) {
+                    player_callback_message *cb_msg = (player_callback_message *)msg.lParam;
                     switch (msg.wParam) {
                     case YAGE_PLAYER_PLAY:
                         hr = controls->play();
                         assert(SUCCEEDED(hr));
-                        *((player_callback_message*)msg.lParam)->pbool_ = SUCCEEDED(hr);
-                        SetEvent(((player_callback_message*)msg.lParam)->event_);
+                        *cb_msg->pbool_ = SUCCEEDED(hr);
                         break;
 
                     case YAGE_PLAYER_PAUSE:
                         hr = controls->pause();
                         assert(SUCCEEDED(hr));
-                        SetEvent(((player_callback_message*)msg.lParam)->event_);
                         break;
 
                     case YAGE_PLAYER_STOP:
                         hr = controls->stop();
                         assert(SUCCEEDED(hr));
-                        SetEvent(((player_callback_message*)msg.lParam)->event_);
                         break;
 
                     case YAGE_PLAYER_PLAYING:
                         WMPPlayState wmpps;
                         hr = player->get_playState(&wmpps);
-                        *((player_callback_message*)msg.lParam)->pbool_ = wmpps == wmppsPlaying;
-                        SetEvent(((player_callback_message*)msg.lParam)->event_);
+                        assert(SUCCEEDED(hr));
+                        *cb_msg->pbool_ = wmpps == wmppsPlaying;
+                        break;
+
+                    case YAGE_PLAYER_FINALIZE:
+                        *pfinished = true;
                         break;
 
                     default:
                         std::cerr << "Triggered default!" << std::endl;
                     }
+                    SetEvent(cb_msg->event_);
                 }
             }
         } else {
@@ -115,47 +121,43 @@ WinPlayer::WinPlayer(std::string url) : Player() {
     msg.event_ = CreateEventW(NULL, FALSE, FALSE, NULL);
     thread_handle_ = CreateThread(NULL, 0, player_worker_, (LPVOID) &msg, NULL, &thread_id_);
     WaitForSingleObject(msg.event_, INFINITE);
+    CloseHandle(msg.event_);
 }
 
 
 WinPlayer::~WinPlayer() {
     control_.Release();
     player_.Release();
-    finished_ = true;
+    send_message_(YAGE_PLAYER_FINALIZE);
+    WaitForSingleObject(thread_handle_, INFINITE);
+    CloseHandle(thread_handle_);
+}
+
+bool WinPlayer::send_message_(WPARAM message) {
+    bool result;
+    player_callback_message msg;
+    msg.event_ = CreateEventW(NULL, FALSE, FALSE, NULL);
+    msg.pbool_ = &result;
+    PostThreadMessageW(thread_id_, YAGE_PLAYER_MESSAGE, message, (LPARAM)&msg);
+    WaitForSingleObject(msg.event_, INFINITE);
+    CloseHandle(msg.event_);
+    return result;
 }
 
 bool WinPlayer::play() {
-    bool result;
-    player_callback_message msg;
-    msg.event_ = CreateEventW(NULL, FALSE, FALSE, NULL);
-    msg.pbool_ = &result;
-    PostThreadMessageW(thread_id_, YAGE_PLAYER_MESSAGE, YAGE_PLAYER_PLAY, (LPARAM)&msg);
-    WaitForSingleObject(msg.event_, INFINITE);
-    return result;
+    return send_message_(YAGE_PLAYER_PLAY);
 }
 
 void WinPlayer::pause() {
-    player_callback_message msg;
-    msg.event_ = CreateEventW(NULL, FALSE, FALSE, NULL);
-    PostThreadMessageW(thread_id_, YAGE_PLAYER_MESSAGE, YAGE_PLAYER_PAUSE, (LPARAM)&msg);
-    WaitForSingleObject(msg.event_, INFINITE);
+    send_message_(YAGE_PLAYER_PAUSE);
 }
 
 void WinPlayer::stop() {
-    player_callback_message msg;
-    msg.event_ = CreateEventW(NULL, FALSE, FALSE, NULL);
-    PostThreadMessageW(thread_id_, YAGE_PLAYER_MESSAGE, YAGE_PLAYER_STOP, (LPARAM)&msg);
-    WaitForSingleObject(msg.event_, INFINITE);
+    send_message_(YAGE_PLAYER_STOP);
 }
 
 bool WinPlayer::is_playing() {
-    bool result;
-    player_callback_message msg;
-    msg.event_ = CreateEventW(NULL, FALSE, FALSE, NULL);
-    msg.pbool_ = &result;
-    PostThreadMessageW(thread_id_, YAGE_PLAYER_MESSAGE, YAGE_PLAYER_PLAYING, (LPARAM)&msg);
-    WaitForSingleObject(msg.event_, INFINITE);
-    return result;
+    return send_message_(YAGE_PLAYER_PLAYING);
 }
 
 }

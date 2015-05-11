@@ -1,7 +1,7 @@
-.ycm_extra_conf.pyc
+src/.ycm_extra_conf.*
 *.swp
 bin/
 
 .DS_Store
-build/
+build*/
 .idea

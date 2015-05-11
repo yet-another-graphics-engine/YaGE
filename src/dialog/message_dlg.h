@@ -60,7 +60,7 @@ private:
 
 };
 
-  }  // namespace dialog
+}  // namespace dialog
 }  // namespace yage
 
 #endif /* end of include guard: MESSAGE_H_S4GAKVJJ */

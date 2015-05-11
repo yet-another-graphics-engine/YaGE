@@ -10,33 +10,20 @@ namespace platform {
 OSXPlayer::OSXPlayer(std::string url) : Player() {
     url_ = url;
     NSURL *nsurl;
-    NSError *err = nil;
-    content_ = nil;
-
     NSString *nsurlstr = [NSString stringWithCString:url.c_str() encoding:[NSString defaultCStringEncoding]];
-    if ([nsurlstr hasPrefix:@"http"] || [nsurlstr hasPrefix:@"ftp"]) {
         nsurl = [NSURL URLWithString:nsurlstr];
-        content_ = [NSData dataWithContentsOfURL:nsurl];
-        player_ = [[AVAudioPlayer alloc] initWithData:content_ error:&err];
-    } else {
-        nsurl = [NSURL fileURLWithPath:nsurlstr];
-        player_ = [[AVAudioPlayer alloc] initWithContentsOfURL:nsurl error:&err];
-    }
+        player_ = [AVPlayer playerWithURL:nsurl];
     [nsurlstr release];
     [nsurl release];
-    if (err) {
-        NSLog(@"%@", [err localizedDescription]);
-        //[err release];
-    }
 }
 
 OSXPlayer::~OSXPlayer() {
-    [content_ release];
     [player_ release];
 }
 
 bool OSXPlayer::play(void) {
-    return [player_ play];
+    [player_ play];
+    return is_playing();
 }
 
 void OSXPlayer::pause(void) {
@@ -44,11 +31,12 @@ void OSXPlayer::pause(void) {
 }
 
 void OSXPlayer::stop(void) {
-    [player_ stop];
+    [player_ pause];
+    [player_ seekToTime:CMTimeMakeWithSeconds(1.0, 1)];
 }
 
 bool OSXPlayer::is_playing(void) {
-    return player_.playing;
+    return player_.rate > 0 && !player_.error;
 }
 
 }
