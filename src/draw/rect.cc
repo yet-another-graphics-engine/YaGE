@@ -11,7 +11,7 @@ void Rect::rebuild_poly()
 {
 	auto x = std::minmax<double>(a_.getx(), b_.getx());
 	auto y = std::minmax<double>(a_.gety(), b_.gety());
-	poly_.vertex = Poly::Vertexes{
+	poly_.vertex = BasePoly::Vertexes{
 		Point(x.first,	y.first),
 		Point(x.second,	y.first),
 		Point(x.second,	y.second),
@@ -44,11 +44,11 @@ void Rect::set_points(const Point &a, const Point &b)
  * @param name the name of the shape
  */
 Rect::Rect(std::string name)
-		: BasicShape(name, "rectangle")
+		: ShapeProperty(name, "rectangle")
 {
 }
 
-Poly &Rect::pro_get_poly(void) {
+BasePoly &Rect::pro_get_base_poly(void) {
     return poly_;
 }
 

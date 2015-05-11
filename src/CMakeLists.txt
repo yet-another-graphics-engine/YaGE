@@ -28,7 +28,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-set(LIB_SOURCE_FILES core/message.cc core/window.cc util/runner.cc draw/basic_shape.cc draw/canvas.cc draw/circle.cc draw/color.cc draw/ellipse.cc draw/elliptic_arc.cc draw/point.cc draw/point.cc draw/poly.cc draw/rect.cc)
+set(LIB_SOURCE_FILES core/message.cc core/window.cc util/runner.cc draw/point.cc draw/color.cc draw/shape_property.cc draw/base_elliptic_arc.cc draw/elliptic_arc.cc draw/base_ellipse.cc draw/ellipse.cc draw/circle.cc draw/base_poly.cc draw/rect.cc draw/canvas.cc)
 add_library(yage STATIC ${LIB_SOURCE_FILES})
 
 # CMake x GTK from https://gist.github.com/fracek/3323924

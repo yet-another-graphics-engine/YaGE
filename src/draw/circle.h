@@ -1,14 +1,14 @@
 #ifndef CIRCLE_H_
 #define CIRCLE_H_
-#include "basic_shape.h"
-#include "ellipse.h"
+#include "shape_property.h"
+#include "base_ellipse.h"
 
 namespace yage {
 namespace draw {
 
-class Circle : public BasicShape {
+class Circle : public ShapeProperty {
 	private:
-		Ellipse ellipse_;
+		BaseEllipse ellipse_;
 	public:
         Circle(std::string name = "");
 
@@ -18,7 +18,7 @@ class Circle : public BasicShape {
 		void set_center(Point &center);
         void set_radius(double radius);
 
-        Ellipse &pro_get_ellipse(void);
+        BaseEllipse &pro_get_base_ellipse(void);
 };
 
 }

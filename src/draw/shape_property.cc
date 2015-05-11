@@ -1,4 +1,4 @@
-#include "basic_shape.h"
+#include "shape_property.h"
 #include "color.h"
 
 namespace yage {
@@ -8,7 +8,7 @@ namespace draw {
  * Get the foreground(border) color of the shape.
  * @return the color
  */
-Color BasicShape::get_fgcolor() const
+Color ShapeProperty::get_fgcolor() const
 {
     return fgcolor_;
 }
@@ -17,7 +17,7 @@ Color BasicShape::get_fgcolor() const
  * Get the background(fill) color of the shape.
  * @return the color
  */
-Color BasicShape::get_bgcolor() const
+Color ShapeProperty::get_bgcolor() const
 {
     return bgcolor_;
 }
@@ -26,7 +26,7 @@ Color BasicShape::get_bgcolor() const
  * Get the border thickness of the shape.
  * @return the thickness
  */
-double BasicShape::get_thickness() const
+double ShapeProperty::get_thickness() const
 {
     return thickness_;
 }
@@ -35,7 +35,7 @@ double BasicShape::get_thickness() const
  * Get the name of the shape.
  * @return the name
  */
-std::string BasicShape::get_name() const
+std::string ShapeProperty::get_name() const
 {
     return name_;
 }
@@ -44,7 +44,7 @@ std::string BasicShape::get_name() const
  * Set the foreground(border) color of the shape.
  * @param fgcolor new foreground color
  */
-void BasicShape::set_fgcolor(Color fgcolor)
+void ShapeProperty::set_fgcolor(Color fgcolor)
 {
     fgcolor_ = fgcolor;
 }
@@ -53,7 +53,7 @@ void BasicShape::set_fgcolor(Color fgcolor)
  * Set the background(fill) color of the shape.
  * @param fgcolor new background color
  */
-void BasicShape::set_bgcolor(Color bgcolor)
+void ShapeProperty::set_bgcolor(Color bgcolor)
 {
     bgcolor_ = bgcolor;
 }
@@ -62,7 +62,7 @@ void BasicShape::set_bgcolor(Color bgcolor)
  * Set the border thickness of the shape.
  * @param fgcolor new thickness
  */
-void BasicShape::set_thickness(double thickness)
+void ShapeProperty::set_thickness(double thickness)
 {
     thickness_ = thickness;
 }
@@ -71,7 +71,7 @@ void BasicShape::set_thickness(double thickness)
  * Rename the shape
  * @param name new name
  */
-void BasicShape::set_name(std::string name)
+void ShapeProperty::set_name(std::string name)
 {
     name_ = name;
 }
@@ -82,7 +82,7 @@ void BasicShape::set_name(std::string name)
  *
  * @param name the name of the shape
  */
-BasicShape::BasicShape(std::string name, std::string type)
+ShapeProperty::ShapeProperty(std::string name, std::string type)
         : fgcolor_(), bgcolor_(), thickness_(1), name_(name), type_(type)
 {
 }

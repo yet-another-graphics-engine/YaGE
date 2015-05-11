@@ -1,14 +1,14 @@
 #ifndef RECT_H_LWYTDFQS
 #define RECT_H_LWYTDFQS
-#include "basic_shape.h"
-#include "poly.h"
+#include "shape_property.h"
+#include "base_poly.h"
 
 namespace yage {
 namespace draw {
 
-class Rect : public BasicShape {
+class Rect : public ShapeProperty {
 	private:
-		Poly poly_;	///< Internal polygon.
+		BasePoly poly_;	///< Internal polygon.
 		Point a_, b_;	///< Two diagonal points on the rectangle.
 		void rebuild_poly();
 
@@ -18,7 +18,7 @@ class Rect : public BasicShape {
 		void set_points(const Point &a, const Point &b);
 		Rect(std::string name = "");
 
-        Poly &pro_get_poly(void);
+        BasePoly &pro_get_base_poly(void);
 };
 
 

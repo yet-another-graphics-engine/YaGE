@@ -3,7 +3,7 @@
 namespace yage {
 namespace draw {
 
-Poly::Poly(std::string name) : BasicShape("", "poly") {
+Poly::Poly(std::string name) : BasePoly(), ShapeProperty(name, "polygon") {
 }
 
 } // namespace draw

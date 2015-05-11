@@ -1,5 +1,5 @@
-#ifndef BASIC_SHAPE_H_JZUADHOK
-#define BASIC_SHAPE_H_JZUADHOK
+#ifndef SHAPE_PROPERTY_H_JZUADHOK
+#define SHAPE_PROPERTY_H_JZUADHOK
 #include "color.h"
 #include "point.h"
 #include <string>
@@ -9,9 +9,9 @@ namespace yage {
 namespace draw {
 
 /**
- * A base class for all shapes
+ * A base class for all properties of shapes
  */
-class BasicShape {
+class ShapeProperty {
 	protected:
 		Color fgcolor_;		///< color of the border.
 		Color bgcolor_;
@@ -20,9 +20,9 @@ class BasicShape {
 		std::string type_;
 
 	public:
-		BasicShape(std::string name = "", std::string type = "");
+		ShapeProperty(std::string name = "", std::string type = "");
 
-		virtual ~BasicShape() = default;
+		virtual ~ShapeProperty() = default;
 
 		Color get_fgcolor() const;
 		Color get_bgcolor() const;
@@ -38,4 +38,4 @@ class BasicShape {
 
 } // namespace draw
 } // namespace yage
-#endif /* end of include guard: BASIC_SHAPE_H_JZUADHOK */
+#endif /* end of include guard: SHAPE_PROPERTY_H_JZUADHOK */
