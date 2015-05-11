@@ -3,6 +3,8 @@
 #include "player/macosx.h"
 #elif defined(WIN32)
 #include "player/win32.h"
+#else
+#include "player/linux.h"
 #endif
 
 namespace yage {
@@ -17,7 +19,7 @@ Player *Player::create_player(std::string url) {
 #elif defined(WIN32)
     return new WinPlayer(url);
 #else
-    return nullptr;
+    return new LinuxPlayer(url);
 #endif
 }
 
