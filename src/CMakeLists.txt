@@ -43,9 +43,7 @@ if(APPLE)
     find_library(AVFOUNDATION_LIBRARY AVFoundation)
     find_library(COREMEDIA_LIBRARY CoreMedia)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ObjC++")
-endif()
-
-if(UNIX)
+elseif(UNIX)
 	FIND_PACKAGE(PkgConfig REQUIRED)
 	PKG_CHECK_MODULES(GSTREAMER REQUIRED gstreamer-0.10)
 	INCLUDE_DIRECTORIES(${GSTREAMER_INCLUDE_DIRS})
@@ -73,12 +71,13 @@ target_link_libraries(yagetest yage)
 
 if (APPLE)
     target_link_libraries(yagetest ${FOUNDATION_LIBRARY} ${AVFOUNDATION_LIBRARY} ${COREMEDIA_LIBRARY})
+elseif(UNIX)
+    target_link_libraries(yagetest ${GSTREAMER_LIBRARIES})
 endif()
 
 if (MSVC) # library required by MSVC is pretty different than others
     target_link_libraries(yagetest "atk-1.0.lib" "cairo.lib" "fontconfig.lib" "gailutil.lib" "gdk-win32-3.0.lib" "gdk_pixbuf-2.0.lib" "gio-2.0.lib" "glib-2.0.lib" "gmodule-2.0.lib" "gobject-2.0.lib" "gthread-2.0.lib" "gtk-win32-3.0.lib" "pango-1.0.lib" "pangocairo-1.0.lib" "pangoft2-1.0.lib" "pangowin32-1.0.lib")
 else()
     target_link_libraries(yagetest ${GTK3_LIBRARIES})
-    target_link_libraries(yagetest ${GSTREAMER_LIBRARIES})
 endif()
 
