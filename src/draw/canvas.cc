@@ -38,7 +38,7 @@ Canvas::Canvas(std::string filename) {
     gdk_cairo_set_source_pixbuf(brush_, buf, 0.0, 0.0);
     cairo_paint(brush_);
     finish_brush_();
-    gdk_pixbuf_unref(buf);
+    g_object_unref(buf);
 }
 
 Canvas::~Canvas() {
