@@ -13,8 +13,6 @@
 #include <cairo.h>
 #include <vector>
 
-class Picture;
-
 namespace yage {
 namespace core {
 class Window;
@@ -42,14 +40,16 @@ public:
     Canvas(Window &window);
     // Create a 'virtual' canvas based on memory buffer
     Canvas(int width, int height);
+    // Create a 'virtual' canvas based on a specific picture
+    Canvas(std::string filename);
     ~Canvas();
     void draw_poly(Poly &poly);
     void draw_rect(Rect &rect);
     void draw_elliptical_arc(EllipticArc &ellparc);
     void draw_ellipse(Ellipse &ellipse);
     void draw_circle(Circle &circle);
-    void draw_canvas(Canvas &canvas);
-    void draw_picture(Picture &picture);
+    // position indicates the left-top position
+    void draw_canvas(Canvas &canvas, Point position);
     void draw_text(Text &text);
 
     cairo_surface_t *pro_get_cairo_surface(void);

@@ -108,6 +108,14 @@ void test_draw(void)
     if (msg.mouse.type != msg.mouse.type_move) continue;
     if (!msg.mouse.is_left) continue;
     Canvas& canvas = w.pro_get_canvas();
+    std::string pic_name = "";
+    if (pic_name == "") {
+      fprintf(stderr, "Please specify the picture name as pic_name.\nPicture will not show if you do not change the variable");
+    } else {
+      Canvas picture(pic_name);
+      Point origin(0, 0);
+      canvas.draw_canvas(picture, origin);
+    }
     Ellipse e("");
     Point point(300, 200);
     e.set_center(point);
@@ -386,6 +394,6 @@ void test_audio(void) {
 
 int yage_main()
 {
-  test_dialog();
+  test_draw();
   return 0;
 }

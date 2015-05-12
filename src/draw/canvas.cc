@@ -23,6 +23,22 @@ Canvas::Canvas(int width, int height) : ShapeProperty("", "canvas") {
     brush_ = cairo_create(surface_);
 }
 
+Canvas::Canvas(std::string filename) {
+    GError *err = NULL;
+    GdkPixbuf *buf = gdk_pixbuf_new_from_file(filename.c_str(), &err);
+    if (err) {
+        fprintf(stderr, "%s\n", err->message);
+    }
+    int width = gdk_pixbuf_get_width(buf);
+    int height = gdk_pixbuf_get_height(buf);
+    surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    brush_ = cairo_create(surface_);
+    init_brush_();
+    gdk_cairo_set_source_pixbuf(brush_, buf, 0.0, 0.0);
+    cairo_paint(brush_);
+    finish_brush_();
+}
+
 Canvas::~Canvas() {
     cairo_destroy(brush_);
     cairo_surface_finish(surface_);
@@ -74,7 +90,7 @@ void Canvas::pro_draw_ellipse_(BaseEllipse &ellipse, ShapeProperty &shape)  {
     pro_draw_elliptic_arc_(ellipse.pro_get_base_elliptic_arc(), shape);
 }
 
-// dirty hack for wrong class model
+// hack for the class model
 void Canvas::pro_draw_poly_(BasePoly &poly, ShapeProperty &shape)  {
     init_brush_();
     cairo_set_line_width(brush_, shape.get_thickness());
@@ -86,18 +102,12 @@ void Canvas::pro_draw_poly_(BasePoly &poly, ShapeProperty &shape)  {
     finish_brush_();
 }
 
-void Canvas::draw_picture(Picture &picture)  {
-
-}
-
 void Canvas::draw_text(Text &text) {
     init_brush_();
     PangoLayout *layout = pango_cairo_create_layout(brush_);
 
     pango_layout_set_text(layout, text.get_text().c_str(), -1);
     pango_layout_set_font_description(layout, text.get_font().pro_get_pango_font());
-    //PangoFontDescription *desc = pango_font_description_from_string ("Sans Bold 14");
-    //pango_layout_set_font_description(layout, desc);
     cairo_translate(brush_, text.get_position().getx(), text.get_position().gety());
     cairo_set_source_rgba(brush_,
                           text.get_fgcolor().getr(),
@@ -130,11 +140,18 @@ void Canvas::draw_circle(Circle &circle)  {
     pro_draw_ellipse_(circle.pro_get_base_ellipse(), circle);
 }
 
-cairo_surface_t *Canvas::pro_get_cairo_surface()  {
+void Canvas::draw_canvas(Canvas &canvas, Point position) {
+    init_brush_();
+    cairo_set_source_surface(brush_, canvas.pro_get_cairo_surface(), position.getx(), position.gety());
+    cairo_paint(brush_);
+    finish_brush_();
+}
+
+cairo_surface_t *Canvas::pro_get_cairo_surface(void)  {
     return surface_;
 }
 
-cairo_t *Canvas::pro_get_brush()  {
+cairo_t *Canvas::pro_get_brush(void)  {
     return brush_;
 }
 
