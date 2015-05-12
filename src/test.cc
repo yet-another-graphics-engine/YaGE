@@ -100,34 +100,35 @@ void test_draw(void)
   Window w;
   w.show();
   using namespace yage::draw;
-  Canvas& canvas = w.pro_get_canvas();
-  Ellipse e("");
-  Point point(300, 200);
-  e.set_center(point);
-  Color color(1, 0, 0, 1);
-  e.set_bgcolor(color);
-  Color color1(0, 1, 0, 1);
-  e.set_fgcolor(color1);
-  e.set_xradius(100);
-  e.set_yradius(200);
-  canvas.draw_ellipse(e);
-  Point point2(500, 400);
-  Rect rect("");
-  rect.set_points(point, point2);
-  rect.set_bgcolor(color1);
-  rect.set_fgcolor(color);
-  canvas.draw_rect(rect);
-  Font times("Times New Roman", 12, true, true);
-  Text text("Yet another Graphics Engine", times);
-  Color yellow(1, 1, 0, 1);
-  text.set_color(yellow);
-  text.set_position(point);
-  canvas.draw_text(text);
+
   Message msg;
   while (Window::poll(msg)) {
     if (msg.type != msg.type_mouse) continue;
     if (msg.mouse.type != msg.mouse.type_move) continue;
     if (!msg.mouse.is_left) continue;
+    Canvas& canvas = w.pro_get_canvas();
+    Ellipse e("");
+    Point point(300, 200);
+    e.set_center(point);
+    Color color(1, 0, 0, 1);
+    e.set_bgcolor(color);
+    Color color1(0, 1, 0, 1);
+    e.set_fgcolor(color1);
+    e.set_xradius(100);
+    e.set_yradius(200);
+    canvas.draw_ellipse(e);
+    Point point2(500, 400);
+    Rect rect("");
+    rect.set_points(point, point2);
+    rect.set_bgcolor(color1);
+    rect.set_fgcolor(color);
+    canvas.draw_rect(rect);
+    Font times("Times New Roman", 12, true, true);
+    Text text("Yet another Graphics Engine", times);
+    Color yellow(1, 1, 0, 1);
+    text.set_color(yellow);
+    text.set_position(point);
+    canvas.draw_text(text);
   }
 }
 
@@ -346,17 +347,17 @@ void test_audio(void) {
     std::cerr << "Load file IGNITE from Internet" << std::endl;
     Player *player = Player::create_player("https://kirito.me/ignite.mp3");
     std::cerr << "Play IGNITE" << std::endl;
-	player->play();
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+    player->play();
+    std::this_thread::sleep_for(std::chrono::seconds(5));
     std::cerr << "Load file Date A Live from Internet" << std::endl;
-	Player *player2 = Player::create_player("https://kirito.me/date_a_live.mp3");
+    Player *player2 = Player::create_player("https://kirito.me/date_a_live.mp3");
     std::cerr << "Play Date A Live" << std::endl;
-	player2->play();
-	std::this_thread::sleep_for(std::chrono::seconds(3));
+    player2->play();
+    std::this_thread::sleep_for(std::chrono::seconds(3));
     std::cerr << "Pause IGNITE" << std::endl;
     player->pause();
-	std::this_thread::sleep_for(std::chrono::seconds(3));
-	player->play();
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    player->play();
     std::cerr << "Resume IGNITE" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(3));
     std::cerr << "Stop IGNITE" << std::endl;
@@ -365,16 +366,16 @@ void test_audio(void) {
     player->play();
     std::this_thread::sleep_for(std::chrono::seconds(3));
     std::cerr << "Destroy music IGNITE object" << std::endl;
-	delete player;
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+    delete player;
+    std::this_thread::sleep_for(std::chrono::seconds(2));
     std::cerr << "Stop Date A Live" << std::endl;
-	player2->stop();
+    player2->stop();
     std::cerr << "Destroy music Date A Live object" << std::endl;
-	delete player2;
+    delete player2;
 }
 
 int yage_main()
 {
-  test_draw();
+  test_audio();
   return 0;
 }

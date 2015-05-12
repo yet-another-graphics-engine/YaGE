@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#define _SCL_SECURE_NO_WARNINGS
 #include <algorithm>
 #include "runner.h"
 

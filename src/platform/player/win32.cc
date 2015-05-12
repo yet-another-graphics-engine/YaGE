@@ -50,14 +50,18 @@ DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
 
     // WinPlayer instance ctor
     CoInitialize(NULL);
-    hr = this_->player_.CoCreateInstance(__uuidof(WindowsMediaPlayer), 0, CLSCTX_INPROC_SERVER);
+    IID iid_wmpplayer;
+    IIDFromString(const_cast<wchar_t *>(L"{6bf52a4f-394a-11d3-b153-00c04f79faa6}"), &iid_wmpplayer);
+    UUID uuid_windowsmediaplayer;
+    IIDFromString(const_cast<wchar_t *>(L"{6BF52A52-394A-11d3-B153-00C04F79FAA6}"), &uuid_windowsmediaplayer);
+    hr = CoCreateInstance(uuid_windowsmediaplayer, 0, CLSCTX_INPROC_SERVER, iid_wmpplayer, (void **)&this_->player_);
     player = this_->player_;
     assert(SUCCEEDED(hr));
     wchar_t *wurl = yage::util::char_to_wchar(init_msg->url.c_str());
-    hr = player->put_URL(wurl);
+    hr = IWMPPlayer_put_URL(player, wurl);
     assert(SUCCEEDED(hr));
     delete[] wurl;
-    hr = player->get_controls(&(this_->control_));
+    hr = IWMPPlayer_get_controls(player, &this_->control_);
     controls = this_->control_;
     assert(SUCCEEDED(hr));
     SetEvent(init_msg->event_);
@@ -71,24 +75,24 @@ DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
                     player_callback_message *cb_msg = (player_callback_message *)msg.lParam;
                     switch (msg.wParam) {
                     case YAGE_PLAYER_PLAY:
-                        hr = controls->play();
+                        hr = IWMPControls_play(controls);
                         assert(SUCCEEDED(hr));
                         *cb_msg->pbool_ = SUCCEEDED(hr);
                         break;
 
                     case YAGE_PLAYER_PAUSE:
-                        hr = controls->pause();
+                        hr = IWMPControls_pause(controls);
                         assert(SUCCEEDED(hr));
                         break;
 
                     case YAGE_PLAYER_STOP:
-                        hr = controls->stop();
+                        hr = IWMPControls_stop(controls);
                         assert(SUCCEEDED(hr));
                         break;
 
                     case YAGE_PLAYER_PLAYING:
                         WMPPlayState wmpps;
-                        hr = player->get_playState(&wmpps);
+                        hr = IWMPPlayer_get_playState(player, &wmpps);
                         assert(SUCCEEDED(hr));
                         *cb_msg->pbool_ = wmpps == wmppsPlaying;
                         break;
@@ -119,15 +123,15 @@ WinPlayer::WinPlayer(std::string url) : Player() {
     msg.this_ = this;
     msg.url = url;
     msg.event_ = CreateEventW(NULL, FALSE, FALSE, NULL);
-    thread_handle_ = CreateThread(NULL, 0, player_worker_, (LPVOID) &msg, NULL, &thread_id_);
+    thread_handle_ = CreateThread(NULL, 0, player_worker_, (LPVOID) &msg, 0L, &thread_id_);
     WaitForSingleObject(msg.event_, INFINITE);
     CloseHandle(msg.event_);
 }
 
 
 WinPlayer::~WinPlayer() {
-    control_.Release();
-    player_.Release();
+    IWMPControls_Release(control_);
+    IWMPPlayer_Release(player_);
     send_message_(YAGE_PLAYER_FINALIZE);
     WaitForSingleObject(thread_handle_, INFINITE);
     CloseHandle(thread_handle_);
