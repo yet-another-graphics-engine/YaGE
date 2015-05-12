@@ -28,6 +28,7 @@ Canvas::Canvas(std::string filename) {
     GdkPixbuf *buf = gdk_pixbuf_new_from_file(filename.c_str(), &err);
     if (err) {
         fprintf(stderr, "%s\n", err->message);
+        g_error_free(err);
     }
     int width = gdk_pixbuf_get_width(buf);
     int height = gdk_pixbuf_get_height(buf);
@@ -37,6 +38,7 @@ Canvas::Canvas(std::string filename) {
     gdk_cairo_set_source_pixbuf(brush_, buf, 0.0, 0.0);
     cairo_paint(brush_);
     finish_brush_();
+    gdk_pixbuf_unref(buf);
 }
 
 Canvas::~Canvas() {
