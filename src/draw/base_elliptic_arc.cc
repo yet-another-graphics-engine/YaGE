@@ -1,4 +1,7 @@
 #define _USE_MATH_DEFINES
+#ifdef __MINGW32__
+#undef __STRICT_ANSI__
+#endif
 #include <cmath>
 #include "base_elliptic_arc.h"
 
