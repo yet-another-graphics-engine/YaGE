@@ -6,6 +6,7 @@
 #include "dialog/message_dlg.h"
 #include "dialog/file_chooser_dlg.h"
 #include "dialog/color_chooser_dlg.h"
+#include "dialog/font_chooser_dlg.h"
 
 #include <cstdlib>
 #include <thread>
@@ -294,13 +295,22 @@ void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
   }
 }
 
-void test_dialog_color(Window &w)
+void test_dialog_color_font(Window &w)
 {
   ColorChooserDlg color_dlg("color", w);
-  yage::draw::Color c;
-  if (color_dlg.show(c)) {
-    fprintf(stderr, "Color: %lf %lf %lf %lf\n", c.getr(), c.getg(), c.getb(), c.geta());
-  }
+  FontChooserDlg font_dlg("font", w);
+
+  yage::draw::Color color;
+  yage::draw::Font font;
+
+  color_dlg.show(color);
+  font_dlg.show(font);
+
+  yage::draw::Text text("Yet another Graphics Engine", font);
+  text.set_position(yage::draw::Point(0, 0));
+  text.set_color(color);
+
+  w.pro_get_canvas().draw_text(text);
 }
 
 void test_dialog()
@@ -336,7 +346,7 @@ void test_dialog()
         break;
 
       case 'f':
-        test_dialog_color(w);
+        test_dialog_color_font(w);
         break;
     }
   }
@@ -376,6 +386,6 @@ void test_audio(void) {
 
 int yage_main()
 {
-  test_audio();
+  test_dialog();
   return 0;
 }

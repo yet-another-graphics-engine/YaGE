@@ -10,7 +10,7 @@ class Font {
 private:
     PangoFontDescription *description_;
 public:
-    Font(std::string family, int size = 12, bool is_bold = false, bool is_italic = false);
+    Font(std::string family = "", int size = 12, bool is_bold = false, bool is_italic = false);
     Font(PangoFontDescription *description);
     ~Font();
 
@@ -25,6 +25,7 @@ public:
     void set_italic_status(bool is_italic);
 
     PangoFontDescription *pro_get_pango_font(void);
+    void pro_set_pango_font(PangoFontDescription *description);
 };
 
 

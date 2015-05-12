@@ -25,7 +25,7 @@ public:
     void set_text(std::string text);
     void set_font(Font &font);
     // Set the left-top position of text
-    void set_position(Point &position);
+    void set_position(Point position);
     void set_color(Color &color);
 
 };

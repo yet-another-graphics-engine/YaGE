@@ -33,7 +33,7 @@ void Text::set_font(Font &font) {
     font_ = &font;
 }
 
-void Text::set_position(Point &position) {
+void Text::set_position(Point position) {
     position_ = position;
 }
 
