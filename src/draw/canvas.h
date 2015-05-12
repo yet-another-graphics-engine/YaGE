@@ -8,12 +8,12 @@
 #include "rect.h"
 #include "ellipse.h"
 #include "circle.h"
+#include "text.h"
 
 #include <cairo.h>
 #include <vector>
 
 class Picture;
-class Text;
 
 namespace yage {
 namespace core {

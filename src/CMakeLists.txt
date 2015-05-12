@@ -28,7 +28,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-set(LIB_SOURCE_FILES yage.cc core/message.cc core/window.cc util/runner.cc dialog/message_dlg.cc platform/player.cc dialog/file_chooser_dlg.cc dialog/color_chooser_dlg.cc draw/point.cc draw/color.cc draw/shape_property.cc draw/base_elliptic_arc.cc draw/elliptic_arc.cc draw/base_ellipse.cc draw/ellipse.cc draw/circle.cc draw/base_poly.cc draw/rect.cc draw/canvas.cc)
+set(LIB_SOURCE_FILES yage.cc core/message.cc core/window.cc util/runner.cc platform/player.cc dialog/message_dlg.cc dialog/file_chooser_dlg.cc dialog/color_chooser_dlg.cc draw/point.cc draw/color.cc draw/shape_property.cc draw/base_elliptic_arc.cc draw/elliptic_arc.cc draw/base_ellipse.cc draw/ellipse.cc draw/circle.cc draw/base_poly.cc draw/rect.cc draw/canvas.cc draw/font.cc draw/text.cc)
 
 if(WIN32)
     list(APPEND LIB_SOURCE_FILES platform/player/win32.cc)

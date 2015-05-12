@@ -99,11 +99,9 @@ void test_draw(void)
 {
   Window w;
   w.show();
-  yage::draw::Canvas& canvas = w.pro_get_canvas();
-  using yage::draw::Circle;
-  using yage::draw::Point;
-  using yage::draw::Color;
-  yage::draw::Ellipse e("");
+  using namespace yage::draw;
+  Canvas& canvas = w.pro_get_canvas();
+  Ellipse e("");
   Point point(300, 200);
   e.set_center(point);
   Color color(1, 0, 0, 1);
@@ -114,12 +112,17 @@ void test_draw(void)
   e.set_yradius(200);
   canvas.draw_ellipse(e);
   Point point2(500, 400);
-  yage::draw::Rect rect("");
+  Rect rect("");
   rect.set_points(point, point2);
   rect.set_bgcolor(color1);
   rect.set_fgcolor(color);
   canvas.draw_rect(rect);
-  w.pro_redraw();
+  Font times("Times New Roman", 12, true, true);
+  Text text("Yet another Graphics Engine", times);
+  Color yellow(1, 1, 0, 1);
+  text.set_color(yellow);
+  text.set_position(point);
+  canvas.draw_text(text);
   Message msg;
   while (Window::poll(msg)) {
     if (msg.type != msg.type_mouse) continue;
@@ -372,6 +375,6 @@ void test_audio(void) {
 
 int yage_main()
 {
-  test_dialog();
+  test_draw();
   return 0;
 }

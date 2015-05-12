@@ -34,7 +34,7 @@ void Canvas::init_brush_(void)  {
 
 void Canvas::finish_brush_(void)  {
     cairo_restore(brush_);
-    // if (window_) window_->pro_redraw();
+    if (window_) window_->pro_redraw();
 }
 
 void Canvas::shape_fill_(ShapeProperty &shape)  {
@@ -91,7 +91,23 @@ void Canvas::draw_picture(Picture &picture)  {
 }
 
 void Canvas::draw_text(Text &text) {
+    init_brush_();
+    PangoLayout *layout = pango_cairo_create_layout(brush_);
 
+    pango_layout_set_text(layout, text.get_text().c_str(), -1);
+    pango_layout_set_font_description(layout, text.get_font().pro_get_pango_font());
+    //PangoFontDescription *desc = pango_font_description_from_string ("Sans Bold 14");
+    //pango_layout_set_font_description(layout, desc);
+    cairo_translate(brush_, text.get_position().getx(), text.get_position().gety());
+    cairo_set_source_rgba(brush_,
+                          text.get_fgcolor().getr(),
+                          text.get_fgcolor().getg(),
+                          text.get_fgcolor().getb(),
+                          text.get_fgcolor().geta());
+    pango_cairo_show_layout(brush_, layout);
+
+    g_object_unref(layout);
+    finish_brush_();
 }
 
 void Canvas::draw_poly(Poly &poly) {
