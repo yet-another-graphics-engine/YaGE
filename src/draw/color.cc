@@ -13,6 +13,13 @@ Color::Color(double r, double g, double b, double a)
 {
 }
 
+Color::Color(unsigned int ege_color) {
+    r_ = 1.0 * ((ege_color >> 16) & 0xFF) / 0xFF;
+    g_ = 1.0 * ((ege_color >> 8) & 0xFF) / 0xFF;
+    b_ = 1.0 * ((ege_color) & 0xFF) / 0xFF;
+    a_ = 1.0;
+}
+
 Color::Color()
         : Color(0, 0, 0)
 {

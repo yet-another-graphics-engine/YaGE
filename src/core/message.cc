@@ -3,6 +3,7 @@
 #ifdef _MSC_VER
 #pragma warning(disable:4800)
 #endif
+#include "../yage.h"
 
 namespace yage {
 namespace core {
@@ -121,8 +122,11 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
   msg.window.type = msg.window.type_resize;
   msg_push_queue(msg);
 
-  if (source->canvas_) delete source->canvas_;
-  source->canvas_ = new Canvas(*source);
+  if (event->width != 1 && event->height != 1) {
+	  if (source->canvas_) delete source->canvas_;
+	  source->canvas_ = new Canvas(*source);
+	  gtk_runner.signal();
+  }
   return true;
 }
 

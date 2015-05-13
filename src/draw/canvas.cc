@@ -1,3 +1,4 @@
+#include <cmath>
 #include "canvas.h"
 
 namespace yage {
@@ -55,16 +56,19 @@ void Canvas::finish_brush_(void)  {
     if (window_) window_->pro_redraw();
 }
 
-void Canvas::shape_fill_(ShapeProperty &shape)  {
+void Canvas::shape_fill_and_stroke_(ShapeProperty &shape) {
+    cairo_scale(brush_, 1.0, 1.0);
     cairo_set_source_rgba(brush_,
                           shape.get_fgcolor().getr(),
                           shape.get_fgcolor().getg(),
                           shape.get_fgcolor().getb(),
                           shape.get_fgcolor().geta());
     cairo_fill_preserve(brush_);
+    shape_stroke_(shape);
+}
 
+void Canvas::shape_stroke_(ShapeProperty &shape) {
     cairo_scale(brush_, 1.0, 1.0);
-
     cairo_set_source_rgba(brush_,
                           shape.get_bgcolor().getr(),
                           shape.get_bgcolor().getg(),
@@ -73,8 +77,16 @@ void Canvas::shape_fill_(ShapeProperty &shape)  {
     cairo_stroke(brush_);
 }
 
+void Canvas::draw_line(Line &line) {
+    init_brush_();
+    cairo_move_to(brush_, line.get_points().first.getx(), line.get_points().first.gety());
+    cairo_line_to(brush_, line.get_points().second.getx(), line.get_points().second.gety());
+    shape_stroke_(line);
+    finish_brush_();
+}
+
 // dirty hack for wrong class model
-void Canvas::pro_draw_elliptic_arc_(BaseEllipticArc &elliparc, ShapeProperty &shape)  {
+void Canvas::pro_draw_elliptic_arc_(BaseEllipticArc &elliparc, ShapeProperty &shape, bool draw_sector)  {
     // Drawing Elliptic Arc procedure
     // Finally, we will draw a arc with radius of 0 at (0,0)
     init_brush_();
@@ -83,8 +95,16 @@ void Canvas::pro_draw_elliptic_arc_(BaseEllipticArc &elliparc, ShapeProperty &sh
     init_brush_();
     cairo_scale(brush_, elliparc.get_xradius(), elliparc.get_yradius());  // scale ellipse to a circle having radius of 1
     cairo_arc(brush_, 0.0, 0.0, 1.0, elliparc.get_startangle(), elliparc.get_endangle()); // draw the 'circle arc'
+    if (draw_sector) {
+        cairo_line_to(brush_, 0, 0);
+        cairo_close_path(brush_);
+    }
     finish_brush_();
-    shape_fill_(shape);
+    if (draw_sector) {
+        shape_fill_and_stroke_(shape);
+    } else {
+        shape_stroke_(shape);
+    }
     finish_brush_();
 }
 
@@ -100,7 +120,7 @@ void Canvas::pro_draw_poly_(BasePoly &poly, ShapeProperty &shape)  {
         cairo_line_to(brush_, i.getx(), i.gety());
     }
     cairo_close_path(brush_);
-    shape_fill_(shape);
+    shape_fill_and_stroke_(shape);
     finish_brush_();
 }
 
@@ -134,6 +154,10 @@ void Canvas::draw_elliptical_arc(EllipticArc &ellparc) {
     pro_draw_elliptic_arc_(ellparc, ellparc);
 }
 
+void Canvas::draw_elliptical_sector(EllipticSector &ellipsec) {
+    pro_draw_elliptic_arc_(ellipsec, ellipsec, true);
+}
+
 void Canvas::draw_ellipse(Ellipse &ellipse) {
     pro_draw_ellipse_(ellipse, ellipse);
 }
@@ -155,6 +179,16 @@ cairo_surface_t *Canvas::pro_get_cairo_surface(void)  {
 
 cairo_t *Canvas::pro_get_brush(void)  {
     return brush_;
+}
+
+void Canvas::clear(Point a, Point b) {
+    init_brush_();
+    cairo_set_source_rgba(brush_, get_bgcolor().getr(),
+                                  get_bgcolor().getg(),
+                                  get_bgcolor().getb(),
+                                  get_bgcolor().geta());
+    cairo_fill(brush_);
+    finish_brush_();
 }
 
 }

@@ -11,6 +11,10 @@ Font::Font(std::string family, int size, bool is_bold, bool is_italic) {
   set_italic_status(is_italic);
 }
 
+Font::Font(Font& font) {
+  description_ = pango_font_description_copy(font.pro_get_pango_font());
+}
+
 Font::~Font() {
   pango_font_description_free(description_);
 }

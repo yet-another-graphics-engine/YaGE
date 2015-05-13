@@ -104,7 +104,6 @@ gboolean Window::exec_show(gpointer *param)
 
   gtk_widget_show_all(GTK_WIDGET(this_->gtk_window_));
 
-  gtk_runner.signal();
   return false;
 }
 

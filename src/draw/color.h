@@ -15,6 +15,7 @@ class Color {
 
 	public:
 		Color(double r, double g, double b, double a = 1);
+		Color(unsigned int ege_color);
 		Color();
 
 		double getr() const;

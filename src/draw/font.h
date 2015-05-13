@@ -11,7 +11,7 @@ private:
     PangoFontDescription *description_;
 public:
     Font(std::string family = "", int size = 12, bool is_bold = false, bool is_italic = false);
-    Font(PangoFontDescription *description);
+	Font(Font &font);
     ~Font();
 
     std::string get_font_family(void) const;

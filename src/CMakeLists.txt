@@ -40,9 +40,11 @@ set(LIB_SOURCE_FILES
     dialog/font_chooser_dlg.cc
     draw/point.cc
     draw/color.cc
+    draw/line.cc
     draw/shape_property.cc
     draw/base_elliptic_arc.cc
     draw/elliptic_arc.cc
+    draw/elliptic_sector.cc
     draw/base_ellipse.cc
     draw/ellipse.cc
     draw/circle.cc
@@ -50,7 +52,9 @@ set(LIB_SOURCE_FILES
     draw/rect.cc
     draw/canvas.cc
     draw/font.cc
-    draw/text.cc)
+    draw/text.cc
+    bgi.cc
+    )
 
 if(WIN32)
     list(APPEND LIB_SOURCE_FILES platform/player/win32.cc)
