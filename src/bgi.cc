@@ -4,13 +4,12 @@
 #include "dialog/input_dlg.h"
 
 #include <cstdarg>
+#include <sstream>
 
 #ifdef _WIN32
 #include <windows.h>
 #else
 #include <unistd.h>
-#include <sstream>
-
 #endif
 
 #ifdef _MSC_VER
@@ -270,10 +269,10 @@ int getInteger(const char *title) {
     dlg.set_message("Input integer below");
     std::string content;
     dlg.show(content);
-    std::istringstream istream;
-    istream.str(content);
+    std::istringstream str_stream;
+    str_stream.str(content);
     int result;
-    istream >> result;
+    str_stream >> result;
     return result;
 }
 
@@ -282,10 +281,10 @@ double getFloat(const char *title) {
     dlg.set_message("Input float below");
     std::string content;
     dlg.show(content);
-    std::istringstream istream;
-    istream.str(content);
+    std::istringstream str_stream;
+    str_stream.str(content);
     float result;
-    istream >> result;
+    str_stream >> result;
     return result;
 }
 

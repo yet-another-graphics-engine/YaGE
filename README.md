@@ -51,6 +51,7 @@ X:\YaGE\build> cmake ..
 
 项目库文件将生成在 `build\lib` 文件夹中，名为 `libyage.a`，将其复制到 MinGW 安装目录的 `Lib` 中即可使用。
 
+注意：yagetest 项目需要带有 pthreads 实现了 C++ 11 Thread 的 gcc 版本 (如 TDM-GCC)。
 
 ### GNU/Linux
 

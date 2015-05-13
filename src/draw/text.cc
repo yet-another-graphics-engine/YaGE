@@ -1,6 +1,7 @@
 #include "text.h"
 #ifdef _WIN32
 #include "../platform/win32.h"
+#include <cstdlib>
 #endif
 
 namespace yage {
