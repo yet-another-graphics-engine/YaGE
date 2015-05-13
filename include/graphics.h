@@ -10,12 +10,14 @@
 
 #ifndef _YAGE_DISABLE_BGI_WARNINGS
 #ifdef _MSC_VER
-#pragma message("BGI-compatible functions are deprecated, use modern YaGE API instead.")
+#pragma message("Note: BGI-compatible functions are deprecated, use modern YaGE API instead.")
 #else
 #warning BGI-compatible functions are deprecated, use modern YaGE API instead.
 #endif
 #endif
 
+/* main function redirect
+ * please use extern "C" before macro*/
 #define main yage_main
 
 #ifdef __cplusplus
@@ -62,6 +64,7 @@ void ellipsef(float x, float y, float startangle, float endangle, float xradius,
 void fillellipse(int x, int y, int xradius, int yradius);
 void fillellipsef(float x, float y, float xradius, float yradius);
 void line(int x1, int y1, int x2, int y2);
+void moveto(int x, int y);
 void pieslice(int x, int y, int startangle, int endangle, int radius);
 void pieslicef(float x, float y, float startangle, float endangle, float radius);
 void putpixel(int x, int y, color_t color);
@@ -82,8 +85,33 @@ double getFloat(const char *title);
 void delay_ms(long miliseconds);
 /* Level 1 end */
 
+/* Level 3 temp start */
+
+void lineto(int x, int y);
+
+/* Level 3 temp end */
+
 #ifdef __cplusplus
 };
 #endif
+
+/* Temp code start */
+#ifdef __cplusplus
+typedef struct mouse_msg {
+    unsigned int msg;
+    int x;
+    int y;
+    bool is_move();
+    bool is_down();
+    bool is_up();
+    bool is_left();
+    bool is_mid();
+    bool is_right();
+    bool is_wheel();
+} mouse_msg;
+
+mouse_msg getmouse();
+#endif
+/* Temp code end */
 
 #endif /* YAGE_GRAPHICS_H */

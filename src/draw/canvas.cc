@@ -14,6 +14,8 @@ Canvas::Canvas(Window &window) : ShapeProperty("", "canvas") , window_(&window) 
             gtk_widget_get_allocated_height(widget));
     brush_ = cairo_create(surface_);
     cairo_save(brush_);
+    bgcolor_.set_color(1, 1, 1, 1);
+    fgcolor_.set_color(0, 0, 0, 1);
     cairo_set_source_rgb(brush_, 1, 1, 1);
     cairo_paint(brush_);
     cairo_restore(brush_);
@@ -59,10 +61,10 @@ void Canvas::finish_brush_(void)  {
 void Canvas::shape_fill_and_stroke_(ShapeProperty &shape) {
     cairo_scale(brush_, 1.0, 1.0);
     cairo_set_source_rgba(brush_,
-                          shape.get_fgcolor().getr(),
-                          shape.get_fgcolor().getg(),
-                          shape.get_fgcolor().getb(),
-                          shape.get_fgcolor().geta());
+                          shape.get_bgcolor().getr(),
+                          shape.get_bgcolor().getg(),
+                          shape.get_bgcolor().getb(),
+                          shape.get_bgcolor().geta());
     cairo_fill_preserve(brush_);
     shape_stroke_(shape);
 }
@@ -70,10 +72,10 @@ void Canvas::shape_fill_and_stroke_(ShapeProperty &shape) {
 void Canvas::shape_stroke_(ShapeProperty &shape) {
     cairo_scale(brush_, 1.0, 1.0);
     cairo_set_source_rgba(brush_,
-                          shape.get_bgcolor().getr(),
-                          shape.get_bgcolor().getg(),
-                          shape.get_bgcolor().getb(),
-                          shape.get_bgcolor().geta());
+                          shape.get_fgcolor().getr(),
+                          shape.get_fgcolor().getg(),
+                          shape.get_fgcolor().getb(),
+                          shape.get_fgcolor().geta());
     cairo_stroke(brush_);
 }
 
@@ -187,7 +189,7 @@ void Canvas::clear(Point a, Point b) {
                                   get_bgcolor().getg(),
                                   get_bgcolor().getb(),
                                   get_bgcolor().geta());
-    cairo_fill(brush_);
+    cairo_paint(brush_);
     finish_brush_();
 }
 

@@ -58,7 +58,7 @@ set(LIB_SOURCE_FILES
     )
 
 if(WIN32)
-    list(APPEND LIB_SOURCE_FILES platform/player/win32.cc)
+    list(APPEND LIB_SOURCE_FILES platform/player/win32.cc platform/win32.cc)
 elseif(APPLE)
     list(APPEND LIB_SOURCE_FILES platform/player/macosx.mm)
 elseif(UNIX)

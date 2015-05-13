@@ -1,6 +1,5 @@
 #include "core/window.h"
 #include "draw/canvas.h"
-#include "draw/circle.h"
 #include "draw/color.h"
 #include "platform/player.h"
 #include "dialog/message_dlg.h"
@@ -115,7 +114,7 @@ void test_draw(void)
   Ellipse e("");
   Point point(300, 200);
   e.set_center(point);
-  Color color(1, 0, 0, 1);
+  Color color(1, 0, 0, 0);
   e.set_bgcolor(color);
   Color color1(0, 1, 0, 1);
   e.set_fgcolor(color1);

@@ -1,21 +1,9 @@
 #include "win32.h"
+#include "../win32.h"
 #include <cassert>
 #include <iostream>
 
 namespace yage {
-
-namespace util {
-
-wchar_t *char_to_wchar(const char *str) {
-    int length = strlen(str) + 1;
-    wchar_t *t = new wchar_t[length];
-    memset(t, 0, length * sizeof(wchar_t));
-    MultiByteToWideChar(CP_ACP, 0, str, strlen(str), t, length);
-    return t;
-}
-
-}
-
 namespace platform {
 
 static const UINT YAGE_PLAYER_MESSAGE = WM_USER + 0x233;
@@ -57,10 +45,10 @@ DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
     hr = CoCreateInstance(uuid_windowsmediaplayer, 0, CLSCTX_INPROC_SERVER, iid_wmpplayer, (void **)&this_->player_);
     player = this_->player_;
     assert(SUCCEEDED(hr));
-    wchar_t *wurl = yage::util::char_to_wchar(init_msg->url.c_str());
+    wchar_t *wurl = yage::platform::ansi_to_utf_16(init_msg->url.c_str());
     hr = IWMPPlayer_put_URL(player, wurl);
     assert(SUCCEEDED(hr));
-    delete[] wurl;
+    free(wurl);
     hr = IWMPPlayer_get_controls(player, &this_->control_);
     controls = this_->control_;
     assert(SUCCEEDED(hr));

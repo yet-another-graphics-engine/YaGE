@@ -1,11 +1,14 @@
 #include "text.h"
+#ifdef _WIN32
+#include "../platform/win32.h"
+#endif
 
 namespace yage {
 namespace draw {
 
 Text::Text(std::string text, Font &font) {
     bgcolor_ = Color(1.0, 1.0, 1.0, 1.0);
-    name_ = text;
+    set_text(text);
     font_ = &font;
 }
 
@@ -26,7 +29,13 @@ Color &Text::get_color(void) {
 }
 
 void Text::set_text(std::string text) {
+#ifndef _WIN32
     name_ = text;
+#else
+    char *ansi_str = yage::platform::ansi_to_utf_8(text.c_str());
+    name_ = ansi_str;
+    free(ansi_str);
+#endif
 }
 
 void Text::set_font(Font &font) {

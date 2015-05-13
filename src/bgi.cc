@@ -1,12 +1,7 @@
 // BGI Compatibility Layer
 #include "core/window.h"
 #include "draw/canvas.h"
-#include "draw/circle.h"
-#include "draw/ellipse.h"
-#include "draw/elliptic_arc.h"
-#include "draw/rect.h"
-#include "draw/color.h"
-#include "draw/point.h"
+#include "dialog/input_dlg.h"
 
 #include <cstdarg>
 
@@ -14,10 +9,13 @@
 #include <windows.h>
 #else
 #include <unistd.h>
+#include <sstream>
+
 #endif
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4244)
+#pragma warning(disable: 4800)
 #endif
 
 static yage::core::Window *window = nullptr;
@@ -51,11 +49,11 @@ void clearviewport(void) {
 }
 
 void setcolor(color_t color) {
-
+    canvas->set_fgcolor(yage::draw::Color(color));
 }
 
 void setfillcolor(color_t color) {
-
+    canvas->set_bgcolor(yage::draw::Color(color));
 }
 
 void arcf(float x, float y, float startangle, float endangle, float radius) {
@@ -127,8 +125,8 @@ void fillellipsef(float x, float y, float xradius, float yradius) {
     yage::draw::Point center(x, y);
     yage::draw::Color transparent(1, 1, 1, 0);
     ellipse1.set_center(center);
-    ellipse1.set_xradius(x);
-    ellipse1.set_yradius(y);
+	ellipse1.set_xradius(xradius);
+	ellipse1.set_yradius(yradius);
     ellipse1.set_bgcolor(canvas->get_bgcolor());
     ellipse1.set_fgcolor(transparent);
     canvas->draw_ellipse(ellipse1);
@@ -255,28 +253,118 @@ int getch(void) {
 }
 
 int inputbox_getline(const char *title, const char *text, char *buffer, int length) {
-    fprintf(stderr, "WARNING: Not implemented.\n");
+    yage::dialog::InputDlg dlg(title, *window);
+    dlg.set_message(text);
+    std::string content;
+    dlg.show(content);
+    #ifndef _MSC_VER
+    strncpy(buffer, content.c_str(), length - 1);
+    #else
+    strncpy_s(buffer, length, content.c_str(), _TRUNCATE);
+    #endif
     return 0;
 }
 
 int getInteger(const char *title) {
-    fprintf(stderr, "WARNING: Not implemented.\n");
-    return 0;
+    yage::dialog::InputDlg dlg(title, *window);
+    dlg.set_message("Input integer below");
+    std::string content;
+    dlg.show(content);
+    std::istringstream istream;
+    istream.str(content);
+    int result;
+    istream >> result;
+    return result;
 }
 
 double getFloat(const char *title) {
-    fprintf(stderr, "WARNING: Not implemented.\n");
-    return 0.0;
+    yage::dialog::InputDlg dlg(title, *window);
+    dlg.set_message("Input float below");
+    std::string content;
+    dlg.show(content);
+    std::istringstream istream;
+    istream.str(content);
+    float result;
+    istream >> result;
+    return result;
 }
 
-void delay_ms(long miliseconds) {
+void delay_ms(long milliseconds) {
     #ifdef _WIN32
-    Sleep(miliseconds);
+    Sleep(milliseconds);
     #else
-    usleep(1000 * miliseconds);
+    usleep(1000 * milliseconds);
     #endif
+}
+
+void lineto(int x, int y) {
+    line(canvas_position.getx(), canvas_position.gety(), x, y);
 }
 
 #ifdef __cplusplus
 };
 #endif
+
+/* Temp code start */
+
+typedef struct mouse_msg {
+    unsigned int msg = 0;
+    int x;
+    int y;
+    bool is_move();
+    bool is_down();
+    bool is_up();
+    bool is_left();
+    bool is_mid();
+    bool is_right();
+    bool is_wheel();
+} mouse_msg;
+
+bool mouse_msg::is_move() {
+    return msg & 64;
+}
+
+bool mouse_msg::is_down() {
+    return msg & 32;
+}
+
+bool mouse_msg::is_up() {
+    return msg & 16;
+}
+
+bool mouse_msg::is_left() {
+    return msg & 8;
+}
+
+bool mouse_msg::is_mid() {
+    return msg & 4;
+}
+
+bool mouse_msg::is_right() {
+    return msg & 2;
+}
+
+bool mouse_msg::is_wheel() {
+    return msg & 1;
+}
+
+mouse_msg getmouse() {
+    mouse_msg ege_msg;
+    yage::core::Message msg;
+    while(yage::core::Window::poll(msg)) {
+        if (msg.type == yage::core::Message::type_mouse) {
+            ege_msg.x = static_cast<int>(msg.mouse.x);
+            ege_msg.y = static_cast<int>(msg.mouse.y);
+            ege_msg.msg += (msg.mouse.type == msg.mouse.type_move) << 6;
+            ege_msg.msg += (msg.mouse.type == msg.mouse.type_press) << 5;
+            ege_msg.msg += (msg.mouse.type == msg.mouse.type_release) << 4;
+            ege_msg.msg += msg.mouse.is_left << 3;
+            ege_msg.msg += msg.mouse.is_middle << 2;
+            ege_msg.msg += msg.mouse.is_right << 1;
+            return ege_msg;
+        }
+    }
+	return mouse_msg();
+}
+
+/* Temp code end */
