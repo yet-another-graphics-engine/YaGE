@@ -7,6 +7,7 @@
 #include "dialog/file_chooser_dlg.h"
 #include "dialog/color_chooser_dlg.h"
 #include "dialog/font_chooser_dlg.h"
+#include "dialog/input_dlg.h"
 
 #include <cstdlib>
 #include <thread>
@@ -303,6 +304,17 @@ void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
   }
 }
 
+void test_dialog_input(Window &w)
+{
+  std::string msg = "Aloha World!";
+  bool ok = true;
+  while (ok) {
+    InputDlg input_dlg("input_dlg", w);
+    input_dlg.set_message(msg.c_str());
+    ok = input_dlg.show(msg);
+  }
+}
+
 void test_dialog_color_font(Window &w)
 {
   ColorChooserDlg color_dlg("color", w);
@@ -356,6 +368,10 @@ void test_dialog()
       case 'f':
         test_dialog_color_font(w);
         break;
+
+      case 'g':
+        test_dialog_input(w);
+        break;
     }
   }
 }
@@ -394,6 +410,6 @@ void test_audio(void) {
 
 int yage_main()
 {
-  test_draw();
+  test_dialog();
   return 0;
 }

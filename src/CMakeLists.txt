@@ -38,6 +38,7 @@ set(LIB_SOURCE_FILES
     dialog/file_chooser_dlg.cc
     dialog/color_chooser_dlg.cc
     dialog/font_chooser_dlg.cc
+    dialog/input_dlg.cc
     draw/point.cc
     draw/color.cc
     draw/shape_property.cc
