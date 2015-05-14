@@ -4,6 +4,7 @@
 #include "dialog/input_dlg.h"
 
 #include <cstdarg>
+#include <cstring>
 #include <sstream>
 
 #ifdef _WIN32
