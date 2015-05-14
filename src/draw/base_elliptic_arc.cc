@@ -1,8 +1,4 @@
-#define _USE_MATH_DEFINES
-#ifdef __MINGW32__
-#undef __STRICT_ANSI__
-#endif
-#include <cmath>
+#define M_PI 3.14159265358979323846
 #include "base_elliptic_arc.h"
 
 namespace yage {

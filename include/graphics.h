@@ -17,12 +17,15 @@
 #endif
 
 /* main function redirect
- * please use extern "C" before macro*/
+ * DO NOT INCLUDE THIS HEADER TO WRITE PROGRAM THAT DO NOT LINK TO YAGE
+ */
 #define main yage_main
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+int yage_main(void);
 
 /* Level 1 start */
 typedef unsigned int color_t;
