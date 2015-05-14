@@ -11,8 +11,8 @@ OSXPlayer::OSXPlayer(std::string url) : Player() {
     url_ = url;
     NSURL *nsurl;
     NSString *nsurlstr = [NSString stringWithCString:url.c_str() encoding:[NSString defaultCStringEncoding]];
-        nsurl = [NSURL URLWithString:nsurlstr];
-        player_ = [AVPlayer playerWithURL:nsurl];
+    nsurl = [NSURL URLWithString:nsurlstr];
+    player_ = [AVPlayer playerWithURL:nsurl];
     [nsurlstr release];
     [nsurl release];
 }

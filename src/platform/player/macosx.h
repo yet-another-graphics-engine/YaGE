@@ -15,7 +15,6 @@ namespace platform {
 class OSXPlayer : public Player {
     private:
         AVPlayer *player_;
-        bool online_play_;
     public:
         OSXPlayer(std::string url);
         virtual ~OSXPlayer();

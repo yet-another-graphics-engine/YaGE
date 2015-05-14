@@ -44,7 +44,8 @@ gboolean InputDlg::exec_set_message(gpointer *param)
 
 gboolean InputDlg::msg_entry_on_key(GtkWidget *widget, GdkEvent *event, InputDlg *source)
 {
-  if (event->key.hardware_keycode == 36) {
+  if (event->key.hardware_keycode == 36 ||
+      event->key.hardware_keycode == 76) {
     // Enter pressed
     gtk_dialog_response(source->gtk_dialog_, GTK_RESPONSE_OK);
     return true;
