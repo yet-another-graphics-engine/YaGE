@@ -128,7 +128,7 @@ void test_draw(void)
   yage::draw::Ellipse e("");
   Point point(300, 200);
   e.set_center(point);
-  Color color(1, 0, 0, 0);
+  Color color(1, 0, 0, 1);
   e.set_bgcolor(color);
   Color color1(0, 1, 0, 1);
   e.set_fgcolor(color1);
@@ -424,6 +424,6 @@ void test_audio(void) {
 
 int yage_main()
 {
-  test_dialog();
+  test_draw();
   return 0;
 }

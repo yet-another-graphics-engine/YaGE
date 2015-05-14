@@ -111,7 +111,7 @@ void Canvas::pro_draw_elliptic_arc_(BaseEllipticArc &elliparc, ShapeProperty &sh
 }
 
 void Canvas::pro_draw_ellipse_(BaseEllipse &ellipse, ShapeProperty &shape)  {
-    pro_draw_elliptic_arc_(ellipse.pro_get_base_elliptic_arc(), shape);
+    pro_draw_elliptic_arc_(ellipse.pro_get_base_elliptic_arc(), shape, true);
 }
 
 // hack for the class model
