@@ -49,9 +49,7 @@ X:\YaGE\build> cmake ..
 /YaGE/build $ make
 ```
 
-项目库文件将生成在 `build\lib` 文件夹中，名为 `libyage.a`，将其复制到 MinGW 安装目录的 `Lib` 中即可使用。
-
-注意：yagetest 项目需要带有 pthreads 实现了 C++ 11 Thread 的 gcc 版本 (如 TDM-GCC)。
+项目库文件将生成在 `build\lib` 文件夹中，名为 `libyage.a`，将其复制到 MinGW 安装目录的 `lib` 中即可使用。
 
 ### GNU/Linux
 
@@ -59,7 +57,7 @@ X:\YaGE\build> cmake ..
 
 安装必要包
 
-`sudo apt-get install -y build-essential git libgtk-3-dev cmake pkg-config`
+`sudo apt-get install -y build-essential git libgtk-3-dev cmake pkg-config libgstreamer-plugins-base0.10-dev`
 
 安装后，运行以下命令
 
@@ -78,7 +76,7 @@ $ make
 
 安装必要包
 
-`yum install git cmake pkgconfig gcc-c++ gtk3-devel`
+`yum install git cmake pkgconfig gcc-c++ gtk3-devel gstreamer-devel`
 
 安装后，运行以下命令
 
@@ -96,7 +94,7 @@ $ make
 
 安装必要包
 
-`sudo pacman -S gtk3 cmake pkg-config`
+`sudo pacman -S gtk3 cmake pkg-config gstreamer0.10-ugly`
 
 安装后，运行以下命令
 
@@ -151,4 +149,3 @@ $ cmake ..
 $ make
 ```
 项目库文件将生成在 `build/lib` 文件夹中，名为 `libyage.a`，将其复制到 `/usr/local/lib` 中即可使用。
-

@@ -9,8 +9,13 @@
 #include "dialog/input_dlg.h"
 
 #include <cstdlib>
-#include <thread>
 #include <iostream>
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 
 using namespace yage::core;
 using namespace yage::dialog;
@@ -19,11 +24,20 @@ extern "C" int yage_main(void);
 #define P_PROP(type, name, format) fprintf(stderr, #name"="#format", ", msg.type.name)
 #define P_NAME(type) \
   case msg.type:\
-fprintf(stderr, #type ": ")
+  fprintf(stderr, #type ": ")
 
 #define P_STOP() \
   fprintf(stderr, "\n"); \
 break
+
+static void sleep_sec(int seconds) {
+#ifdef _WIN32
+  Sleep(1000 * seconds);
+#else
+  sleep(seconds);
+#endif
+}
+
 
 void test_message()
 {
@@ -111,7 +125,7 @@ void test_draw(void)
 	  Point origin(0, 0);
 	  canvas.draw_canvas(picture, origin);
   }
-  Ellipse e("");
+  yage::draw::Ellipse e("");
   Point point(300, 200);
   e.set_center(point);
   Color color(1, 0, 0, 0);
@@ -189,7 +203,7 @@ void test_resize()
 
       case '!':
         w.hide();
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        sleep_sec(1);
         w.show();
     }
   }
@@ -382,26 +396,26 @@ void test_audio(void) {
     Player *player = Player::create_player("https://kirito.me/ignite.mp3");
     std::cerr << "Play IGNITE" << std::endl;
     player->play();
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+    sleep_sec(5);
     std::cerr << "Load file Date A Live from Internet" << std::endl;
     Player *player2 = Player::create_player("https://kirito.me/date_a_live.mp3");
     std::cerr << "Play Date A Live" << std::endl;
     player2->play();
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    sleep_sec(3);
     std::cerr << "Pause IGNITE" << std::endl;
     player->pause();
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    sleep_sec(3);
     player->play();
     std::cerr << "Resume IGNITE" << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    sleep_sec(3);
     std::cerr << "Stop IGNITE" << std::endl;
     player->stop();
     std::cerr << "Play IGNITE" << std::endl;
     player->play();
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    sleep_sec(3);
     std::cerr << "Destroy music IGNITE object" << std::endl;
     delete player;
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    sleep_sec(2);
     std::cerr << "Stop Date A Live" << std::endl;
     player2->stop();
     std::cerr << "Destroy music Date A Live object" << std::endl;
