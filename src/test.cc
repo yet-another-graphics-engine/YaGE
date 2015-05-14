@@ -9,6 +9,7 @@
 #include "dialog/input_dlg.h"
 
 #include <cstdlib>
+#include <cstdio>
 #include <thread>
 #include <iostream>
 
