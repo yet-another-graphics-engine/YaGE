@@ -5,6 +5,7 @@ namespace platform {
 
 gboolean LinuxPlayer::bus_call(GstBus *bus, GstMessage *msg, void *user_data)
 {
+  return false;
 }
 
 LinuxPlayer::~LinuxPlayer() {
