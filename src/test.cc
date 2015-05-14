@@ -119,7 +119,7 @@ void test_draw(void)
   Canvas& canvas = w.pro_get_canvas();
   std::string pic_name = "";
   if (pic_name == "") {
-	  fprintf(stderr, "Please specify the picture name as pic_name.\nPicture will not show if you do not change the variable");
+	  fprintf(stderr, "Please specify the picture name as pic_name.\nPicture will not show if you do not change the variable\n");
   } else {
 	  Canvas picture(pic_name);
 	  Point origin(0, 0);
@@ -128,9 +128,9 @@ void test_draw(void)
   yage::draw::Ellipse e("");
   Point point(300, 200);
   e.set_center(point);
-  Color color(1, 0, 0, 1);
+  Color color(0, 1, 0, 1);
   e.set_bgcolor(color);
-  Color color1(0, 1, 0, 1);
+  Color color1(1, 0, 0, 1);
   e.set_fgcolor(color1);
   e.set_xradius(100);
   e.set_yradius(200);

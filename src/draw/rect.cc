@@ -5,21 +5,6 @@ namespace yage {
 namespace draw {
 
 /**
- * Rebuild the polygen according to two diagonal points;
- */
-void Rect::rebuild_poly()
-{
-	auto x = std::minmax<double>(a_.getx(), b_.getx());
-	auto y = std::minmax<double>(a_.gety(), b_.gety());
-	poly_.vertex = BasePoly::Vertexes{
-		Point(x.first,	y.first),
-		Point(x.second,	y.first),
-		Point(x.second,	y.second),
-		Point(x.first,	y.second)};
-}
-
-
-/**
  * Get the diagonal points of the rectangle.
  * @return two points representing the rectangle
  */
@@ -36,7 +21,6 @@ void Rect::set_points(const Point &a, const Point &b)
 {
 	a_ = a;
 	b_ = b;
-	rebuild_poly();
 }
 
 /**
@@ -46,10 +30,6 @@ void Rect::set_points(const Point &a, const Point &b)
 Rect::Rect(std::string name)
 		: ShapeProperty(name, "rectangle")
 {
-}
-
-BasePoly &Rect::pro_get_base_poly(void) {
-    return poly_;
 }
 
 } // namespace draw

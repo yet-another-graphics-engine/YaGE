@@ -149,7 +149,12 @@ void Canvas::draw_poly(Poly &poly) {
 }
 
 void Canvas::draw_rect(Rect &rect)  {
-    pro_draw_poly_(rect.pro_get_base_poly(), rect);
+    init_brush_();
+    const Point &a = rect.get_points().first;
+    const Point &b = rect.get_points().second;
+    cairo_rectangle(brush_, a.getx(), a.gety(), b.getx() - a.getx(), b.gety() - a.gety());
+    shape_fill_and_stroke_(rect);
+    finish_brush_();
 }
 
 void Canvas::draw_elliptical_arc(EllipticArc &ellparc) {
