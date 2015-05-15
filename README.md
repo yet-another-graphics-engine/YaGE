@@ -6,9 +6,13 @@ YaGE 是一套基于 Cairo / GTK+ 的跨平台图形库。
 
 ## 状态
 
-Windows 静态库：[![Build status](https://ci.appveyor.com/api/projects/status/09s1wlhb9wa4bu5q?svg=true)](https://ci.appveyor.com/project/xdqi/yage)
+Windows 静态库：[![Build status](https://img.shields.io/appveyor/ci/xdqi/yage.svg)](https://ci.appveyor.com/project/xdqi/yage)
 
-Linux 静态库：[![Build Status](https://travis-ci.org/yet-another-graphics-engine/YaGE.svg)](https://travis-ci.org/yet-another-graphics-engine/YaGE)
+Linux 静态库：[![Build Status](https://img.shields.io/travis/yet-another-graphics-engine/YaGE.svg)](https://travis-ci.org/yet-another-graphics-engine/YaGE)
+
+## 许可证
+
+[![LGPL v3](https://www.gnu.org/graphics/lgplv3-147x51.png)](https://www.gnu.org/licenses/)
 
 ## 编译方法
 
