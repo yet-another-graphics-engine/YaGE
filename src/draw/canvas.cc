@@ -115,7 +115,7 @@ void Canvas::draw_text(Text &text) {
     init_brush_();
     PangoLayout *layout = pango_cairo_create_layout(brush_);
 #ifdef _WIN32
-    char *utf_text = yage::platform::ansi_to_utf_8(text.c_str());
+    char *utf_text = yage::platform::ansi_to_utf_8(text.text.c_str());
 #else
     const char *utf_text = text.text.c_str();
 #endif
