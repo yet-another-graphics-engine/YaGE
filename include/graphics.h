@@ -88,6 +88,13 @@ double getFloat(const char *title);
 void delay_ms(long miliseconds);
 /* Level 1 end */
 
+/* Level 2 start */
+void drawlines(int num_lines, const int points[]);
+void drawpoly(int num_lines, const int poly_points[]);
+void fillpoly(int num_points, const int poly_points[]);
+void putpixels(int num_points, int points_and_colors[]);
+/* Level 2 end */
+
 /* Level 3 temp start */
 
 void lineto(int x, int y);
