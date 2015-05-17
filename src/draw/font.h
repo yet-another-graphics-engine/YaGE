@@ -12,6 +12,7 @@ private:
 public:
     Font(std::string family = "", int size = 12, bool is_bold = false, bool is_italic = false);
 	Font(Font &font);
+    Font &operator=(Font &font);
     ~Font();
 
     std::string get_font_family(void) const;

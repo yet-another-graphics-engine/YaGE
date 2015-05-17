@@ -1,4 +1,4 @@
-#include "base_ellipse.h"
+#include "shape_property.h"
 
 #ifndef ELLIPSE_H
 #define ELLIPSE_H
@@ -6,9 +6,11 @@
 namespace yage {
 namespace draw {
 
-class Ellipse : public BaseEllipse, public ShapeProperty {
+struct Ellipse : public ShapeProperty {
 public:
-    Ellipse(std::string name);
+    Point center;                  ///< Center of the ellipse.
+    double xradius, yradius;       ///< X and Y radius of the ellipse.
+    Ellipse(Point center=Point(0,0), double xradius=0.0, double yradius=0.0);
 };
 
 } // namespace draw

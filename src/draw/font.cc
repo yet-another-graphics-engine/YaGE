@@ -15,6 +15,14 @@ Font::Font(Font& font) {
   description_ = pango_font_description_copy(font.pro_get_pango_font());
 }
 
+Font &Font::operator=(Font &font) {
+  if (this != &font) {
+    pango_font_description_free(description_);
+    description_ = pango_font_description_copy(font.pro_get_pango_font());
+  }
+  return *this;
+}
+
 Font::~Font() {
   pango_font_description_free(description_);
 }

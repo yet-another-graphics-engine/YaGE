@@ -1,10 +1,14 @@
-#include <cmath>
 #include "canvas.h"
+#define M_PI 3.14159265358979323846
+#ifdef _WIN32
+#include "../platform/win32.h"
+#include <cstdlib>
+#endif
 
 namespace yage {
 namespace draw {
 
-Canvas::Canvas(Window &window) : ShapeProperty("", "canvas") , window_(&window) {
+Canvas::Canvas(Window &window) : window_(&window) {
     GtkWidget *widget = window.pro_get_gtk_draw();
 
     surface_ = gdk_window_create_similar_surface(
@@ -14,14 +18,12 @@ Canvas::Canvas(Window &window) : ShapeProperty("", "canvas") , window_(&window) 
             gtk_widget_get_allocated_height(widget));
     brush_ = cairo_create(surface_);
     cairo_save(brush_);
-    bgcolor_.set_color(1, 1, 1, 1);
-    fgcolor_.set_color(0, 0, 0, 1);
     cairo_set_source_rgb(brush_, 1, 1, 1);
     cairo_paint(brush_);
     cairo_restore(brush_);
 }
 
-Canvas::Canvas(int width, int height) : ShapeProperty("", "canvas") {
+Canvas::Canvas(int width, int height) {
     surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     brush_ = cairo_create(surface_);
 }
@@ -61,10 +63,10 @@ void Canvas::finish_brush_(void)  {
 void Canvas::shape_fill_and_stroke_(ShapeProperty &shape) {
     cairo_scale(brush_, 1.0, 1.0);
     cairo_set_source_rgba(brush_,
-                          shape.get_bgcolor().getr(),
-                          shape.get_bgcolor().getg(),
-                          shape.get_bgcolor().getb(),
-                          shape.get_bgcolor().geta());
+                          shape.bgcolor.r,
+                          shape.bgcolor.g,
+                          shape.bgcolor.b,
+                          shape.bgcolor.a);
     cairo_fill_preserve(brush_);
     shape_stroke_(shape);
 }
@@ -72,31 +74,30 @@ void Canvas::shape_fill_and_stroke_(ShapeProperty &shape) {
 void Canvas::shape_stroke_(ShapeProperty &shape) {
     cairo_scale(brush_, 1.0, 1.0);
     cairo_set_source_rgba(brush_,
-                          shape.get_fgcolor().getr(),
-                          shape.get_fgcolor().getg(),
-                          shape.get_fgcolor().getb(),
-                          shape.get_fgcolor().geta());
+                          shape.fgcolor.r,
+                          shape.fgcolor.g,
+                          shape.fgcolor.b,
+                          shape.fgcolor.a);
     cairo_stroke(brush_);
 }
 
 void Canvas::draw_line(Line &line) {
     init_brush_();
-    cairo_move_to(brush_, line.get_points().first.getx(), line.get_points().first.gety());
-    cairo_line_to(brush_, line.get_points().second.getx(), line.get_points().second.gety());
+    cairo_move_to(brush_, line.first.x, line.first.y);
+    cairo_line_to(brush_, line.second.x, line.second.y);
     shape_stroke_(line);
     finish_brush_();
 }
 
-// dirty hack for wrong class model
-void Canvas::pro_draw_elliptic_arc_(BaseEllipticArc &elliparc, ShapeProperty &shape, bool draw_sector)  {
+void Canvas::pro_draw_elliptic_arc_(Point center, double xradius, double yradius, double startangle, double endangle, ShapeProperty &shape, bool draw_sector)  {
     // Drawing Elliptic Arc procedure
     // Finally, we will draw a arc with radius of 0 at (0,0)
     init_brush_();
-    cairo_set_line_width(brush_, shape.get_thickness());
-    cairo_translate(brush_, elliparc.get_center().getx(), elliparc.get_center().gety()); // make center of ellipse arc (0,0)
+    cairo_set_line_width(brush_, shape.thickness);
+    cairo_translate(brush_, center.x, center.y); // make center of ellipse arc (0,0)
     init_brush_();
-    cairo_scale(brush_, elliparc.get_xradius(), elliparc.get_yradius());  // scale ellipse to a circle having radius of 1
-    cairo_arc(brush_, 0.0, 0.0, 1.0, elliparc.get_startangle(), elliparc.get_endangle()); // draw the 'circle arc'
+    cairo_scale(brush_, xradius, yradius);  // scale ellipse to a circle having radius of 1
+    cairo_arc(brush_, 0.0, 0.0, 1.0, startangle, endangle); // draw the 'circle arc'
     if (draw_sector) {
         cairo_line_to(brush_, 0, 0);
         cairo_close_path(brush_);
@@ -110,72 +111,69 @@ void Canvas::pro_draw_elliptic_arc_(BaseEllipticArc &elliparc, ShapeProperty &sh
     finish_brush_();
 }
 
-void Canvas::pro_draw_ellipse_(BaseEllipse &ellipse, ShapeProperty &shape)  {
-    pro_draw_elliptic_arc_(ellipse.pro_get_base_elliptic_arc(), shape, true);
-}
-
-// hack for the class model
-void Canvas::pro_draw_poly_(BasePoly &poly, ShapeProperty &shape)  {
-    init_brush_();
-    cairo_set_line_width(brush_, shape.get_thickness());
-    for (const auto &i : poly.vertex) {
-        cairo_line_to(brush_, i.getx(), i.gety());
-    }
-    cairo_close_path(brush_);
-    shape_fill_and_stroke_(shape);
-    finish_brush_();
-}
-
 void Canvas::draw_text(Text &text) {
     init_brush_();
     PangoLayout *layout = pango_cairo_create_layout(brush_);
-
-    pango_layout_set_text(layout, text.get_text().c_str(), -1);
+#ifdef _WIN32
+    char *utf_text = yage::platform::ansi_to_utf_8(text.text.c_str());
+#else
+    const char *utf_text = text.text.c_str();
+#endif
+    pango_layout_set_text(layout, utf_text, -1);
     pango_layout_set_font_description(layout, text.get_font().pro_get_pango_font());
-    cairo_translate(brush_, text.get_position().getx(), text.get_position().gety());
+    cairo_translate(brush_, text.position.x, text.position.y);
     cairo_set_source_rgba(brush_,
-                          text.get_fgcolor().getr(),
-                          text.get_fgcolor().getg(),
-                          text.get_fgcolor().getb(),
-                          text.get_fgcolor().geta());
+                          text.color.r,
+                          text.color.g,
+                          text.color.b,
+                          text.color.a);
     pango_cairo_show_layout(brush_, layout);
-
+#ifdef _WIN32
+    free(utf_text);
+#endif
     g_object_unref(layout);
     finish_brush_();
 }
 
 void Canvas::draw_poly(Poly &poly) {
-    pro_draw_poly_(poly, poly);
+    init_brush_();
+    cairo_set_line_width(brush_, poly.thickness);
+    for (const auto &i : poly.vertex) {
+        cairo_line_to(brush_, i.x, i.y);
+    }
+    cairo_close_path(brush_);
+    shape_fill_and_stroke_(poly);
+    finish_brush_();
 }
 
 void Canvas::draw_rect(Rect &rect)  {
     init_brush_();
-    const Point &a = rect.get_points().first;
-    const Point &b = rect.get_points().second;
-    cairo_rectangle(brush_, a.getx(), a.gety(), b.getx() - a.getx(), b.gety() - a.gety());
+    const Point &a = rect.first;
+    const Point &b = rect.second;
+    cairo_rectangle(brush_, a.x, a.y, b.x - a.x, b.y - a.y);
     shape_fill_and_stroke_(rect);
     finish_brush_();
 }
 
-void Canvas::draw_elliptical_arc(EllipticArc &ellparc) {
-    pro_draw_elliptic_arc_(ellparc, ellparc);
+void Canvas::draw_elliptical_arc(EllipticArc &elliparc) {
+    pro_draw_elliptic_arc_(elliparc.center, elliparc.xradius, elliparc.yradius, elliparc.startangle, elliparc.endangle, elliparc, false);
 }
 
 void Canvas::draw_elliptical_sector(EllipticSector &ellipsec) {
-    pro_draw_elliptic_arc_(ellipsec, ellipsec, true);
+    pro_draw_elliptic_arc_(ellipsec.center, ellipsec.xradius, ellipsec.yradius, ellipsec.startangle, ellipsec.endangle, ellipsec, true);
 }
 
 void Canvas::draw_ellipse(Ellipse &ellipse) {
-    pro_draw_ellipse_(ellipse, ellipse);
+    pro_draw_elliptic_arc_(ellipse.center, ellipse.xradius, ellipse.yradius, 0, 2 * M_PI, ellipse, true);
 }
 
 void Canvas::draw_circle(Circle &circle)  {
-    pro_draw_ellipse_(circle.pro_get_base_ellipse(), circle);
+    pro_draw_elliptic_arc_(circle.center, circle.radius, circle.radius, 0, 2 * M_PI, circle, true);
 }
 
 void Canvas::draw_canvas(Canvas &canvas, Point position) {
     init_brush_();
-    cairo_set_source_surface(brush_, canvas.pro_get_cairo_surface(), position.getx(), position.gety());
+    cairo_set_source_surface(brush_, canvas.pro_get_cairo_surface(), position.x, position.y);
     cairo_paint(brush_);
     finish_brush_();
 }
@@ -188,12 +186,12 @@ cairo_t *Canvas::pro_get_brush(void)  {
     return brush_;
 }
 
-void Canvas::clear(Point a, Point b) {
+void Canvas::clear(Point a, Point b, Color color) {
     init_brush_();
-    cairo_set_source_rgba(brush_, get_bgcolor().getr(),
-                                  get_bgcolor().getg(),
-                                  get_bgcolor().getb(),
-                                  get_bgcolor().geta());
+    cairo_set_source_rgba(brush_, color.r,
+                                  color.g,
+                                  color.b,
+                                  color.a);
     cairo_paint(brush_);
     finish_brush_();
 }

@@ -4,7 +4,7 @@ namespace yage {
 namespace draw {
 
 
-EllipticSector::EllipticSector(std::string name) : BaseEllipticArc(), ShapeProperty(name, "elliptic arc") {
+EllipticSector::EllipticSector() : BaseEllipticArc(), ShapeProperty() {
 }
 
 }

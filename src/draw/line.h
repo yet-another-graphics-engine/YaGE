@@ -9,12 +9,9 @@ namespace draw {
 
 class Line : public ShapeProperty {
 public:
-    Line(std::string name);
-    void set_points(Point start, Point end);
-    std::pair<Point, Point> get_points(void);
-
-private:
-    std::pair<Point, Point> points_;
+    Point first;
+    Point second;
+    Line(Point a, Point b);
 };
 
 }

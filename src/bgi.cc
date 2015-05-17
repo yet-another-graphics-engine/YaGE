@@ -21,6 +21,7 @@
 static yage::core::Window *window = nullptr;
 static yage::draw::Canvas *canvas = nullptr;
 static yage::draw::Point canvas_position(0, 0);
+static yage::draw::ShapeProperty property;
 static yage::draw::Font simsun("SimSun", 12, false, false);
 typedef unsigned int color_t;
 
@@ -49,25 +50,25 @@ void clearviewport(void) {
 }
 
 void setcolor(color_t color) {
-    canvas->set_fgcolor(yage::draw::Color(color));
+    property.fgcolor = yage::draw::Color(color);
 }
 
 void setfillcolor(color_t color) {
-    canvas->set_bgcolor(yage::draw::Color(color));
+    property.bgcolor = yage::draw::Color(color);
 }
 
 void arcf(float x, float y, float startangle, float endangle, float radius) {
-    yage::draw::EllipticSector ellipsec("");
+    yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
     yage::draw::Color transparent(1, 1, 1, 0);
-    ellipsec.set_bgcolor(transparent);
-    ellipsec.set_fgcolor(canvas->get_fgcolor());
-    ellipsec.set_thickness(canvas->get_thickness());
-    ellipsec.set_center(center);
-    ellipsec.set_startangle(startangle);
-    ellipsec.set_endangle(endangle);
-    ellipsec.set_xradius(radius);
-    ellipsec.set_yradius(radius);
+    ellipsec.bgcolor = transparent;
+    ellipsec.fgcolor = property.fgcolor;
+    ellipsec.thickness = property.thickness;
+    ellipsec.center = center;
+    ellipsec.startangle = startangle;
+    ellipsec.endangle = endangle;
+    ellipsec.xradius = radius;
+    ellipsec.yradius = radius;
     canvas->draw_elliptical_sector(ellipsec);
 }
 
@@ -76,24 +77,25 @@ void arc(int x, int y, int startangle, int endangle, int radius) {
 }
 
 void bar(int left, int top, int right, int bottom) {
-    yage::draw::Rect rect("");
+    yage::draw::Rect rect;
     yage::draw::Point a(left, top);
     yage::draw::Point b(right, bottom);
     yage::draw::Color transparent(1, 1, 1, 0);
-    rect.set_points(a, b);
-    rect.set_bgcolor(canvas->get_bgcolor());
-    rect.set_fgcolor(transparent);
+    rect.first = a;
+    rect.second = b;
+    rect.bgcolor = property.bgcolor;
+    rect.fgcolor = transparent;
     canvas->draw_rect(rect);
 }
 
 void circlef(float x, float y, float radius) {
-    yage::draw::Circle circle1("");
+    yage::draw::Circle circle1;
     yage::draw::Point center(x, y);
-    circle1.set_center(center);
-    circle1.set_radius(radius);
-    circle1.set_fgcolor(canvas->get_fgcolor());
-    circle1.set_thickness(canvas->get_thickness());
-    circle1.set_center(center);
+    circle1.center = center;
+    circle1.radius = radius;
+    circle1.fgcolor = property.fgcolor;
+    circle1.thickness = property.thickness;
+    circle1.center = center;
     canvas->draw_circle(circle1);
 }
 
@@ -102,17 +104,17 @@ void circle(int x, int y, int radius) {
 }
 
 void ellipsef(float x, float y, float startangle, float endangle, float xradius, float yradius) {
-    yage::draw::EllipticArc elliparc("");
+    yage::draw::EllipticArc elliparc;
     yage::draw::Point center(x, y);
     yage::draw::Color transparent(1, 1, 1, 0);
-    elliparc.set_bgcolor(transparent);
-    elliparc.set_fgcolor(canvas->get_fgcolor());
-    elliparc.set_thickness(canvas->get_thickness());
-    elliparc.set_center(center);
-    elliparc.set_startangle(startangle);
-    elliparc.set_endangle(endangle);
-    elliparc.set_xradius(xradius);
-    elliparc.set_yradius(yradius);
+    elliparc.bgcolor = transparent;
+    elliparc.fgcolor = property.fgcolor;
+    elliparc.thickness = property.thickness;
+    elliparc.center = center;
+    elliparc.startangle = startangle;
+    elliparc.endangle = endangle;
+    elliparc.xradius = xradius;
+    elliparc.yradius = yradius;
     canvas->draw_elliptical_arc(elliparc);
 }
 
@@ -121,14 +123,10 @@ void ellipse(int x, int y, int startangle, int endangle, int xradius, int yradiu
 }
 
 void fillellipsef(float x, float y, float xradius, float yradius) {
-    yage::draw::Ellipse ellipse1("");
-    yage::draw::Point center(x, y);
+    yage::draw::Ellipse ellipse1(yage::draw::Point(x, y), xradius, yradius);
     yage::draw::Color transparent(1, 1, 1, 0);
-    ellipse1.set_center(center);
-	ellipse1.set_xradius(xradius);
-	ellipse1.set_yradius(yradius);
-    ellipse1.set_bgcolor(canvas->get_bgcolor());
-    ellipse1.set_fgcolor(transparent);
+    ellipse1.bgcolor = property.bgcolor;
+    ellipse1.fgcolor = transparent;
     canvas->draw_ellipse(ellipse1);
 }
 
@@ -137,28 +135,28 @@ void fillellipse(int x, int y, int xradius, int yradius) {
 }
 
 void line(int x1, int y1, int x2, int y2) {
-    yage::draw::Line line1("");
-    line1.set_points(yage::draw::Point(x1, y1), yage::draw::Point(x2, y2));
+    yage::draw::Line line1(yage::draw::Point(x1, y1),
+                           yage::draw::Point(x2, y2));
     canvas->draw_line(line1);
 }
 
 void pieslicef(float x, float y, float startangle, float endangle, float radius) {
-    yage::draw::EllipticSector ellipsec("");
+    yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
     yage::draw::Color transparent(1, 1, 1, 0);
-    ellipsec.set_bgcolor(canvas->get_bgcolor());
-    ellipsec.set_fgcolor(transparent);
-    ellipsec.set_center(center);
-    ellipsec.set_startangle(startangle);
-    ellipsec.set_endangle(endangle);
-    ellipsec.set_xradius(radius);
-    ellipsec.set_yradius(radius);
+    ellipsec.bgcolor = property.bgcolor;
+    ellipsec.fgcolor = transparent;
+    ellipsec.center = center;
+    ellipsec.startangle = startangle;
+    ellipsec.endangle = endangle;
+    ellipsec.xradius = radius;
+    ellipsec.yradius = radius;
     canvas->draw_elliptical_sector(ellipsec);
 }
 
 void moveto(int x, int y) {
-    canvas_position.setx(x);
-    canvas_position.sety(y);
+    canvas_position.x=x;
+    canvas_position.y=y;
 }
 
 void pieslice(int x, int y, int startangle, int endangle, int radius) {
@@ -166,41 +164,43 @@ void pieslice(int x, int y, int startangle, int endangle, int radius) {
 }
 
 void putpixel(int x, int y, color_t color) {
-    yage::draw::Rect pixel("");
+    yage::draw::Rect pixel;
     yage::draw::Point a(x - 0.5, y - 0.5);
     yage::draw::Point b(x + 0.5, y + 0.5);
     yage::draw::Color transparent(1, 1, 1, 0);
-    pixel.set_points(a,b);
-    pixel.set_fgcolor(transparent);
-    pixel.set_bgcolor(yage::draw::Color(color));
-    pixel.set_thickness(canvas->get_thickness());
+    pixel.first = a;
+    pixel.second= b;
+    pixel.fgcolor = transparent;
+    pixel.bgcolor = yage::draw::Color(color);
+    pixel.thickness = property.thickness;
     canvas->draw_rect(pixel);
 }
 
 void rectangle(int left, int top, int right, int bottom) {
-    yage::draw::Rect rect("");
+    yage::draw::Rect rect;
     yage::draw::Point a(left, top);
     yage::draw::Point b(right, bottom);
     yage::draw::Color transparent(1, 1, 1, 0);
-    rect.set_points(a, b);
-    rect.set_bgcolor(transparent);
-    rect.set_fgcolor(canvas->get_fgcolor());
-    rect.set_thickness(canvas->get_thickness());
+    rect.first = a;
+    rect.second= b;
+    rect.bgcolor = transparent;
+    rect.fgcolor = property.fgcolor;
+    rect.thickness = property.thickness;
     canvas->draw_rect(rect);
 
 }
 
 void sectorf(float x, float y, float startangle, float endangle, float xradius, float yradius) {
-    yage::draw::EllipticSector ellipsec("");
+    yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
     yage::draw::Color transparent(1, 1, 1, 0);
-    ellipsec.set_bgcolor(canvas->get_bgcolor());
-    ellipsec.set_fgcolor(transparent);
-    ellipsec.set_center(center);
-    ellipsec.set_startangle(startangle);
-    ellipsec.set_endangle(endangle);
-    ellipsec.set_xradius(xradius);
-    ellipsec.set_yradius(yradius);
+    ellipsec.bgcolor = property.bgcolor;
+    ellipsec.fgcolor = transparent;
+    ellipsec.center = center;
+    ellipsec.startangle = startangle;
+    ellipsec.endangle = endangle;
+    ellipsec.xradius = xradius;
+    ellipsec.yradius = yradius;
     canvas->draw_elliptical_sector(ellipsec);
 }
 
@@ -209,20 +209,20 @@ void sector(int x, int y, int startangle, int endangle, int xradius, int yradius
 }
 
 void setlinewidth(int thickness) {
-    canvas->set_thickness(thickness);
+    property.thickness = thickness;
 }
 
 void outtext(const char *text) {
     yage::draw::Text text1(text, simsun);
-    text1.set_position(canvas_position);
-    text1.set_fgcolor(canvas->get_fgcolor());
+    text1.position = canvas_position;
+    text1.color = property.fgcolor;
     canvas->draw_text(text1);
 }
 
 void outtextxy(int x, int y, const char *text) {
     yage::draw::Text text1(text, simsun);
-    text1.set_position(yage::draw::Point(x, y));
-    text1.set_fgcolor(canvas->get_fgcolor());
+    text1.position = yage::draw::Point(x, y);
+    text1.color = property.fgcolor;
     canvas->draw_text(text1);
 }
 
@@ -237,8 +237,8 @@ void xyprintf(int x, int y, const char *format, ...) {
 #endif
     va_end(args);
     yage::draw::Text text1(buf, simsun);
-    text1.set_position(yage::draw::Point(x, y));
-    text1.set_fgcolor(canvas->get_fgcolor());
+    text1.position = yage::draw::Point(x, y);
+    text1.color = property.fgcolor;
     canvas->draw_text(text1);
 }
 
@@ -298,7 +298,7 @@ void delay_ms(long milliseconds) {
 }
 
 void lineto(int x, int y) {
-    line(canvas_position.getx(), canvas_position.gety(), x, y);
+    line(canvas_position.x, canvas_position.y, x, y);
 }
 
 #ifdef __cplusplus

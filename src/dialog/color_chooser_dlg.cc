@@ -47,7 +47,10 @@ void ColorChooserDlg::exec_show(ColorChooserDlg *this_,
 
     GdkRGBA gdk_color;
     gtk_color_chooser_get_rgba(this_->gtk_dialog_, &gdk_color);
-    yage_color.set_color(gdk_color.red, gdk_color.green, gdk_color.blue, gdk_color.alpha);
+    yage_color.r = gdk_color.red;
+    yage_color.g = gdk_color.green;
+    yage_color.b = gdk_color.blue;
+    yage_color.a = gdk_color.alpha;
   } else {
     ret = false;
   }
