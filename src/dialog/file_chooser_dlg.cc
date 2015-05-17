@@ -5,38 +5,33 @@ namespace yage {
 namespace dialog {
 FileChooserDlg::FileChooserDlg(action_type action, const char *title)
 {
-  yage::core::gtk_runner.call(exec_create,
-      {this, &action, const_cast<char *>(title), nullptr});
+  runner_call(exec_create, this, &action, const_cast<char *>(title), nullptr);
 }
 
 FileChooserDlg::FileChooserDlg(action_type action, const char *title, Window &window)
 {
-  yage::core::gtk_runner.call(exec_create,
-      {this, &action, const_cast<char *>(title), window.pro_get_gtk_window()});
+  runner_call(exec_create, this, &action, const_cast<char *>(title),
+              window.pro_get_gtk_window());
 }
 
 FileChooserDlg::~FileChooserDlg()
 {
-  yage::core::gtk_runner.call(exec_destroy, {this});
+  runner_call(exec_destroy, this);
 }
 
-gboolean FileChooserDlg::exec_destroy(gpointer *param)
+void FileChooserDlg::exec_destroy(FileChooserDlg *this_)
 {
-  auto this_ = reinterpret_cast<FileChooserDlg *>(param[0]);
-
-  if (this_->gtk_dialog_) gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
-
-  yage::core::gtk_runner.signal();
-  return false;
+  if (this_->gtk_dialog_) {
+    gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
+    this_->gtk_dialog_ = nullptr;
+  }
 }
 
-gboolean FileChooserDlg::exec_create(gpointer *param)
+void FileChooserDlg::exec_create(FileChooserDlg *this_,
+                                 action_type &action,
+                                 const char *title,
+                                 GtkWindow *parent)
 {
-  auto this_ = reinterpret_cast<FileChooserDlg *>(param[0]);
-  auto action = *reinterpret_cast<action_type *>(param[1]);
-  auto title = reinterpret_cast<const char *>(param[2]);
-  auto parent = reinterpret_cast<GtkWindow *>(param[3]);
-
   GtkFileChooserAction action_type;
   switch (action) {
     default:
@@ -61,17 +56,12 @@ gboolean FileChooserDlg::exec_create(gpointer *param)
       nullptr));
 
   gtk_file_chooser_set_do_overwrite_confirmation(this_->gtk_dialog_, TRUE);
-
-  yage::core::gtk_runner.signal();
-  return false;
 }
 
-gboolean FileChooserDlg::exec_show(gpointer *param)
+void FileChooserDlg::exec_show(FileChooserDlg *this_,
+                                   std::string &std_str,
+                                   bool &ret)
 {
-  auto this_ = reinterpret_cast<FileChooserDlg *>(param[0]);
-  auto &std_str = *reinterpret_cast<std::string *>(param[1]);
-  auto &ret = *reinterpret_cast<gint *>(param[2]);
-
   char *c_str = nullptr;
   ret = false;
 
@@ -85,14 +75,11 @@ gboolean FileChooserDlg::exec_show(gpointer *param)
     g_free(c_str);
     ret = true;
   }
-
-  yage::core::gtk_runner.signal();
-  return false;
 }
 
 bool FileChooserDlg::show(std::string &str) {
   bool ret;
-  gtk_runner.call(exec_show, {this, &str, &ret});
+  runner_call(exec_show, this, &str, &ret);
   return ret;
 }
 

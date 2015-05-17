@@ -22,15 +22,16 @@ private:
   GtkWindow *gtk_window_;
   yage::draw::Canvas *canvas_;
 
-  static gboolean exec_window(gpointer *param);
-  static gboolean exec_show(gpointer *param);
-  static gboolean exec_hide(gpointer *param);
-  static gboolean exec_destroy(gpointer *param);
-  static gboolean exec_set_title(gpointer *param);
-  static gboolean exec_set_resizable(gpointer *param);
-  static gboolean exec_set_size(gpointer *param);
-  static gboolean exec_get_size(gpointer *param);
-  static gboolean exec_redraw(gpointer *param);
+  static void exec_create(Window *this_);
+  static void exec_show(Window *this_);
+  static void exec_hide(Window *this_);
+  static void exec_redraw(Window *this_);
+  static void exec_destroy(Window *this_);
+
+  static void exec_set_title(Window *this_, char *title);
+  static void exec_set_resizable(Window *this_, bool &resizable);
+  static void exec_set_size(Window *this_, int &width, int &height);
+  static void exec_get_size(Window *this_, int &width, int &height);
 
   static void msg_push_queue(Message &msg);
 
@@ -76,7 +77,7 @@ public:
   void set_resizable(bool resizable);
   void set_size(int width, int height);
   void get_size(int &width, int &height);
- 
+
   GtkWidget *pro_get_gtk_draw(void);
   GtkWindow *pro_get_gtk_window();
   void pro_redraw();

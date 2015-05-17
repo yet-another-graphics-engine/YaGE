@@ -26,9 +26,15 @@ public:
 private:
   GtkFileChooser *gtk_dialog_;
 
-  static gboolean exec_show(gpointer *param);
-  static gboolean exec_destroy(gpointer *param);
-  static gboolean exec_create(gpointer *param);
+  static void exec_destroy(FileChooserDlg *this_);
+  static void exec_create(FileChooserDlg *this_,
+                          action_type &action,
+                          const char *title,
+                          GtkWindow *parent);
+  static void exec_show(FileChooserDlg *this_,
+                        std::string &std_str,
+                        bool &ret);
+
 };
 
 }  // namespace dialog

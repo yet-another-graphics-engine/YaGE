@@ -1,11 +1,10 @@
 #ifndef YAGE_H_MDXUGEJV
 #define YAGE_H_MDXUGEJV
-#include "util/runner.h"
+
+extern "C" int yage_main(void);
 
 namespace yage {
 namespace core {
-
-extern yage::util::Runner gtk_runner;
 
 }  // namespace core
 }  // namespace yage

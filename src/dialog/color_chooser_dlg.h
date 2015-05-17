@@ -20,9 +20,13 @@ public:
 private:
   GtkColorChooser *gtk_dialog_;
 
-  static gboolean exec_show(gpointer *param);
-  static gboolean exec_destroy(gpointer *param);
-  static gboolean exec_create(gpointer *param);
+  static void exec_destroy(ColorChooserDlg *this_);
+  static void exec_create(ColorChooserDlg *this_,
+                          const char *title,
+                          GtkWindow *parent);
+  static void exec_show(ColorChooserDlg *this_,
+                        yage::draw::Color &yage_color,
+                        bool &ret);
 };
 
 }  // namespace dialog

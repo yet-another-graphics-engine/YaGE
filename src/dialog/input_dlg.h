@@ -23,10 +23,12 @@ private:
   GtkEntry *gtk_entry_;
   GtkLabel *gtk_label_;
 
-  static gboolean exec_show(gpointer *param);
-  static gboolean exec_destroy(gpointer *param);
-  static gboolean exec_create(gpointer *param);
-  static gboolean exec_set_message(gpointer *param);
+  static void exec_show(InputDlg *this_, std::string &yage_str, bool &ret);
+  static void exec_set_message(InputDlg *this_, const char *text);
+  static void exec_destroy(InputDlg *this_);
+  static void exec_create(InputDlg *this_,
+                          const char *title,
+                          GtkWindow *parent);
 
   static gboolean msg_entry_on_key(GtkWidget *widget,
                                    GdkEvent *event,

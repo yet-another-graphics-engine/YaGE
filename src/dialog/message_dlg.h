@@ -49,15 +49,17 @@ public:
   result_type show();
 
 private:
-  const size_t kBufferSize = 1024 * 8;
   GtkWidget *gtk_dialog_;
 
-  static gboolean exec_show(gpointer *param);
-  static gboolean exec_destroy(gpointer *param);
-  static gboolean exec_create(gpointer *param);
-  static gboolean exec_set_title(gpointer *param);
-  static gboolean exec_set_message(gpointer *param);
+  static void exec_create(MessageDlg *this_,
+                          button_type &button,
+                          icon_type &icon,
+                          GtkWindow *parent);
 
+  static void exec_set_title(MessageDlg *this_, char *title);
+  static void exec_set_message(MessageDlg *this_, char *msg);
+  static void exec_show(MessageDlg *this_, int &ret);
+  static void exec_destroy(MessageDlg *this_);
 };
 
 }  // namespace dialog

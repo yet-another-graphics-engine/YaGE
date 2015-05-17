@@ -1,25 +1,22 @@
 #ifndef SYNC_CC_TBADOQUZ
 #define SYNC_CC_TBADOQUZ
 #include <glib.h>
-#include <initializer_list>
 
 namespace yage {
 namespace util {
+namespace runner {
 
-class Runner {
-private:
-  GCond cond_;
-  GMutex mutex_;
+void call(void *callback,
+          void *p0 = nullptr,
+          void *p1 = nullptr,
+          void *p2 = nullptr,
+          void *p3 = nullptr);
 
-public:
-  using callback_type = gboolean (*)(gpointer *param);
-
-  Runner();
-  ~Runner();
-  void call(callback_type fn, std::initializer_list<gpointer> param);
-  void signal();
-};
-
+}  // namespace runner
 }  // namespace util
 }  // namespace yage
+
+#define runner_call(fn, ...) \
+  yage::util::runner::call(reinterpret_cast<void *>(fn), __VA_ARGS__)
+
 #endif /* end of include guard: SYNC_CC_TBADOQUZ */

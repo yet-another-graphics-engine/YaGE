@@ -20,9 +20,13 @@ public:
 private:
   GtkFontChooser *gtk_dialog_;
 
-  static gboolean exec_show(gpointer *param);
-  static gboolean exec_destroy(gpointer *param);
-  static gboolean exec_create(gpointer *param);
+  static void exec_destroy(FontChooserDlg *this_);
+  static void exec_create(FontChooserDlg *this_,
+                          const char *title,
+                          GtkWindow *parent);
+  static void exec_show(FontChooserDlg *this_,
+                        yage::draw::Font &yage_font,
+                        int &ret);
 };
 
 }  // namespace dialog

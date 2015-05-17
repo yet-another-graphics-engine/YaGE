@@ -6,50 +6,40 @@ namespace dialog {
 
 FontChooserDlg::FontChooserDlg(const char *title)
 {
-  yage::core::gtk_runner.call(exec_create,
-      {this, const_cast<char *>(title), nullptr});
+  runner_call(exec_create, this, const_cast<char *>(title), nullptr);
 }
 
 FontChooserDlg::FontChooserDlg(const char *title, Window &window)
 {
-  yage::core::gtk_runner.call(exec_create,
-      {this, const_cast<char *>(title), window.pro_get_gtk_window()});
+  runner_call(exec_create, this, const_cast<char *>(title),
+              window.pro_get_gtk_window());
 }
 
 FontChooserDlg::~FontChooserDlg()
 {
-  yage::core::gtk_runner.call(exec_destroy, {this});
+  runner_call(exec_destroy, this);
 }
 
-gboolean FontChooserDlg::exec_destroy(gpointer *param)
+void FontChooserDlg::exec_destroy(FontChooserDlg *this_)
 {
-  auto this_ = reinterpret_cast<FontChooserDlg *>(param[0]);
-
-  if (this_->gtk_dialog_) gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
-
-  yage::core::gtk_runner.signal();
-  return false;
+  if (this_->gtk_dialog_) {
+    this_->gtk_dialog_ = nullptr;
+    gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
+  }
 }
 
-gboolean FontChooserDlg::exec_create(gpointer *param)
+void FontChooserDlg::exec_create(FontChooserDlg *this_,
+                                 const char *title,
+                                 GtkWindow *parent)
 {
-  auto this_ = reinterpret_cast<FontChooserDlg *>(param[0]);
-  auto title = reinterpret_cast<const char *>(param[1]);
-  auto parent = reinterpret_cast<GtkWindow *>(param[2]);
-
-  this_->gtk_dialog_ = GTK_FONT_CHOOSER(gtk_font_chooser_dialog_new(title,
-                                                                    parent));
-
-  yage::core::gtk_runner.signal();
-  return false;
+  this_->gtk_dialog_ = GTK_FONT_CHOOSER(
+      gtk_font_chooser_dialog_new(title, parent));
 }
 
-gboolean FontChooserDlg::exec_show(gpointer *param)
+void FontChooserDlg::exec_show(FontChooserDlg *this_,
+                               yage::draw::Font &yage_font,
+                               int &ret)
 {
-  auto this_ = reinterpret_cast<FontChooserDlg *>(param[0]);
-  auto &yage_font = *reinterpret_cast<yage::draw::Font *>(param[1]);
-  auto &ret = *reinterpret_cast<gint *>(param[2]);
-
   gint run_ret = gtk_dialog_run(GTK_DIALOG(this_->gtk_dialog_));
   if (run_ret == GTK_RESPONSE_OK) {
     ret = true;
@@ -61,15 +51,12 @@ gboolean FontChooserDlg::exec_show(gpointer *param)
   } else {
     ret = false;
   }
-
-  yage::core::gtk_runner.signal();
-  return false;
 }
 
 bool FontChooserDlg::show(yage::draw::Font &font)
 {
   bool ret;
-  gtk_runner.call(exec_show, {this, &font, &ret});
+  runner_call(exec_show, this, &font, &ret);
   return ret;
 }
 

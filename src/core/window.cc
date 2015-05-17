@@ -1,7 +1,6 @@
-#include <glib.h>
 #include "../yage.h"
-#include "window.h"
 #include "../draw/canvas.h"
+#include "window.h"
 
 namespace yage {
 namespace core {
@@ -42,13 +41,12 @@ size_t Window::window_num_ = 0;
  * These function should return false, to signal GTK that the source should be
  * removed.
  */
-gboolean Window::exec_window(gpointer *param)
+void Window::exec_create(Window *this_)
 {
-  Window *this_ = reinterpret_cast<Window *>(param[0]);
   this_->canvas_ = nullptr;
 
   GtkWindow *&gtk_window_ = this_->gtk_window_;
-  gtk_window_ = reinterpret_cast<GtkWindow*>(gtk_window_new(GTK_WINDOW_TOPLEVEL));
+  gtk_window_ = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 
   // Default: not resizable
   GdkGeometry geo;
@@ -93,67 +91,39 @@ gboolean Window::exec_window(gpointer *param)
   // Add window counter
   ++Window::window_num_;
   fprintf(stderr, "New window=%p widget=%p\n", this_, gtk_draw_);
-
-  gtk_runner.signal();
-  return false;
 }
 
-gboolean Window::exec_show(gpointer *param)
+void Window::exec_show(Window *this_)
 {
-  Window *this_ = reinterpret_cast<Window *>(param[0]);
-
   gtk_widget_show_all(GTK_WIDGET(this_->gtk_window_));
-
-  return false;
 }
 
-gboolean Window::exec_redraw(gpointer *param)
+void Window::exec_redraw(Window *this_)
 {
-  Window *this_ = reinterpret_cast<Window *>(param[0]);
-
   gtk_widget_queue_draw(GTK_WIDGET(this_->gtk_draw_));
-
-  gtk_runner.signal();
-  return false;
 }
 
-gboolean Window::exec_hide(gpointer *param)
+void Window::exec_hide(Window *this_)
 {
-  Window *this_ = reinterpret_cast<Window *>(param[0]);
-
   gtk_widget_hide(GTK_WIDGET(this_->gtk_window_));
-
-  gtk_runner.signal();
-  return false;
 }
 
-gboolean Window::exec_destroy(gpointer *param)
+void Window::exec_destroy(Window *this_)
 {
-  Window *this_ = reinterpret_cast<Window *>(param[0]);
-
-  if (this_->gtk_window_)
+  if (this_->gtk_window_) {
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_window_));
-
-  gtk_runner.signal();
-  return false;
+    this_->gtk_window_ = nullptr;
+    this_->gtk_draw_ = nullptr;
+  }
 }
 
-gboolean Window::exec_set_title(gpointer *param)
+void Window::exec_set_title(Window *this_, char *title)
 {
-  Window *this_ = reinterpret_cast<Window *>(param[0]);
-  const gchar *title = reinterpret_cast<const gchar *>(param[1]);
-
   gtk_window_set_title(this_->gtk_window_, title);
-
-  gtk_runner.signal();
-  return false;
 }
 
-gboolean Window::exec_set_resizable(gpointer *param)
+void Window::exec_set_resizable(Window *this_, bool &resizable)
 {
-  Window *this_ = reinterpret_cast<Window *>(param[0]);
-  bool resizable = *reinterpret_cast<const bool *>(param[1]);
-
   gtk_window_set_resizable(this_->gtk_window_, resizable);
 
   if (resizable) {
@@ -163,85 +133,64 @@ gboolean Window::exec_set_resizable(gpointer *param)
     gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
                                   GDK_HINT_MIN_SIZE);
   }
-
-  gtk_runner.signal();
-  return false;
 }
 
-gboolean Window::exec_set_size(gpointer *param)
+void Window::exec_set_size(Window *this_, int &width, int &height)
 {
-  Window *this_ = reinterpret_cast<Window *>(param[0]);
-  int width = *reinterpret_cast<const int *>(param[1]);
-  int height = *reinterpret_cast<const int *>(param[2]);
-
   gtk_window_resize(this_->gtk_window_, width, height);
+
   if (gtk_window_get_resizable(this_->gtk_window_)) {
     gtk_window_resize(this_->gtk_window_, width, height);
   } else {
+
     GdkGeometry geo;
     geo.min_width = width;
     geo.min_height = height;
     gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
                                   GDK_HINT_MIN_SIZE);
+
   }
-
-  gtk_runner.signal();
-  return false;
 }
 
-gboolean Window::exec_get_size(gpointer *param)
+void Window::exec_get_size(Window *this_, int &width, int &height)
 {
-  Window *this_ = reinterpret_cast<Window *>(param[0]);
-  int &width = *reinterpret_cast<int *>(param[1]);
-  int &height = *reinterpret_cast<int *>(param[2]);
-
   gtk_window_get_size(this_->gtk_window_, &width, &height);
-
-  gtk_runner.signal();
-  return false;
 }
-
 
 /*
  * Proxy functions
  * Request to execute worker functions in GUI thread and wait for the return.
  */
 Window::Window() {
-  gtk_runner.call(exec_window, {this});
+  runner_call(exec_create, this);
 }
 
 void Window::show() {
-  gtk_runner.call(exec_show, {this});
+  runner_call(exec_show, this);
 }
 
 void Window::hide() {
-  gtk_runner.call(exec_hide, {this});
+  runner_call(exec_hide, this);
 }
 
 void Window::destroy() {
-  gtk_runner.call(exec_destroy, {this});
+  runner_call(exec_destroy, this);
 }
 
-void Window::set_title(const gchar *title) {
-  gtk_runner.call(exec_set_title, {this,
-               reinterpret_cast<gpointer>(const_cast<gchar *>(title))});
+void Window::set_title(const char *title) {
+  runner_call(exec_set_title, const_cast<char *>(title));
 }
 
 void Window::set_resizable(bool resizable) {
-  gtk_runner.call(exec_set_resizable, {this,
-               reinterpret_cast<gpointer>(&resizable)});
+  runner_call(exec_set_resizable, &resizable);
 }
 
 void Window::set_size(int width, int height) {
-  gtk_runner.call(exec_set_size, {this,
-               reinterpret_cast<gpointer>(&width),
-               reinterpret_cast<gpointer>(&height)});
+  runner_call(exec_set_size, &width, &height);
 }
 
 void Window::get_size(int &width, int &height) {
-  gtk_runner.call(exec_get_size, {this,
-               reinterpret_cast<gpointer>(&width),
-               reinterpret_cast<gpointer>(&height)});
+  runner_call(exec_get_size, &width, &height);
 }
 
 GtkWindow *Window::pro_get_gtk_window()
@@ -259,7 +208,7 @@ yage::draw::Canvas &Window::pro_get_canvas(void) {
 }
 
 void Window::pro_redraw() {
-  gtk_runner.call(exec_redraw, {this});
+  runner_call(exec_redraw, this);
 }
 
 void Window::quit() {
@@ -284,8 +233,10 @@ bool Window::is_valid() {
  */
 bool Window::poll(Message &msg, bool block) {
   if (Window::window_num_ == 0) return false;
+
   gpointer pmsg = block ? g_async_queue_pop(Window::msg_queue_)
                         : g_async_queue_try_pop(Window::msg_queue_);
+
   if (pmsg == nullptr) {
     msg.type = msg.type_nop;
   } else {

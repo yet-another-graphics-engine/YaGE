@@ -125,7 +125,6 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
   if (event->width != 1 && event->height != 1) {
 	  if (source->canvas_) delete source->canvas_;
 	  source->canvas_ = new Canvas(*source);
-	  gtk_runner.signal();
   }
   return true;
 }

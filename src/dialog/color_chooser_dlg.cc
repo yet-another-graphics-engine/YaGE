@@ -6,51 +6,41 @@ namespace dialog {
 
 ColorChooserDlg::ColorChooserDlg(const char *title)
 {
-  yage::core::gtk_runner.call(exec_create,
-      {this, const_cast<char *>(title), nullptr});
+  runner_call(exec_create, this, const_cast<char *>(title), nullptr);
 }
 
 ColorChooserDlg::ColorChooserDlg(const char *title, Window &window)
 {
-  yage::core::gtk_runner.call(exec_create,
-      {this, const_cast<char *>(title), window.pro_get_gtk_window()});
+  runner_call(exec_create, this, const_cast<char *>(title),
+              window.pro_get_gtk_window());
 }
 
 ColorChooserDlg::~ColorChooserDlg()
 {
-  yage::core::gtk_runner.call(exec_destroy, {this});
+  runner_call(exec_destroy, this);
 }
 
-gboolean ColorChooserDlg::exec_destroy(gpointer *param)
+void ColorChooserDlg::exec_destroy(ColorChooserDlg *this_)
 {
-  auto this_ = reinterpret_cast<ColorChooserDlg *>(param[0]);
-
-  if (this_->gtk_dialog_) gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
-
-  yage::core::gtk_runner.signal();
-  return false;
+  if (this_->gtk_dialog_) {
+    gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
+    this_->gtk_dialog_ = nullptr;
+  }
 }
 
-gboolean ColorChooserDlg::exec_create(gpointer *param)
+void ColorChooserDlg::exec_create(ColorChooserDlg *this_,
+                                      const char *title,
+                                      GtkWindow *parent)
 {
-  auto this_ = reinterpret_cast<ColorChooserDlg *>(param[0]);
-  auto title = reinterpret_cast<const char *>(param[1]);
-  auto parent = reinterpret_cast<GtkWindow *>(param[2]);
-
-  this_->gtk_dialog_ = GTK_COLOR_CHOOSER(gtk_color_chooser_dialog_new(title,
-                                                                      parent));
+  this_->gtk_dialog_ = GTK_COLOR_CHOOSER(
+      gtk_color_chooser_dialog_new(title, parent));
   gtk_color_chooser_set_use_alpha(this_->gtk_dialog_, TRUE);
-
-  yage::core::gtk_runner.signal();
-  return false;
 }
 
-gboolean ColorChooserDlg::exec_show(gpointer *param)
+void ColorChooserDlg::exec_show(ColorChooserDlg *this_,
+                                yage::draw::Color &yage_color,
+                                bool &ret)
 {
-  auto this_ = reinterpret_cast<ColorChooserDlg *>(param[0]);
-  auto &yage_color = *reinterpret_cast<yage::draw::Color *>(param[1]);
-  auto &ret = *reinterpret_cast<gint *>(param[2]);
-
   gint run_ret = gtk_dialog_run(GTK_DIALOG(this_->gtk_dialog_));
   if (run_ret == GTK_RESPONSE_OK) {
     ret = true;
@@ -61,15 +51,12 @@ gboolean ColorChooserDlg::exec_show(gpointer *param)
   } else {
     ret = false;
   }
-
-  yage::core::gtk_runner.signal();
-  return false;
 }
 
 bool ColorChooserDlg::show(yage::draw::Color &color)
 {
   bool ret;
-  gtk_runner.call(exec_show, {this, &color, &ret});
+  runner_call(exec_show, this, &color, &ret);
   return ret;
 }
 

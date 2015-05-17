@@ -4,13 +4,11 @@
 namespace yage {
 namespace dialog {
 
-gboolean MessageDlg::exec_create(gpointer *param)
+void MessageDlg::exec_create(MessageDlg *this_,
+                             button_type &button,
+                             icon_type &icon,
+                             GtkWindow *parent)
 {
-  auto this_ = reinterpret_cast<MessageDlg *>(param[0]);
-  auto &button = *reinterpret_cast<button_type *>(param[1]);
-  auto &icon = *reinterpret_cast<icon_type *>(param[2]);
-  auto *parent = reinterpret_cast<GtkWindow *>(param[3]);
-
   GtkButtonsType btn_type;
   switch (button) {
     case button_type_ok:
@@ -55,38 +53,21 @@ gboolean MessageDlg::exec_create(gpointer *param)
 
   this_->gtk_dialog_ = gtk_message_dialog_new(
       parent, GTK_DIALOG_MODAL, msg_type, btn_type, nullptr);
-
-  yage::core::gtk_runner.signal();
-  return false;
 }
 
-gboolean MessageDlg::exec_set_title(gpointer *param)
+void MessageDlg::exec_set_title(MessageDlg *this_, char *title)
 {
-  auto this_ = reinterpret_cast<MessageDlg *>(param[0]);
-  auto title = reinterpret_cast<char *>(param[1]);
-
   gtk_message_dialog_set_markup(GTK_MESSAGE_DIALOG(this_->gtk_dialog_), title);
-
-  yage::core::gtk_runner.signal();
-  return false;
 }
 
-gboolean MessageDlg::exec_set_message(gpointer *param)
+void MessageDlg::exec_set_message(MessageDlg *this_, char *msg)
 {
-  auto this_ = reinterpret_cast<MessageDlg *>(param[0]);
-  auto msg = reinterpret_cast<char *>(param[1]);
-
   gtk_message_dialog_format_secondary_markup(
       GTK_MESSAGE_DIALOG(this_->gtk_dialog_), "%s", msg);
-
-  yage::core::gtk_runner.signal();
-  return false;
 }
 
-gboolean MessageDlg::exec_show(gpointer *param)
+void MessageDlg::exec_show(MessageDlg *this_, int &ret)
 {
-  auto this_ = reinterpret_cast<MessageDlg *>(param[0]);
-  auto &ret = *reinterpret_cast<gint *>(param[1]);
   gint run_ret = gtk_dialog_run(GTK_DIALOG(this_->gtk_dialog_));
 
   switch(run_ret) {
@@ -124,48 +105,42 @@ gboolean MessageDlg::exec_show(gpointer *param)
       break;
   };
 
-  yage::core::gtk_runner.signal();
-  return false;
 }
 
-gboolean MessageDlg::exec_destroy(gpointer *param)
+void MessageDlg::exec_destroy(MessageDlg *this_)
 {
-  auto this_ = reinterpret_cast<MessageDlg *>(param[0]);
-
-  if (this_->gtk_dialog_) gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
-
-  yage::core::gtk_runner.signal();
-  return false;
+  if (this_->gtk_dialog_) {
+    gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
+    this_->gtk_dialog_ = nullptr;
+  }
 }
 
 MessageDlg::MessageDlg(button_type button, icon_type icon)
 {
-  yage::core::gtk_runner.call(exec_create,
-      {this, &button, &icon, nullptr});
+  runner_call(exec_create, this, &button, &icon, nullptr);
 }
 
 MessageDlg::MessageDlg(button_type button, icon_type icon, Window &window)
 {
-  yage::core::gtk_runner.call(exec_create,
-      {this, &button, &icon, window.pro_get_gtk_window()});
+  runner_call(exec_create, this, &button, &icon, window.pro_get_gtk_window());
 }
 
 MessageDlg::~MessageDlg()
 {
-  yage::core::gtk_runner.call(exec_destroy, {this});
+  runner_call(exec_destroy, this);
 }
 
 void MessageDlg::set_title(const char *title) {
-  gtk_runner.call(exec_set_title, {this, const_cast<char *>(title)});
+  runner_call(exec_set_title, this, const_cast<char *>(title));
 }
 
 void MessageDlg::set_message(const char *message) {
-  gtk_runner.call(exec_set_message, {this, const_cast<char *>(message)});
+  runner_call(exec_set_message, this, const_cast<char *>(message));
 }
 
 MessageDlg::result_type MessageDlg::show() {
   result_type ret;
-  gtk_runner.call(exec_show, {this, &ret});
+  runner_call(exec_set_message, this, &ret);
   return ret;
 }
 
