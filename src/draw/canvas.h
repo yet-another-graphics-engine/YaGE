@@ -24,7 +24,7 @@ namespace draw {
 
 using namespace core;
 
-class Canvas : public ShapeProperty {
+class Canvas {
 private:
     cairo_surface_t *surface_;
     cairo_t *brush_;
@@ -34,9 +34,7 @@ private:
     void finish_brush_(void);
     void shape_fill_and_stroke_(ShapeProperty &shape);
     void shape_stroke_(ShapeProperty &shape);
-    void pro_draw_poly_(BasePoly &poly, ShapeProperty &shape);
-    void pro_draw_elliptic_arc_(BaseEllipticArc &elliparc, ShapeProperty &shape, bool draw_sector = false);
-    void pro_draw_ellipse_(BaseEllipse &ellipse, ShapeProperty &shape);
+    void pro_draw_elliptic_arc_(Point center, double xradius, double yradius, double startangle, double endangle, ShapeProperty &shape, bool draw_sector = false);
 
 public:
     // Create a canvas based on GTK-packaged yage::core::Window
@@ -49,14 +47,14 @@ public:
     void draw_line(Line &line);
     void draw_poly(Poly &poly);
     void draw_rect(Rect &rect);
-    void draw_elliptical_arc(EllipticArc &ellparc);
+    void draw_elliptical_arc(EllipticArc &elliparc);
     void draw_elliptical_sector(EllipticSector &ellpsec);
     void draw_ellipse(Ellipse &ellipse);
     void draw_circle(Circle &circle);
     // position indicates the left-top position
     void draw_canvas(Canvas &canvas, Point position);
     void draw_text(Text &text);
-    void clear(Point a = Point(), Point b = Point());
+    void clear(Point a = Point(), Point b = Point(), Color color=Color(1,1,1,1));
 
     cairo_surface_t *pro_get_cairo_surface(void);
     cairo_t *pro_get_brush(void);

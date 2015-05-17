@@ -125,27 +125,28 @@ void test_draw(void)
 	  Point origin(0, 0);
 	  canvas.draw_canvas(picture, origin);
   }
-  yage::draw::Ellipse e("");
+  yage::draw::Ellipse e;
   Point point(300, 200);
-  e.set_center(point);
+  e.center = point;
   Color color(0, 1, 0, 1);
-  e.set_bgcolor(color);
+  e.bgcolor = color;
   Color color1(1, 0, 0, 1);
-  e.set_fgcolor(color1);
-  e.set_xradius(100);
-  e.set_yradius(200);
+  e.fgcolor = color1;
+  e.xradius = 100;
+  e.yradius = 200;
   canvas.draw_ellipse(e);
   Point point2(500, 400);
-  Rect rect("");
-  rect.set_points(point, point2);
-  rect.set_bgcolor(color1);
-  rect.set_fgcolor(color);
+  Rect rect;
+  rect.first = point;
+  rect.second = point2;
+  rect.bgcolor = color1;
+  rect.fgcolor = color;
   canvas.draw_rect(rect);
   Font times("Times New Roman", 12, true, true);
   Text text("Yet another Graphics Engine", times);
   Color yellow(1, 1, 0, 1);
-  text.set_color(yellow);
-  text.set_position(point);
+  text.color = yellow;
+  text.position = point;
   canvas.draw_text(text);
 
   Message msg;
@@ -341,8 +342,8 @@ void test_dialog_color_font(Window &w)
   font_dlg.show(font);
 
   yage::draw::Text text("Yet another Graphics Engine", font);
-  text.set_position(yage::draw::Point(0, 0));
-  text.set_color(color);
+  text.position = yage::draw::Point(0, 0);
+  text.color = color;
 
   w.pro_get_canvas().draw_text(text);
 }

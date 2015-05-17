@@ -9,7 +9,7 @@ namespace draw {
 
 class EllipticArc: public BaseEllipticArc, public ShapeProperty {
 public:
-    EllipticArc(std::string name = "");
+    EllipticArc();
 };
 
 } // draw

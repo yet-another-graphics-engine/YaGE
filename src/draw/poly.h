@@ -1,13 +1,16 @@
 #ifndef POLY_H
 #define POLY_H
-#include "base_poly.h"
+#include "shape_property.h"
+#include <vector>
 
 namespace yage {
 namespace draw {
 
-class Poly : public BasePoly, public ShapeProperty {
+struct Poly : public ShapeProperty {
 public:
-    Poly(std::string name="");
+    using Vertexes = std::vector<Point>; ///< Type for the container of all vertexes
+    Vertexes vertex;	///< All vertexes
+    Poly();
 };
 
 } // namespace draw

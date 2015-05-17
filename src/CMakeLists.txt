@@ -50,10 +50,8 @@ set(LIB_SOURCE_FILES
     draw/base_elliptic_arc.cc
     draw/elliptic_arc.cc
     draw/elliptic_sector.cc
-    draw/base_ellipse.cc
     draw/ellipse.cc
     draw/circle.cc
-    draw/base_poly.cc
     draw/rect.cc
     draw/canvas.cc
     draw/font.cc
