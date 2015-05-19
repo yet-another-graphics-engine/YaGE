@@ -5,6 +5,8 @@
 namespace yage {
 namespace core {
 
+using yage::draw::Canvas;
+
 gpointer user_thread(gpointer *param) {
   auto func = reinterpret_cast<int (*)()>(param[0]);
   auto &ret = *reinterpret_cast<int *>(param[1]);
@@ -53,7 +55,7 @@ void Window::exec_create(Window *this_)
   geo.min_width = 640;
   geo.min_height = 480;
   gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
-                                GDK_HINT_MIN_SIZE);
+                             GDK_HINT_MIN_SIZE);
   gtk_window_set_resizable(gtk_window_, false);
 
   // Setup signals for main window
@@ -73,6 +75,7 @@ void Window::exec_create(Window *this_)
   // Setup drawing_area
   GtkWidget *&gtk_draw_ = this_->gtk_draw_;
   gtk_draw_ = gtk_drawing_area_new();
+  gtk_widget_set_size_request(gtk_draw_,geo.min_width,geo.min_height);
   gtk_widget_add_events(gtk_draw_, GDK_BUTTON_PRESS_MASK |
                                    GDK_BUTTON_RELEASE_MASK |
                                    GDK_POINTER_MOTION_MASK);
@@ -96,6 +99,7 @@ void Window::exec_create(Window *this_)
 void Window::exec_show(Window *this_)
 {
   gtk_widget_show_all(GTK_WIDGET(this_->gtk_window_));
+  //this_->canvas_=new Canvas(*this_);
 }
 
 void Window::exec_redraw(Window *this_)
@@ -122,9 +126,10 @@ void Window::exec_set_title(Window *this_, char *title)
   gtk_window_set_title(this_->gtk_window_, title);
 }
 
-void Window::exec_set_resizable(Window *this_, bool &resizable)
+void Window::exec_set_resizable(Window *this_, bool* resizable)
 {
-  gtk_window_set_resizable(this_->gtk_window_, resizable);
+  g_print("resizable==%d\n",*resizable);
+  gtk_window_set_resizable(this_->gtk_window_, *resizable);
 
   if (resizable) {
     GdkGeometry geo;
@@ -178,19 +183,19 @@ void Window::destroy() {
 }
 
 void Window::set_title(const char *title) {
-  runner_call(exec_set_title, const_cast<char *>(title));
+  runner_call(exec_set_title,this,const_cast<char *>(title));
 }
 
 void Window::set_resizable(bool resizable) {
-  runner_call(exec_set_resizable, &resizable);
+  runner_call(exec_set_resizable,this,&resizable);
 }
 
 void Window::set_size(int width, int height) {
-  runner_call(exec_set_size, &width, &height);
+  runner_call(exec_set_size,this,&width, &height);
 }
 
 void Window::get_size(int &width, int &height) {
-  runner_call(exec_get_size, &width, &height);
+  runner_call(exec_get_size,this,&width, &height);
 }
 
 GtkWindow *Window::pro_get_gtk_window()

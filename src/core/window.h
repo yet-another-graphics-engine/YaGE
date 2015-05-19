@@ -29,7 +29,7 @@ private:
   static void exec_destroy(Window *this_);
 
   static void exec_set_title(Window *this_, char *title);
-  static void exec_set_resizable(Window *this_, bool &resizable);
+  static void exec_set_resizable(Window *this_, bool* resizable);
   static void exec_set_size(Window *this_, int &width, int &height);
   static void exec_get_size(Window *this_, int &width, int &height);
 

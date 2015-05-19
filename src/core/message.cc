@@ -9,6 +9,7 @@ namespace yage {
 namespace core {
 
 using yage::draw::Canvas;
+using yage::draw::Point;
 
 void Window::msg_push_queue(Message &msg)
 {
@@ -116,21 +117,36 @@ gboolean Window::msg_draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *
 
 gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, Window *source)
 {
+  g_print("on_draw_resize\n");
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_window;
   msg.window.type = msg.window.type_resize;
   msg_push_queue(msg);
 
-  if (event->width != 1 && event->height != 1) {
-	  if (source->canvas_) delete source->canvas_;
-	  source->canvas_ = new Canvas(*source);
+  g_print("width=%d,height=%d\n",gtk_widget_get_allocated_width(widget),gtk_widget_get_allocated_height(widget));
+  /*if (event->width != 1 && event->height != 1) {
+      Canvas* new_canvas=new Canvas(*source);
+	  if (source->canvas_)
+      {
+          new_canvas->draw_canvas(*source->canvas_,Point(0,0));
+          delete source->canvas_;
+      }
+	  source->canvas_ =new_canvas;
+  }*/
+  Canvas* new_canvas=new Canvas(*source);
+  if (source->canvas_)
+  {
+    //new_canvas->draw_canvas(*source->canvas_,Point(0,0));
+    delete source->canvas_;
   }
+  source->canvas_ =new_canvas;
   return true;
 }
 
 gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source)
 {
+  g_print("on_draw_area_draw\n");
   cairo_set_source_surface(cairo, source->canvas_->pro_get_cairo_surface(), 0, 0);
   cairo_paint(cairo);
   return false;
