@@ -1,5 +1,5 @@
-#ifndef CIRCLE_H_
-#define CIRCLE_H_
+#ifndef DRAW_CIRCLE_H_
+#define DRAW_CIRCLE_H_
 #include "shape_property.h"
 
 namespace yage {

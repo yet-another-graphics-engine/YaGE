@@ -1,5 +1,5 @@
-#ifndef YAGE_WIN32_H
-#define YAGE_WIN32_H
+#ifndef UTIL_MSWIN_H_
+#define UTIL_MSWIN_H_
 
 namespace yage {
 namespace util {

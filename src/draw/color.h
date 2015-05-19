@@ -1,5 +1,5 @@
-#ifndef COLOR_H_XWXGEHH1
-#define COLOR_H_XWXGEHH1
+#ifndef DRAW_COLOR_H_
+#define DRAW_COLOR_H_
 
 namespace yage {
 namespace draw {
@@ -18,4 +18,4 @@ struct Color {
 
 } // namespace draw
 } // namespace yage
-#endif /* end of include guard: COLOR_H_XWXGEHH1 */
+#endif /* end of include guard: DRAW_COLOR_H_ */

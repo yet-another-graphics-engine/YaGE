@@ -1,5 +1,5 @@
-#ifndef PLAYER_WIN32_H_
-#define PLAYER_WIN32_H_
+#ifndef AUDIO_MSWIN_H_
+#define AUDIO_MSWIN_H_
 #include "player.h"
 
 #include <windows.h>

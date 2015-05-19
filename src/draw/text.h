@@ -1,5 +1,5 @@
-#ifndef TEXT_H_
-#define TEXT_H_
+#ifndef DRAW_TEXT_H_
+#define DRAW_TEXT_H_
 #include "font.h"
 #include "point.h"
 #include "shape_property.h"
@@ -28,4 +28,4 @@ public:
 }
 }
 
-#endif //TEXT_H_
+#endif //DRAW_TEXT_H_

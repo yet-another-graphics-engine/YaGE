@@ -1,5 +1,5 @@
-#ifndef SYNC_CC_TBADOQUZ
-#define SYNC_CC_TBADOQUZ
+#ifndef UTIL_RUNNER_H_
+#define UTIL_RUNNER_H_
 #include <glib.h>
 
 namespace yage {

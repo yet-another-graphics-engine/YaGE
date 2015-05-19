@@ -1,5 +1,5 @@
-#ifndef WINDOW_H_YDVLBPKF
-#define WINDOW_H_YDVLBPKF
+#ifndef WINDOW_WINDOW_H_
+#define WINDOW_WINDOW_H_
 #include <gtk/gtk.h>
 #include "message.h"
 #include "../draw/canvas.h"

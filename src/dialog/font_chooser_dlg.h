@@ -1,5 +1,5 @@
-#ifndef FONT_CHOOSER_DLG_H_NPSYKKMZ
-#define FONT_CHOOSER_DLG_H_NPSYKKMZ
+#ifndef DIALOG_FONT_CHOOSER_DLG_H_
+#define DIALOG_FONT_CHOOSER_DLG_H_
 #include <gtk/gtk.h>
 #include "../window/window.h"
 #include "../window/message.h"

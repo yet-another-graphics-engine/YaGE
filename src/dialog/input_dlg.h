@@ -1,5 +1,5 @@
-#ifndef INPUT_DLG_H_3SLRDMQA
-#define INPUT_DLG_H_3SLRDMQA
+#ifndef DIALOG_INPUT_DLG_H_
+#define DIALOG_INPUT_DLG_H_
 #include <gtk/gtk.h>
 #include <string>
 #include "../window/window.h"

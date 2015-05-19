@@ -1,5 +1,5 @@
-#ifndef POLY_H
-#define POLY_H
+#ifndef DRAW_POLY_H_
+#define DRAW_POLY_H_
 #include "shape_property.h"
 #include <vector>
 
@@ -17,4 +17,4 @@ public:
 } // namespace yage
 
 
-#endif //POLY_H
+#endif //DRAW_POLY_H_

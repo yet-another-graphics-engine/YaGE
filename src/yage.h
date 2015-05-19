@@ -1,5 +1,5 @@
-#ifndef YAGE_H_MDXUGEJV
-#define YAGE_H_MDXUGEJV
+#ifndef YAGE_H_
+#define YAGE_H_
 
 extern "C" int yage_main(void);
 

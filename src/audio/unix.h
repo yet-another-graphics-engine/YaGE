@@ -1,5 +1,5 @@
-#ifndef LINUX_H_BQTYW1ZH
-#define LINUX_H_BQTYW1ZH
+#ifndef AUDIO_UNIX_H_
+#define AUDIO_UNIX_H_
 #include <string>
 #include <gst/gst.h>
 #include "player.h"

@@ -1,5 +1,5 @@
-#ifndef MESSAGE_H_S4GAKVJJ
-#define MESSAGE_H_S4GAKVJJ
+#ifndef DIALOG_MESSAGE_DLG_H_
+#define DIALOG_MESSAGE_DLG_H_
 #include <gtk/gtk.h>
 #include "../window/window.h"
 #include "../window/message.h"

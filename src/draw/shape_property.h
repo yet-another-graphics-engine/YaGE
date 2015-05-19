@@ -1,5 +1,5 @@
-#ifndef SHAPE_PROPERTY_H_JZUADHOK
-#define SHAPE_PROPERTY_H_JZUADHOK
+#ifndef DRAW_SHAPE_PROPERTY_H_
+#define DRAW_SHAPE_PROPERTY_H_
 #include "color.h"
 #include "point.h"
 
@@ -20,4 +20,4 @@ struct ShapeProperty {
 
 } // namespace draw
 } // namespace yage
-#endif /* end of include guard: SHAPE_PROPERTY_H_JZUADHOK */
+#endif /* end of include guard: DRAW_SHAPE_PROPERTY_H_ */

@@ -1,5 +1,5 @@
-#ifndef PLAYER_MACOSX_H_
-#define PLAYER_MACOSX_H_
+#ifndef AUDIO_OSX_H_
+#define AUDIO_OSX_H_
 
 #include "player.h"
 

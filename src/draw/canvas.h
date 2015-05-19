@@ -1,5 +1,5 @@
-#ifndef CANVAS_H_
-#define CANVAS_H_
+#ifndef DRAW_CANVAS_H_
+#define DRAW_CANVAS_H_
 
 #include "../window/window.h"
 #include "shape_property.h"

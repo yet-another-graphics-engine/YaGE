@@ -1,5 +1,5 @@
-#ifndef BASE_ELLIPTIC_ARC_H_
-#define BASE_ELLIPTIC_ARC_H_
+#ifndef DRAW_BASE_ELLIPTIC_ARC_H_
+#define DRAW_BASE_ELLIPTIC_ARC_H_
 
 #include "point.h"
 

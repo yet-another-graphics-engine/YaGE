@@ -1,7 +1,7 @@
 #include "shape_property.h"
 
-#ifndef ELLIPSE_H
-#define ELLIPSE_H
+#ifndef DRAW_ELLIPSE_H_
+#define DRAW_ELLIPSE_H_
 
 namespace yage {
 namespace draw {
@@ -17,4 +17,4 @@ public:
 } // namespace yage
 
 
-#endif //ELLIPSE_H
+#endif //DRAW_ELLIPSE_H_

@@ -1,5 +1,5 @@
-#ifndef LINE_H_
-#define LINE_H_
+#ifndef DRAW_LINE_H_
+#define DRAW_LINE_H_
 
 #include "shape_property.h"
 #include "point.h"
@@ -17,4 +17,4 @@ public:
 }
 }
 
-#endif // LINE_H_
+#endif // DRAW_LINE_H_

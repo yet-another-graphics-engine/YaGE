@@ -1,5 +1,5 @@
-#ifndef RECT_H_LWYTDFQS
-#define RECT_H_LWYTDFQS
+#ifndef DRAW_RECT_H_
+#define DRAW_RECT_H_
 #include "shape_property.h"
 
 namespace yage {
@@ -15,4 +15,4 @@ public:
 
 } // namespace draw
 } // namespace yage
-#endif /* end of include guard: RECT_H_LWYTDFQS */
+#endif /* end of include guard: DRAW_RECT_H_ */

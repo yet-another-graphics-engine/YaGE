@@ -1,5 +1,5 @@
-#ifndef FILE_CHOOSER_DLG_H_CKHZY7EV
-#define FILE_CHOOSER_DLG_H_CKHZY7EV
+#ifndef DIALOG_FILE_CHOOSER_DLG_H_
+#define DIALOG_FILE_CHOOSER_DLG_H_
 #include <string>
 #include <gtk/gtk.h>
 #include "../window/window.h"

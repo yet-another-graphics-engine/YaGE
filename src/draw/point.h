@@ -1,5 +1,5 @@
-#ifndef POINT_H_3ETAHMDF
-#define POINT_H_3ETAHMDF
+#ifndef DRAW_POINT_H_
+#define DRAW_POINT_H_
 
 namespace yage {
 namespace draw {
@@ -15,4 +15,4 @@ struct Point {
 
 } // namespace draw
 } // namespace yage
-#endif /* end of include guard: POINT_H_3ETAHMDF */
+#endif /* end of include guard: DRAW_POINT_H_ */

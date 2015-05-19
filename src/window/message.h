@@ -1,5 +1,5 @@
-#ifndef MESSAGE_H_JDF1VFPO
-#define MESSAGE_H_JDF1VFPO
+#ifndef WINDOW_MESSAGE_H_
+#define WINDOW_MESSAGE_H_
 #include <cstdint>
 #include <gtk/gtk.h>
 #include "window.h"

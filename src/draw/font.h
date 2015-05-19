@@ -1,5 +1,5 @@
-#ifndef FONT_H_
-#define FONT_H_
+#ifndef DRAW_FONT_H_
+#define DRAW_FONT_H_
 #include <pango/pango-font.h>
 #include <string>
 
@@ -34,4 +34,4 @@ public:
 }
 
 
-#endif //FONT_H_
+#endif //DRAW_FONT_H_
