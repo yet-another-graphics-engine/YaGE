@@ -2,6 +2,7 @@
 #define WINDOW_H_YDVLBPKF
 #include <gtk/gtk.h>
 #include "message.h"
+#include "../draw/canvas.h"
 #include "../util/runner.h"
 
 namespace yage {
@@ -80,8 +81,10 @@ public:
 
   GtkWidget *pro_get_gtk_draw(void);
   GtkWindow *pro_get_gtk_window();
-  void pro_redraw();
-  yage::draw::Canvas &pro_get_canvas(void);
+
+  void set_canvas(yage::draw::Canvas* canvas);
+  yage::draw::Canvas* get_canvas(void);
+  void update_window(void);
 };
 
 } /* core */

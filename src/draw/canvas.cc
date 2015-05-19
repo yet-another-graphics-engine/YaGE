@@ -5,86 +5,112 @@
 #include <cstdlib>
 #endif
 
+using namespace yage::draw;
+
 namespace yage {
 namespace draw {
 
-Canvas::Canvas(Window &window) : window_(&window) {
-    GtkWidget *widget = window.pro_get_gtk_draw();
 
-    surface_ = gdk_window_create_similar_surface(
-            gtk_widget_get_window(widget),
-            CAIRO_CONTENT_COLOR,
-            gtk_widget_get_allocated_width(widget),
-            gtk_widget_get_allocated_height(widget));
-    brush_ = cairo_create(surface_);
-    cairo_save(brush_);
-    cairo_set_source_rgb(brush_, 1, 1, 1);
-    cairo_paint(brush_);
-    cairo_restore(brush_);
-}
+Canvas::Canvas(int width, int height,Color bg_color) {
+    width_=width;
+    height_=height;
+    bg_color_=bg_color;
+    viewport_left_top_.x=viewport_left_top_.y=0;
+    viewport_right_bottom_.x=width-1;
+    viewport_right_bottom_.y=height-1;
 
-Canvas::Canvas(int width, int height) {
+    buffer_brush_=nullptr;
+    buffer_surface_=nullptr;
     surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     brush_ = cairo_create(surface_);
+    clear_all();
 }
 
-Canvas::Canvas(std::string filename) {
+Canvas::Canvas(std::string filename,Color bg_color) {
     GError *err = NULL;
     GdkPixbuf *buf = gdk_pixbuf_new_from_file(filename.c_str(), &err);
     if (err) {
         fprintf(stderr, "%s\n", err->message);
         g_error_free(err);
     }
-    int width = gdk_pixbuf_get_width(buf);
-    int height = gdk_pixbuf_get_height(buf);
-    surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    width_ = gdk_pixbuf_get_width(buf);
+    height_ = gdk_pixbuf_get_height(buf);
+
+    surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width_, height_);
     brush_ = cairo_create(surface_);
-    init_brush_();
+
     gdk_cairo_set_source_pixbuf(brush_, buf, 0.0, 0.0);
     cairo_paint(brush_);
-    finish_brush_();
+
     g_object_unref(buf);
+
+    bg_color_=bg_color;
+    viewport_left_top_.x=viewport_left_top_.y=0;
+    viewport_right_bottom_.x=width_-1;
+    viewport_right_bottom_.y=height_-1;
+    buffer_brush_=nullptr;
+    buffer_surface_=nullptr;
 }
 
 Canvas::~Canvas() {
+    if(buffer_surface_!=nullptr)
+    {
+        cairo_destroy(buffer_brush_);
+        cairo_surface_destroy(buffer_surface_);
+    }
     cairo_destroy(brush_);
-    cairo_surface_finish(surface_);
+    cairo_surface_destroy(surface_);
 }
 
 void Canvas::init_brush_(void)  {
+    buffer_surface_=cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width_, height_);
+    buffer_brush_=cairo_create(buffer_surface_);
     cairo_save(brush_);
 }
 
 void Canvas::finish_brush_(void)  {
+    cairo_set_line_width(brush_,0);
+    cairo_rectangle(brush_,viewport_left_top_.x,
+                           viewport_left_top_.y,
+                           viewport_right_bottom_.x-viewport_left_top_.x+1,
+                           viewport_right_bottom_.y-viewport_left_top_.y+1);
+    cairo_set_source_surface(brush_,buffer_surface_,viewport_left_top_.x,
+                                                    viewport_left_top_.y);
+    cairo_fill(brush_);
     cairo_restore(brush_);
-    if (window_) window_->pro_redraw();
+
+    cairo_destroy(buffer_brush_);
+    cairo_surface_destroy(buffer_surface_);
+    buffer_brush_=nullptr;
+    buffer_surface_=nullptr;
 }
 
 void Canvas::shape_fill_and_stroke_(ShapeProperty &shape) {
-    cairo_scale(brush_, 1.0, 1.0);
-    cairo_set_source_rgba(brush_,
+    cairo_scale(buffer_brush_, 1.0, 1.0);
+    cairo_set_source_rgba(buffer_brush_,
                           shape.bgcolor.r,
                           shape.bgcolor.g,
                           shape.bgcolor.b,
                           shape.bgcolor.a);
-    cairo_fill_preserve(brush_);
+    cairo_fill_preserve(buffer_brush_);
     shape_stroke_(shape);
 }
 
 void Canvas::shape_stroke_(ShapeProperty &shape) {
-    cairo_scale(brush_, 1.0, 1.0);
-    cairo_set_source_rgba(brush_,
+    cairo_scale(buffer_brush_, 1.0, 1.0);
+    cairo_set_source_rgba(buffer_brush_,
                           shape.fgcolor.r,
                           shape.fgcolor.g,
                           shape.fgcolor.b,
                           shape.fgcolor.a);
-    cairo_stroke(brush_);
+    cairo_stroke(buffer_brush_);
 }
 
 void Canvas::draw_line(Line &line) {
     init_brush_();
-    cairo_move_to(brush_, line.first.x, line.first.y);
-    cairo_line_to(brush_, line.second.x, line.second.y);
+    cairo_set_line_width(buffer_brush_,line.thickness);
+    cairo_move_to(buffer_brush_, line.first.x, line.first.y);
+    cairo_line_to(buffer_brush_, line.second.x, line.second.y);
     shape_stroke_(line);
     finish_brush_();
 }
@@ -93,16 +119,18 @@ void Canvas::pro_draw_elliptic_arc_(Point center, double xradius, double yradius
     // Drawing Elliptic Arc procedure
     // Finally, we will draw a arc with radius of 0 at (0,0)
     init_brush_();
-    cairo_set_line_width(brush_, shape.thickness);
-    cairo_translate(brush_, center.x, center.y); // make center of ellipse arc (0,0)
-    init_brush_();
-    cairo_scale(brush_, xradius, yradius);  // scale ellipse to a circle having radius of 1
-    cairo_arc(brush_, 0.0, 0.0, 1.0, startangle, endangle); // draw the 'circle arc'
+    cairo_set_line_width(buffer_brush_, shape.thickness);
+    cairo_translate(buffer_brush_, center.x, center.y); // make center of ellipse arc (0,0)
+
+    cairo_save(buffer_brush_);
+    cairo_scale(buffer_brush_, xradius, yradius);  // scale ellipse to a circle having radius of 1
+    cairo_arc(buffer_brush_, 0.0, 0.0, 1.0, startangle, endangle); // draw the 'circle arc'
     if (draw_sector) {
-        cairo_line_to(brush_, 0, 0);
-        cairo_close_path(brush_);
+        cairo_line_to(buffer_brush_, 0, 0);
+        cairo_close_path(buffer_brush_);
     }
-    finish_brush_();
+
+    cairo_restore(buffer_brush_);
     if (draw_sector) {
         shape_fill_and_stroke_(shape);
     } else {
@@ -113,7 +141,7 @@ void Canvas::pro_draw_elliptic_arc_(Point center, double xradius, double yradius
 
 void Canvas::draw_text(Text &text) {
     init_brush_();
-    PangoLayout *layout = pango_cairo_create_layout(brush_);
+    PangoLayout *layout = pango_cairo_create_layout(buffer_brush_);
 #ifdef _WIN32
     char *utf_text = yage::platform::ansi_to_utf_8(text.text.c_str());
 #else
@@ -121,13 +149,13 @@ void Canvas::draw_text(Text &text) {
 #endif
     pango_layout_set_text(layout, utf_text, -1);
     pango_layout_set_font_description(layout, text.get_font().pro_get_pango_font());
-    cairo_translate(brush_, text.position.x, text.position.y);
-    cairo_set_source_rgba(brush_,
+    cairo_translate(buffer_brush_, text.position.x, text.position.y);
+    cairo_set_source_rgba(buffer_brush_,
                           text.color.r,
                           text.color.g,
                           text.color.b,
                           text.color.a);
-    pango_cairo_show_layout(brush_, layout);
+    pango_cairo_show_layout(buffer_brush_, layout);
 #ifdef _WIN32
     free(utf_text);
 #endif
@@ -137,11 +165,11 @@ void Canvas::draw_text(Text &text) {
 
 void Canvas::draw_poly(Poly &poly) {
     init_brush_();
-    cairo_set_line_width(brush_, poly.thickness);
+    cairo_set_line_width(buffer_brush_, poly.thickness);
     for (const auto &i : poly.vertex) {
-        cairo_line_to(brush_, i.x, i.y);
+        cairo_line_to(buffer_brush_, i.x, i.y);
     }
-    cairo_close_path(brush_);
+    cairo_close_path(buffer_brush_);
     shape_fill_and_stroke_(poly);
     finish_brush_();
 }
@@ -150,7 +178,7 @@ void Canvas::draw_rect(Rect &rect)  {
     init_brush_();
     const Point &a = rect.first;
     const Point &b = rect.second;
-    cairo_rectangle(brush_, a.x, a.y, b.x - a.x, b.y - a.y);
+    cairo_rectangle(buffer_brush_, a.x, a.y, b.x - a.x, b.y - a.y);
     shape_fill_and_stroke_(rect);
     finish_brush_();
 }
@@ -173,9 +201,55 @@ void Canvas::draw_circle(Circle &circle)  {
 
 void Canvas::draw_canvas(Canvas &canvas, Point position) {
     init_brush_();
-    cairo_set_source_surface(brush_, canvas.pro_get_cairo_surface(), position.x, position.y);
-    cairo_paint(brush_);
+    cairo_set_source_surface(buffer_brush_, canvas.pro_get_cairo_surface(), position.x, position.y);
+    cairo_paint(buffer_brush_);
     finish_brush_();
+}
+
+Color Canvas::get_bg_color()
+{
+    return bg_color_;
+}
+
+void Canvas::set_bg_color(Color color)
+{
+    bg_color_=color;
+}
+
+void Canvas::set_viewport(Point left_top,Point right_bottom)
+{
+    viewport_left_top_.x=(left_top.x < right_bottom.x)?left_top.x:right_bottom.x;
+    viewport_right_bottom_.x=(left_top.x > right_bottom.x)?left_top.x:right_bottom.x;
+    viewport_left_top_.y=(left_top.y < right_bottom.y)?left_top.y:right_bottom.y;
+    viewport_right_bottom_.y=(left_top.y > right_bottom.y)?left_top.y:right_bottom.y;
+
+    viewport_right_bottom_.x--;
+    viewport_right_bottom_.y--;
+    if(viewport_left_top_.x<0)
+        viewport_left_top_.x=0;
+    else if(viewport_left_top_.x>=width_)
+        viewport_left_top_.x=width_-1;
+
+    if(viewport_left_top_.y<0)
+        viewport_left_top_.y=0;
+    else if(viewport_left_top_.y>=height_)
+        viewport_left_top_.y=height_-1;
+
+    if(viewport_right_bottom_.x<0)
+        viewport_right_bottom_.x=0;
+    else if(viewport_right_bottom_.x>=width_)
+        viewport_right_bottom_.x=width_-1;
+
+    if(viewport_right_bottom_.y<0)
+        viewport_right_bottom_.y=0;
+    else if(viewport_right_bottom_.y>=height_)
+        viewport_right_bottom_.y=height_-1;
+}
+
+void Canvas::get_viewport(Point* left_top,Point* right_bottom)
+{
+    *left_top=viewport_left_top_;
+    *right_bottom=viewport_right_bottom_;
 }
 
 cairo_surface_t *Canvas::pro_get_cairo_surface(void)  {
@@ -186,14 +260,29 @@ cairo_t *Canvas::pro_get_brush(void)  {
     return brush_;
 }
 
-void Canvas::clear(Point a, Point b, Color color) {
-    init_brush_();
-    cairo_set_source_rgba(brush_, color.r,
-                                  color.g,
-                                  color.b,
-                                  color.a);
+void Canvas::clear_all(void) {
+    cairo_save(brush_);
+    cairo_set_source_rgba(brush_,bg_color_.r,
+                                 bg_color_.g,
+                                 bg_color_.b,
+                                 bg_color_.a);
     cairo_paint(brush_);
-    finish_brush_();
+    cairo_restore(brush_);
+}
+
+void Canvas::clear_viewport(void){
+    cairo_save(brush_);
+    cairo_set_line_width(brush_,0);
+    cairo_set_source_rgba(brush_,bg_color_.r,
+                                 bg_color_.g,
+                                 bg_color_.b,
+                                 bg_color_.a);
+    cairo_rectangle(brush_,viewport_left_top_.x,
+                           viewport_left_top_.y,
+                           viewport_right_bottom_.x-viewport_left_top_.x+1,
+                           viewport_right_bottom_.y-viewport_left_top_.y+1);
+    cairo_fill(brush_);
+    cairo_restore(brush_);
 }
 
 }

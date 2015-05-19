@@ -116,15 +116,18 @@ void test_draw(void)
   w.show();
   using namespace yage::draw;
 
-  Canvas& canvas = w.pro_get_canvas();
+  Canvas canvas(640,480);
   std::string pic_name = "";
-  if (pic_name == "") {
+  /*if (pic_name == "") {
 	  fprintf(stderr, "Please specify the picture name as pic_name.\nPicture will not show if you do not change the variable\n");
   } else {
 	  Canvas picture(pic_name);
 	  Point origin(0, 0);
 	  canvas.draw_canvas(picture, origin);
-  }
+  }*/
+  Point viewport1(100,100);
+  Point viewport2(600,400);
+  canvas.set_viewport(viewport1,viewport2);
   yage::draw::Ellipse e;
   Point point(300, 200);
   e.center = point;
@@ -148,6 +151,9 @@ void test_draw(void)
   text.color = yellow;
   text.position = point;
   canvas.draw_text(text);
+
+  w.set_canvas(&canvas);
+  w.update_window();
 
   Message msg;
   while (Window::poll(msg)) {
@@ -345,7 +351,7 @@ void test_dialog_color_font(Window &w)
   text.position = yage::draw::Point(0, 0);
   text.color = color;
 
-  w.pro_get_canvas().draw_text(text);
+  w.get_canvas()->draw_text(text);
 }
 
 void test_dialog()

@@ -31,7 +31,7 @@ void initgraph(int width, int height) {
     window = new yage::core::Window();
     window->set_size(width, height);
     window->show();
-    canvas = &window->pro_get_canvas();
+    canvas = window->get_canvas();
 }
 
 void closegraph(void) {
@@ -42,7 +42,7 @@ void closegraph(void) {
 }
 
 void cleardevice(void) {
-    canvas->clear();
+    canvas->clear_all();
 }
 
 void clearviewport(void) {

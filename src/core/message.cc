@@ -125,31 +125,21 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
   msg_push_queue(msg);
 
   g_print("width=%d,height=%d\n",gtk_widget_get_allocated_width(widget),gtk_widget_get_allocated_height(widget));
-  /*if (event->width != 1 && event->height != 1) {
-      Canvas* new_canvas=new Canvas(*source);
-	  if (source->canvas_)
-      {
-          new_canvas->draw_canvas(*source->canvas_,Point(0,0));
-          delete source->canvas_;
-      }
-	  source->canvas_ =new_canvas;
-  }*/
-  Canvas* new_canvas=new Canvas(*source);
-  if (source->canvas_)
-  {
-    //new_canvas->draw_canvas(*source->canvas_,Point(0,0));
-    delete source->canvas_;
-  }
-  source->canvas_ =new_canvas;
   return true;
 }
 
 gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source)
 {
   g_print("on_draw_area_draw\n");
-  cairo_set_source_surface(cairo, source->canvas_->pro_get_cairo_surface(), 0, 0);
-  cairo_paint(cairo);
-  return false;
+  if(source->canvas_==nullptr)
+    return true;
+  cairo_surface_t* surface=source->canvas_->pro_get_cairo_surface();
+  if(surface!=nullptr)
+  {
+    cairo_set_source_surface(cairo, surface, 0, 0);
+    cairo_paint(cairo);
+  }
+  return true;
 }
 
 } /* core */

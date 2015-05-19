@@ -5,8 +5,6 @@
 namespace yage {
 namespace core {
 
-using yage::draw::Canvas;
-
 gpointer user_thread(gpointer *param) {
   auto func = reinterpret_cast<int (*)()>(param[0]);
   auto &ret = *reinterpret_cast<int *>(param[1]);
@@ -208,12 +206,18 @@ GtkWidget *Window::pro_get_gtk_draw()
   return gtk_draw_;
 }
 
-yage::draw::Canvas &Window::pro_get_canvas(void) {
-  return *canvas_;
+yage::draw::Canvas* Window::get_canvas(void) {
+  return canvas_;
 }
 
-void Window::pro_redraw() {
-  runner_call(exec_redraw, this);
+void Window::set_canvas(Canvas* canvas)
+{
+  canvas_=canvas;
+}
+
+void Window::update_window(void) {
+  if(canvas_!=nullptr)
+    runner_call(exec_redraw, this);
 }
 
 void Window::quit() {
