@@ -1,7 +1,7 @@
 #include "canvas.h"
 #define M_PI 3.14159265358979323846
 #ifdef _WIN32
-#include "../platform/win32.h"
+#include "../util/mswin.h"
 #include <cstdlib>
 #endif
 
@@ -143,7 +143,7 @@ void Canvas::draw_text(Text &text) {
     init_brush_();
     PangoLayout *layout = pango_cairo_create_layout(buffer_brush_);
 #ifdef _WIN32
-    char *utf_text = yage::platform::ansi_to_utf_8(text.text.c_str());
+    char *utf_text = yage::util::ansi_to_utf_8(text.text.c_str());
 #else
     const char *utf_text = text.text.c_str();
 #endif

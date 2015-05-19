@@ -6,7 +6,7 @@
 #include "../yage.h"
 
 namespace yage {
-namespace core {
+namespace window {
 
 using yage::draw::Canvas;
 using yage::draw::Point;
@@ -142,6 +142,6 @@ gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *sou
   return true;
 }
 
-} /* core */
+} /* window */
 } /* yage */
 

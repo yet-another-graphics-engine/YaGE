@@ -5,7 +5,7 @@
 #include "window.h"
 
 namespace yage {
-namespace core {
+namespace window {
 
 class Window;
 
@@ -59,7 +59,7 @@ struct Message {
   };
 };
 
-} /* core */
+} /* window */
 } /* yage */
 
 #endif /* end of include guard: MESSAGE_H_JDF1VFPO */

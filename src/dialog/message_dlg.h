@@ -1,12 +1,12 @@
 #ifndef MESSAGE_H_S4GAKVJJ
 #define MESSAGE_H_S4GAKVJJ
 #include <gtk/gtk.h>
-#include "../core/window.h"
-#include "../core/message.h"
+#include "../window/window.h"
+#include "../window/message.h"
 
 namespace yage {
 namespace dialog {
-using namespace core;
+using namespace window;
 
 class MessageDlg {
 public:

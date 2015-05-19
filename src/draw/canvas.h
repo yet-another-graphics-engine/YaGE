@@ -1,7 +1,7 @@
 #ifndef CANVAS_H_
 #define CANVAS_H_
 
-#include "../core/window.h"
+#include "../window/window.h"
 #include "shape_property.h"
 #include "poly.h"
 #include "elliptic_arc.h"
@@ -19,7 +19,7 @@
 using namespace yage::draw;
 
 namespace yage {
-namespace core {
+namespace window {
 class Window;
 }
 

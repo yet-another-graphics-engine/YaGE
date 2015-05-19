@@ -2,7 +2,7 @@
 #define YAGE_WIN32_H
 
 namespace yage {
-namespace platform {
+namespace util {
 
 wchar_t *ansi_to_utf_16(const char *str);
 char *utf_16_to_ansi(const wchar_t *wstr);

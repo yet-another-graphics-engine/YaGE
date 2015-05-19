@@ -2,12 +2,12 @@
 #define INPUT_DLG_H_3SLRDMQA
 #include <gtk/gtk.h>
 #include <string>
-#include "../core/window.h"
-#include "../core/message.h"
+#include "../window/window.h"
+#include "../window/message.h"
 
 namespace yage {
 namespace dialog {
-using namespace core;
+using namespace window;
 
 class InputDlg {
 public:

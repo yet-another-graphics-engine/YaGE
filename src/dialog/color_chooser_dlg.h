@@ -1,13 +1,13 @@
 #ifndef COLORCHOOSERDLG_H_YAXOUDVN
 #define COLORCHOOSERDLG_H_YAXOUDVN
 #include <gtk/gtk.h>
-#include "../core/window.h"
-#include "../core/message.h"
+#include "../window/window.h"
+#include "../window/message.h"
 #include "../draw/color.h"
 
 namespace yage {
 namespace dialog {
-using namespace core;
+using namespace window;
 
 class ColorChooserDlg {
 public:

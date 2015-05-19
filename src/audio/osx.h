@@ -1,7 +1,7 @@
 #ifndef PLAYER_MACOSX_H_
 #define PLAYER_MACOSX_H_
 
-#include "../player.h"
+#include "player.h"
 
 #ifdef __OBJC__
 @class AVPlayer;
@@ -11,7 +11,7 @@ struct AVPlayer;
 #endif
 
 namespace yage {
-namespace platform {
+namespace audio {
 class OSXPlayer : public Player {
     private:
         AVPlayer *player_;

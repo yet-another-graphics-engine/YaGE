@@ -10,7 +10,7 @@ namespace draw {
   class Canvas;
 }
 
-namespace core {
+namespace window {
 
 struct Message;
 
@@ -87,7 +87,7 @@ public:
   void update_window(void);
 };
 
-} /* core */
+} /* window */
 } /* yage */
 
 #endif /* end of include guard: WINDOW_H_YDVLBPKF */

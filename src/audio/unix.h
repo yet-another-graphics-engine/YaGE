@@ -2,10 +2,10 @@
 #define LINUX_H_BQTYW1ZH
 #include <string>
 #include <gst/gst.h>
-#include "../player.h"
+#include "player.h"
 
 namespace yage {
-namespace platform {
+namespace audio {
 
 class LinuxPlayer : public Player {
 private:

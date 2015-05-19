@@ -1,11 +1,11 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
-#include "macosx.h"
+#include "osx.h"
 
 #include <string>
 
 namespace yage {
-namespace platform {
+namespace audio {
 
 OSXPlayer::OSXPlayer(std::string url) : Player() {
     url_ = url;

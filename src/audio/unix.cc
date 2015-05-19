@@ -1,7 +1,7 @@
-#include "linux.h"
+#include "unix.h"
 
 namespace yage {
-namespace platform {
+namespace audio {
 
 gboolean LinuxPlayer::bus_call(GstBus *bus, GstMessage *msg, void *user_data)
 {

@@ -3,7 +3,7 @@
 #include <string>
 
 namespace yage {
-namespace platform {
+namespace audio {
 class Player {
     protected:
         std::string url_;

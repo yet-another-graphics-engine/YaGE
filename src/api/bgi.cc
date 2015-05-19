@@ -1,7 +1,7 @@
 // BGI Compatibility Layer
-#include "core/window.h"
-#include "draw/canvas.h"
-#include "dialog/input_dlg.h"
+#include "../window/window.h"
+#include "../draw/canvas.h"
+#include "../dialog/input_dlg.h"
 
 #include <cstdarg>
 #include <cstring>
@@ -18,7 +18,7 @@
 #pragma warning(disable: 4800)
 #endif
 
-static yage::core::Window *window = nullptr;
+static yage::window::Window *window = nullptr;
 static yage::draw::Canvas *canvas = nullptr;
 static yage::draw::Point canvas_position(0, 0);
 static yage::draw::ShapeProperty property;
@@ -28,7 +28,7 @@ typedef unsigned int color_t;
 extern "C" {
 
 void initgraph(int width, int height) {
-    window = new yage::core::Window();
+    window = new yage::window::Window();
     window->set_size(width, height);
     window->show();
     canvas = window->get_canvas();
@@ -243,9 +243,9 @@ void xyprintf(int x, int y, const char *format, ...) {
 }
 
 int getch(void) {
-    yage::core::Message msg;
-    while(yage::core::Window::poll(msg)) {
-        if (msg.type == yage::core::Message::type_kbd) {
+    yage::window::Message msg;
+    while(yage::window::Window::poll(msg)) {
+        if (msg.type == yage::window::Message::type_kbd) {
             return msg.kbd.keyval;
         }
     }
@@ -350,9 +350,9 @@ bool mouse_msg::is_wheel() {
 
 mouse_msg getmouse() {
     mouse_msg ege_msg;
-    yage::core::Message msg;
-    while(yage::core::Window::poll(msg)) {
-        if (msg.type == yage::core::Message::type_mouse) {
+    yage::window::Message msg;
+    while(yage::window::Window::poll(msg)) {
+        if (msg.type == yage::window::Message::type_mouse) {
             ege_msg.x = static_cast<int>(msg.mouse.x);
             ege_msg.y = static_cast<int>(msg.mouse.y);
             ege_msg.msg += (msg.mouse.type == msg.mouse.type_move) << 6;

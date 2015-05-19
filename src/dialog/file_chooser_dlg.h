@@ -2,12 +2,12 @@
 #define FILE_CHOOSER_DLG_H_CKHZY7EV
 #include <string>
 #include <gtk/gtk.h>
-#include "../core/window.h"
-#include "../core/message.h"
+#include "../window/window.h"
+#include "../window/message.h"
 
 namespace yage {
 namespace dialog {
-using namespace core;
+using namespace window;
 
 class FileChooserDlg {
 public:

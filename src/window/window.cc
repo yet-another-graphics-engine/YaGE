@@ -3,7 +3,7 @@
 #include "window.h"
 
 namespace yage {
-namespace core {
+namespace window {
 
 gpointer user_thread(gpointer *param) {
   auto func = reinterpret_cast<int (*)()>(param[0]);
@@ -255,6 +255,6 @@ bool Window::poll(Message &msg, bool block) {
   return true;
 }
 
-}  // namespace core
+}  // namespace window
 }  // namespace yage
 

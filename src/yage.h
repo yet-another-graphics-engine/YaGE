@@ -4,9 +4,9 @@
 extern "C" int yage_main(void);
 
 namespace yage {
-namespace core {
+namespace window {
 
-}  // namespace core
+}  // namespace window
 }  // namespace yage
 
 #endif /* end of include guard: YAGE_H_MDXUGEJV */

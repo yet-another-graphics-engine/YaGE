@@ -1,13 +1,13 @@
 #ifndef FONT_CHOOSER_DLG_H_NPSYKKMZ
 #define FONT_CHOOSER_DLG_H_NPSYKKMZ
 #include <gtk/gtk.h>
-#include "../core/window.h"
-#include "../core/message.h"
+#include "../window/window.h"
+#include "../window/message.h"
 #include "../draw/font.h"
 
 namespace yage {
 namespace dialog {
-using namespace core;
+using namespace window;
 
 class FontChooserDlg {
 public:

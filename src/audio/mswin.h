@@ -1,11 +1,11 @@
 #ifndef PLAYER_WIN32_H_
 #define PLAYER_WIN32_H_
-#include "../player.h"
+#include "player.h"
 
 #include <windows.h>
 
 #ifdef __MINGW32__
-#include "wmp_mingw.h"
+#include "mswin_wmp_mingw.h"
 #else
 #define CINTERFACE
 #define COBJMACROS
@@ -13,7 +13,7 @@
 #endif
 
 namespace yage {
-namespace platform {
+namespace util {
 
 class WinPlayer : public Player {
 private:

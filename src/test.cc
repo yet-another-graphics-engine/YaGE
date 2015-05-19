@@ -1,7 +1,7 @@
-#include "core/window.h"
+#include "window/window.h"
 #include "draw/canvas.h"
 #include "draw/color.h"
-#include "platform/player.h"
+#include "audio/player.h"
 #include "dialog/message_dlg.h"
 #include "dialog/file_chooser_dlg.h"
 #include "dialog/color_chooser_dlg.h"
@@ -17,7 +17,7 @@
 #include <unistd.h>
 #endif
 
-using namespace yage::core;
+using namespace yage::window;
 using namespace yage::dialog;
 extern "C" int yage_main(void);
 
@@ -398,7 +398,7 @@ void test_dialog()
 }
 
 void test_audio(void) {
-    using yage::platform::Player;
+    using yage::audio::Player;
     std::cerr << "Load file IGNITE from Internet" << std::endl;
     Player *player = Player::create_player("https://kirito.me/ignite.mp3");
     std::cerr << "Play IGNITE" << std::endl;

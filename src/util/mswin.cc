@@ -1,8 +1,8 @@
-#include "win32.h"
+#include "mswin.h"
 #include <windows.h>
 
 namespace yage {
-namespace platform {
+namespace util {
 
 // use free()
 wchar_t *ansi_to_utf_16(const char* str) {

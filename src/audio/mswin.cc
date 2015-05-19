@@ -1,10 +1,10 @@
-#include "win32.h"
-#include "../win32.h"
+#include "../util/mswin.h"
+#include "mswin.h"
 #include <cassert>
 #include <iostream>
 
 namespace yage {
-namespace platform {
+namespace audio {
 
 static const UINT YAGE_PLAYER_MESSAGE = WM_USER + 0x233;
 static const WPARAM YAGE_PLAYER_PLAY = 1L;
@@ -45,7 +45,7 @@ DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
     hr = CoCreateInstance(uuid_windowsmediaplayer, 0, CLSCTX_INPROC_SERVER, iid_wmpplayer, (void **)&this_->player_);
     player = this_->player_;
     assert(SUCCEEDED(hr));
-    wchar_t *wurl = yage::platform::ansi_to_utf_16(init_msg->url.c_str());
+    wchar_t *wurl = yage::util::ansi_to_utf_16(init_msg->url.c_str());
     hr = IWMPPlayer_put_URL(player, wurl);
     assert(SUCCEEDED(hr));
     free(wurl);

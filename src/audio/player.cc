@@ -1,14 +1,14 @@
 #include "player.h"
 #if defined(__APPLE__)
-#include "player/macosx.h"
+#include "osx.h"
 #elif defined(_WIN32)
-#include "player/win32.h"
+#include "mswin.h"
 #else
-#include "player/linux.h"
+#include "unix.h"
 #endif
 
 namespace yage {
-namespace platform {
+namespace audio {
 
 Player::Player() {}
 Player::~Player() {}

@@ -34,10 +34,10 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(LIB_SOURCE_FILES
     yage.cc
-    core/message.cc
-    core/window.cc
+    window/message.cc
+    window/window.cc
     util/runner.cc
-    platform/player.cc
+    audio/player.cc
     dialog/message_dlg.cc
     dialog/file_chooser_dlg.cc
     dialog/color_chooser_dlg.cc
@@ -56,15 +56,15 @@ set(LIB_SOURCE_FILES
     draw/canvas.cc
     draw/font.cc
     draw/text.cc
-    bgi.cc
+    api/bgi.cc
     )
 
 if(WIN32)
-    list(APPEND LIB_SOURCE_FILES platform/player/win32.cc platform/win32.cc)
+    list(APPEND LIB_SOURCE_FILES util/mswin.cc audio/mswin.cc)
 elseif(APPLE)
-    list(APPEND LIB_SOURCE_FILES platform/player/macosx.mm)
+    list(APPEND LIB_SOURCE_FILES audio/macosx.mm)
 elseif(UNIX)
-    list(APPEND LIB_SOURCE_FILES platform/player/linux.cc)
+    list(APPEND LIB_SOURCE_FILES audio/unix.cc)
 endif()
 
 if(APPLE)
