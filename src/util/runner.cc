@@ -28,7 +28,7 @@ void glib_destroy_notify(gpointer data)
   auto sync_data = reinterpret_cast<SyncData *>(data);
   g_mutex_clear(&sync_data->mutex);
   g_cond_clear(&sync_data->cond);
-  delete &sync_data;
+  delete sync_data;
 }
 
 gboolean gtk_source_func(CallParam &data)
