@@ -98,7 +98,16 @@ else()
     ADD_DEFINITIONS(${GTK3_CFLAGS_OTHER})
 endif()
 
-add_executable(yagetest test.cc)
+add_executable(yagetest
+test/test.cc
+test/audio.cc
+test/dialog.cc
+test/draw.cc
+test/fix_size.cc
+test/msg.cc
+test/resize.cc
+test/window_count.cc
+)
 
 target_link_libraries(yagetest yage)
 
