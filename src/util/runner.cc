@@ -48,9 +48,13 @@ void call(void *callback, void *p0, void *p1, void *p2, void *p3)
     g_private_set(&key, sync_data);
   }
 
-  CallParam param = {
-    .callback = reinterpret_cast<decltype(CallParam::callback)>(callback),
-    .sync_data = sync_data, .p0 = p0, .p1 = p1, .p2 = p2, .p3 = p3};
+  CallParam param;
+  param.callback = reinterpret_cast<decltype(CallParam::callback)>(callback);
+  param.sync_data = sync_data;
+  param.p0 = p0;
+  param.p1 = p1;
+  param.p2 = p2;
+  param.p3 = p3;
 
   g_mutex_lock(&sync_data->mutex);
 

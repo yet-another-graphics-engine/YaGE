@@ -13,7 +13,7 @@
 #endif
 
 namespace yage {
-namespace util {
+namespace audio {
 
 class WinPlayer : public Player {
 private:
