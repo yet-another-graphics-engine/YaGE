@@ -19,13 +19,13 @@
 /* main function redirect
  * DO NOT INCLUDE THIS HEADER TO WRITE PROGRAM THAT DO NOT LINK TO YAGE
  */
-#define main yage_main
+#define main(...) yage_main(int argc, char *argv[])
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-int yage_main(void);
+int yage_main(int argc, char *argv[]);
 
 /* Level 1 start */
 typedef unsigned int color_t;
