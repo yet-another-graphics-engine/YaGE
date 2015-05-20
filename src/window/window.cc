@@ -41,7 +41,7 @@ size_t Window::window_num_ = 0;
  * These function should return false, to signal GTK that the source should be
  * removed.
  */
-void Window::exec_create(Window *this_)
+void Window::exec_create(Window *this_,int* start_width,int* start_height)
 {
   this_->canvas_ = nullptr;
 
@@ -49,11 +49,6 @@ void Window::exec_create(Window *this_)
   gtk_window_ = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 
   // Default: not resizable
-  GdkGeometry geo;
-  geo.min_width = 640;
-  geo.min_height = 480;
-  gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
-                             GDK_HINT_MIN_SIZE);
   gtk_window_set_resizable(gtk_window_, false);
 
   // Setup signals for main window
@@ -73,7 +68,7 @@ void Window::exec_create(Window *this_)
   // Setup drawing_area
   GtkWidget *&gtk_draw_ = this_->gtk_draw_;
   gtk_draw_ = gtk_drawing_area_new();
-  gtk_widget_set_size_request(gtk_draw_,geo.min_width,geo.min_height);
+  gtk_widget_set_size_request(gtk_draw_,*start_width,*start_height);
   gtk_widget_add_events(gtk_draw_, GDK_BUTTON_PRESS_MASK |
                                    GDK_BUTTON_RELEASE_MASK |
                                    GDK_POINTER_MOTION_MASK);
@@ -126,16 +121,7 @@ void Window::exec_set_title(Window *this_, char *title)
 
 void Window::exec_set_resizable(Window *this_, bool* resizable)
 {
-  g_print("resizable==%d\n",*resizable);
   gtk_window_set_resizable(this_->gtk_window_, *resizable);
-
-  if (resizable) {
-    GdkGeometry geo;
-    geo.min_width = 1;
-    geo.min_height = 1;
-    gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
-                                  GDK_HINT_MIN_SIZE);
-  }
 }
 
 void Window::exec_set_size(Window *this_, int &width, int &height)
@@ -164,8 +150,16 @@ void Window::exec_get_size(Window *this_, int &width, int &height)
  * Proxy functions
  * Request to execute worker functions in GUI thread and wait for the return.
  */
-Window::Window() {
-  runner_call(exec_create, this);
+Window::Window(int start_width,int start_height,yage::draw::Canvas* canvas) {
+  if(start_width<=0)
+    start_width=1;
+  if(start_height<=0)
+    start_height=1;
+  if(canvas==nullptr)
+    canvas_ = new yage::draw::Canvas(start_width,start_height);
+  else
+    canvas_=canvas;
+  runner_call(exec_create, this,&start_width,&start_height);
 }
 
 void Window::show() {
@@ -217,7 +211,10 @@ void Window::set_canvas(Canvas* canvas)
 
 void Window::update_window(void) {
   if(canvas_!=nullptr)
+  {
+    canvas_->update_canvas();
     runner_call(exec_redraw, this);
+  }
 }
 
 void Window::quit() {
