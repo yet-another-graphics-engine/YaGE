@@ -62,7 +62,7 @@ set(LIB_SOURCE_FILES
 if(WIN32)
     list(APPEND LIB_SOURCE_FILES util/mswin.cc audio/mswin.cc)
 elseif(APPLE)
-    list(APPEND LIB_SOURCE_FILES audio/macosx.mm)
+    list(APPEND LIB_SOURCE_FILES audio/osx.mm)
 elseif(UNIX)
     list(APPEND LIB_SOURCE_FILES audio/unix.cc)
 endif()
