@@ -6,10 +6,10 @@ namespace yage {
 namespace window {
 
 gpointer user_thread(gpointer *param) {
-  auto func = reinterpret_cast<int (*)()>(param[0]);
+  auto func = reinterpret_cast<int (*)(int, char**)>(param[0]);
   auto &ret = *reinterpret_cast<int *>(param[1]);
 
-  ret = func();
+  ret = func(argc, argv);
   gtk_main_quit();
   return nullptr;
 }
