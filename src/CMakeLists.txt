@@ -98,6 +98,10 @@ else()
     ADD_DEFINITIONS(${GTK3_CFLAGS_OTHER})
 endif()
 
+# install library and headers
+install(TARGETS yage DESTINATION "lib")
+install(FILES "../include/graphics.h" DESTINATION "include")
+
 add_executable(yagetest
 test/test.cc
 test/audio.cc
