@@ -126,7 +126,7 @@ void Canvas::pro_draw_elliptic_arc_(Point center, double xradius, double yradius
     cairo_save(buffer_brush_);
     cairo_scale(buffer_brush_, xradius, yradius);  // scale ellipse to a circle having radius of 1
     cairo_arc(buffer_brush_, 0.0, 0.0, 1.0, startangle, endangle); // draw the 'circle arc'
-    if (draw_sector) {
+    if (draw_sector && endangle != 2 * M_PI) {
         cairo_line_to(buffer_brush_, 0, 0);
         cairo_close_path(buffer_brush_);
     }
