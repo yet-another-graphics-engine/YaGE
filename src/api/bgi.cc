@@ -31,7 +31,9 @@ void initgraph(int width, int height) {
     window = new yage::window::Window();
     window->set_size(width, height);
     window->show();
-    canvas = window->get_canvas();
+    canvas = new yage::draw::Canvas(width, height);
+    window->set_canvas(canvas);
+    window->update_window();
 }
 
 void closegraph(void) {
@@ -70,6 +72,8 @@ void arcf(float x, float y, float startangle, float endangle, float radius) {
     ellipsec.xradius = radius;
     ellipsec.yradius = radius;
     canvas->draw_elliptical_sector(ellipsec);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void arc(int x, int y, int startangle, int endangle, int radius) {
@@ -86,6 +90,8 @@ void bar(int left, int top, int right, int bottom) {
     rect.bgcolor = property.bgcolor;
     rect.fgcolor = transparent;
     canvas->draw_rect(rect);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void circlef(float x, float y, float radius) {
@@ -97,6 +103,8 @@ void circlef(float x, float y, float radius) {
     circle1.thickness = property.thickness;
     circle1.center = center;
     canvas->draw_circle(circle1);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void circle(int x, int y, int radius) {
@@ -116,6 +124,8 @@ void ellipsef(float x, float y, float startangle, float endangle, float xradius,
     elliparc.xradius = xradius;
     elliparc.yradius = yradius;
     canvas->draw_elliptical_arc(elliparc);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void ellipse(int x, int y, int startangle, int endangle, int xradius, int yradius) {
@@ -128,6 +138,8 @@ void fillellipsef(float x, float y, float xradius, float yradius) {
     ellipse1.bgcolor = property.bgcolor;
     ellipse1.fgcolor = transparent;
     canvas->draw_ellipse(ellipse1);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void fillellipse(int x, int y, int xradius, int yradius) {
@@ -138,6 +150,8 @@ void line(int x1, int y1, int x2, int y2) {
     yage::draw::Line line1(yage::draw::Point(x1, y1),
                            yage::draw::Point(x2, y2));
     canvas->draw_line(line1);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void pieslicef(float x, float y, float startangle, float endangle, float radius) {
@@ -152,6 +166,8 @@ void pieslicef(float x, float y, float startangle, float endangle, float radius)
     ellipsec.xradius = radius;
     ellipsec.yradius = radius;
     canvas->draw_elliptical_sector(ellipsec);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void moveto(int x, int y) {
@@ -174,6 +190,8 @@ void putpixel(int x, int y, color_t color) {
     pixel.bgcolor = yage::draw::Color(color);
     pixel.thickness = property.thickness;
     canvas->draw_rect(pixel);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void rectangle(int left, int top, int right, int bottom) {
@@ -187,7 +205,8 @@ void rectangle(int left, int top, int right, int bottom) {
     rect.fgcolor = property.fgcolor;
     rect.thickness = property.thickness;
     canvas->draw_rect(rect);
-
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void sectorf(float x, float y, float startangle, float endangle, float xradius, float yradius) {
@@ -202,6 +221,8 @@ void sectorf(float x, float y, float startangle, float endangle, float xradius, 
     ellipsec.xradius = xradius;
     ellipsec.yradius = yradius;
     canvas->draw_elliptical_sector(ellipsec);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void sector(int x, int y, int startangle, int endangle, int xradius, int yradius) {
@@ -217,6 +238,8 @@ void outtext(const char *text) {
     text1.position = canvas_position;
     text1.color = property.fgcolor;
     canvas->draw_text(text1);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void outtextxy(int x, int y, const char *text) {
@@ -224,6 +247,8 @@ void outtextxy(int x, int y, const char *text) {
     text1.position = yage::draw::Point(x, y);
     text1.color = property.fgcolor;
     canvas->draw_text(text1);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 void xyprintf(int x, int y, const char *format, ...) {
@@ -240,6 +265,8 @@ void xyprintf(int x, int y, const char *format, ...) {
     text1.position = yage::draw::Point(x, y);
     text1.color = property.fgcolor;
     canvas->draw_text(text1);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 int getch(void) {
@@ -299,6 +326,8 @@ void delay_ms(long milliseconds) {
 
 void lineto(int x, int y) {
     line(canvas_position.x, canvas_position.y, x, y);
+    canvas->update_canvas();
+    window->update_window();
 }
 
 #ifdef __cplusplus
