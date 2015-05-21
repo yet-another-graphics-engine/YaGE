@@ -38,7 +38,7 @@ void FontChooserDlg::exec_create(FontChooserDlg *this_,
 
 void FontChooserDlg::exec_show(FontChooserDlg *this_,
                                yage::draw::Font &yage_font,
-                               int &ret)
+                               bool &ret)
 {
   gint run_ret = gtk_dialog_run(GTK_DIALOG(this_->gtk_dialog_));
   if (run_ret == GTK_RESPONSE_OK) {
@@ -51,6 +51,7 @@ void FontChooserDlg::exec_show(FontChooserDlg *this_,
   } else {
     ret = false;
   }
+  gtk_widget_hide(GTK_WIDGET(this_->gtk_dialog_));
 }
 
 bool FontChooserDlg::show(yage::draw::Font &font)

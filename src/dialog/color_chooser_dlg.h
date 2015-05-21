@@ -1,5 +1,5 @@
-#ifndef DIALOG_COLOR_CHOOSER_DLG_H_
-#define DIALOG_COLOR_CHOOSER_DLG_H_
+#ifndef COLORCHOOSERDLG_H_YAXOUDVN
+#define COLORCHOOSERDLG_H_YAXOUDVN
 #include <gtk/gtk.h>
 #include "../window/window.h"
 #include "../window/message.h"

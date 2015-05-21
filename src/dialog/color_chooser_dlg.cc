@@ -1,6 +1,5 @@
 #include "color_chooser_dlg.h"
 #include "../yage.h"
-
 namespace yage {
 namespace dialog {
 
@@ -54,6 +53,7 @@ void ColorChooserDlg::exec_show(ColorChooserDlg *this_,
   } else {
     ret = false;
   }
+  gtk_widget_hide(GTK_WIDGET(this_->gtk_dialog_));
 }
 
 bool ColorChooserDlg::show(yage::draw::Color &color)

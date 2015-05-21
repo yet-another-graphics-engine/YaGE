@@ -26,7 +26,7 @@ private:
                           GtkWindow *parent);
   static void exec_show(FontChooserDlg *this_,
                         yage::draw::Font &yage_font,
-                        int &ret);
+                        bool &ret);
 };
 
 }  // namespace dialog

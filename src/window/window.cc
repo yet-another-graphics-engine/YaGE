@@ -43,11 +43,9 @@ size_t Window::window_num_ = 0;
  */
 void Window::exec_create(Window *this_,int* start_width,int* start_height)
 {
-  this_->canvas_ = nullptr;
-
   GtkWindow *&gtk_window_ = this_->gtk_window_;
   gtk_window_ = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
-
+  gtk_window_set_position(gtk_window_,GTK_WIN_POS_CENTER);
   // Default: not resizable
   gtk_window_set_resizable(gtk_window_, false);
 
@@ -92,7 +90,6 @@ void Window::exec_create(Window *this_,int* start_width,int* start_height)
 void Window::exec_show(Window *this_)
 {
   gtk_widget_show_all(GTK_WIDGET(this_->gtk_window_));
-  //this_->canvas_=new Canvas(*this_);
 }
 
 void Window::exec_redraw(Window *this_)
@@ -159,7 +156,7 @@ Window::Window(int start_width,int start_height,yage::draw::Canvas* canvas) {
     canvas_ = new yage::draw::Canvas(start_width,start_height);
   else
     canvas_=canvas;
-  runner_call(exec_create, this,&start_width,&start_height);
+  runner_call(exec_create,this,&start_width,&start_height);
 }
 
 void Window::show() {
