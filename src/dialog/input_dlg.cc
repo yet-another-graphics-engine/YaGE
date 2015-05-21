@@ -17,7 +17,10 @@ gboolean InputDlg::msg_entry_on_key(GtkWidget *widget, GdkEvent *event, InputDlg
 
 void InputDlg::exec_destroy(InputDlg *this_)
 {
-  if (this_->gtk_dialog_) gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
+  if (this_->gtk_dialog_) {
+    gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
+    this_->gtk_dialog_ = nullptr;
+  }
 }
 
 void InputDlg::exec_set_message(InputDlg *this_, const char *text)
