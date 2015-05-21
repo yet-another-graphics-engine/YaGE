@@ -3,6 +3,12 @@
 
 void test_audio(void) {
     using yage::audio::Player;
+    std::cerr << "Playing test track" << std::endl;
+    Player *p = Player::create_player("file:///home/hugh/tmp/t.mp3");
+    p->play();
+    while(p->is_playing()) sleep_sec(1);
+    std::cerr << "Test track stopped" << std::endl;
+
     std::cerr << "Load file IGNITE from Internet" << std::endl;
     Player *player = Player::create_player("https://kirito.me/ignite.mp3");
     std::cerr << "Play IGNITE" << std::endl;
