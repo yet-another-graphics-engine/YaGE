@@ -11,7 +11,7 @@ void test_dialog_msg(Window &w)
   MessageDlg msg_dlg(MessageDlg::button_type_yes_no, MessageDlg::icon_type_question, w);
   msg_dlg.set_title("<u>title</u>");
   msg_dlg.set_message("<i>message: press a button</i>");
-  MessageDlg msg_dlg1(MessageDlg::button_type_ok, MessageDlg::icon_type_info);
+  MessageDlg msg_dlg1(MessageDlg::button_type_ok, MessageDlg::icon_type_info, w);
   msg_dlg1.set_title("result");
   if (msg_dlg.show() == MessageDlg::result_type_yes) {
     msg_dlg1.set_message("yes");

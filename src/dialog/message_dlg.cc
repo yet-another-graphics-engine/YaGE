@@ -140,7 +140,7 @@ void MessageDlg::set_message(const char *message) {
 
 MessageDlg::result_type MessageDlg::show() {
   result_type ret;
-  runner_call(exec_set_message, this, &ret);
+  runner_call(exec_show, this, &ret);
   return ret;
 }
 
