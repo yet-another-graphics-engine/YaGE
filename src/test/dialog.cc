@@ -57,6 +57,7 @@ void test_dialog_color_font(Window &w)
   text.color = color;
 
   w.get_canvas()->draw_text(text);
+  w.update_window();
 }
 
 void test_dialog()
