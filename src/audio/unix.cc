@@ -3,40 +3,40 @@
 namespace yage {
 namespace audio {
 
-gboolean LinuxPlayer::bus_call(GstBus *bus, GstMessage *msg, void *user_data)
+gboolean UnixPlayer::bus_call(GstBus *bus, GstMessage *msg, void *user_data)
 {
   return false;
 }
 
-LinuxPlayer::~LinuxPlayer() {
+UnixPlayer::~UnixPlayer() {
 	gst_element_set_state(pipeline_, GST_STATE_NULL);
 	gst_object_unref(GST_OBJECT(pipeline_));
 }
 
-bool LinuxPlayer::play() {
+bool UnixPlayer::play() {
   gst_element_set_state(pipeline_, GST_STATE_PLAYING);
   auto state = gst_element_get_state(pipeline_, nullptr, nullptr,
                                      GST_CLOCK_TIME_NONE);
   return state != GST_STATE_CHANGE_FAILURE;
 }
 
-void LinuxPlayer::pause() {
+void UnixPlayer::pause() {
   gst_element_set_state(pipeline_, GST_STATE_PAUSED);
 }
 
-void LinuxPlayer::stop() {
+void UnixPlayer::stop() {
   gst_element_seek(pipeline_, 1.0, GST_FORMAT_DEFAULT, GST_SEEK_FLAG_NONE,
                    GST_SEEK_TYPE_SET, 0, GST_SEEK_TYPE_END, 0);
   gst_element_set_state(pipeline_, GST_STATE_PAUSED);
 }
 
-bool LinuxPlayer::is_playing() {
+bool UnixPlayer::is_playing() {
   GstState state;
   auto ret = gst_element_get_state(pipeline_, &state, nullptr, 0);
   return state == GST_STATE_PLAYING;
 }
 
-LinuxPlayer::LinuxPlayer(const std::string &url) : Player() {
+UnixPlayer::UnixPlayer(const std::string &url) : Player() {
   url_ = url;
 
   gst_init(nullptr, nullptr);

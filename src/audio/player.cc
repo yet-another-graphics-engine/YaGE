@@ -19,7 +19,7 @@ Player *Player::create_player(std::string url) {
 #elif defined(_WIN32)
     return new WinPlayer(url);
 #else
-    return new LinuxPlayer(url);
+    return new UnixPlayer(url);
 #endif
 }
 
