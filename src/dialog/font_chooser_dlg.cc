@@ -23,8 +23,8 @@ FontChooserDlg::~FontChooserDlg()
 void FontChooserDlg::exec_destroy(FontChooserDlg *this_)
 {
   if (this_->gtk_dialog_) {
-    this_->gtk_dialog_ = nullptr;
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
+    this_->gtk_dialog_ = nullptr;
   }
 }
 
