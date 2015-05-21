@@ -23,7 +23,7 @@ private:
   GtkWindow *gtk_window_;
   yage::draw::Canvas *canvas_;
 
-  static void exec_create(Window *this_);
+  static void exec_create(Window *this_,int* start_width,int* start_height);
   static void exec_show(Window *this_);
   static void exec_hide(Window *this_);
   static void exec_redraw(Window *this_);
@@ -68,7 +68,7 @@ public:
   static bool poll(Message &msg, bool block = true);
   static void quit();
 
-  Window();
+  Window(int start_width=640,int start_height=480,yage::draw::Canvas* canvas=nullptr);
   ~Window();
   void show();
   void hide();

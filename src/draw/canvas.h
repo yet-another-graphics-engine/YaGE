@@ -39,8 +39,6 @@ class Canvas {
         Point viewport_left_top_;
         Point viewport_right_bottom_;
 
-        void init_brush_(void);
-        void finish_brush_(void);
         void shape_fill_and_stroke_(ShapeProperty &shape);
         void shape_stroke_(ShapeProperty &shape);
         void pro_draw_elliptic_arc_(Point center, double xradius, double yradius, double startangle, double endangle, ShapeProperty &shape, bool draw_sector = false);
@@ -56,6 +54,7 @@ class Canvas {
 
         void set_viewport(Point left_top,Point right_bottom);
         void get_viewport(Point* left_top,Point* right_bottom);
+        void update_canvas(void);
 
         void draw_line(Line &line);
         void draw_poly(Poly &poly);
