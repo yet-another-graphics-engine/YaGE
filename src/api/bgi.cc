@@ -100,6 +100,7 @@ void circlef(float x, float y, float radius) {
     circle1.center = center;
     circle1.radius = radius;
     circle1.fgcolor = property.fgcolor;
+    circle1.bgcolor = Color(1, 1, 1, 0);
     circle1.thickness = property.thickness;
     circle1.center = center;
     canvas->draw_circle(circle1);
