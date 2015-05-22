@@ -6,7 +6,7 @@ namespace yage {
 namespace util {
 namespace runner {
 
-void call(void *callback,
+void call(void *callback, bool wait,
           void *p0 = nullptr,
           void *p1 = nullptr,
           void *p2 = nullptr,
@@ -16,7 +16,9 @@ void call(void *callback,
 }  // namespace util
 }  // namespace yage
 
-#define runner_call(fn, ...) \
-  yage::util::runner::call(reinterpret_cast<void *>(fn), __VA_ARGS__)
+#define runner_call_ex(fn, wait, ...) \
+  yage::util::runner::call(reinterpret_cast<void *>(fn), (wait), __VA_ARGS__)
 
-#endif /* end of include guard: SYNC_CC_TBADOQUZ */
+#define runner_call(fn, ...) runner_call_ex(fn, true, __VA_ARGS__)
+
+#endif

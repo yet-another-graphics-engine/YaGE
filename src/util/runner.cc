@@ -17,6 +17,7 @@ struct SyncData {
 struct CallParam {
   void (*callback)(void *, void *, void *, void*);
   SyncData *sync_data;
+  bool wait;
   void *p0;
   void *p1;
   void *p2;
@@ -34,11 +35,14 @@ void glib_destroy_notify(gpointer data)
 gboolean gtk_source_func(CallParam &data)
 {
   data.callback(data.p0, data.p1, data.p2, data.p3);
-  g_cond_signal(&data.sync_data->cond);
+  if (data.wait) g_cond_signal(&data.sync_data->cond);
+
+  delete &data;
   return false;
 }
 
-void call(void *callback, void *p0, void *p1, void *p2, void *p3)
+void call(void *callback, bool wait,
+          void *p0, void *p1, void *p2, void *p3)
 {
   auto sync_data = reinterpret_cast<SyncData *>(g_private_get(&key));
   if (sync_data == nullptr) {
@@ -48,20 +52,22 @@ void call(void *callback, void *p0, void *p1, void *p2, void *p3)
     g_private_set(&key, sync_data);
   }
 
-  CallParam param;
+  CallParam &param = *(new CallParam);
   param.callback = reinterpret_cast<decltype(CallParam::callback)>(callback);
   param.sync_data = sync_data;
+  param.wait = wait;
   param.p0 = p0;
   param.p1 = p1;
   param.p2 = p2;
   param.p3 = p3;
 
-  g_mutex_lock(&sync_data->mutex);
-
   gdk_threads_add_idle(reinterpret_cast<GSourceFunc>(gtk_source_func), &param);
 
-  g_cond_wait(&sync_data->cond, &sync_data->mutex);
-  g_mutex_unlock(&sync_data->mutex);
+  if (wait) {
+    g_mutex_lock(&sync_data->mutex);
+    g_cond_wait(&sync_data->cond, &sync_data->mutex);
+    g_mutex_unlock(&sync_data->mutex);
+  }
 }
 
 }  // namespace runner

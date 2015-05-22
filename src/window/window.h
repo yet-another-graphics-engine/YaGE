@@ -26,7 +26,7 @@ private:
   static void exec_create(Window *this_,int* start_width,int* start_height);
   static void exec_show(Window *this_);
   static void exec_hide(Window *this_);
-  static void exec_redraw(Window *this_);
+  static void exec_redraw(GtkWidget *gtk_draw);
   static void exec_destroy(Window *this_);
 
   static void exec_set_title(Window *this_, char *title);

@@ -92,9 +92,9 @@ void Window::exec_show(Window *this_)
   gtk_widget_show_all(GTK_WIDGET(this_->gtk_window_));
 }
 
-void Window::exec_redraw(Window *this_)
+void Window::exec_redraw(GtkWidget *gtk_draw)
 {
-  gtk_widget_queue_draw(GTK_WIDGET(this_->gtk_draw_));
+  gtk_widget_queue_draw(gtk_draw);
 }
 
 void Window::exec_hide(Window *this_)
@@ -210,7 +210,7 @@ void Window::update_window(void) {
   if(canvas_!=nullptr)
   {
     canvas_->update_canvas();
-    runner_call(exec_redraw, this);
+    runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_draw_));
   }
 }
 
