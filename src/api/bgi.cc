@@ -327,8 +327,6 @@ void delay_ms(long milliseconds) {
 
 void lineto(int x, int y) {
     line(canvas_position.x, canvas_position.y, x, y);
-    canvas->update_canvas();
-    window->update_window();
 }
 
 #ifdef __cplusplus
