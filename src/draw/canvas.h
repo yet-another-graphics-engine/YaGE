@@ -1,7 +1,6 @@
 #ifndef DRAW_CANVAS_H_
 #define DRAW_CANVAS_H_
 
-#include "../window/window.h"
 #include "shape_property.h"
 #include "poly.h"
 #include "elliptic_arc.h"
@@ -12,62 +11,52 @@
 #include "text.h"
 #include "line.h"
 #include "color.h"
+#include "paint.h"
 
 #include <cairo.h>
+#include <pango/pango.h>
+#include <gdk/gdk.h>
 #include <vector>
 
 using namespace yage::draw;
 
-namespace yage {
-namespace window {
-class Window;
-}
-
-
+namespace yage{
 namespace draw {
 
 class Canvas {
     private:
         cairo_surface_t *surface_;
         cairo_t *brush_;
-        cairo_surface_t *buffer_surface_;
-        cairo_t *buffer_brush_;
 
-        Color bg_color_;
+        static Paint paint_;
+
         int width_;
         int height_;
-        Point viewport_left_top_;
-        Point viewport_right_bottom_;
 
-        void shape_fill_and_stroke_(ShapeProperty &shape);
-        void shape_stroke_(ShapeProperty &shape);
-        void pro_draw_elliptic_arc_(Point center, double xradius, double yradius, double startangle, double endangle, ShapeProperty &shape, bool draw_sector = false);
+        void init_brush(const Paint &paint);
+        void shape_fill_and_stroke_(const Paint &paint);
+        void shape_stroke_(const Paint &paint);
+        void pro_draw_elliptic_arc_(Point center, double xradius, double yradius,
+                                    double startangle, double endangle, bool draw_sector = false, const Paint &paint=paint_);
     public:
         // Create a 'virtual' canvas based on memory buffer
-        Canvas(int width, int height,Color bg_color=Color(1,1,1,1));
+        Canvas(int width, int height);
         // Create a 'virtual' canvas based on a specific picture
-        Canvas(std::string filename,Color bg_color=Color(1,1,1,1));
+        Canvas(std::string filename);
         ~Canvas();
 
-        Color get_bg_color(void);
-        void set_bg_color(Color color);
-
-        void set_viewport(Point left_top,Point right_bottom);
-        void get_viewport(Point* left_top,Point* right_bottom);
-        void update_canvas(void);
-
-        void draw_line(Line &line);
-        void draw_poly(Poly &poly);
-        void draw_rect(Rect &rect);
-        void draw_elliptical_arc(EllipticArc &elliparc);
-        void draw_elliptical_sector(EllipticSector &ellpsec);
-        void draw_ellipse(Ellipse &ellipse);
-        void draw_circle(Circle &circle);
+        void draw_line(Line &line,const Paint &paint=paint_);
+        void draw_poly(Poly &poly,const Paint &paint=paint_);
+        void draw_rect(Rect &rect,const Paint &paint=paint_);
+        void draw_elliptical_arc(EllipticArc &elliparc,const Paint &paint=paint_);
+        void draw_elliptical_sector(EllipticSector &ellpsec,const Paint &paint=paint_);
+        void draw_ellipse(Ellipse &ellipse,const Paint &paint=paint_);
+        void draw_circle(Circle &circle,const Paint &paint=paint_);
         // position indicates the left-top position
-        void draw_canvas(Canvas &canvas, Point position);
-        void draw_text(Text &text);
-        void clear_all(void);
-        void clear_viewport(void);
+        void draw_canvas(Canvas &canvas, Point position,const Paint &paint=paint_);
+        void draw_text(Text &text,const Paint &paint=paint_);
+        void clear_all(const Paint &paint=paint_);
+        void clear_viewport(const Paint &paint=paint_);
 
         cairo_surface_t *pro_get_cairo_surface(void);
         cairo_t *pro_get_brush(void);

@@ -60,6 +60,7 @@ set(LIB_SOURCE_FILES
     draw/canvas.cc
     draw/font.cc
     draw/text.cc
+	draw/paint.cc
     api/bgi.cc
     )
 

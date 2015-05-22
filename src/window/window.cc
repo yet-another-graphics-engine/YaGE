@@ -209,7 +209,6 @@ void Window::set_canvas(Canvas* canvas)
 void Window::update_window(void) {
   if(canvas_!=nullptr)
   {
-    canvas_->update_canvas();
     runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_draw_));
   }
 }
