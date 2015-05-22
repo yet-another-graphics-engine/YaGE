@@ -72,7 +72,6 @@ void arcf(float x, float y, float startangle, float endangle, float radius) {
     ellipsec.xradius = radius;
     ellipsec.yradius = radius;
     canvas->draw_elliptical_sector(ellipsec);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -90,7 +89,6 @@ void bar(int left, int top, int right, int bottom) {
     rect.bgcolor = property.bgcolor;
     rect.fgcolor = transparent;
     canvas->draw_rect(rect);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -104,7 +102,6 @@ void circlef(float x, float y, float radius) {
     circle1.thickness = property.thickness;
     circle1.center = center;
     canvas->draw_circle(circle1);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -125,7 +122,6 @@ void ellipsef(float x, float y, float startangle, float endangle, float xradius,
     elliparc.xradius = xradius;
     elliparc.yradius = yradius;
     canvas->draw_elliptical_arc(elliparc);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -139,7 +135,6 @@ void fillellipsef(float x, float y, float xradius, float yradius) {
     ellipse1.bgcolor = property.bgcolor;
     ellipse1.fgcolor = transparent;
     canvas->draw_ellipse(ellipse1);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -151,7 +146,6 @@ void line(int x1, int y1, int x2, int y2) {
     yage::draw::Line line1(yage::draw::Point(x1, y1),
                            yage::draw::Point(x2, y2));
     canvas->draw_line(line1);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -167,7 +161,6 @@ void pieslicef(float x, float y, float startangle, float endangle, float radius)
     ellipsec.xradius = radius;
     ellipsec.yradius = radius;
     canvas->draw_elliptical_sector(ellipsec);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -191,7 +184,6 @@ void putpixel(int x, int y, color_t color) {
     pixel.bgcolor = yage::draw::Color(color);
     pixel.thickness = property.thickness;
     canvas->draw_rect(pixel);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -206,7 +198,6 @@ void rectangle(int left, int top, int right, int bottom) {
     rect.fgcolor = property.fgcolor;
     rect.thickness = property.thickness;
     canvas->draw_rect(rect);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -222,7 +213,6 @@ void sectorf(float x, float y, float startangle, float endangle, float xradius, 
     ellipsec.xradius = xradius;
     ellipsec.yradius = yradius;
     canvas->draw_elliptical_sector(ellipsec);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -239,7 +229,6 @@ void outtext(const char *text) {
     text1.position = canvas_position;
     text1.color = property.fgcolor;
     canvas->draw_text(text1);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -248,7 +237,6 @@ void outtextxy(int x, int y, const char *text) {
     text1.position = yage::draw::Point(x, y);
     text1.color = property.fgcolor;
     canvas->draw_text(text1);
-    canvas->update_canvas();
     window->update_window();
 }
 
@@ -266,7 +254,6 @@ void xyprintf(int x, int y, const char *format, ...) {
     text1.position = yage::draw::Point(x, y);
     text1.color = property.fgcolor;
     canvas->draw_text(text1);
-    canvas->update_canvas();
     window->update_window();
 }
 
