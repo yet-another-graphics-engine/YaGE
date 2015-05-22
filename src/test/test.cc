@@ -1,6 +1,9 @@
 #include "test.h"
 #include <vector>
+#include <ctime>
+void test_init(void);
 using test_callback_t = void (*)(void);
+
 vector<pair<test_callback_t, string>> g_tests;
 
 void sleep_sec(int seconds) {
@@ -9,31 +12,6 @@ void sleep_sec(int seconds) {
 #else
   sleep(seconds);
 #endif
-}
-
-/*
- * To add tests to framework:
- *
- * 0. Write void test_xxx() in src/test/xxx.cc
- * 1. Edit src/CMakeListst.txt, add "src/xxx.cc"
- * 2. Add "TEST_ADD(xxx)" at the end of "void test_init(void)"
- * 3. Your code will be run by default
- * 4. Execute "bin/yagetest xxx" to run a specific test
- */
-
-void test_init(void)
-{
-#define TEST_ADD(x) \
-  void test_##x(void); \
-  g_tests.push_back(pair<test_callback_t, string>(test_##x, #x))
-
-  TEST_ADD(audio);
-  TEST_ADD(dialog);
-  TEST_ADD(fix_size);
-  TEST_ADD(msg);
-  TEST_ADD(resize);
-  TEST_ADD(window_count);
-  TEST_ADD(draw);
 }
 
 extern "C" int yage_main()
@@ -67,6 +45,37 @@ extern "C" int yage_main()
   }
 
   fprintf(stderr, "INFO: Running test_%s\n", test_iter->second.c_str());
+  clock_t start_time = clock();
+
   test_iter->first();
+
+  fprintf(stderr, "INFO: Test end, CPU time = %.2lfs\n",
+                  static_cast<double>(clock() - start_time) / CLOCKS_PER_SEC);
   return 0;
 }
+
+/*
+ * To add tests to framework:
+ *
+ * 0. Write void test_xxx() in src/test/xxx.cc
+ * 1. Edit src/CMakeListst.txt, add "src/xxx.cc"
+ * 2. Add "TEST_ADD(xxx)" at the end of "void test_init(void)"
+ * 3. Your code will be run by default
+ * 4. Execute "bin/yagetest xxx" to run a specific test
+ */
+
+void test_init(void)
+{
+#define TEST_ADD(x) \
+  void test_##x(void); \
+  g_tests.push_back(pair<test_callback_t, string>(test_##x, #x))
+
+  TEST_ADD(audio);
+  TEST_ADD(dialog);
+  TEST_ADD(fix_size);
+  TEST_ADD(msg);
+  TEST_ADD(resize);
+  TEST_ADD(window_count);
+  TEST_ADD(draw);
+}
+
