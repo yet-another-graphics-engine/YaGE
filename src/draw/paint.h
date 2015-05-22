@@ -3,6 +3,7 @@
 #include <cairo.h>
 #include "point.h"
 #include "color.h"
+#include "font.h"
 
 using namespace yage::draw;
 
@@ -16,6 +17,8 @@ class Paint
     double line_width;
     Color line_color;
     Color fill_color;
+    Color background_color;
+    Font font;
 
     Paint();
     void set_viewport(Point left_top,Point right_bottom);
