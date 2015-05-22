@@ -25,6 +25,9 @@ gboolean UnixPlayer::bus_callback(GstBus *bus,
     case GST_MESSAGE_EOS:
       this_->is_playing_ = false;
       break;
+
+    default:
+      break;
   }
 
   return TRUE; // keep receiving message
@@ -64,11 +67,11 @@ UnixPlayer::UnixPlayer(const std::string &url) : Player() {
   gst_init(&yage::argc, &yage::argv);
   pipeline_ = gst_element_factory_make("playbin2", "player");
 
-  typedef enum {
+  enum {
     GST_PLAY_FLAG_VIDEO         = (1 << 0),
     GST_PLAY_FLAG_AUDIO         = (1 << 1),
     GST_PLAY_FLAG_TEXT          = (1 << 2)
-  } GstPlayFlags;
+  };
   g_object_set (pipeline_, "flags", GST_PLAY_FLAG_AUDIO, NULL);
 
   bus_ = gst_pipeline_get_bus(GST_PIPELINE(pipeline_));
