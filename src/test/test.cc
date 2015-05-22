@@ -77,5 +77,6 @@ void test_init(void)
   TEST_ADD(resize);
   TEST_ADD(window_count);
   TEST_ADD(draw);
+  TEST_ADD(draw_perf);
 }
 

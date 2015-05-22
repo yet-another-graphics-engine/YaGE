@@ -115,6 +115,7 @@ test/fix_size.cc
 test/msg.cc
 test/resize.cc
 test/window_count.cc
+test/draw_perf.cc
 )
 
 target_link_libraries(yagetest yage)
