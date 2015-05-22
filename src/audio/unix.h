@@ -7,16 +7,19 @@
 namespace yage {
 namespace audio {
 
-class LinuxPlayer : public Player {
+class UnixPlayer : public Player {
 private:
   GstElement *pipeline_;
   GstBus *bus_;
+  bool is_playing_;
 
-  static gboolean bus_call(GstBus *bus, GstMessage *msg, void *user_data);
+  static gboolean bus_callback(GstBus *bus,
+                               GstMessage *msg,
+                               UnixPlayer *this_);
 
 public:
-	LinuxPlayer(const std::string &url);
-	virtual ~LinuxPlayer();
+	UnixPlayer(const std::string &url);
+	virtual ~UnixPlayer();
 	virtual bool play(void);
 	virtual void pause(void);
 	virtual void stop(void);
