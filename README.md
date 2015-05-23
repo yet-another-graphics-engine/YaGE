@@ -7,7 +7,9 @@
 YaGE is a cross-platform graphics library based on Cairo / GTK+. It works under windows, linux and macos.
 Based on this graphics library, one can write graphic programs using turbo-c like interfaces.
 
-for example, to draw a circle at point (100,200) with radius 50:
+Currently, the main purpose of YaGE is to provide a easy-to-use utility in C and C++ teaching courses. It's NOT aiming at a industrial library for game building or complex computer graphics applications.
+
+The usage of YaGE is very simple. For example, to draw a circle at point (100,200) with radius 50:
 
     #include <graphics.h>
     int main() {
@@ -15,6 +17,16 @@ for example, to draw a circle at point (100,200) with radius 50:
       circle(100,200,50);
       closegraph();
     }
+
+So, just download this library and start your own graphics program!
+
+## Motivation
+
+A graphics library named "ege" is used in the teaching of C++ course for freshman since 2013 in School of Software Engineering of Beijing University of Posts and Telecummunications. 
+
+However, the "ege" has several drawbacks, including vague license, plat-dependent, etc.
+
+In the early month of 2015,  two freshmen, xdqi and mzwang, who are the main contributors of this yage project, complained about the lab work of the C++ course. After negotiating with the teacher of the C++ course, YaGE could be their lab works instead of the original ones. Hence, YaGE started its journey on April, 2015.
 
 ## Status
 
