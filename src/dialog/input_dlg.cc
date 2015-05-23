@@ -1,5 +1,6 @@
 #include "input_dlg.h"
 #include "../yage.h"
+#include "../util/encoding.h"
 
 namespace yage {
 namespace dialog {
@@ -74,19 +75,26 @@ bool InputDlg::show(std::string &str)
   return ret;
 }
 
-void InputDlg::set_message(const char *text) {
-  runner_call(exec_set_message, this, const_cast<char *>(text));
+void InputDlg::set_message(const char *text)
+{
+  char *utf_8_text = yage::util::ansi_to_utf_8(text);
+  runner_call(exec_set_message, this, const_cast<char *>(utf_8_text));
+  yage::util::free_string(utf_8_text);
 }
 
 InputDlg::InputDlg(const char *title)
 {
-  runner_call(exec_create, this, const_cast<char *>(title), nullptr);
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  runner_call(exec_create, this, const_cast<char *>(utf_8_title), nullptr);
+  yage::util::free_string(utf_8_title);
 }
 
 InputDlg::InputDlg(const char *title, Window &window)
 {
-  runner_call(exec_create, this, const_cast<char *>(title),
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  runner_call(exec_create, this, const_cast<char *>(utf_8_title),
               window.pro_get_gtk_window());
+  yage::util::free_string(utf_8_title);
 }
 
 InputDlg::~InputDlg()

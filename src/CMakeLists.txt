@@ -38,6 +38,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(LIB_SOURCE_FILES
     yage.cc
+    util/encoding.cc
     window/message.cc
     window/window.cc
     util/runner.cc
@@ -57,7 +58,7 @@ set(LIB_SOURCE_FILES
     )
 
 if(WIN32)
-    list(APPEND LIB_SOURCE_FILES util/mswin.cc audio/mswin.cc)
+    list(APPEND LIB_SOURCE_FILES audio/mswin.cc)
 elseif(APPLE)
     list(APPEND LIB_SOURCE_FILES audio/osx.mm)
 elseif(UNIX)

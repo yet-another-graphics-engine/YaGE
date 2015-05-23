@@ -1,4 +1,5 @@
 #include "font.h"
+#include "../util/encoding.h"
 
 namespace yage {
 namespace draw {
@@ -44,7 +45,9 @@ bool Font::get_italic_status(void) const {
 }
 
 void Font::set_font_family(std::string family) {
-  pango_font_description_set_family(description_, family.c_str());
+  char *utf_8_family = yage::util::ansi_to_utf_8(family.c_str());
+  pango_font_description_set_family(description_, utf_8_family);
+  yage::util::free_string(utf_8_family);
 }
 
 void Font::set_size(int size) {

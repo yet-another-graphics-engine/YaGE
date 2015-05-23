@@ -1,8 +1,5 @@
 #include "canvas.h"
-#ifdef _WIN32
-#include "../util/mswin.h"
-#include <cstdlib>
-#endif
+#include "../util/encoding.h"
 
 namespace yage {
 namespace draw {
@@ -132,12 +129,8 @@ void Canvas::pro_draw_elliptic_arc_(Point center, double xradius, double yradius
 void Canvas::draw_text(Text &text, const Paint &paint) {
     init_brush();
     PangoLayout *layout = pango_cairo_create_layout(brush_);
-#ifdef _WIN32
-    char *utf_text = yage::util::ansi_to_utf_8(text.text.c_str());
-#else
-    const char *utf_text = text.text.c_str();
-#endif
-    pango_layout_set_text(layout, utf_text, -1);
+    char *utf_8_text = yage::util::ansi_to_utf_8(text.text.c_str());
+    pango_layout_set_text(layout, utf_8_text, -1);
     pango_layout_set_font_description(layout, text.get_font().pro_get_pango_font());
     cairo_translate(brush_, text.position.x, text.position.y);
     cairo_set_source_rgba(brush_,
@@ -146,9 +139,7 @@ void Canvas::draw_text(Text &text, const Paint &paint) {
                           text.color.b,
                           text.color.a);
     pango_cairo_show_layout(brush_, layout);
-#ifdef _WIN32
-    free(utf_text);
-#endif
+    yage::util::free_string(utf_8_text);
     g_object_unref(layout);
     cairo_restore(brush_);
 }

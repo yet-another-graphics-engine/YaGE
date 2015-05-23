@@ -1,6 +1,7 @@
 #include "../yage.h"
 #include "../draw/canvas.h"
 #include "window.h"
+#include "../util/encoding.h"
 
 namespace yage {
 namespace window {
@@ -172,7 +173,9 @@ void Window::destroy() {
 }
 
 void Window::set_title(const char *title) {
-  runner_call(exec_set_title,this,const_cast<char *>(title));
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  runner_call(exec_set_title,this,const_cast<char *>(utf_8_title));
+  yage::util::free_string(utf_8_title);
 }
 
 void Window::set_resizable(bool resizable) {

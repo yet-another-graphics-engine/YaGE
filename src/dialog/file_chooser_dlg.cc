@@ -1,17 +1,22 @@
 #include "file_chooser_dlg.h"
 #include "../yage.h"
+#include "../util/encoding.h"
 
 namespace yage {
 namespace dialog {
 FileChooserDlg::FileChooserDlg(action_type action, const char *title)
 {
-  runner_call(exec_create, this, &action, const_cast<char *>(title), nullptr);
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  runner_call(exec_create, this, &action, const_cast<char *>(utf_8_title), nullptr);
+  yage::util::free_string(utf_8_title);
 }
 
 FileChooserDlg::FileChooserDlg(action_type action, const char *title, Window &window)
 {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
   runner_call(exec_create, this, &action, const_cast<char *>(title),
               window.pro_get_gtk_window());
+  yage::util::free_string(utf_8_title);
 }
 
 FileChooserDlg::~FileChooserDlg()
@@ -71,7 +76,9 @@ void FileChooserDlg::exec_show(FileChooserDlg *this_,
   }
 
   if (c_str) {
-    std_str = c_str;
+    char *ansi_c_str = yage::util::utf_8_to_ansi(c_str);
+    std_str = ansi_c_str;
+    yage::util::free_string(ansi_c_str);
     g_free(c_str);
     ret = true;
   }

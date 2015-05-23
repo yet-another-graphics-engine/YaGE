@@ -1,18 +1,23 @@
 #include "font_chooser_dlg.h"
 #include "../yage.h"
+#include "../util/encoding.h"
 
 namespace yage {
 namespace dialog {
 
 FontChooserDlg::FontChooserDlg(const char *title)
 {
-  runner_call(exec_create, this, const_cast<char *>(title), nullptr);
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  runner_call(exec_create, this, const_cast<char *>(utf_8_title), nullptr);
+  yage::util::free_string(utf_8_title);
 }
 
 FontChooserDlg::FontChooserDlg(const char *title, Window &window)
 {
-  runner_call(exec_create, this, const_cast<char *>(title),
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  runner_call(exec_create, this, const_cast<char *>(utf_8_title),
               window.pro_get_gtk_window());
+  yage::util::free_string(utf_8_title);
 }
 
 FontChooserDlg::~FontChooserDlg()
