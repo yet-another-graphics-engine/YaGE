@@ -141,10 +141,10 @@ void Canvas::draw_text(Text &text, const Paint &paint) {
     pango_layout_set_font_description(layout, text.get_font().pro_get_pango_font());
     cairo_translate(brush_, text.position.x, text.position.y);
     cairo_set_source_rgba(brush_,
-                          paint.line_color.r,
-                          paint.line_color.g,
-                          paint.line_color.b,
-                          paint.line_color.a);
+                          text.color.r,
+                          text.color.g,
+                          text.color.b,
+                          text.color.a);
     pango_cairo_show_layout(brush_, layout);
 #ifdef _WIN32
     free(utf_text);
