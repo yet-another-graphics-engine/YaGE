@@ -10,6 +10,7 @@
 #define YAGE_DEFAULT_FONT "Lucida Grande"
 #else
 #define YAGE_DEFAULT_FONT "Helvetica Neue"
+#endif
 #else
 #define YAGE_DEFAULT_FONT "Sans Serif"
 #endif
