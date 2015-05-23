@@ -1,5 +1,4 @@
 #include "canvas.h"
-#define M_PI 3.14159265358979323846
 #ifdef _WIN32
 #include "../util/mswin.h"
 #include <cstdlib>
@@ -92,8 +91,10 @@ void Canvas::draw_line(Line &line,const Paint& paint) {
     cairo_restore(brush_);
 }
 
-void Canvas::pro_draw_elliptic_arc_(Point center, double xradius, double yradius,
-                                    double startangle, double endangle, bool draw_sector, const Paint &paint)  {
+void Canvas::pro_draw_elliptic_arc_(Point center,
+                                    double xradius, double yradius,
+                                    double startangle, double endangle,
+                                    bool draw_sector, const Paint &paint)  {
     // Drawing Elliptic Arc procedure
     // Finally, we will draw a arc with radius of 0 at (0,0)
     init_brush(paint);

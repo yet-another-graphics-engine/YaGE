@@ -49,14 +49,6 @@ set(LIB_SOURCE_FILES
     dialog/input_dlg.cc
     draw/point.cc
     draw/color.cc
-    draw/line.cc
-    draw/shape_property.cc
-    draw/base_elliptic_arc.cc
-    draw/elliptic_arc.cc
-    draw/elliptic_sector.cc
-    draw/ellipse.cc
-    draw/circle.cc
-    draw/rect.cc
     draw/canvas.cc
     draw/font.cc
     draw/text.cc

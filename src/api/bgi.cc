@@ -21,7 +21,7 @@
 static yage::window::Window *window = nullptr;
 static yage::draw::Canvas *canvas = nullptr;
 static yage::draw::Point canvas_position(0, 0);
-static yage::draw::ShapeProperty property;
+static yage::draw::Paint paint;
 static yage::draw::Font simsun("SimSun", 12, false, false);
 typedef unsigned int color_t;
 
@@ -52,26 +52,29 @@ void clearviewport(void) {
 }
 
 void setcolor(color_t color) {
-    property.fgcolor = yage::draw::Color(color);
+    paint.line_color = yage::draw::Color(color);
 }
 
 void setfillcolor(color_t color) {
-    property.bgcolor = yage::draw::Color(color);
+    paint.fill_color = yage::draw::Color(color);
 }
 
 void arcf(float x, float y, float startangle, float endangle, float radius) {
+    Paint p;
+    yage::draw::Color transparent(1, 1, 1, 0);
+    p.fill_color = transparent;
+    p.line_color = paint.line_color;
+    p.line_width = paint.line_width;
+
     yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
-    yage::draw::Color transparent(1, 1, 1, 0);
-    ellipsec.bgcolor = transparent;
-    ellipsec.fgcolor = property.fgcolor;
-    ellipsec.thickness = property.thickness;
     ellipsec.center = center;
     ellipsec.startangle = startangle;
     ellipsec.endangle = endangle;
     ellipsec.xradius = radius;
     ellipsec.yradius = radius;
-    canvas->draw_elliptical_sector(ellipsec);
+
+    canvas->draw_elliptical_sector(ellipsec, p);
     window->update_window();
 }
 
@@ -80,28 +83,34 @@ void arc(int x, int y, int startangle, int endangle, int radius) {
 }
 
 void bar(int left, int top, int right, int bottom) {
+    Paint p;
+    yage::draw::Color transparent(1, 1, 1, 0);
+    p.fill_color = paint.fill_color;
+    p.line_color = transparent;
+
     yage::draw::Rect rect;
     yage::draw::Point a(left, top);
     yage::draw::Point b(right, bottom);
-    yage::draw::Color transparent(1, 1, 1, 0);
     rect.first = a;
     rect.second = b;
-    rect.bgcolor = property.bgcolor;
-    rect.fgcolor = transparent;
-    canvas->draw_rect(rect);
+
+    canvas->draw_rect(rect, p);
     window->update_window();
 }
 
 void circlef(float x, float y, float radius) {
+    Paint p;
+    p.line_color = paint.line_color;
+    p.fill_color = Color(1, 1, 1, 0);
+    p.line_width = paint.line_width;
+
     yage::draw::Circle circle1;
     yage::draw::Point center(x, y);
     circle1.center = center;
     circle1.radius = radius;
-    circle1.fgcolor = property.fgcolor;
-    circle1.bgcolor = Color(1, 1, 1, 0);
-    circle1.thickness = property.thickness;
     circle1.center = center;
-    canvas->draw_circle(circle1);
+
+    canvas->draw_circle(circle1, p);
     window->update_window();
 }
 
@@ -110,18 +119,21 @@ void circle(int x, int y, int radius) {
 }
 
 void ellipsef(float x, float y, float startangle, float endangle, float xradius, float yradius) {
+    Paint p;
+    yage::draw::Color transparent(1, 1, 1, 0);
+    p.fill_color = transparent;
+    p.line_color = paint.line_color;
+    p.line_width = paint.line_width;
+
     yage::draw::EllipticArc elliparc;
     yage::draw::Point center(x, y);
-    yage::draw::Color transparent(1, 1, 1, 0);
-    elliparc.bgcolor = transparent;
-    elliparc.fgcolor = property.fgcolor;
-    elliparc.thickness = property.thickness;
     elliparc.center = center;
     elliparc.startangle = startangle;
     elliparc.endangle = endangle;
     elliparc.xradius = xradius;
     elliparc.yradius = yradius;
-    canvas->draw_elliptical_arc(elliparc);
+
+    canvas->draw_elliptical_arc(elliparc, p);
     window->update_window();
 }
 
@@ -130,11 +142,14 @@ void ellipse(int x, int y, int startangle, int endangle, int xradius, int yradiu
 }
 
 void fillellipsef(float x, float y, float xradius, float yradius) {
-    yage::draw::Ellipse ellipse1(yage::draw::Point(x, y), xradius, yradius);
+    Paint p;
     yage::draw::Color transparent(1, 1, 1, 0);
-    ellipse1.bgcolor = property.bgcolor;
-    ellipse1.fgcolor = transparent;
-    canvas->draw_ellipse(ellipse1);
+    p.fill_color = paint.fill_color;
+    p.line_color = transparent;
+
+    yage::draw::Ellipse ellipse1(yage::draw::Point(x, y), xradius, yradius);
+
+    canvas->draw_ellipse(ellipse1, p);
     window->update_window();
 }
 
@@ -145,22 +160,25 @@ void fillellipse(int x, int y, int xradius, int yradius) {
 void line(int x1, int y1, int x2, int y2) {
     yage::draw::Line line1(yage::draw::Point(x1, y1),
                            yage::draw::Point(x2, y2));
-    canvas->draw_line(line1);
+    canvas->draw_line(line1, paint);
     window->update_window();
 }
 
 void pieslicef(float x, float y, float startangle, float endangle, float radius) {
+    Paint p;
+    yage::draw::Color transparent(1, 1, 1, 0);
+    p.fill_color = paint.fill_color;
+    p.line_color = transparent;
+
     yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
-    yage::draw::Color transparent(1, 1, 1, 0);
-    ellipsec.bgcolor = property.bgcolor;
-    ellipsec.fgcolor = transparent;
     ellipsec.center = center;
     ellipsec.startangle = startangle;
     ellipsec.endangle = endangle;
     ellipsec.xradius = radius;
     ellipsec.yradius = radius;
-    canvas->draw_elliptical_sector(ellipsec);
+
+    canvas->draw_elliptical_sector(ellipsec, p);
     window->update_window();
 }
 
@@ -174,45 +192,54 @@ void pieslice(int x, int y, int startangle, int endangle, int radius) {
 }
 
 void putpixel(int x, int y, color_t color) {
+    Paint p;
+    yage::draw::Color transparent(1, 1, 1, 0);
+    p.line_color = transparent;
+    p.fill_color = yage::draw::Color(color);
+    p.line_width = paint.line_width;
+
     yage::draw::Rect pixel;
     yage::draw::Point a(x - 0.5, y - 0.5);
     yage::draw::Point b(x + 0.5, y + 0.5);
-    yage::draw::Color transparent(1, 1, 1, 0);
     pixel.first = a;
     pixel.second= b;
-    pixel.fgcolor = transparent;
-    pixel.bgcolor = yage::draw::Color(color);
-    pixel.thickness = property.thickness;
-    canvas->draw_rect(pixel);
+
+    canvas->draw_rect(pixel, p);
     window->update_window();
 }
 
 void rectangle(int left, int top, int right, int bottom) {
+    Paint p;
+    yage::draw::Color transparent(1, 1, 1, 0);
+    p.fill_color = transparent;
+    p.line_color = paint.line_color;
+    p.line_width = paint.line_width;
+
     yage::draw::Rect rect;
     yage::draw::Point a(left, top);
     yage::draw::Point b(right, bottom);
-    yage::draw::Color transparent(1, 1, 1, 0);
     rect.first = a;
     rect.second= b;
-    rect.bgcolor = transparent;
-    rect.fgcolor = property.fgcolor;
-    rect.thickness = property.thickness;
-    canvas->draw_rect(rect);
+
+    canvas->draw_rect(rect, p);
     window->update_window();
 }
 
 void sectorf(float x, float y, float startangle, float endangle, float xradius, float yradius) {
+    Paint p;
+    yage::draw::Color transparent(1, 1, 1, 0);
+    p.fill_color = paint.fill_color;
+    p.line_color = transparent;
+
     yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
-    yage::draw::Color transparent(1, 1, 1, 0);
-    ellipsec.bgcolor = property.bgcolor;
-    ellipsec.fgcolor = transparent;
     ellipsec.center = center;
     ellipsec.startangle = startangle;
     ellipsec.endangle = endangle;
     ellipsec.xradius = xradius;
     ellipsec.yradius = yradius;
-    canvas->draw_elliptical_sector(ellipsec);
+
+    canvas->draw_elliptical_sector(ellipsec, p);
     window->update_window();
 }
 
@@ -220,23 +247,23 @@ void sector(int x, int y, int startangle, int endangle, int xradius, int yradius
     sectorf(x, y, startangle, endangle, xradius, yradius);
 }
 
-void setlinewidth(int thickness) {
-    property.thickness = thickness;
+void setlinewidth(int line_width) {
+    paint.line_width = line_width;
 }
 
 void outtext(const char *text) {
     yage::draw::Text text1(text, simsun);
     text1.position = canvas_position;
-    text1.color = property.fgcolor;
-    canvas->draw_text(text1);
+    text1.color = paint.line_color;
+    canvas->draw_text(text1, paint);
     window->update_window();
 }
 
 void outtextxy(int x, int y, const char *text) {
     yage::draw::Text text1(text, simsun);
     text1.position = yage::draw::Point(x, y);
-    text1.color = property.fgcolor;
-    canvas->draw_text(text1);
+    text1.color = paint.line_color;
+    canvas->draw_text(text1, paint);
     window->update_window();
 }
 
@@ -252,8 +279,8 @@ void xyprintf(int x, int y, const char *format, ...) {
     va_end(args);
     yage::draw::Text text1(buf, simsun);
     text1.position = yage::draw::Point(x, y);
-    text1.color = property.fgcolor;
-    canvas->draw_text(text1);
+    text1.color = paint.line_color;
+    canvas->draw_text(text1, paint);
     window->update_window();
 }
 
