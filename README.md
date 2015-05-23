@@ -9,17 +9,12 @@ Based on this graphics library, one can write graphic programs using turbo-c lik
 
 for example, to draw a circle at point (100,200) with radius 50:
 
-  #include <graphics.h>
-
-  int main() {
-
-    initgraph();
-
-    circle(100,200,50);
-
-    closegraph();
-
-  }
+    #include <graphics.h>
+    int main() {
+      initgraph();
+      circle(100,200,50);
+      closegraph();
+    }
 
 ## Status
 
