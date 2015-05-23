@@ -52,7 +52,7 @@ set(LIB_SOURCE_FILES
     draw/canvas.cc
     draw/font.cc
     draw/text.cc
-	draw/paint.cc
+    draw/paint.cc
     api/bgi.cc
     )
 
@@ -104,11 +104,11 @@ test/test.cc
 test/audio.cc
 test/dialog.cc
 test/draw.cc
-test/fix_size.cc
-test/msg.cc
-test/resize.cc
-test/window_count.cc
 test/draw_perf.cc
+test/window_count.cc
+test/window_fix_size.cc
+test/window_msg.cc
+test/window_resize.cc
 )
 
 target_link_libraries(yagetest yage)

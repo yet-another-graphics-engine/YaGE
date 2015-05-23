@@ -1,6 +1,6 @@
 #include "test.h"
 
-void test_resize()
+void test_window_resize()
 {
   Window w;
   bool resize = false;

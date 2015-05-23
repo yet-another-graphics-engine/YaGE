@@ -1,6 +1,6 @@
 #include "test.h"
 
-void test_fix_size()
+void test_window_fix_size()
 {
   Window w;
   w.show();

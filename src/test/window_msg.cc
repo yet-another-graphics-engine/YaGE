@@ -9,7 +9,7 @@
   fprintf(stderr, "\n"); \
 break
 
-void test_msg()
+void test_window_msg()
 {
   Window w;
   w.show();

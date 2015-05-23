@@ -72,11 +72,11 @@ void test_init(void)
 
   TEST_ADD(audio);
   TEST_ADD(dialog);
-  TEST_ADD(fix_size);
-  TEST_ADD(msg);
-  TEST_ADD(resize);
-  TEST_ADD(window_count);
   TEST_ADD(draw);
   TEST_ADD(draw_perf);
+  TEST_ADD(window_count);
+  TEST_ADD(window_fix_size);
+  TEST_ADD(window_msg);
+  TEST_ADD(window_resize);
 }
 
