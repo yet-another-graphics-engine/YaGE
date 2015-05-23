@@ -1,8 +1,9 @@
-#ifndef PAINT_H
-#define PAINT_H
+#ifndef DRAW_PAINT_H
+#define DRAW_PAINT_H
 #include <cairo.h>
 #include "point.h"
 #include "color.h"
+#include "font.h"
 
 namespace yage {
 namespace draw {
@@ -17,6 +18,8 @@ class Paint
     double line_width;
     Color line_color;
     Color fill_color;
+    Color background_color;
+    Font font;
 
     Paint();
     void set_viewport(Point left_top,Point right_bottom);
