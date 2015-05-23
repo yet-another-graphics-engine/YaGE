@@ -8,12 +8,13 @@ YaGE is a cross-platform graphics library based on Cairo / GTK+. It works under 
 Based on this graphics library, one can write graphic programs using turbo-c like interfaces.
 
 for example, to draw a circle at point (100,200) with radius 50:
-#include <graphics.h>
-int main() {
-  initgraph();
-  circle(100,200,50);
-  closegraph();
-}
+
+  #include <graphics.h>
+  int main() {
+    initgraph();
+    circle(100,200,50);
+    closegraph();
+  }
 
 ## Status
 
