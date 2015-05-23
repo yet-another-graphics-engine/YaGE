@@ -7,7 +7,7 @@
 namespace yage {
 namespace draw {
 
-Canvas::Canvas(int width, int height) {
+Canvas::Canvas(int width, int height) : paint_() {
     width_ = width;
     height_ = height;
 
@@ -16,7 +16,7 @@ Canvas::Canvas(int width, int height) {
     clear_all();
 }
 
-Canvas::Canvas(std::string filename) {
+Canvas::Canvas(std::string filename) : paint_() {
     GError *err = NULL;
     GdkPixbuf *buf = gdk_pixbuf_new_from_file(filename.c_str(), &err);
     if (err) {
@@ -42,22 +42,25 @@ Canvas::~Canvas() {
     surface_ = nullptr;
 }
 
-void Canvas::init_brush(void)
+void Canvas::init_brush(const Paint &paint)
 {
     cairo_reset_clip(brush_);
-    if(!paint_.is_viewport_full_canvas())
+    if(!paint.is_viewport_full_canvas())
     {
         Point left_top, right_bottom;
-        paint_.get_viewport(left_top, right_bottom);
+        paint.get_viewport(left_top, right_bottom);
         cairo_rectangle(brush_, left_top.x, left_top.y,
                         right_bottom.x-left_top.x+1,
                         right_bottom.y-left_top.y+1);
         cairo_clip(brush_);
     }
     cairo_save(brush_);
-    cairo_set_matrix(brush_, paint_.pro_get_cairo_matrix());
+    cairo_set_matrix(brush_, paint.pro_get_cairo_matrix());
 }
 
+void Canvas::init_brush(void) {
+    init_brush(paint_);
+}
 
 void Canvas::shape_fill_and_stroke_(const Paint &paint) {
     cairo_scale(brush_, 1.0, 1.0);
@@ -68,6 +71,10 @@ void Canvas::shape_fill_and_stroke_(const Paint &paint) {
                           paint.fill_color.a);
     cairo_fill_preserve(brush_);
     shape_stroke_(paint);
+}
+
+void Canvas::shape_fill_and_stroke_(void) {
+    shape_fill_and_stroke_(paint_);
 }
 
 void Canvas::shape_stroke_(const Paint &paint) {
@@ -81,6 +88,10 @@ void Canvas::shape_stroke_(const Paint &paint) {
     cairo_stroke(brush_);
 }
 
+void Canvas::shape_stroke_(void) {
+    shape_stroke_(paint_);
+}
+
 void Canvas::draw_line(Line &line, const Paint& paint) {
     init_brush();
     cairo_move_to(brush_, line.first.x, line.first.y);
@@ -89,10 +100,12 @@ void Canvas::draw_line(Line &line, const Paint& paint) {
     cairo_restore(brush_);
 }
 
-void Canvas::pro_draw_elliptic_arc_(Point center,
-                                    double xradius, double yradius,
-                                    double startangle, double endangle,
-                                    bool draw_sector, const Paint &paint)  {
+void Canvas::draw_line(Line &line) {
+    draw_line(line, paint_);
+}
+
+void Canvas::pro_draw_elliptic_arc_(Point center, double xradius, double yradius, double startangle, double endangle,
+                            const Paint &paint, bool draw_sector) {
     // Drawing Elliptic Arc procedure
     // Finally, we will draw a arc with radius of 0 at (0, 0)
     init_brush();
@@ -140,6 +153,10 @@ void Canvas::draw_text(Text &text, const Paint &paint) {
     cairo_restore(brush_);
 }
 
+void Canvas::draw_text(Text &text) {
+    draw_text(text, paint_);
+}
+
 void Canvas::draw_poly(Poly &poly, const Paint &paint) {
     init_brush();
     //cairo_set_line_width(brush_, poly.thickness);
@@ -151,6 +168,10 @@ void Canvas::draw_poly(Poly &poly, const Paint &paint) {
     cairo_restore(brush_);
 }
 
+void Canvas::draw_poly(Poly &poly) {
+    draw_poly(poly, paint_);
+}
+
 void Canvas::draw_rect(Rect &rect, const Paint &paint) {
     init_brush();
     const Point &a = rect.first;
@@ -160,20 +181,44 @@ void Canvas::draw_rect(Rect &rect, const Paint &paint) {
     cairo_restore(brush_);
 }
 
+void Canvas::draw_rect(Rect &rect) {
+    draw_rect(rect, paint_);
+}
+
 void Canvas::draw_elliptical_arc(EllipticArc &elliparc, const Paint &paint) {
-    pro_draw_elliptic_arc_(elliparc.center, elliparc.xradius, elliparc.yradius, elliparc.startangle, elliparc.endangle, false, paint);
+    pro_draw_elliptic_arc_(elliparc.center, elliparc.xradius, elliparc.yradius, elliparc.startangle, elliparc.endangle,
+                           paint, false);
+}
+
+void Canvas::draw_elliptical_arc(EllipticArc &elliparc) {
+    pro_draw_elliptic_arc_(elliparc.center, elliparc.xradius, elliparc.yradius, elliparc.startangle, elliparc.endangle,
+                           paint_, false);
 }
 
 void Canvas::draw_elliptical_sector(EllipticSector &ellipsec, const Paint &paint) {
-    pro_draw_elliptic_arc_(ellipsec.center, ellipsec.xradius, ellipsec.yradius, ellipsec.startangle, ellipsec.endangle, true, paint);
+    pro_draw_elliptic_arc_(ellipsec.center, ellipsec.xradius, ellipsec.yradius, ellipsec.startangle, ellipsec.endangle,
+                           paint, true);
+}
+
+void Canvas::draw_elliptical_sector(EllipticSector &ellipsec) {
+    pro_draw_elliptic_arc_(ellipsec.center, ellipsec.xradius, ellipsec.yradius, ellipsec.startangle, ellipsec.endangle,
+                           paint_, true);
 }
 
 void Canvas::draw_ellipse(Ellipse &ellipse, const Paint &paint) {
-    pro_draw_elliptic_arc_(ellipse.center, ellipse.xradius, ellipse.yradius, 0, 2 * M_PI, true, paint);
+    pro_draw_elliptic_arc_(ellipse.center, ellipse.xradius, ellipse.yradius, 0, 2 * M_PI, paint, true);
+}
+
+void Canvas::draw_ellipse(Ellipse &ellipse) {
+    pro_draw_elliptic_arc_(ellipse.center, ellipse.xradius, ellipse.yradius, 0, 2 * M_PI, paint_, true);
 }
 
 void Canvas::draw_circle(Circle &circle, const Paint &paint) {
-    pro_draw_elliptic_arc_(circle.center, circle.radius, circle.radius, 0, 2 * M_PI, true, paint);
+    pro_draw_elliptic_arc_(circle.center, circle.radius, circle.radius, 0, 2 * M_PI, paint, true);
+}
+
+void Canvas::draw_circle(Circle &circle) {
+    pro_draw_elliptic_arc_(circle.center, circle.radius, circle.radius, 0, 2 * M_PI, paint_, true);
 }
 
 void Canvas::draw_canvas(Canvas &canvas, Point position, const Paint &paint) {
@@ -181,6 +226,10 @@ void Canvas::draw_canvas(Canvas &canvas, Point position, const Paint &paint) {
     cairo_set_source_surface(brush_, canvas.pro_get_cairo_surface(), position.x, position.y);
     cairo_paint(brush_);
     cairo_restore(brush_);
+}
+
+void Canvas::draw_canvas(Canvas &canvas, Point position) {
+    draw_canvas(canvas, position, paint_);
 }
 
 cairo_surface_t *Canvas::pro_get_cairo_surface(void) {
@@ -202,6 +251,10 @@ void Canvas::clear_all(const Paint &paint) {
     cairo_restore(brush_);
 }
 
+void Canvas::clear_all(void) {
+    clear_all(paint_);
+}
+
 void Canvas::clear_viewport(const Paint &paint){
     init_brush();
     cairo_set_source_rgba(brush_, paint.background_color.r,
@@ -210,6 +263,10 @@ void Canvas::clear_viewport(const Paint &paint){
                                   paint.background_color.a);
     cairo_paint(brush_);
     cairo_restore(brush_);
+}
+
+void Canvas::clear_viewport(void) {
+    clear_viewport(paint_);
 }
 
 }

@@ -1,5 +1,5 @@
-#ifndef PAINT_H
-#define PAINT_H
+#ifndef DRAW_PAINT_H
+#define DRAW_PAINT_H
 #include <cairo.h>
 #include "point.h"
 #include "color.h"
