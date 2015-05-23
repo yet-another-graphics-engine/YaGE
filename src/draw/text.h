@@ -2,7 +2,7 @@
 #define DRAW_TEXT_H_
 #include "font.h"
 #include "point.h"
-#include "shape_property.h"
+#include "color.h"
 
 #include <string>
 

@@ -1,17 +1,10 @@
 #ifndef DRAW_CANVAS_H_
 #define DRAW_CANVAS_H_
 
-#include "shape_property.h"
-#include "poly.h"
-#include "elliptic_arc.h"
-#include "elliptic_sector.h"
-#include "rect.h"
-#include "ellipse.h"
-#include "circle.h"
 #include "text.h"
-#include "line.h"
 #include "color.h"
 #include "paint.h"
+#include "shape.h"
 
 #include <cairo.h>
 #include <pango/pango.h>

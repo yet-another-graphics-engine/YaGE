@@ -5,7 +5,8 @@
 #include "color.h"
 #include "font.h"
 
-using namespace yage::draw;
+namespace yage {
+namespace draw {
 
 class Paint
 {
@@ -28,5 +29,8 @@ class Paint
     bool is_viewport_full_canvas() const;
     const cairo_matrix_t* pro_get_cairo_matrix() const;
 };
+
+}
+}
 
 #endif // PAINT_H

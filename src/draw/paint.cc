@@ -1,5 +1,8 @@
 #include "paint.h"
 
+namespace yage {
+namespace draw {
+
 Paint::Paint()
 {
   line_width = 2;
@@ -58,4 +61,7 @@ void Paint::set_viewport_full_canvas()
 const cairo_matrix_t* Paint::pro_get_cairo_matrix() const
 {
   return &matrix_;
+}
+
+}
 }
