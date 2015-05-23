@@ -116,7 +116,7 @@ void test_init(void) {
 
   TEST_ADD(audio);
   TEST_ADD(dialog);
-  TEST_ADD(draw);
+  TEST_ADD(draw_shape);
   TEST_ADD(window_count);
   TEST_ADD(window_fix_size);
   TEST_ADD(window_msg);

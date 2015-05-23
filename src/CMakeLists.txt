@@ -103,8 +103,8 @@ add_executable(yagetest
 test/test.cc
 test/audio.cc
 test/dialog.cc
-test/draw.cc
 test/draw_perf.cc
+test/draw_shape.cc
 test/window_count.cc
 test/window_fix_size.cc
 test/window_msg.cc

@@ -2,7 +2,7 @@
 
 using namespace yage::draw;
 
-void test_draw(void)
+void test_draw_shape(void)
 {
   Window w;
   w.show();
