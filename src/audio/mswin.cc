@@ -106,7 +106,6 @@ DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
 WinPlayer::WinPlayer(std::string url) : Player() {
     finished_ = false;
     url_ = url;
-    HRESULT hr = S_OK;
     player_init_message msg;
     msg.this_ = this;
     msg.url = url;
