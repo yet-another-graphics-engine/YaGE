@@ -175,7 +175,7 @@ public:
 
   /**
    * @brief Lets the window updates its interface.
-   * @note If the window didn't be set any canvas,
+   */
   void update();
 
   GtkWidget *pro_get_gtk_draw();
