@@ -208,14 +208,6 @@ bool Window::is_valid() {
   return gtk_draw_ != nullptr && gtk_window_ != nullptr;
 }
 
-/**
- * Get a message from pool.
- *
- * @param block: If no message availiable, whether block until new message comes.
- * @param [out] msg: The arrived message will be written here
- * @return Returns false when there are no window left, thus no messages can be
- *  generated. Returns true when new message can arrive in the future.
- */
 bool Window::poll(Message &msg, bool block) {
   if (Window::window_num_ == 0) return false;
 

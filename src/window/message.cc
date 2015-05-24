@@ -139,6 +139,10 @@ gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *sou
     cairo_set_source_surface(cairo, surface, 0, 0);
     cairo_paint(cairo);
   }
+  else {
+    cairo_set_source_rgb(cairo,1,1,1);
+    cairo_paint(cairo);
+  }
   return true;
 }
 
