@@ -21,16 +21,16 @@ private:
 
   GtkWidget *gtk_draw_;
   GtkWindow *gtk_window_;
-  yage::draw::Canvas *canvas_;
+  cairo_surface_t *cairo_surface_;
 
-  static void exec_create(Window *this_,int* start_width,int* start_height);
+  static void exec_create(Window *this_, int &width, int &height);
   static void exec_show(Window *this_);
   static void exec_hide(Window *this_);
   static void exec_redraw(GtkWidget *gtk_draw);
   static void exec_destroy(Window *this_);
 
   static void exec_set_title(Window *this_, char *title);
-  static void exec_set_resizable(Window *this_, bool* resizable);
+  static void exec_set_resizable(Window *this_, bool &resizable);
   static void exec_set_size(Window *this_, int &width, int &height);
   static void exec_get_size(Window *this_, int &width, int &height);
 
@@ -68,7 +68,8 @@ public:
   static bool poll(Message &msg, bool block = true);
   static void quit();
 
-  Window(int start_width=640,int start_height=480,yage::draw::Canvas* canvas=nullptr);
+  Window(int width = 640, int height = 480);
+
   ~Window();
   void show();
   void hide();
@@ -79,12 +80,11 @@ public:
   void set_size(int width, int height);
   void get_size(int &width, int &height);
 
-  GtkWidget *pro_get_gtk_draw(void);
+  GtkWidget *pro_get_gtk_draw();
   GtkWindow *pro_get_gtk_window();
 
-  void set_canvas(yage::draw::Canvas* canvas);
-  yage::draw::Canvas* get_canvas(void);
-  void update_window(void);
+  void set_canvas(Canvas &canvas);
+  void update();
 };
 
 } /* window */

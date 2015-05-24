@@ -56,8 +56,10 @@ void test_dialog_color_font(Window &w)
   text.position = yage::draw::Point(0, 0);
   text.color = color;
 
-  w.get_canvas()->draw_text(text);
-  w.update_window();
+  Canvas c(640, 480);
+  w.set_canvas(c);
+  c.draw_text(text);
+  w.update();
 }
 
 void test_dialog()

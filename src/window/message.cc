@@ -22,6 +22,11 @@ void Window::msg_window_on_destroy(GtkWidget *widget, Window *source)
   source->gtk_window_ = nullptr;
   --Window::window_num_;
 
+  if (source->cairo_surface_ != nullptr) {
+    cairo_surface_destroy(source->cairo_surface_);
+    source->cairo_surface_= nullptr;
+  }
+
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_window;
@@ -117,25 +122,20 @@ gboolean Window::msg_draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *
 
 gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, Window *source)
 {
-  g_print("on_draw_resize\n");
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_window;
   msg.window.type = msg.window.type_resize;
   msg_push_queue(msg);
-
-  g_print("width=%d,height=%d\n",gtk_widget_get_allocated_width(widget),gtk_widget_get_allocated_height(widget));
   return true;
 }
 
 gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source)
 {
-  g_print("on_draw_area_draw\n");
-  if(source->canvas_==nullptr)
-    return true;
-  cairo_surface_t* surface=source->canvas_->pro_get_cairo_surface();
-  if(surface!=nullptr)
-  {
+  cairo_surface_t* surface = source->cairo_surface_;
+  size_t ref = cairo_surface_get_reference_count(surface);
+  fprintf(stderr, "surface_ref = %zu\n", ref);
+  if (surface) {
     cairo_set_source_surface(cairo, surface, 0, 0);
     cairo_paint(cairo);
   }

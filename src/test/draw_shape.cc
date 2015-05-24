@@ -43,8 +43,8 @@ void test_draw_shape(void)
   text.position = point;
   canvas.draw_text(text,paint);
 
-  w.set_canvas(&canvas);
-  w.update_window();
+  w.set_canvas(canvas);
+  w.update();
 
   Message msg;
   while (Window::poll(msg)) {

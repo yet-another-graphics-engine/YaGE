@@ -32,8 +32,8 @@ void initgraph(int width, int height) {
     window->set_size(width, height);
     window->show();
     canvas = new yage::draw::Canvas(width, height);
-    window->set_canvas(canvas);
-    window->update_window();
+    window->set_canvas(*canvas);
+    window->update();
 }
 
 void closegraph(void) {
@@ -75,7 +75,7 @@ void arcf(float x, float y, float startangle, float endangle, float radius) {
     ellipsec.yradius = radius;
 
     canvas->draw_elliptical_sector(ellipsec, p);
-    window->update_window();
+    window->update();
 }
 
 void arc(int x, int y, int startangle, int endangle, int radius) {
@@ -95,7 +95,7 @@ void bar(int left, int top, int right, int bottom) {
     rect.second = b;
 
     canvas->draw_rect(rect, p);
-    window->update_window();
+    window->update();
 }
 
 void circlef(float x, float y, float radius) {
@@ -111,7 +111,7 @@ void circlef(float x, float y, float radius) {
     circle1.center = center;
 
     canvas->draw_circle(circle1, p);
-    window->update_window();
+    window->update();
 }
 
 void circle(int x, int y, int radius) {
@@ -134,7 +134,7 @@ void ellipsef(float x, float y, float startangle, float endangle, float xradius,
     elliparc.yradius = yradius;
 
     canvas->draw_elliptical_arc(elliparc, p);
-    window->update_window();
+    window->update();
 }
 
 void ellipse(int x, int y, int startangle, int endangle, int xradius, int yradius) {
@@ -150,7 +150,7 @@ void fillellipsef(float x, float y, float xradius, float yradius) {
     yage::draw::Ellipse ellipse1(yage::draw::Point(x, y), xradius, yradius);
 
     canvas->draw_ellipse(ellipse1, p);
-    window->update_window();
+    window->update();
 }
 
 void fillellipse(int x, int y, int xradius, int yradius) {
@@ -161,7 +161,7 @@ void line(int x1, int y1, int x2, int y2) {
     yage::draw::Line line1(yage::draw::Point(x1, y1),
                            yage::draw::Point(x2, y2));
     canvas->draw_line(line1, paint);
-    window->update_window();
+    window->update();
 }
 
 void pieslicef(float x, float y, float startangle, float endangle, float radius) {
@@ -179,7 +179,7 @@ void pieslicef(float x, float y, float startangle, float endangle, float radius)
     ellipsec.yradius = radius;
 
     canvas->draw_elliptical_sector(ellipsec, p);
-    window->update_window();
+    window->update();
 }
 
 void moveto(int x, int y) {
@@ -205,7 +205,7 @@ void putpixel(int x, int y, color_t color) {
     pixel.second= b;
 
     canvas->draw_rect(pixel, p);
-    window->update_window();
+    window->update();
 }
 
 void rectangle(int left, int top, int right, int bottom) {
@@ -222,7 +222,7 @@ void rectangle(int left, int top, int right, int bottom) {
     rect.second= b;
 
     canvas->draw_rect(rect, p);
-    window->update_window();
+    window->update();
 }
 
 void sectorf(float x, float y, float startangle, float endangle, float xradius, float yradius) {
@@ -240,7 +240,7 @@ void sectorf(float x, float y, float startangle, float endangle, float xradius, 
     ellipsec.yradius = yradius;
 
     canvas->draw_elliptical_sector(ellipsec, p);
-    window->update_window();
+    window->update();
 }
 
 void sector(int x, int y, int startangle, int endangle, int xradius, int yradius) {
@@ -256,7 +256,7 @@ void outtext(const char *text) {
     text1.position = canvas_position;
     text1.color = paint.line_color;
     canvas->draw_text(text1, paint);
-    window->update_window();
+    window->update();
 }
 
 void outtextxy(int x, int y, const char *text) {
@@ -264,7 +264,7 @@ void outtextxy(int x, int y, const char *text) {
     text1.position = yage::draw::Point(x, y);
     text1.color = paint.line_color;
     canvas->draw_text(text1, paint);
-    window->update_window();
+    window->update();
 }
 
 void xyprintf(int x, int y, const char *format, ...) {
@@ -281,7 +281,7 @@ void xyprintf(int x, int y, const char *format, ...) {
     text1.position = yage::draw::Point(x, y);
     text1.color = paint.line_color;
     canvas->draw_text(text1, paint);
-    window->update_window();
+    window->update();
 }
 
 int getch(void) {

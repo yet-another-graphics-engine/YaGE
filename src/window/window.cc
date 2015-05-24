@@ -16,7 +16,6 @@ gpointer user_thread(gpointer *param) {
 }
 
 int Window::init(int (*new_main)()) {
-
   msg_queue_ = g_async_queue_new();
   gtk_init(nullptr, nullptr);
 
@@ -42,12 +41,14 @@ size_t Window::window_num_ = 0;
  * These function should return false, to signal GTK that the source should be
  * removed.
  */
-void Window::exec_create(Window *this_,int* start_width,int* start_height)
-{
+void Window::exec_create(Window *this_, int &width, int &height) {
+  if (width <= 0) width = 1;
+  if (height <= 0) height = 1;
+  this_->cairo_surface_ = nullptr;
+
   GtkWindow *&gtk_window_ = this_->gtk_window_;
   gtk_window_ = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
-  gtk_window_set_position(gtk_window_,GTK_WIN_POS_CENTER);
-  // Default: not resizable
+  gtk_window_set_position(gtk_window_, GTK_WIN_POS_CENTER);
   gtk_window_set_resizable(gtk_window_, false);
 
   // Setup signals for main window
@@ -67,7 +68,9 @@ void Window::exec_create(Window *this_,int* start_width,int* start_height)
   // Setup drawing_area
   GtkWidget *&gtk_draw_ = this_->gtk_draw_;
   gtk_draw_ = gtk_drawing_area_new();
-  gtk_widget_set_size_request(gtk_draw_,*start_width,*start_height);
+
+  gtk_widget_set_size_request(gtk_draw_, width, height);
+
   gtk_widget_add_events(gtk_draw_, GDK_BUTTON_PRESS_MASK |
                                    GDK_BUTTON_RELEASE_MASK |
                                    GDK_POINTER_MOTION_MASK);
@@ -88,23 +91,19 @@ void Window::exec_create(Window *this_,int* start_width,int* start_height)
   fprintf(stderr, "New window=%p widget=%p\n", this_, gtk_draw_);
 }
 
-void Window::exec_show(Window *this_)
-{
+void Window::exec_show(Window *this_) {
   gtk_widget_show_all(GTK_WIDGET(this_->gtk_window_));
 }
 
-void Window::exec_redraw(GtkWidget *gtk_draw)
-{
+void Window::exec_redraw(GtkWidget *gtk_draw) {
   gtk_widget_queue_draw(gtk_draw);
 }
 
-void Window::exec_hide(Window *this_)
-{
+void Window::exec_hide(Window *this_) {
   gtk_widget_hide(GTK_WIDGET(this_->gtk_window_));
 }
 
-void Window::exec_destroy(Window *this_)
-{
+void Window::exec_destroy(Window *this_) {
   if (this_->gtk_window_) {
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_window_));
     this_->gtk_window_ = nullptr;
@@ -112,35 +111,29 @@ void Window::exec_destroy(Window *this_)
   }
 }
 
-void Window::exec_set_title(Window *this_, char *title)
-{
+void Window::exec_set_title(Window *this_, char *title) {
   gtk_window_set_title(this_->gtk_window_, title);
 }
 
-void Window::exec_set_resizable(Window *this_, bool* resizable)
-{
-  gtk_window_set_resizable(this_->gtk_window_, *resizable);
+void Window::exec_set_resizable(Window *this_, bool &resizable) {
+  gtk_window_set_resizable(this_->gtk_window_, resizable);
 }
 
-void Window::exec_set_size(Window *this_, int &width, int &height)
-{
+void Window::exec_set_size(Window *this_, int &width, int &height) {
   gtk_window_resize(this_->gtk_window_, width, height);
 
   if (gtk_window_get_resizable(this_->gtk_window_)) {
     gtk_window_resize(this_->gtk_window_, width, height);
   } else {
-
     GdkGeometry geo;
     geo.min_width = width;
     geo.min_height = height;
     gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
                                   GDK_HINT_MIN_SIZE);
-
   }
 }
 
-void Window::exec_get_size(Window *this_, int &width, int &height)
-{
+void Window::exec_get_size(Window *this_, int &width, int &height) {
   gtk_window_get_size(this_->gtk_window_, &width, &height);
 }
 
@@ -148,16 +141,8 @@ void Window::exec_get_size(Window *this_, int &width, int &height)
  * Proxy functions
  * Request to execute worker functions in GUI thread and wait for the return.
  */
-Window::Window(int start_width,int start_height,yage::draw::Canvas* canvas) {
-  if(start_width<=0)
-    start_width=1;
-  if(start_height<=0)
-    start_height=1;
-  if(canvas==nullptr)
-    canvas_ = new yage::draw::Canvas(start_width,start_height);
-  else
-    canvas_=canvas;
-  runner_call(exec_create,this,&start_width,&start_height);
+Window::Window(int width, int height) {
+  runner_call(exec_create, this, &width, &height);
 }
 
 void Window::show() {
@@ -174,46 +159,41 @@ void Window::destroy() {
 
 void Window::set_title(const char *title) {
   char *utf_8_title = yage::util::ansi_to_utf_8(title);
-  runner_call(exec_set_title,this,const_cast<char *>(utf_8_title));
+  runner_call(exec_set_title, this, const_cast<char *>(utf_8_title));
   yage::util::free_string(utf_8_title);
 }
 
 void Window::set_resizable(bool resizable) {
-  runner_call(exec_set_resizable,this,&resizable);
+  runner_call(exec_set_resizable, this, &resizable);
 }
 
 void Window::set_size(int width, int height) {
-  runner_call(exec_set_size,this,&width, &height);
+  runner_call(exec_set_size, this, &width, &height);
 }
 
 void Window::get_size(int &width, int &height) {
-  runner_call(exec_get_size,this,&width, &height);
+  runner_call(exec_get_size, this, &width, &height);
 }
 
-GtkWindow *Window::pro_get_gtk_window()
-{
+GtkWindow *Window::pro_get_gtk_window() {
   return gtk_window_;
 }
 
-GtkWidget *Window::pro_get_gtk_draw()
-{
+GtkWidget *Window::pro_get_gtk_draw() {
   return gtk_draw_;
 }
 
-yage::draw::Canvas* Window::get_canvas(void) {
-  return canvas_;
+void Window::set_canvas(Canvas &canvas) {
+  // Maintain Cairo's internal reference counter:
+  // Decrease the previous counter when window exits or binds to a new surface
+  // Increase the counter of the new surface
+  if (cairo_surface_ != nullptr) cairo_surface_destroy(cairo_surface_);
+  cairo_surface_ = canvas.pro_get_cairo_surface();
+  cairo_surface_reference(cairo_surface_);
 }
 
-void Window::set_canvas(Canvas* canvas)
-{
-  canvas_=canvas;
-}
-
-void Window::update_window(void) {
-  if(canvas_!=nullptr)
-  {
-    runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_draw_));
-  }
+void Window::update() {
+  runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_draw_));
 }
 
 void Window::quit() {

@@ -1,3 +1,4 @@
+#include <string>
 #include "canvas.h"
 #include "../util/encoding.h"
 
@@ -35,15 +36,11 @@ Canvas::Canvas(std::string filename) : paint_() {
 Canvas::~Canvas() {
     cairo_destroy(brush_);
     cairo_surface_destroy(surface_);
-    brush_ = nullptr;
-    surface_ = nullptr;
 }
 
-void Canvas::init_brush(const Paint &paint)
-{
+void Canvas::init_brush(const Paint &paint) {
     cairo_reset_clip(brush_);
-    if(!paint.is_viewport_full_canvas())
-    {
+    if (!paint.is_viewport_full_canvas()) {
         Point left_top, right_bottom;
         paint.get_viewport(left_top, right_bottom);
         cairo_rectangle(brush_, left_top.x, left_top.y,
@@ -101,17 +98,21 @@ void Canvas::draw_line(Line &line) {
     draw_line(line, paint_);
 }
 
-void Canvas::pro_draw_elliptic_arc_(Point center, double xradius, double yradius, double startangle, double endangle,
-                            const Paint &paint, bool draw_sector) {
+void Canvas::pro_draw_elliptic_arc_(Point center,
+                                    double xradius, double yradius,
+                                    double startangle, double endangle,
+                                    const Paint &paint, bool draw_sector) {
     // Drawing Elliptic Arc procedure
     // Finally, we will draw a arc with radius of 0 at (0, 0)
     init_brush();
-    //cairo_set_line_width(brush_, paint.line_width);
-    cairo_translate(brush_, center.x, center.y); // make center of ellipse arc (0, 0)
-
+    //
+    // make center of ellipse arc (0, 0)
+    cairo_translate(brush_, center.x, center.y);
+    // scale ellipse to a circle having radius of 1
     cairo_save(brush_);
-    cairo_scale(brush_, xradius, yradius);  // scale ellipse to a circle having radius of 1
-    cairo_arc(brush_, 0.0, 0.0, 1.0, startangle, endangle); // draw the 'circle arc'
+    cairo_scale(brush_, xradius, yradius);
+    // draw the 'circle arc'
+    cairo_arc(brush_, 0.0, 0.0, 1.0, startangle, endangle);
     if (draw_sector && endangle != 2 * M_PI) {
         cairo_line_to(brush_, 0, 0);
         cairo_close_path(brush_);
@@ -131,7 +132,8 @@ void Canvas::draw_text(Text &text, const Paint &paint) {
     PangoLayout *layout = pango_cairo_create_layout(brush_);
     char *utf_8_text = yage::util::ansi_to_utf_8(text.text.c_str());
     pango_layout_set_text(layout, utf_8_text, -1);
-    pango_layout_set_font_description(layout, text.get_font().pro_get_pango_font());
+    pango_layout_set_font_description(layout,
+                                      text.get_font().pro_get_pango_font());
     cairo_translate(brush_, text.position.x, text.position.y);
     cairo_set_source_rgba(brush_,
                           text.color.r,
@@ -150,7 +152,6 @@ void Canvas::draw_text(Text &text) {
 
 void Canvas::draw_poly(Poly &poly, const Paint &paint) {
     init_brush();
-    //cairo_set_line_width(brush_, poly.thickness);
     for (const auto &i : poly.vertex) {
         cairo_line_to(brush_, i.x, i.y);
     }
@@ -177,44 +178,66 @@ void Canvas::draw_rect(Rect &rect) {
 }
 
 void Canvas::draw_elliptical_arc(EllipticArc &elliparc, const Paint &paint) {
-    pro_draw_elliptic_arc_(elliparc.center, elliparc.xradius, elliparc.yradius, elliparc.startangle, elliparc.endangle,
+    pro_draw_elliptic_arc_(elliparc.center,
+                           elliparc.xradius, elliparc.yradius,
+                           elliparc.startangle, elliparc.endangle,
                            paint, false);
 }
 
 void Canvas::draw_elliptical_arc(EllipticArc &elliparc) {
-    pro_draw_elliptic_arc_(elliparc.center, elliparc.xradius, elliparc.yradius, elliparc.startangle, elliparc.endangle,
+    pro_draw_elliptic_arc_(elliparc.center,
+                           elliparc.xradius, elliparc.yradius,
+                           elliparc.startangle, elliparc.endangle,
                            paint_, false);
 }
 
-void Canvas::draw_elliptical_sector(EllipticSector &ellipsec, const Paint &paint) {
-    pro_draw_elliptic_arc_(ellipsec.center, ellipsec.xradius, ellipsec.yradius, ellipsec.startangle, ellipsec.endangle,
+void Canvas::draw_elliptical_sector(EllipticSector &ellipsec,
+                                    const Paint &paint) {
+    pro_draw_elliptic_arc_(ellipsec.center,
+                           ellipsec.xradius, ellipsec.yradius,
+                           ellipsec.startangle, ellipsec.endangle,
                            paint, true);
 }
 
 void Canvas::draw_elliptical_sector(EllipticSector &ellipsec) {
-    pro_draw_elliptic_arc_(ellipsec.center, ellipsec.xradius, ellipsec.yradius, ellipsec.startangle, ellipsec.endangle,
+    pro_draw_elliptic_arc_(ellipsec.center,
+                           ellipsec.xradius, ellipsec.yradius,
+                           ellipsec.startangle, ellipsec.endangle,
                            paint_, true);
 }
 
 void Canvas::draw_ellipse(Ellipse &ellipse, const Paint &paint) {
-    pro_draw_elliptic_arc_(ellipse.center, ellipse.xradius, ellipse.yradius, 0, 2 * M_PI, paint, true);
+    pro_draw_elliptic_arc_(ellipse.center,
+                           ellipse.xradius, ellipse.yradius,
+                           0, 2 * M_PI,
+                           paint, true);
 }
 
 void Canvas::draw_ellipse(Ellipse &ellipse) {
-    pro_draw_elliptic_arc_(ellipse.center, ellipse.xradius, ellipse.yradius, 0, 2 * M_PI, paint_, true);
+    pro_draw_elliptic_arc_(ellipse.center,
+                           ellipse.xradius, ellipse.yradius,
+                           0, 2 * M_PI,
+                           paint_, true);
 }
 
 void Canvas::draw_circle(Circle &circle, const Paint &paint) {
-    pro_draw_elliptic_arc_(circle.center, circle.radius, circle.radius, 0, 2 * M_PI, paint, true);
+    pro_draw_elliptic_arc_(circle.center,
+                           circle.radius, circle.radius,
+                           0, 2 * M_PI,
+                           paint, true);
 }
 
 void Canvas::draw_circle(Circle &circle) {
-    pro_draw_elliptic_arc_(circle.center, circle.radius, circle.radius, 0, 2 * M_PI, paint_, true);
+    pro_draw_elliptic_arc_(circle.center,
+                           circle.radius, circle.radius,
+                           0, 2 * M_PI,
+                           paint_, true);
 }
 
 void Canvas::draw_canvas(Canvas &canvas, Point position, const Paint &paint) {
     init_brush();
-    cairo_set_source_surface(brush_, canvas.pro_get_cairo_surface(), position.x, position.y);
+    cairo_set_source_surface(brush_, canvas.pro_get_cairo_surface(),
+                             position.x, position.y);
     cairo_paint(brush_);
     cairo_restore(brush_);
 }
@@ -246,7 +269,7 @@ void Canvas::clear_all(void) {
     clear_all(paint_);
 }
 
-void Canvas::clear_viewport(const Paint &paint){
+void Canvas::clear_viewport(const Paint &paint) {
     init_brush();
     cairo_set_source_rgba(brush_, paint.background_color.r,
                                   paint.background_color.g,
@@ -260,5 +283,5 @@ void Canvas::clear_viewport(void) {
     clear_viewport(paint_);
 }
 
-}
-}
+}  // namespace draw
+}  // namespace yage
