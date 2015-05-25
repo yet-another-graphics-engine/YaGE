@@ -33,10 +33,26 @@ Canvas::Canvas(std::string filename) : paint_() {
     g_object_unref(buf);
 }
 
+Canvas::Canvas(Canvas& canvas)
+{
+  width_=canvas.width_;
+  height_=canvas.height_;
+  paint_=canvas.paint_;
+  surface_=cairo_image_surface_create(CAIRO_FORMAT_ARGB32,width_,height_);
+  brush_=cairo_create(surface_);
+  cairo_save(brush_);
+
+  cairo_set_source_surface(brush_,canvas.surface_,0,0);
+  cairo_paint(brush_);
+
+  cairo_restore(brush_);
+}
+
 Canvas::~Canvas() {
     cairo_destroy(brush_);
     cairo_surface_destroy(surface_);
 }
+
 
 void Canvas::init_brush(const Paint &paint) {
     cairo_reset_clip(brush_);
@@ -52,10 +68,6 @@ void Canvas::init_brush(const Paint &paint) {
     cairo_set_matrix(brush_, paint.pro_get_cairo_matrix());
 }
 
-void Canvas::init_brush(void) {
-    init_brush(paint_);
-}
-
 void Canvas::shape_fill_and_stroke_(const Paint &paint) {
     cairo_scale(brush_, 1.0, 1.0);
     cairo_set_source_rgba(brush_,
@@ -65,10 +77,6 @@ void Canvas::shape_fill_and_stroke_(const Paint &paint) {
                           paint.fill_color.a);
     cairo_fill_preserve(brush_);
     shape_stroke_(paint);
-}
-
-void Canvas::shape_fill_and_stroke_(void) {
-    shape_fill_and_stroke_(paint_);
 }
 
 void Canvas::shape_stroke_(const Paint &paint) {
@@ -82,12 +90,8 @@ void Canvas::shape_stroke_(const Paint &paint) {
     cairo_stroke(brush_);
 }
 
-void Canvas::shape_stroke_(void) {
-    shape_stroke_(paint_);
-}
-
 void Canvas::draw_line(Line &line, const Paint& paint) {
-    init_brush();
+    init_brush(paint);
     cairo_move_to(brush_, line.first.x, line.first.y);
     cairo_line_to(brush_, line.second.x, line.second.y);
     shape_stroke_(paint);
@@ -104,8 +108,7 @@ void Canvas::pro_draw_elliptic_arc_(Point center,
                                     const Paint &paint, bool draw_sector) {
     // Drawing Elliptic Arc procedure
     // Finally, we will draw a arc with radius of 0 at (0, 0)
-    init_brush();
-    //
+    init_brush(paint);
     // make center of ellipse arc (0, 0)
     cairo_translate(brush_, center.x, center.y);
     // scale ellipse to a circle having radius of 1
@@ -128,7 +131,7 @@ void Canvas::pro_draw_elliptic_arc_(Point center,
 }
 
 void Canvas::draw_text(Text &text, const Paint &paint) {
-    init_brush();
+    init_brush(paint);
     PangoLayout *layout = pango_cairo_create_layout(brush_);
     char *utf_8_text = yage::util::ansi_to_utf_8(text.text.c_str());
     pango_layout_set_text(layout, utf_8_text, -1);
@@ -151,7 +154,7 @@ void Canvas::draw_text(Text &text) {
 }
 
 void Canvas::draw_poly(Poly &poly, const Paint &paint) {
-    init_brush();
+    init_brush(paint);
     for (const auto &i : poly.vertex) {
         cairo_line_to(brush_, i.x, i.y);
     }
@@ -165,7 +168,7 @@ void Canvas::draw_poly(Poly &poly) {
 }
 
 void Canvas::draw_rect(Rect &rect, const Paint &paint) {
-    init_brush();
+    init_brush(paint);
     const Point &a = rect.first;
     const Point &b = rect.second;
     cairo_rectangle(brush_, a.x, a.y, b.x - a.x, b.y - a.y);
@@ -235,7 +238,7 @@ void Canvas::draw_circle(Circle &circle) {
 }
 
 void Canvas::draw_canvas(Canvas &canvas, Point position, const Paint &paint) {
-    init_brush();
+    init_brush(paint);
     cairo_set_source_surface(brush_, canvas.pro_get_cairo_surface(),
                              position.x, position.y);
     cairo_paint(brush_);
@@ -270,7 +273,7 @@ void Canvas::clear_all(void) {
 }
 
 void Canvas::clear_viewport(const Paint &paint) {
-    init_brush();
+    init_brush(paint);
     cairo_set_source_rgba(brush_, paint.background_color.r,
                                   paint.background_color.g,
                                   paint.background_color.b,

@@ -25,9 +25,6 @@ class Canvas {
         int width_;
         int height_;
 
-        void init_brush(void);
-        void shape_fill_and_stroke_(void);
-        void shape_stroke_(void);
         void init_brush(const Paint &paint);
         void shape_fill_and_stroke_(const Paint &paint);
         void shape_stroke_(const Paint &paint);
@@ -38,8 +35,9 @@ class Canvas {
         Canvas(int width, int height);
         // Create a 'virtual' canvas based on a specific picture
         Canvas(std::string filename);
+        Canvas(Canvas& canvas);
         ~Canvas();
-        
+
         void draw_line(Line &line, const Paint &paint);
         void draw_poly(Poly &poly, const Paint &paint);
         void draw_rect(Rect &rect, const Paint &paint);
@@ -65,7 +63,7 @@ class Canvas {
         void draw_text(Text &text);
         void clear_all(void);
         void clear_viewport(void);
-    
+
         cairo_surface_t *pro_get_cairo_surface(void);
         cairo_t *pro_get_brush(void);
 };

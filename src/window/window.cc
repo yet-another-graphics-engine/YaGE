@@ -119,6 +119,13 @@ void Window::exec_set_resizable(Window *this_, bool &resizable) {
   gtk_window_set_resizable(this_->gtk_window_, resizable);
 }
 
+void Window::exec_get_resizable(Window *this_, bool &resizable) {
+  if(this_->gtk_window_)
+    resizable = gtk_window_get_resizable(this_->gtk_window_);
+  else
+    resizable = false;
+}
+
 void Window::exec_set_size(Window *this_, int &width, int &height) {
   gtk_window_resize(this_->gtk_window_, width, height);
 
@@ -167,6 +174,12 @@ void Window::set_resizable(bool resizable) {
   runner_call(exec_set_resizable, this, &resizable);
 }
 
+bool Window::is_resizable() {
+  bool result;
+  runner_call(exec_get_resizable, this, &result);
+  return result;
+}
+
 void Window::set_size(int width, int height) {
   runner_call(exec_set_size, this, &width, &height);
 }
@@ -187,7 +200,8 @@ void Window::set_canvas(Canvas &canvas) {
   // Maintain Cairo's internal reference counter:
   // Decrease the previous counter when window exits or binds to a new surface
   // Increase the counter of the new surface
-  if (cairo_surface_ != nullptr) cairo_surface_destroy(cairo_surface_);
+  if (cairo_surface_ != nullptr)
+    cairo_surface_destroy(cairo_surface_);
   cairo_surface_ = canvas.pro_get_cairo_surface();
   cairo_surface_reference(cairo_surface_);
 }
