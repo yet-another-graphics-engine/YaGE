@@ -169,10 +169,11 @@ public:
    * @brief Sets a new size for the window.
    * @param width The new width for the window.
    * @param height The new height for the window.
-   * @attention The window's size will be changed really only if the window is resizable
-   * and both the new width and the new height are not smaller than the min width and the
-   * min height of the window.The window will push a resizing Message to the massage queue
-   * when its size is changed,and you should handle the resizing event.
+   * @attention The window's size won't be changed really if both the new width and the new height
+   * are smaller than the min width and the min height of the window or both of them
+   * are equal to the current width and the current height of the window.
+   * The window will push a resizing Message to the massage queue
+   * when its size is changed really,and you should handle the resizing event.
    * @see Window::set_resizable
    * @see Window::Window
    * @see Window::poll
