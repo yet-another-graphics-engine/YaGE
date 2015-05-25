@@ -14,7 +14,7 @@ namespace yage {
 namespace audio {
 class OSXPlayer : public Player {
     private:
-        AVPlayer *player_;
+        AVPlayer *player_; ///< AVPlayer Object instance
     public:
         OSXPlayer(std::string url);
         virtual ~OSXPlayer();

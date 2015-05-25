@@ -6,27 +6,43 @@
 namespace yage {
 namespace audio {
 
+/**
+ * @brief Windows Message code of YaGE Audio Player
+ */
 static const UINT YAGE_PLAYER_MESSAGE = WM_USER + 0x233;
-static const WPARAM YAGE_PLAYER_PLAY = 1L;
-static const WPARAM YAGE_PLAYER_PAUSE = 2L;
-static const WPARAM YAGE_PLAYER_STOP = 3L;
-static const WPARAM YAGE_PLAYER_PLAYING = 4L;
-static const WPARAM YAGE_PLAYER_FINALIZE = 5L;
 
+/**
+ * @brief Signal to send to player worker thread
+ */
+enum YAGE_PLAY_SIGNAL {YAGE_PLAYER_UNKNOWN, YAGE_PLAYER_PLAY, YAGE_PLAYER_PAUSE, YAGE_PLAYER_STOP, YAGE_PLAYER_PLAYING, YAGE_PLAYER_FINALIZE};
+
+/**
+ * @brief Initial information for player worker thread
+ */
 struct player_init_message {
-    WinPlayer* this_;
-    std::string url;
-    HANDLE event_;
+    WinPlayer* this_;  ///< the pointer pointing to `this` player
+    std::string url;   ///< URL that be played later
+    HANDLE event_;     ///< Event that waits for finish of initialization
 };
 
-// Structure to be sent to thread
+/**
+ * @brief Signal information to be sent to player worker thread
+ */
 struct player_callback_message {
-    HANDLE event_;
-    bool *pbool_;
+    HANDLE event_;     ///< Event that waits for finish of operation process
+    bool *pbool_;      ///< (optional) Return value that player returns
 };
 
+/**
+ * @brief Player worker thread of the player
+ *
+ * See https://msdn.microsoft.com/en-us/library/windows/desktop/ms686736(v=vs.85).aspx for more information of
+ * this function
+ *
+ * @param lpParameter Signal information sent to thread
+ * @return 0 if thread gracefully finished
+ */
 DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
-
     player_init_message *init_msg = (player_init_message *)lpParameter;
 
     MSG msg;
@@ -54,11 +70,13 @@ DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
     assert(SUCCEEDED(hr));
     SetEvent(init_msg->event_);
 
+    // Message loop
     while (true) {
         if (!*pfinished) {
             if (GetMessageW(&msg, NULL, 0, 0) > 0) {
                 TranslateMessage(&msg);
                 DispatchMessageW(&msg);
+                // Deal with YAGE_PLAYER_* messages
                 if (msg.message == YAGE_PLAYER_MESSAGE) {
                     player_callback_message *cb_msg = (player_callback_message *)msg.lParam;
                     switch (msg.wParam) {
@@ -103,6 +121,10 @@ DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
     return 0;
 }
 
+/**
+ * @brief Creates a new instance of WinPlayer
+ * @param url The URL of music to be played
+ */
 WinPlayer::WinPlayer(std::string url) : Player() {
     finished_ = false;
     url_ = url;
@@ -115,7 +137,9 @@ WinPlayer::WinPlayer(std::string url) : Player() {
     CloseHandle(msg.event_);
 }
 
-
+/**
+ * @brief Destructor of WinPlayer
+ */
 WinPlayer::~WinPlayer() {
     IWMPControls_Release(control_);
     IWMPPlayer_Release(player_);
@@ -124,6 +148,11 @@ WinPlayer::~WinPlayer() {
     CloseHandle(thread_handle_);
 }
 
+/**
+ * @brief Send a message to worker thread
+ * @param message The message to be sent to thread
+ * @return Desired return value got from worker thread
+ */
 bool WinPlayer::send_message_(WPARAM message) {
     bool result;
     player_callback_message msg;
@@ -135,18 +164,32 @@ bool WinPlayer::send_message_(WPARAM message) {
     return result;
 }
 
+/**
+ * @brief Play the music in the Player
+ * @return The status if music plays normally
+ */
 bool WinPlayer::play() {
     return send_message_(YAGE_PLAYER_PLAY);
 }
 
+/**
+ * @brief Pause the music in the Player
+ */
 void WinPlayer::pause() {
     send_message_(YAGE_PLAYER_PAUSE);
 }
 
+/**
+ * @brief Stop the music in the Player
+ */
 void WinPlayer::stop() {
     send_message_(YAGE_PLAYER_STOP);
 }
 
+/**
+ * @brief Get if the music is playing
+ * @return The status if music is playung
+ */
 bool WinPlayer::is_playing() {
     return send_message_(YAGE_PLAYER_PLAYING);
 }

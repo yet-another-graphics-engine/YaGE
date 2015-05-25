@@ -1,6 +1,7 @@
 src/.ycm_extra_conf.*
 *.swp
 bin/
+doc/
 
 .DS_Store
 build*/

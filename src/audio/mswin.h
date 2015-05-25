@@ -17,22 +17,22 @@ namespace audio {
 
 class WinPlayer : public Player {
 private:
-     static DWORD WINAPI player_worker_(LPVOID lpParameter);
+    static DWORD WINAPI player_worker_(LPVOID lpParameter);
 
-     bool finished_;
-     DWORD thread_id_;
-     HANDLE thread_handle_;
-     IWMPPlayer *player_;
-     IWMPControls *control_;
+    bool finished_;          ///< Status that indicates the player thread is to be terminated
+    DWORD thread_id_;        ///< Thread ID of player worker thread
+    HANDLE thread_handle_;   ///< Thread handle of player worker thread
+    IWMPPlayer *player_;     ///< Windows Media Player Object instance
+    IWMPControls *control_;  ///< Windows Media Player Control Object instance
     bool send_message_(WPARAM message);
 
 public:
-     WinPlayer(std::string url);
-     virtual ~WinPlayer();
-     virtual bool play(void);
-     virtual void pause(void);
-     virtual void stop(void);
-     virtual bool is_playing(void);
+    WinPlayer(std::string url);
+    virtual ~WinPlayer();
+    virtual bool play(void);
+    virtual void pause(void);
+    virtual void stop(void);
+    virtual bool is_playing(void);
 };
 
 }
