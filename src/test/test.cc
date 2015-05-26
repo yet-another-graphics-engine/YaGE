@@ -121,6 +121,7 @@ void test_init(void) {
   TEST_ADD(window_fix_size);
   TEST_ADD(window_msg);
   TEST_ADD(window_resize);
+  TEST_ADD(draw_pic);
   TEST_ADD(draw_perf);
 }
 

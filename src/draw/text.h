@@ -15,10 +15,9 @@ private:
 
 public:
     Point position;
-    Color color;
     std::string text;
 
-    Text(std::string text, Font &font);
+    Text(const std::string &text, Font &font);
 
     Font &get_font(void) const;
 

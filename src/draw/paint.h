@@ -18,6 +18,7 @@ class Paint
     double line_width;
     Color line_color;
     Color fill_color;
+    Color font_color;
     Color background_color;
     Font font;
 

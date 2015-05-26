@@ -3,7 +3,7 @@
 namespace yage {
 namespace draw {
 
-Text::Text(std::string text, Font &font) : font_(&font), color(0.0, 0.0, 0.0, 1.0), text(text) {}
+Text::Text(const std::string &text, Font &font) : font_(&font), text(text) {}
 
 Font &Text::get_font(void) const {
     return *font_;

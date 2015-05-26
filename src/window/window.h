@@ -36,6 +36,8 @@ private:
   GtkWindow *gtk_window_;
   cairo_surface_t *cairo_surface_;
 
+  /*Not allow to copy the window object*/
+  Window(const Window& window){}
   /*The following functions are working in the GUI thread*/
   static void exec_create(Window *this_, int &width, int &height);
   static void exec_show(Window *this_);

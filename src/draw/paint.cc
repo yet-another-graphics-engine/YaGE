@@ -8,6 +8,7 @@ Paint::Paint()
   line_width = 2;
   line_color = Color(0, 0, 0, 1);
   fill_color = Color(1, 1, 1, 1);
+  font_color = Color(0, 0, 0, 1);
   background_color = Color(1, 1, 1, 1);
   set_viewport_full_canvas();
 }

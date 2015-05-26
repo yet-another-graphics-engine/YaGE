@@ -53,10 +53,12 @@ void clearviewport(void) {
 
 void setcolor(color_t color) {
     paint.line_color = yage::draw::Color(color);
+    paint.font_color = yage::draw::Color(color);
 }
 
 void setfillcolor(color_t color) {
     paint.fill_color = yage::draw::Color(color);
+    paint.background_color = yage::draw::Color(color);
 }
 
 void arcf(float x, float y, float startangle, float endangle, float radius) {
@@ -254,7 +256,6 @@ void setlinewidth(int line_width) {
 void outtext(const char *text) {
     yage::draw::Text text1(text, simsun);
     text1.position = canvas_position;
-    text1.color = paint.line_color;
     canvas->draw_text(text1, paint);
     window->update();
 }
@@ -262,7 +263,6 @@ void outtext(const char *text) {
 void outtextxy(int x, int y, const char *text) {
     yage::draw::Text text1(text, simsun);
     text1.position = yage::draw::Point(x, y);
-    text1.color = paint.line_color;
     canvas->draw_text(text1, paint);
     window->update();
 }
@@ -279,7 +279,6 @@ void xyprintf(int x, int y, const char *format, ...) {
     va_end(args);
     yage::draw::Text text1(buf, simsun);
     text1.position = yage::draw::Point(x, y);
-    text1.color = paint.line_color;
     canvas->draw_text(text1, paint);
     window->update();
 }
