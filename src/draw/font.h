@@ -23,7 +23,7 @@ private:
     PangoFontDescription *description_;
 public:
     Font(std::string family = YAGE_DEFAULT_FONT, int size = 12, bool is_bold = false, bool is_italic = false);
-	Font(Font &font);
+    Font(Font &font);
     Font &operator=(Font &font);
     ~Font();
 
@@ -37,7 +37,7 @@ public:
     void set_bold_status(bool is_bold);
     void set_italic_status(bool is_italic);
 
-    PangoFontDescription *pro_get_pango_font(void);
+    PangoFontDescription *pro_get_pango_font(void) const;
     void pro_set_pango_font(PangoFontDescription *description);
 };
 

@@ -6,11 +6,12 @@ void test_draw_shape(void)
 {
   Window w;
   w.show();
-  w.set_resizable(true);
+  //w.set_resizable(true);
   Canvas canvas(640,480);
   std::string pic_name = "";
 
   Paint paint;
+  Paint paint2=paint;
   Point viewport1(100,100);
   Point viewport2(600,400);
   paint.set_viewport(viewport1,viewport2);
@@ -24,9 +25,9 @@ void test_draw_shape(void)
   paint.line_color = color1;
   e.xradius = 100;
   e.yradius = 200;
-  canvas.draw_ellipse(e,paint);
+  canvas.draw_ellipse(e,paint2);
+  Canvas canvas2=canvas;
 
-  paint.set_viewport_full_canvas();
   Point point2(500, 400);
   Rect rect;
   rect.first = point;
@@ -37,9 +38,10 @@ void test_draw_shape(void)
   canvas.draw_rect(rect,paint);
 
   Font times("Times New Roman", 12, true, true);
-  Text text("Yet another Graphics Engine", times);
+  paint.font = times;
+  Text text("Yet another Graphics Engine");
   Color yellow(1, 1, 0, 1);
-  paint.line_color=yellow;
+  paint.font_color = yellow;
   text.position = point;
   canvas.draw_text(text,paint);
 

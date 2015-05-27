@@ -9,19 +9,10 @@
 namespace yage {
 namespace draw {
 
-class Text {
-private:
-    Font* font_;
-
-public:
+struct Text {
     Point position;
     std::string text;
-
-    Text(const std::string &text, Font &font);
-
-    Font &get_font(void) const;
-
-    void set_font(Font &font);
+    Text(const std::string &text = " ");
 };
 
 }

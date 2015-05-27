@@ -70,7 +70,7 @@ void Font::set_italic_status(bool is_italic) {
   }
 }
 
-PangoFontDescription *Font::pro_get_pango_font(void) {
+PangoFontDescription *Font::pro_get_pango_font(void) const {
   return description_;
 }
 

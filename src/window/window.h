@@ -133,13 +133,16 @@ public:
 
   /**
    * @brief Destroys the window.
+   * @note The window will be destroyed automatically when it is closed by the user.
+   * @note The window will push a destroying message to the message queue after being destroyed.
    * @attention The window after being destroyed is not valid any more.
+   * @see Message
    */
   void destroy();
 
   /**
    * @brief Checks if the window is valid.
-   * @return Returns false if the window was destroyed.Otherwise return true.
+   * @return Returns false if the window was destroyed.
    */
   bool is_valid();
 
@@ -185,8 +188,8 @@ public:
 
   /**
    * @brief Gets the current size of the window.
-   * @param [out]width The current width of the window will be written here.
-   * @param [out]height The current height of the window will be written here.
+   * @param [out]width The current width value of the window will be written here.
+   * @param [out]height The current height value of the window will be written here.
    */
   void get_size(int &width, int &height);
 

@@ -35,17 +35,17 @@ Canvas::Canvas(std::string filename) : paint_() {
 
 Canvas::Canvas(Canvas& canvas)
 {
-  width_=canvas.width_;
-  height_=canvas.height_;
-  paint_=canvas.paint_;
-  surface_=cairo_image_surface_create(CAIRO_FORMAT_ARGB32,width_,height_);
-  brush_=cairo_create(surface_);
-  cairo_save(brush_);
+    width_=canvas.width_;
+    height_=canvas.height_;
+    paint_=canvas.paint_;
+    surface_=cairo_image_surface_create(CAIRO_FORMAT_ARGB32,width_,height_);
+    brush_=cairo_create(surface_);
+    cairo_save(brush_);
 
-  cairo_set_source_surface(brush_,canvas.surface_,0,0);
-  cairo_paint(brush_);
+    cairo_set_source_surface(brush_,canvas.surface_,0,0);
+    cairo_paint(brush_);
 
-  cairo_restore(brush_);
+    cairo_restore(brush_);
 }
 
 Canvas::~Canvas() {
@@ -53,6 +53,10 @@ Canvas::~Canvas() {
     cairo_surface_destroy(surface_);
 }
 
+void Canvas::get_size(int& width,int& height) {
+    width=width_;
+    height=height_;
+}
 
 void Canvas::init_brush(const Paint &paint) {
     cairo_reset_clip(brush_);
@@ -136,13 +140,13 @@ void Canvas::draw_text(Text &text, const Paint &paint) {
     char *utf_8_text = yage::util::ansi_to_utf_8(text.text.c_str());
     pango_layout_set_text(layout, utf_8_text, -1);
     pango_layout_set_font_description(layout,
-                                      text.get_font().pro_get_pango_font());
+                                      paint.font.pro_get_pango_font());
     cairo_translate(brush_, text.position.x, text.position.y);
     cairo_set_source_rgba(brush_,
-                          text.color.r,
-                          text.color.g,
-                          text.color.b,
-                          text.color.a);
+                          paint.font_color.r,
+                          paint.font_color.g,
+                          paint.font_color.b,
+                          paint.font_color.a);
     pango_cairo_show_layout(brush_, layout);
     yage::util::free_string(utf_8_text);
     g_object_unref(layout);

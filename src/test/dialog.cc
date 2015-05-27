@@ -52,7 +52,7 @@ void test_dialog_color_font(Window &w)
   color_dlg.show(color);
   font_dlg.show(font);
 
-  yage::draw::Text text("Yet another Graphics Engine", font);
+  yage::draw::Text text("Yet another Graphics Engine");
   text.position = yage::draw::Point(0, 0);
   Paint p;
   p.font_color = color;

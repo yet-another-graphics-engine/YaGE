@@ -22,7 +22,7 @@ static yage::window::Window *window = nullptr;
 static yage::draw::Canvas *canvas = nullptr;
 static yage::draw::Point canvas_position(0, 0);
 static yage::draw::Paint paint;
-static yage::draw::Font simsun("SimSun", 12, false, false);
+//static yage::draw::Font simsun("SimSun", 12, false, false);
 typedef unsigned int color_t;
 
 extern "C" {
@@ -254,14 +254,14 @@ void setlinewidth(int line_width) {
 }
 
 void outtext(const char *text) {
-    yage::draw::Text text1(text, simsun);
+    yage::draw::Text text1(text);
     text1.position = canvas_position;
     canvas->draw_text(text1, paint);
     window->update();
 }
 
 void outtextxy(int x, int y, const char *text) {
-    yage::draw::Text text1(text, simsun);
+    yage::draw::Text text1(text);
     text1.position = yage::draw::Point(x, y);
     canvas->draw_text(text1, paint);
     window->update();
@@ -277,7 +277,7 @@ void xyprintf(int x, int y, const char *format, ...) {
     snprintf(buf, 512, format, args);
 #endif
     va_end(args);
-    yage::draw::Text text1(buf, simsun);
+    yage::draw::Text text1(buf);
     text1.position = yage::draw::Point(x, y);
     canvas->draw_text(text1, paint);
     window->update();
