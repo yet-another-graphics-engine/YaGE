@@ -14,9 +14,10 @@ Canvas::Canvas(int width, int height) : paint_() {
     clear_all();
 }
 
-Canvas::Canvas(std::string filename) : paint_() {
+Canvas::Canvas(const std::string &filename) : paint_() {
     GError *err = NULL;
-    GdkPixbuf *buf = gdk_pixbuf_new_from_file(filename.c_str(), &err);
+    std::string utf_8_filename = yage::util::convert_string(filename);
+    GdkPixbuf *buf = gdk_pixbuf_new_from_file(utf_8_filename.c_str(), &err);
     if (err) {
         fprintf(stderr, "%s\n", err->message);
         g_error_free(err);
@@ -137,8 +138,7 @@ void Canvas::pro_draw_elliptic_arc_(Point center,
 void Canvas::draw_text(Text &text, const Paint &paint) {
     init_brush(paint);
     PangoLayout *layout = pango_cairo_create_layout(brush_);
-    char *utf_8_text = yage::util::ansi_to_utf_8(text.text.c_str());
-    pango_layout_set_text(layout, utf_8_text, -1);
+    pango_layout_set_text(layout, text.get_text().c_str(), -1);
     pango_layout_set_font_description(layout,
                                       paint.font.pro_get_pango_font());
     cairo_translate(brush_, text.position.x, text.position.y);
@@ -148,7 +148,6 @@ void Canvas::draw_text(Text &text, const Paint &paint) {
                           paint.font_color.b,
                           paint.font_color.a);
     pango_cairo_show_layout(brush_, layout);
-    yage::util::free_string(utf_8_text);
     g_object_unref(layout);
     cairo_restore(brush_);
 }

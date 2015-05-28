@@ -23,7 +23,7 @@ void test_dialog_msg(Window &w)
 
 void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
 {
-  FileChooserDlg fc_dlg(type, "fc_dlg", w);
+  FileChooserDlg fc_dlg(type, "浏览文件", w);
   std::string path;
   if (fc_dlg.show(path)) {
     fprintf(stderr, "Path: %s\n", path.c_str());
@@ -32,11 +32,11 @@ void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
 
 void test_dialog_input(Window &w)
 {
-  std::string msg = "Aloha World!";
+  std::string msg = "输入框测试";
   bool ok = true;
   while (ok) {
-    InputDlg input_dlg("input_dlg", w);
-    input_dlg.set_message(msg.c_str());
+    InputDlg input_dlg("输入对话框", w);
+    input_dlg.set_message(msg);
     ok = input_dlg.show(msg);
   }
 }
@@ -52,10 +52,11 @@ void test_dialog_color_font(Window &w)
   color_dlg.show(color);
   font_dlg.show(font);
 
-  yage::draw::Text text("Yet another Graphics Engine");
+  yage::draw::Text text("YaGE 我能吞下玻璃而不伤身体");
   text.position = yage::draw::Point(0, 0);
   Paint p;
   p.font_color = color;
+  p.font = font;
 
   Canvas c(640, 480);
   w.set_canvas(c);
@@ -67,6 +68,7 @@ void test_dialog()
 {
   using namespace yage::dialog;
   Window w;
+  w.set_title("对话框测试");
   w.show();
   Message msg;
 

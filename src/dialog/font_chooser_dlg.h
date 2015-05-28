@@ -13,8 +13,8 @@ class FontChooserDlg {
 public:
 
   ~FontChooserDlg();
-  FontChooserDlg(const char *title);
-  FontChooserDlg(const char *title, Window &window);
+  FontChooserDlg(const std::string &title);
+  FontChooserDlg(const std::string &title, Window &window);
   bool show(yage::draw::Font &font);
 
 private:

@@ -131,16 +131,14 @@ MessageDlg::~MessageDlg()
   runner_call(exec_destroy, this);
 }
 
-void MessageDlg::set_title(const char *title) {
-  char *utf_8_title = yage::util::ansi_to_utf_8(title);
-  runner_call(exec_set_title, this, const_cast<char *>(utf_8_title));
-  yage::util::free_string(utf_8_title);
+void MessageDlg::set_title(const std::string &title) {
+  std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_set_title, this, const_cast<char *>(utf_8_title.c_str()));
 }
 
-void MessageDlg::set_message(const char *message) {
-  char *utf_8_message = yage::util::ansi_to_utf_8(message);
-  runner_call(exec_set_message, this, const_cast<char *>(utf_8_message));
-  yage::util::free_string(utf_8_message);
+void MessageDlg::set_message(const std::string &message) {
+  std::string utf_8_title = yage::util::convert_string(message);
+  runner_call(exec_set_message, this, const_cast<char *>(utf_8_title.c_str()));
 }
 
 MessageDlg::result_type MessageDlg::show() {

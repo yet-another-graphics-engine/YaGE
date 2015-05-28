@@ -4,7 +4,7 @@
 namespace yage {
 namespace draw {
 
-Font::Font(std::string family, int size, bool is_bold, bool is_italic) {
+Font::Font(const std::string &family, int size, bool is_bold, bool is_italic) {
   description_ = pango_font_description_new();
   set_font_family(family);
   set_size(size);
@@ -44,10 +44,9 @@ bool Font::get_italic_status(void) const {
   return pango_font_description_get_style(description_) != PANGO_STYLE_NORMAL;
 }
 
-void Font::set_font_family(std::string family) {
-  char *utf_8_family = yage::util::ansi_to_utf_8(family.c_str());
-  pango_font_description_set_family(description_, utf_8_family);
-  yage::util::free_string(utf_8_family);
+void Font::set_font_family(const std::string &family) {
+  std::string utf_8_family = yage::util::convert_string(family.c_str());
+  pango_font_description_set_family(description_, utf_8_family.c_str());
 }
 
 void Font::set_size(int size) {

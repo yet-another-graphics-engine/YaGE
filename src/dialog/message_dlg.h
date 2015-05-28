@@ -1,5 +1,6 @@
 #ifndef DIALOG_MESSAGE_DLG_H_
 #define DIALOG_MESSAGE_DLG_H_
+#include <string>
 #include <gtk/gtk.h>
 #include "../window/window.h"
 #include "../window/message.h"
@@ -44,8 +45,8 @@ public:
   MessageDlg(button_type button, icon_type icon);
   MessageDlg(button_type button, icon_type icon, Window &window);
 
-  void set_title(const char *title);
-  void set_message(const char *msg);
+  void set_title(const std::string &title);
+  void set_message(const std::string &msg);
   result_type show();
 
 private:

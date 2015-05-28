@@ -3,7 +3,7 @@
 #include <pango/pango-font.h>
 #include <string>
 
-#ifdef _WIN32
+#ifdef __WIN32
 #define YAGE_DEFAULT_FONT "Tahoma"
 #elif defined(__APPLE__)
 #if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_9
@@ -22,7 +22,7 @@ class Font {
 private:
     PangoFontDescription *description_;
 public:
-    Font(std::string family = YAGE_DEFAULT_FONT, int size = 12, bool is_bold = false, bool is_italic = false);
+    Font(const std::string &family = YAGE_DEFAULT_FONT, int size = 12, bool is_bold = false, bool is_italic = false);
     Font(Font &font);
     Font &operator=(Font &font);
     ~Font();
@@ -32,7 +32,7 @@ public:
     bool get_bold_status(void) const;
     bool get_italic_status(void) const;
 
-    void set_font_family(std::string family);
+    void set_font_family(const std::string &family);
     void set_size(int size);
     void set_bold_status(bool is_bold);
     void set_italic_status(bool is_italic);

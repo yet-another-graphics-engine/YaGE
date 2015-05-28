@@ -5,15 +5,10 @@
 namespace yage {
 namespace dialog {
 
-gboolean InputDlg::msg_entry_on_key(GtkWidget *widget, GdkEvent *event, InputDlg *source)
+gboolean InputDlg::msg_entry_on_enter_key(GtkWidget *widget, InputDlg *source)
 {
-  if (event->key.hardware_keycode == 36 ||
-      event->key.hardware_keycode == 76) {
-    // Enter pressed
-    gtk_dialog_response(source->gtk_dialog_, GTK_RESPONSE_OK);
-    return true;
-  }
-  return false;
+  gtk_dialog_response(source->gtk_dialog_, GTK_RESPONSE_OK);
+  return true;
 }
 
 void InputDlg::exec_destroy(InputDlg *this_)
@@ -26,7 +21,7 @@ void InputDlg::exec_destroy(InputDlg *this_)
 
 void InputDlg::exec_set_message(InputDlg *this_, const char *text)
 {
-  gtk_label_set_markup(this_->gtk_label_, text);
+  gtk_label_set_label(this_->gtk_label_, text);
 }
 
 void InputDlg::exec_create(InputDlg *this_,
@@ -44,8 +39,8 @@ void InputDlg::exec_create(InputDlg *this_,
   this_->gtk_entry_ = GTK_ENTRY(gtk_entry_new());
   this_->gtk_label_ = GTK_LABEL(gtk_label_new(nullptr));
 
-  g_signal_connect(this_->gtk_entry_, "key-press-event",
-                   G_CALLBACK(msg_entry_on_key), this_);
+  g_signal_connect(this_->gtk_entry_, "activate",
+                   G_CALLBACK(msg_entry_on_enter_key), this_);
 
   GtkContainer *container =
       GTK_CONTAINER(gtk_dialog_get_content_area(this_->gtk_dialog_));
@@ -75,26 +70,23 @@ bool InputDlg::show(std::string &str)
   return ret;
 }
 
-void InputDlg::set_message(const char *text)
+void InputDlg::set_message(const std::string &text)
 {
-  char *utf_8_text = yage::util::ansi_to_utf_8(text);
-  runner_call(exec_set_message, this, const_cast<char *>(utf_8_text));
-  yage::util::free_string(utf_8_text);
+  std::string utf_8_text = yage::util::convert_string(text);
+  runner_call(exec_set_message, this, const_cast<char *>(utf_8_text.c_str()));
 }
 
-InputDlg::InputDlg(const char *title)
+InputDlg::InputDlg(const std::string &title)
 {
-  char *utf_8_title = yage::util::ansi_to_utf_8(title);
-  runner_call(exec_create, this, const_cast<char *>(utf_8_title), nullptr);
-  yage::util::free_string(utf_8_title);
+  std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()), nullptr);
 }
 
-InputDlg::InputDlg(const char *title, Window &window)
+InputDlg::InputDlg(const std::string &title, Window &window)
 {
-  char *utf_8_title = yage::util::ansi_to_utf_8(title);
-  runner_call(exec_create, this, const_cast<char *>(utf_8_title),
+  std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()),
               window.pro_get_gtk_window());
-  yage::util::free_string(utf_8_title);
 }
 
 InputDlg::~InputDlg()

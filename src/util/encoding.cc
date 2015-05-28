@@ -6,6 +6,55 @@
 namespace yage {
 namespace util {
 
+bool is_string_utf_8(const char *str,int str_length)
+{
+  int i;
+  int nBytes = 0;
+  unsigned char c;
+  for(i = 0; i < str_length; i++)
+  {
+    c = *(str + i);
+    if(nBytes == 0)
+    {
+      if((c & 0x80) == 0)               //ASCII 0XXX XXXX
+        continue;
+      if(c >= 0xFC && c <= 0xFD)        //1111 110X
+        nBytes = 6;
+      else if(c >= 0xF8)                //1111 10XX
+        nBytes = 5;
+      else if(c >= 0xF0)                //1111 0XXX
+        nBytes = 4;
+      else if(c >= 0xE0)                //1110 XXXX
+        nBytes = 3;
+      else if(c >= 0xC0)                //110X XXXX
+        nBytes = 2;
+      else
+        return false;
+      nBytes--;
+    }
+    else
+    {
+      if((c & 0xC0) != 0x80)            //10XX XXXX & 1100 0000 (0xC0)
+        return false;
+      nBytes--;
+    }
+  }
+  return true;
+}
+
+std::string convert_string(const std::string& str)
+{
+  if(is_string_utf_8(str.c_str(),str.length()))
+    return str;
+  else
+  {
+    char* utf8_str = ansi_to_utf_8(str.c_str());
+    std::string result = utf8_str;
+    free_string(utf8_str);
+    return result;
+  }
+}
+
 #ifdef _WIN32
 wchar_t *ansi_to_utf_16(const char* str) {
 	int length;

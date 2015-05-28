@@ -5,19 +5,17 @@
 namespace yage {
 namespace dialog {
 
-ColorChooserDlg::ColorChooserDlg(const char *title)
+ColorChooserDlg::ColorChooserDlg(const std::string &title)
 {
-  char *utf_8_title = yage::util::ansi_to_utf_8(title);
-  runner_call(exec_create, this, const_cast<char *>(utf_8_title), nullptr);
-  yage::util::free_string(utf_8_title);
+  std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()), nullptr);
 }
 
-ColorChooserDlg::ColorChooserDlg(const char *title, Window &window)
+ColorChooserDlg::ColorChooserDlg(const std::string &title, Window &window)
 {
-  char *utf_8_title = yage::util::ansi_to_utf_8(title);
-  runner_call(exec_create, this, const_cast<char *>(utf_8_title),
+  std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()),
               window.pro_get_gtk_window());
-  yage::util::free_string(utf_8_title);
 }
 
 ColorChooserDlg::~ColorChooserDlg()

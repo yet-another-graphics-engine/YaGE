@@ -1,6 +1,6 @@
 #ifndef UTIL_ENCODING_H_
 #define UTIL_ENCODING_H_
-
+#include <string>
 namespace yage {
 namespace util {
 
@@ -16,6 +16,22 @@ wchar_t *utf_8_to_utf_16(const char *str);
 char *utf_16_to_utf_8(const wchar_t *wstr);
 #endif
 
+/**
+ * @author Shengyun Zhou (GGGZ-1101-28@live.cn)
+ * @brief Check if the string is encoded with UTF-8.
+ * @param str A C-style string.
+ * @param str_length The length of the string.
+ * @return Returns true if the string is encoded with UTF-8.
+ */
+bool is_string_utf_8(const char *str,int str_length);
+
+/**
+ * @author Shengyun Zhou (GGGZ-1101-28@live.cn)
+ * @brief Converts a string to a new string which is encoded with UTF-8.
+ * @param str The string to be converted.
+ * @return The new string encoded with UTF-8.
+ */
+std::string convert_string(const std::string& str);
 
 /**
  * Convert ANSI to UTF-8 under Win32, do nothing under other platforms

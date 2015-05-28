@@ -3,6 +3,8 @@
 #include "window.h"
 #include "../util/encoding.h"
 
+using namespace yage::util;
+
 namespace yage {
 namespace window {
 
@@ -18,6 +20,12 @@ gpointer user_thread(gpointer *param) {
 int Window::init(int (*new_main)()) {
   msg_queue_ = g_async_queue_new();
   gtk_init(nullptr, nullptr);
+
+  #ifdef __WIN32
+  GtkSettings* settings = gtk_settings_get_default();
+  gtk_settings_set_string_property(settings, "gtk-font-name", "Microsoft YaHei 10", "Sans 10");
+  gtk_settings_set_string_property(settings, "gtk-icon-theme-name", "Tango", "Adwaita");
+  #endif // __WIN32
 
   int ret = 0;
   gpointer param[] = {reinterpret_cast<gpointer>(new_main), &ret};
@@ -164,10 +172,9 @@ void Window::destroy() {
   runner_call(exec_destroy, this);
 }
 
-void Window::set_title(const char *title) {
-  char *utf_8_title = yage::util::ansi_to_utf_8(title);
-  runner_call(exec_set_title, this, const_cast<char *>(utf_8_title));
-  yage::util::free_string(utf_8_title);
+void Window::set_title(const std::string &title) {
+  std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_set_title, this, const_cast<char *>(utf_8_title.c_str()));
 }
 
 void Window::set_resizable(bool resizable) {

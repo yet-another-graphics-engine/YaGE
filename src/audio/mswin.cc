@@ -188,7 +188,7 @@ void WinPlayer::stop() {
 
 /**
  * @brief Get if the music is playing
- * @return The status if music is playung
+ * @return The status if music is playing
  */
 bool WinPlayer::is_playing() {
     return send_message_(YAGE_PLAYER_PLAYING);

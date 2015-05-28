@@ -13,10 +13,10 @@ class InputDlg {
 public:
 
   ~InputDlg();
-  InputDlg(const char *title);
-  InputDlg(const char *title, Window &window);
+  InputDlg(const std::string &title);
+  InputDlg(const std::string &title, Window &window);
   bool show(std::string &str);
-  void set_message(const char *text);
+  void set_message(const std::string &text);
 
 private:
   GtkDialog *gtk_dialog_;
@@ -30,8 +30,7 @@ private:
                           const char *title,
                           GtkWindow *parent);
 
-  static gboolean msg_entry_on_key(GtkWidget *widget,
-                                   GdkEvent *event,
+  static gboolean msg_entry_on_enter_key(GtkWidget *widget,
                                    InputDlg *source);
 
 };

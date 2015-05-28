@@ -13,8 +13,8 @@ class ColorChooserDlg {
 public:
 
   ~ColorChooserDlg();
-  ColorChooserDlg(const char *title);
-  ColorChooserDlg(const char *title, Window &window);
+  ColorChooserDlg(const std::string &title);
+  ColorChooserDlg(const std::string &title, Window &window);
   bool show(yage::draw::Color &color);
 
 private:

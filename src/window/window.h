@@ -1,5 +1,6 @@
 #ifndef WINDOW_WINDOW_H_
 #define WINDOW_WINDOW_H_
+#include <string>
 #include <gtk/gtk.h>
 #include "message.h"
 #include "../draw/canvas.h"
@@ -79,15 +80,14 @@ private:
   static gboolean msg_draw_on_draw(     GtkWidget *widget,
                                         cairo_t *cairo,
                                         Window *source);
-
 public:
 
   /**
-   * @brief Excutes the given function in an additional user thread.
-   * @note The function will be called automatically to excute the code in the function "int main()"
+   * @brief Executes the given function in an additional user thread.
+   * @note The function will be called automatically to execute the code in the function "int main()"
    * when the program starts.
    * @param new_main The given function.
-   * @return Returns the value which the function new_main returns;
+   * @return Returns the value which the function new_main returns.
    * @attention DO NOT call it manually.
    */
   static int init(int (*new_main)());
@@ -95,7 +95,7 @@ public:
   /**
    * @brief Gets a message from pool.
    *
-   * @param block: If no message availiable, whether block until new message comes.
+   * @param block: If no message available, whether block until new message comes.
    * @param [out] msg: The arrived message will be written here
    * @return Returns false when there are no window left, thus no messages can be
    *  generated. Returns true when new message can arrive in the future.
@@ -150,7 +150,7 @@ public:
    * @brief Sets a new title for the window.
    * @param title The string used as the new title.
    */
-  void set_title(const char *title);
+  void set_title(const std::string &title);
 
   /**
    * @brief Sets whether the user can resize the window.

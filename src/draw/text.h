@@ -3,16 +3,20 @@
 #include "font.h"
 #include "point.h"
 #include "color.h"
-
+#include "../util/encoding.h"
 #include <string>
 
 namespace yage {
 namespace draw {
 
-struct Text {
+class Text {
+  private:
+    std::string text_;
+  public:
     Point position;
-    std::string text;
     Text(const std::string &text = " ");
+    void set_text(const std::string &text);
+    std::string get_text();
 };
 
 }

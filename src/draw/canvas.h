@@ -49,7 +49,7 @@ class Canvas {
          * @param filename The path of the specific picture file.
          * @note The supportive image types include JPEG,BMP,PNG and so on.
          */
-        Canvas(std::string filename);
+        Canvas(const std::string &filename);
 
         /**
          * @brief Copies the content of the another canvas to this canvas.

@@ -4,19 +4,17 @@
 
 namespace yage {
 namespace dialog {
-FileChooserDlg::FileChooserDlg(action_type action, const char *title)
+FileChooserDlg::FileChooserDlg(action_type action, const std::string &title)
 {
-  char *utf_8_title = yage::util::ansi_to_utf_8(title);
-  runner_call(exec_create, this, &action, const_cast<char *>(utf_8_title), nullptr);
-  yage::util::free_string(utf_8_title);
+  std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_create, this, &action, const_cast<char *>(utf_8_title.c_str()), nullptr);
 }
 
-FileChooserDlg::FileChooserDlg(action_type action, const char *title, Window &window)
+FileChooserDlg::FileChooserDlg(action_type action, const std::string &title, Window &window)
 {
-  char *utf_8_title = yage::util::ansi_to_utf_8(title);
-  runner_call(exec_create, this, &action, const_cast<char *>(title),
+  std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_create, this, &action, const_cast<char *>(utf_8_title.c_str()),
               window.pro_get_gtk_window());
-  yage::util::free_string(utf_8_title);
 }
 
 FileChooserDlg::~FileChooserDlg()

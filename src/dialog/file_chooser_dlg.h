@@ -19,8 +19,8 @@ public:
   };
 
   ~FileChooserDlg();
-  FileChooserDlg(action_type action, const char *title);
-  FileChooserDlg(action_type action, const char *title, Window &window);
+  FileChooserDlg(action_type action, const std::string &title);
+  FileChooserDlg(action_type action, const std::string &title, Window &window);
   bool show(std::string &str);
 
 private:
