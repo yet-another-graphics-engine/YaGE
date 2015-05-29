@@ -83,6 +83,12 @@ private:
 public:
 
   /**
+   * @brief The flag that whether the program exits automatically when all the window
+   * Objects are destroyed.The default value is true.
+   */
+  static bool quit_all_windows_destroyed;
+
+  /**
    * @brief Executes the given function in an additional user thread.
    * @note The function will be called automatically to execute the code in the function "int main()"
    * when the program starts.

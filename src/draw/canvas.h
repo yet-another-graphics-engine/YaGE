@@ -156,20 +156,76 @@ class Canvas {
          */
         void draw_circle(Circle &circle);
 
-        void draw_text(Text &text);
+        /**
+         * @brief Draws a text on the canvas with a specific paint.
+         * @param text Indicates the region where the text will be drawn.
+         * @param paint The paint used to draw this text.
+         * @note The color of the text is according to Paint::font_color.
+         * @note The size info of the text is in Paint::font.
+         * @see Font
+         */
         void draw_text(Text &text, const Paint &paint);
 
+        /**
+         * @brief Draws a text on the canvas with the default paint.
+         * @param text Indicates the region where the text will be drawn.
+         * @note The color of the text is according to Paint::font_color.
+         * @note The size info of the text is in Paint::font.
+         * @see Font
+         */
+        void draw_text(Text &text);
 
+        /**
+         * @brief Draws the content of an another canvas on this canvas with a specific paint.
+         * @param canvas The another canvas used to be drawn on this canvas.
+         * @param position The start(left-top) position in this canvas.Drawing will start from
+         * this position.
+         * @param paint The paint used to draw the content of the another canvas.
+         */
         void draw_canvas(Canvas &canvas, Point position, const Paint &paint);
+
+        /**
+         * @brief Draws the content of an another canvas on this canvas with the default paint.
+         * @param canvas The another canvas used to be drawn on this canvas.
+         * @param position The start(left-top) position in this canvas.Drawing will start from
+         * this position.
+         */
+        void draw_canvas(Canvas &canvas, Point position);
+
+        /**
+         * @brief Clear all the content of this canvas by filling the whole canvas with
+         * a specific paint.
+         * @param paint The paint used to clear this canvas.
+         * @note The color used to fill this canvas is according to Paint::background_color.
+         */
         void clear_all(const Paint &paint);
+
+        /**
+         * @brief Clear all the content of this canvas by filling the whole canvas with
+         * the default paint.
+         * @note The color used to fill this canvas is according to Paint::background_color.
+         */
+        void clear_all(void);
+
+        /**
+         * @brief Clear all the content of the viewport in this canvas by filling the whole
+         * viewport with a specific paint.
+         * @param paint The paint used to clear the viewport.
+         * @note The viewport info is in the paint.You can use the function Paint::set_viewport to set the viewport.
+         * @note The color used to fill the viewport is according to Paint::background_color.
+         */
         void clear_viewport(const Paint &paint);
 
-        // position indicates the left-top position
-        void draw_canvas(Canvas &canvas, Point position);
-        void clear_all(void);
-        void clear_viewport(void);
-
+        /**
+         * @brief (Pro)Gets the pointer of the Cairo Surface in the canvas object.
+         * @return The pointer of the Cairo Surface.
+         */
         cairo_surface_t *pro_get_cairo_surface(void);
+
+        /**
+         * @brief (Pro)Gets the pointer of the Cairo Context in the canvas object.
+         * @return The pointer of the Cairo Context.
+         */
         cairo_t *pro_get_brush(void);
 };
 

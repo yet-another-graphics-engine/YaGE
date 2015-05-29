@@ -18,6 +18,8 @@ bool is_string_utf_8(const char *str,int str_length)
     {
       if((c & 0x80) == 0)               //ASCII 0XXX XXXX
         continue;
+      if(c > 0xFD)
+        return false;
       if(c >= 0xFC && c <= 0xFD)        //1111 110X
         nBytes = 6;
       else if(c >= 0xF8)                //1111 10XX

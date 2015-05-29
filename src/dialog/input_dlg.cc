@@ -21,7 +21,7 @@ void InputDlg::exec_destroy(InputDlg *this_)
 
 void InputDlg::exec_set_message(InputDlg *this_, const char *text)
 {
-  gtk_label_set_label(this_->gtk_label_, text);
+  gtk_label_set_markup(this_->gtk_label_, text);
 }
 
 void InputDlg::exec_create(InputDlg *this_,
@@ -38,7 +38,6 @@ void InputDlg::exec_create(InputDlg *this_,
 
   this_->gtk_entry_ = GTK_ENTRY(gtk_entry_new());
   this_->gtk_label_ = GTK_LABEL(gtk_label_new(nullptr));
-
   g_signal_connect(this_->gtk_entry_, "activate",
                    G_CALLBACK(msg_entry_on_enter_key), this_);
 

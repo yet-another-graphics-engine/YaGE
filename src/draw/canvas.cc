@@ -285,9 +285,5 @@ void Canvas::clear_viewport(const Paint &paint) {
     cairo_restore(brush_);
 }
 
-void Canvas::clear_viewport(void) {
-    clear_viewport(paint_);
-}
-
 }  // namespace draw
 }  // namespace yage

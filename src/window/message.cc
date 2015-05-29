@@ -27,6 +27,12 @@ void Window::msg_window_on_destroy(GtkWidget *widget, Window *source)
     source->cairo_surface_= nullptr;
   }
 
+  if(Window::quit_all_windows_destroyed && Window::window_num_ == 0)
+  {
+    gtk_main_quit();
+    return;
+  }
+
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_window;
