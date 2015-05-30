@@ -32,7 +32,7 @@ void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
 
 void test_dialog_input(Window &w)
 {
-  std::string msg = "输入框测试";
+  std::string msg = "测试对话框\n支持换行.";
   bool ok = true;
   while (ok) {
     InputDlg input_dlg("输入对话框", w);

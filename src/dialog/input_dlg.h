@@ -22,9 +22,10 @@ private:
   GtkDialog *gtk_dialog_;
   GtkEntry *gtk_entry_;
   GtkLabel *gtk_label_;
+  GtkTextBuffer *gtk_text_buffer_;
 
   static void exec_show(InputDlg *this_, std::string &yage_str, bool &ret);
-  static void exec_set_message(InputDlg *this_, const char *text);
+  static void exec_set_message(InputDlg *this_, const std::string &text);
   static void exec_destroy(InputDlg *this_);
   static void exec_create(InputDlg *this_,
                           const char *title,
@@ -32,6 +33,8 @@ private:
 
   static gboolean msg_entry_on_enter_key(GtkWidget *widget,
                                    InputDlg *source);
+  static gboolean msg_button_ok_on_click(GtkWidget *widget,InputDlg* source);
+  static gboolean msg_button_cancel_on_click(GtkWidget* widget,InputDlg* source);
 
 };
 
