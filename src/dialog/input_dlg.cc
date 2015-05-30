@@ -68,14 +68,14 @@ void InputDlg::exec_create(InputDlg *this_,
   g_signal_connect(GTK_WIDGET(button_cancel), "clicked",
                    G_CALLBACK(msg_button_cancel_on_click), this_);
 
-  gtk_box_pack_start(label_box, GTK_WIDGET(this_->gtk_label_), FALSE, FALSE, 5);
-  gtk_box_pack_start(entry_box, GTK_WIDGET(this_->gtk_entry_), TRUE, TRUE, 5);
-  gtk_box_pack_end(button_box, GTK_WIDGET(button_cancel), FALSE, FALSE, 5);
-  gtk_box_pack_end(button_box, GTK_WIDGET(button_ok), FALSE, FALSE, 5);
+  gtk_box_pack_start(label_box, GTK_WIDGET(this_->gtk_label_), FALSE, FALSE, 0);
+  gtk_box_pack_start(entry_box, GTK_WIDGET(this_->gtk_entry_), TRUE, TRUE, 0);
+  gtk_box_pack_end(button_box, GTK_WIDGET(button_cancel), FALSE, FALSE, 0);
+  gtk_box_pack_end(button_box, GTK_WIDGET(button_ok), FALSE, FALSE, 0);
 
   GtkContainer *container =
       GTK_CONTAINER(gtk_dialog_get_content_area(this_->gtk_dialog_));
-  gtk_container_set_border_width(container, 5);
+  gtk_container_set_border_width(container, 10);
   gtk_container_add(container, GTK_WIDGET(dialog_box));
   gtk_widget_show_all(GTK_WIDGET(container));
 }
