@@ -74,10 +74,7 @@ void FileChooserDlg::exec_show(FileChooserDlg *this_,
   }
 
   if (c_str) {
-    char *ansi_c_str = yage::util::utf_8_to_ansi(c_str);
-    std_str = ansi_c_str;
-    yage::util::free_string(ansi_c_str);
-    g_free(c_str);
+    std_str = yage::util::convert_string(c_str);
     ret = true;
   }
 }

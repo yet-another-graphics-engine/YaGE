@@ -26,7 +26,7 @@ void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
   FileChooserDlg fc_dlg(type, "浏览文件", w);
   std::string path;
   if (fc_dlg.show(path)) {
-    fprintf(stderr, "Path: %s\n", path.c_str());
+    g_printerr("Path: %s\n", path.c_str());
   }
 }
 

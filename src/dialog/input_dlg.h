@@ -35,7 +35,8 @@ private:
                                    InputDlg *source);
   static gboolean msg_button_ok_on_click(GtkWidget *widget,InputDlg* source);
   static gboolean msg_button_cancel_on_click(GtkWidget* widget,InputDlg* source);
-
+  static void msg_entry_on_icon_press(GtkEntry* entry,GtkEntryIconPosition icon_pos,
+                                                        GdkEvent *event);
 };
 
 }  // namespace dialog

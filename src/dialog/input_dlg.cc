@@ -23,6 +23,12 @@ gboolean InputDlg::msg_button_cancel_on_click(GtkWidget *widget,InputDlg *source
   return true;
 }
 
+void InputDlg::msg_entry_on_icon_press(GtkEntry* entry,GtkEntryIconPosition icon_pos,
+                                        GdkEvent *event)
+{
+  gtk_entry_set_text(entry,"");
+}
+
 void InputDlg::exec_destroy(InputDlg *this_)
 {
   if (this_->gtk_dialog_) {
@@ -41,13 +47,15 @@ void InputDlg::exec_create(InputDlg *this_,
                            GtkWindow *parent)
 {
   this_->gtk_dialog_ = GTK_DIALOG(gtk_dialog_new());
+  gtk_window_set_title(GTK_WINDOW(this_->gtk_dialog_), title);
+  gtk_window_set_icon_name(GTK_WINDOW(this_->gtk_dialog_),"gtk-edit");
   gtk_window_set_position(GTK_WINDOW(this_->gtk_dialog_),GTK_WIN_POS_CENTER);
   gtk_dialog_set_default_response(this_->gtk_dialog_, GTK_RESPONSE_OK);
 
   GtkBox* dialog_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
   GtkBox* label_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
   GtkBox* entry_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
-  GtkBox* button_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+  GtkBox* button_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10));
   gtk_box_pack_start(dialog_box, GTK_WIDGET(label_box), TRUE, TRUE, 5);
   gtk_box_pack_start(dialog_box, GTK_WIDGET(entry_box), TRUE, TRUE, 5);
   gtk_box_pack_start(dialog_box, gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), FALSE, FALSE, 5);
@@ -58,13 +66,31 @@ void InputDlg::exec_create(InputDlg *this_,
   gtk_misc_set_alignment(GTK_MISC(this_->gtk_label_), 0, 0);
 
   this_->gtk_entry_ = GTK_ENTRY(gtk_entry_new());
+  gtk_entry_set_icon_activatable(this_->gtk_entry_, GTK_ENTRY_ICON_SECONDARY, TRUE);
+  gtk_entry_set_icon_from_icon_name(this_->gtk_entry_, GTK_ENTRY_ICON_SECONDARY, "gtk-clear");
   g_signal_connect(this_->gtk_entry_, "activate",
                    G_CALLBACK(msg_entry_on_enter_key), this_);
+  g_signal_connect(this_->gtk_entry_, "icon-press",G_CALLBACK(msg_entry_on_icon_press),nullptr);
 
-  GtkButton* button_ok = GTK_BUTTON(gtk_button_new_from_stock(GTK_STOCK_OK));
+  #ifdef __WIN32
+  GtkButton* button_ok = GTK_BUTTON(gtk_button_new_from_stock("gtk-ok"));
+  #else
+  GtkButton* button_ok = GTK_BUTTON(gtk_button_new_from_icon_name("gtk-ok",GTK_ICON_SIZE_SMALL_TOOLBAR));
+  gtk_button_set_always_show_image(button_ok, TRUE);
+  gtk_button_set_label(button_ok, "OK");
+  #endif // __WIN32
+  gtk_widget_set_size_request(GTK_WIDGET(button_ok),100,1);
   g_signal_connect(GTK_WIDGET(button_ok), "clicked",
                    G_CALLBACK(msg_button_ok_on_click), this_);
-  GtkButton* button_cancel = GTK_BUTTON(gtk_button_new_from_stock(GTK_STOCK_CANCEL));
+
+  #ifdef __WIN32
+  GtkButton* button_cancel = GTK_BUTTON(gtk_button_new_from_stock("gtk-ok"));
+  #else
+  GtkButton* button_cancel = GTK_BUTTON(gtk_button_new_from_icon_name("gtk-cancel",GTK_ICON_SIZE_SMALL_TOOLBAR));
+  gtk_button_set_always_show_image(button_cancel, TRUE);
+  gtk_button_set_label(button_cancel, "Cancel");
+  #endif // __WIN32
+  gtk_widget_set_size_request(GTK_WIDGET(button_cancel),100,1);
   g_signal_connect(GTK_WIDGET(button_cancel), "clicked",
                    G_CALLBACK(msg_button_cancel_on_click), this_);
 
