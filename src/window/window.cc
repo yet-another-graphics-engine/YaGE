@@ -23,11 +23,11 @@ int Window::init(int (*new_main)()) {
   msg_queue_ = g_async_queue_new();
   gtk_init(nullptr, nullptr);
 
-  #ifdef __WIN32
+  #ifdef _WIN32
   GtkSettings* settings = gtk_settings_get_default();
   gtk_settings_set_string_property(settings, "gtk-font-name", "Microsoft YaHei 10", "Sans 10");
   gtk_settings_set_string_property(settings, "gtk-icon-theme-name", "Tango", "Adwaita");
-  #endif // __WIN32
+  #endif // _WIN32
 
   int ret = 0;
   gpointer param[] = {reinterpret_cast<gpointer>(new_main), &ret};
