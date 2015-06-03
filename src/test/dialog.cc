@@ -1,4 +1,4 @@
-#include "test.h"
+﻿#include "test.h"
 #include "../dialog/message_dlg.h"
 #include "../dialog/file_chooser_dlg.h"
 #include "../dialog/color_chooser_dlg.h"
