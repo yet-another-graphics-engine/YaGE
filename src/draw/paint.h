@@ -23,6 +23,9 @@ class Paint
     Font font;
 
     Paint();
+    void set_translate(double tx, double ty);
+    void set_rotate(double radians);
+    void set_scale(double sx,double sy);
     void set_viewport(Point left_top,Point right_bottom);
     void get_viewport(Point& left_top,Point& right_bottom) const;
     void set_viewport_full_canvas();

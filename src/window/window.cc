@@ -23,7 +23,7 @@ int Window::init(int (*new_main)()) {
   msg_queue_ = g_async_queue_new();
   gtk_init(nullptr, nullptr);
 
-  #ifdef _WIN32
+  #ifdef __WIN32
   GtkSettings* settings = gtk_settings_get_default();
   gtk_settings_set_string_property(settings, "gtk-font-name", "Microsoft YaHei 10", "Sans 10");
   gtk_settings_set_string_property(settings, "gtk-icon-theme-name", "Tango", "Adwaita");
@@ -52,8 +52,6 @@ size_t Window::window_num_ = 0;
  * removed.
  */
 void Window::exec_create(Window *this_, int &width, int &height) {
-  if (width <= 0) width = 1;
-  if (height <= 0) height = 1;
   this_->cairo_surface_ = nullptr;
 
   GtkWindow *&gtk_window_ = this_->gtk_window_;
@@ -61,6 +59,24 @@ void Window::exec_create(Window *this_, int &width, int &height) {
   gtk_window_set_position(gtk_window_, GTK_WIN_POS_CENTER);
   gtk_window_set_resizable(gtk_window_, false);
 
+  if(width == -1 || height == -1)
+  {
+    GdkScreen* screen = gdk_screen_get_default();
+    int mirror = gdk_screen_get_primary_monitor(screen);
+    GdkRectangle area;
+    gdk_screen_get_monitor_workarea(screen,mirror,&area);
+    if(width == -1)
+      width = area.width;
+    if(height == -1)
+      height = area.height;
+  }
+  else
+  {
+    if (width <= 0)
+      width = 100;
+    if (height <= 0)
+      height = 100;
+  }
   // Setup signals for main window
   gtk_widget_add_events(GTK_WIDGET(gtk_window_),
                         GDK_FOCUS_CHANGE | GDK_KEY_PRESS | GDK_KEY_RELEASE);
@@ -137,6 +153,17 @@ void Window::exec_get_resizable(Window *this_, bool &resizable) {
 }
 
 void Window::exec_set_size(Window *this_, int &width, int &height) {
+  if(width == -1 || height == -1)
+  {
+    GdkScreen* screen = gdk_screen_get_default();
+    int mirror = gdk_screen_get_primary_monitor(screen);
+    GdkRectangle area;
+    gdk_screen_get_monitor_workarea(screen,mirror,&area);
+    if(width == -1)
+      width = area.width;
+    if(height == -1)
+      height = area.height;
+  }
   gtk_window_resize(this_->gtk_window_, width, height);
 
   if (gtk_window_get_resizable(this_->gtk_window_)) {

@@ -115,8 +115,10 @@ public:
 
   /**
    * @brief Creates a new window.
-   * @param start_width The initial width of the window.The default value is 640.
-   * @param start_height The initial height of the window.The default value is 480.
+   * @param start_width The initial width of the window.The default value is 640.If the value is -1,
+   * the width will be the "main desktop" work area's width(maybe it equals to the entire screen width).
+   * @param start_height The initial height of the window.The default value is 480.If the value is -1,
+   * the height will be the "main desktop" work area's height(maybe it equals to the entire screen height).
    * @note The new window is not resizable by default.And the start_width and the start_height are also
    *       the min width and the min height of the new window.
    * @attention The new window doesn't bind any canvas by default.If you want to display graphics on the
@@ -178,8 +180,10 @@ public:
 
   /**
    * @brief Sets a new size for the window.
-   * @param width The new width for the window.
-   * @param height The new height for the window.
+   * @param width The new width for the window.If the value is -1,
+   * the width will be the "main desktop" work area's width(maybe it equals to the entire screen width).
+   * @param height The new height for the window.If the value is -1,
+   * the height will be the "main desktop" work area's height(maybe it equals to the entire screen height).
    * @attention The window's size won't be changed really if both the new width and the new height
    * are smaller than the min width and the min height of the window or both of them
    * are equal to the current width and the current height of the window.

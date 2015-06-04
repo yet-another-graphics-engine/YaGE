@@ -7,6 +7,7 @@
 #include "shape.h"
 
 #include <cairo.h>
+#include <cairo-pdf.h>
 #include <pango/pango.h>
 #include <gdk/gdk.h>
 #include <vector>
@@ -215,6 +216,18 @@ class Canvas {
          * @note The color used to fill the viewport is according to Paint::background_color.
          */
         void clear_viewport(const Paint &paint);
+
+        /**
+         * @brief Save the content of this canvas to a PDF file.
+         * @param file_path The PDF file's path.
+         */
+        void save_PDF_file(const std::string &file_path);
+
+        /**
+         * @brief Save the content of this canvas to a PNG file.
+         * @param file_path The PNG file's path.
+         */
+        void save_PNG_file(const std::string &file_path);
 
         /**
          * @brief (Pro)Gets the pointer of the Cairo Surface in the canvas object.

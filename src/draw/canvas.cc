@@ -285,5 +285,20 @@ void Canvas::clear_viewport(const Paint &paint) {
     cairo_restore(brush_);
 }
 
+void Canvas::save_PDF_file(const std::string &file_path) {
+    std::string file_path_utf8 = yage::util::convert_string(file_path);
+    cairo_surface_t *pdf_surface = cairo_pdf_surface_create(file_path_utf8.c_str(), width_, height_);
+    cairo_t* pdf_brush = cairo_create(pdf_surface);
+    cairo_set_source_surface(pdf_brush, surface_, 0, 0);
+    cairo_paint(pdf_brush);
+    cairo_destroy(pdf_brush);
+    cairo_surface_finish(pdf_surface);
+}
+
+void Canvas::save_PNG_file(const std::string &file_path) {
+    std::string file_path_utf8 = yage::util::convert_string(file_path);
+    cairo_surface_write_to_png(surface_, file_path_utf8.c_str());
+}
+
 }  // namespace draw
 }  // namespace yage
