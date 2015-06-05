@@ -24,7 +24,7 @@ Linux 静态库：[![Build Status](https://img.shields.io/travis/yet-another-gra
 
 下载安装 [CMake](http://www.cmake.org/download/) (Win32 Installer) 和 [GTK+ 3](http://www.gtk.org/download/win32.php) (All-in-one bundles) 并添加其中 `bin` 目录到系统 `PATH` 变量。
 
-安装后，启动 Visual Studio 命令行(32 位)后，切换到本项目根目录
+安装后，启动 Visual Studio 命令行(32 位) 后，切换到本项目根目录
 
 ```
 X:\> cd YaGE
@@ -55,15 +55,47 @@ X:\YaGE\build> cmake ..
 
 项目库文件将生成在 `build\lib` 文件夹中，名为 `libyage.a`，将其复制到 MinGW 安装目录的 `lib` 中即可使用。然后复制 `include` 文件夹内所有文件到 MinGW 安装目录下的 `include` 文件夹中，即可使用头文件。
 
-### GNU/Linux
+#### 使用 Cygwin
 
-#### Debian / Ubuntu 及其衍生发行版
+打开 Cygwin 安装程序然后安装以下包:
 
-安装必要包
+`git make gcc-g++ cmake libgtk3-devel pkg-config libgstreamer0.10-devel`
+
+然后按照 UNIX 构建方法构建
+
+### UNIX 及类 UNIX 系统
+
+#### 安装依赖包
+
+##### Debian / Ubuntu 及其衍生发行版
 
 `sudo apt-get install -y build-essential git libgtk-3-dev cmake pkg-config libgstreamer-plugins-base0.10-dev`
 
-安装后，运行以下命令
+##### RHEL / CentOS 7 及其衍生版, Fedora 21 及早期版本
+
+`sudo yum -y install git cmake pkgconfig gcc-c++ gtk3-devel gstreamer-devel`
+
+##### Fedora 22
+
+`sudo dnf -y install git cmake pkgconfig gcc-c++ gtk3-devel gstreamer-devel`
+
+##### Arch Linux
+
+`sudo pacman -S base-devel git gtk3 cmake pkg-config gstreamer0.10`
+
+##### FreeBSD 10
+
+`sudo pkg install git cmake pkgconf gtk3 gstreamer`
+
+##### Mac OS X 上使用 [Homebrew](http://brew.sh/)
+
+`brew install git cmake gtk+3 cairo pkg-config`
+
+##### Mac OS X 上使用 [MacPorts](https://www.macports.org/)
+
+`sudo port install git cmake gtk3 cairo pkgconfig`
+
+#### 构建
 
 ```
 $ git clone https://github.com/yet-another-graphics-engine/YaGE.git
@@ -74,83 +106,8 @@ $ cmake ..
 $ make
 ```
 
-项目库文件将生成在 `build/lib` 文件夹中，名为 `libyage.a`，将其复制到 `/usr/local/lib` 中即可使用。然后复制 `include` 文件夹内所有文件到 `/usr/local/include` 文件夹中，即可使用头文件。
-
-
-#### RHEL / CentOS 7 及其衍生版, Fedora
-
-安装必要包
-
-`sudo yum install git cmake pkgconfig gcc-c++ gtk3-devel gstreamer-devel`
-
-安装后，运行以下命令
+#### 安装
 
 ```
-$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
-$ cd YaGE
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
+$ sudo make install
 ```
-项目库文件将生成在 `build/lib` 文件夹中，名为 `libyage.a`，将其复制到 `/usr/local/lib` 中即可使用。然后复制 `include` 文件夹内所有文件到 `/usr/local/include` 文件夹中，即可使用头文件。
-
-#### Arch Linux
-
-安装必要包
-
-`sudo pacman -S gtk3 cmake pkg-config gstreamer0.10-ugly`
-
-安装后，运行以下命令
-
-```
-$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
-$ cd YaGE
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
-```
-项目库文件将生成在 `build/lib` 文件夹中，名为 `libyage.a`，将其复制到 `/usr/local/lib` 中即可使用。然后复制 `include` 文件夹内所有文件到 `/usr/local/include` 文件夹中，即可使用头文件。
-
-### Mac OS X
-
-#### 使用 Homebrew
-
-安装 [Xcode](https://developer.apple.com/xcode/)
-
-安装 [Homebrew](http://brew.sh/): `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
-
-安装必要包：`brew install git cmake gtk+3 cairo pkg-config`
-
-安装后，运行以下命令
-
-```
-$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
-$ cd YaGE
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
-```
-项目库文件将生成在 `build/lib` 文件夹中，名为 `libyage.a`，将其复制到 `/usr/local/lib` 中即可使用。然后复制 `include` 文件夹内所有文件到 `/usr/local/include` 文件夹中，即可使用头文件。
-
-#### 使用 MacPorts
-
-安装 [Xcode](https://developer.apple.com/xcode/)
-
-安装 [MacPorts](https://www.macports.org/install.php)
-
-安装必要包：`sudo port install git cmake gtk3 cairo pkgconfig`
-
-安装后，运行以下命令
-
-```
-$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
-$ cd YaGE
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
-```
-项目库文件将生成在 `build/lib` 文件夹中，名为 `libyage.a`，将其复制到 `/usr/local/lib` 中即可使用。然后复制 `include` 文件夹内所有文件到 `/usr/local/include` 文件夹中，即可使用头文件。

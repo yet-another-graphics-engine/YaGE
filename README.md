@@ -57,15 +57,47 @@ Open MSYS Shell, switch to the project root directory, execute the following com
 
 Library will be built in `build/lib` directory called `libyage.a`, copy it to `lib` directory in MinGW installation folder to use it. After that, copy everything in `include` directory to `include` directory in MinGW installation folder to use headers.
 
-### GNU/Linux
+#### Build with Cygwin
 
-#### Debian / Ubuntu and derivatives
+Open Cygwin installer and install following packages:
 
-Install neccessary packages:
+`git make gcc-g++ cmake libgtk3-devel pkg-config libgstreamer0.10-devel`
+
+Then follow UNIX build instructions
+
+### UNIX and UNIX-like Systems
+
+#### Install Dependencies
+
+##### Debian / Ubuntu and derivatives
 
 `sudo apt-get install -y build-essential git libgtk-3-dev cmake pkg-config libgstreamer-plugins-base0.10-dev`
 
-Execute following command after installation:
+##### RHEL / CentOS 7 and derivatives, Fedora 21 and earlier
+
+`sudo yum -y install git cmake pkgconfig gcc-c++ gtk3-devel gstreamer-devel`
+
+##### Fedora 22
+
+`sudo dnf -y install git cmake pkgconfig gcc-c++ gtk3-devel gstreamer-devel`
+
+##### Arch Linux
+
+`sudo pacman -S base-devel git gtk3 cmake pkg-config gstreamer0.10`
+
+##### FreeBSD 10
+
+`sudo pkg install git cmake pkgconf gtk3 gstreamer`
+
+##### Mac OS X via [Homebrew](http://brew.sh/)
+
+`brew install git cmake gtk+3 cairo pkg-config`
+
+##### Mac OS X via [MacPorts](https://www.macports.org/)
+
+`sudo port install git cmake gtk3 cairo pkgconfig`
+
+#### Build
 
 ```
 $ git clone https://github.com/yet-another-graphics-engine/YaGE.git
@@ -76,87 +108,8 @@ $ cmake ..
 $ make
 ```
 
-Library will be built in `build/lib` directory called `libyage.a`, copy it to `/usr/local/lib` to use it. After that, copy everything in `include` directory to `/usr/local/include` directory to use headers.
-
-
-#### RHEL / CentOS 7 and derivatives, Fedora
-
-Install neccessary packages:
-
-`sudo yum install git cmake pkgconfig gcc-c++ gtk3-devel gstreamer-devel`
-
-Execute following command after installation:
+#### Install
 
 ```
-$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
-$ cd YaGE
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
+$ sudo make install
 ```
-
-Library will be built in `build/lib` directory called `libyage.a`, copy it to `/usr/local/lib` to use it. After that, copy everything in `include` directory to `/usr/local/include` directory to use headers.
-
-#### Arch Linux
-
-Install neccessary packages:
-
-`sudo pacman -S gtk3 cmake pkg-config gstreamer0.10-ugly`
-
-Execute following command after installation:
-
-```
-$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
-$ cd YaGE
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
-```
-
-Library will be built in `build/lib` directory called `libyage.a`, copy it to `/usr/local/lib` to use it. After that, copy everything in `include` directory to `/usr/local/include` directory to use headers.
-
-### Mac OS X
-
-#### Use Homebrew
-
-Install [Xcode](https://developer.apple.com/xcode/).
-
-Install [Homebrew](http://brew.sh/): `ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`.
-
-Install neccessary packages: `brew install git cmake gtk+3 cairo pkg-config`
-
-Execute following command after installation:
-
-```
-$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
-$ cd YaGE
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
-```
-
-Library will be built in `build/lib` directory called `libyage.a`, copy it to `/usr/local/lib` to use it. After that, copy everything in `include` directory to `/usr/local/include` directory to use headers.
-
-#### Use MacPorts
-
-Install [Xcode](https://developer.apple.com/xcode/).
-
-Install [MacPorts](https://www.macports.org/install.php).
-
-Install neccessary packages: `sudo port install git cmake gtk3 cairo pkgconfig`
-
-Execute following command after installation:
-
-```
-$ git clone https://github.com/yet-another-graphics-engine/YaGE.git
-$ cd YaGE
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
-```
-
-Library will be built in `build/lib` directory called `libyage.a`, copy it to `/usr/local/lib` to use it. After that, copy everything in `include` directory to `/usr/local/include` directory to use headers.
