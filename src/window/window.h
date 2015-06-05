@@ -185,7 +185,7 @@ public:
    * @param height The new height for the window.If the value is -1,
    * the height will be the "main desktop" work area's height(maybe it equals to the entire screen height).
    * @attention The window's size won't be changed really if both the new width and the new height
-   * are smaller than the min width and the min height of the window or both of them
+   * are smaller than the min width and the min height of the window, or both of them
    * are equal to the current width and the current height of the window.
    * The window will push a resizing Message to the massage queue
    * when its size is changed really,and you should handle the resizing event.

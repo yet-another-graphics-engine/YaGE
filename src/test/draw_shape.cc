@@ -5,9 +5,8 @@ using namespace yage::draw;
 
 void test_draw_shape(void)
 {
-  Window w(1024,576);
+  Window w(-1,-1);
   w.show();
-  w.set_size(-1,-1);
   int width,height;
   w.get_size(width,height);
   g_print("window_width=%d,window_height=%d\n",width,height);

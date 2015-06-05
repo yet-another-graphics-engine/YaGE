@@ -8,38 +8,34 @@ namespace util {
 
 bool is_string_utf_8(const char *str,int str_length)
 {
-  int i;
-  int nBytes = 0;
-  unsigned char c;
+  char c;
+  int i,j,byte_num;
   for(i = 0; i < str_length; i++)
   {
-    c = *(str + i);
-    if(nBytes == 0)
-    {
-      if((c & 0x80) == 0)               //ASCII 0XXX XXXX
-        continue;
-      if(c > 0xFD)
-        return false;
-      if(c >= 0xFC && c <= 0xFD)        //1111 110X
-        nBytes = 6;
-      else if(c >= 0xF8)                //1111 10XX
-        nBytes = 5;
-      else if(c >= 0xF0)                //1111 0XXX
-        nBytes = 4;
-      else if(c >= 0xE0)                //1110 XXXX
-        nBytes = 3;
-      else if(c >= 0xC0)                //110X XXXX
-        nBytes = 2;
-      else
-        return false;
-      nBytes--;
-    }
+    c = str[i];
+    if((c & 0x80) == 0)                        //ASCII 0XXX XXXX & 1000 0000(0x80)
+      continue;
+    else if((c & 0xFE) == 0xFC)                //1111 110X & 1111 1110(0xFE)
+      byte_num = 6;
+    else if((c & 0xFC) == 0xF8)                //1111 10XX & 1111 1100(0xFC)
+      byte_num = 5;
+    else if((c & 0xF8) == 0xF0)                //1111 0XXX & 1111 1000(0xF8)
+      byte_num = 4;
+    else if((c & 0xF0) == 0xE0)                //1110 XXXX & 1111 0000(0xF0)
+      byte_num = 3;
+    else if((c & 0xE0) == 0xC0)                //110X XXXX & 1110 0000(0xE0)
+      byte_num = 2;
     else
+      return false;
+    byte_num--;
+    for(j = i + 1; j <= i + byte_num; j++)
     {
-      if((c & 0xC0) != 0x80)            //10XX XXXX & 1100 0000 (0xC0)
+      if(j >= str_length)
         return false;
-      nBytes--;
+      if((str[j] & 0xC0) != 0x80)              //10XX XXXX & 1100 0000(0xC0)
+        return false;
     }
+    i = j - 1;
   }
   return true;
 }

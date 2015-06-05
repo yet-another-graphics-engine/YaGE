@@ -2,6 +2,11 @@
 #include "../draw/canvas.h"
 #include "window.h"
 #include "../util/encoding.h"
+#ifdef _WIN32
+#include <windef.h>
+#include <wingdi.h>
+#include <winuser.h>
+#endif // _WIN32
 
 using namespace yage::util;
 
@@ -26,7 +31,6 @@ int Window::init(int (*new_main)()) {
   #ifdef __WIN32
   GtkSettings* settings = gtk_settings_get_default();
   gtk_settings_set_string_property(settings, "gtk-font-name", "Microsoft YaHei 10", "Sans 10");
-  gtk_settings_set_string_property(settings, "gtk-icon-theme-name", "Tango", "Adwaita");
   #endif // _WIN32
 
   int ret = 0;
@@ -45,6 +49,25 @@ GAsyncQueue *Window::msg_queue_ = nullptr;
 
 size_t Window::window_num_ = 0;
 
+void set_max_size(int &width, int &height)
+{
+  #ifdef _WIN32
+  if(width == -1)
+    width = GetSystemMetrics(SM_CXFULLSCREEN);
+  if(height == -1)
+    height = GetSystemMetrics(SM_CYFULLSCREEN);
+  #else
+  GdkScreen* screen = gdk_screen_get_default();
+  int mirror = gdk_screen_get_primary_monitor(screen);
+  GdkRectangle area;
+  gdk_screen_get_monitor_workarea(screen,mirror,&area);
+  if(width == -1)
+    width = area.width;
+  if(height == -1)
+    height = area.height;
+  #endif // _WIN32
+}
+
 /*
  * Functions do real GUI work.
  * These function are all executed in GUI thread.
@@ -60,16 +83,7 @@ void Window::exec_create(Window *this_, int &width, int &height) {
   gtk_window_set_resizable(gtk_window_, false);
 
   if(width == -1 || height == -1)
-  {
-    GdkScreen* screen = gdk_screen_get_default();
-    int mirror = gdk_screen_get_primary_monitor(screen);
-    GdkRectangle area;
-    gdk_screen_get_monitor_workarea(screen,mirror,&area);
-    if(width == -1)
-      width = area.width;
-    if(height == -1)
-      height = area.height;
-  }
+    set_max_size(width, height);
   else
   {
     if (width <= 0)
@@ -154,16 +168,7 @@ void Window::exec_get_resizable(Window *this_, bool &resizable) {
 
 void Window::exec_set_size(Window *this_, int &width, int &height) {
   if(width == -1 || height == -1)
-  {
-    GdkScreen* screen = gdk_screen_get_default();
-    int mirror = gdk_screen_get_primary_monitor(screen);
-    GdkRectangle area;
-    gdk_screen_get_monitor_workarea(screen,mirror,&area);
-    if(width == -1)
-      width = area.width;
-    if(height == -1)
-      height = area.height;
-  }
+    set_max_size(width, height);
   gtk_window_resize(this_->gtk_window_, width, height);
 
   if (gtk_window_get_resizable(this_->gtk_window_)) {
