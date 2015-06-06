@@ -91,6 +91,8 @@ void Window::exec_create(Window *this_, int &width, int &height) {
     if (height <= 0)
       height = 100;
   }
+  this_->window_width_ = this_->window_min_width_ = width;
+  this_->window_height_ = this_->window_min_height_ = height;
   // Setup signals for main window
   gtk_widget_add_events(GTK_WIDGET(gtk_window_),
                         GDK_FOCUS_CHANGE | GDK_KEY_PRESS | GDK_KEY_RELEASE);
@@ -156,7 +158,23 @@ void Window::exec_set_title(Window *this_, char *title) {
 }
 
 void Window::exec_set_resizable(Window *this_, bool &resizable) {
-  gtk_window_set_resizable(this_->gtk_window_, resizable);
+  GdkGeometry geo;
+  if(gtk_window_get_resizable(this_->gtk_window_) == FALSE && resizable)
+  {
+    gtk_window_set_resizable(this_->gtk_window_, resizable);
+    geo.min_width = this_->window_min_width_;
+    geo.min_height = this_->window_min_height_;
+    gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
+                                  GDK_HINT_MIN_SIZE);
+  }
+  else if(gtk_window_get_resizable(this_->gtk_window_) && resizable == false)
+  {
+    geo.min_width = this_->window_width_;
+    geo.min_height = this_->window_height_;
+    gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
+                                  GDK_HINT_MIN_SIZE);
+    gtk_window_set_resizable(this_->gtk_window_, resizable);
+  }
 }
 
 void Window::exec_get_resizable(Window *this_, bool &resizable) {
@@ -169,8 +187,8 @@ void Window::exec_get_resizable(Window *this_, bool &resizable) {
 void Window::exec_set_size(Window *this_, int &width, int &height) {
   if(width == -1 || height == -1)
     set_max_size(width, height);
-  gtk_window_resize(this_->gtk_window_, width, height);
-
+  this_->window_width_ = width;
+  this_->window_height_ = height;
   if (gtk_window_get_resizable(this_->gtk_window_)) {
     gtk_window_resize(this_->gtk_window_, width, height);
   } else {
@@ -226,7 +244,8 @@ void Window::set_size(int width, int height) {
 }
 
 void Window::get_size(int &width, int &height) {
-  runner_call(exec_get_size, this, &width, &height);
+  width = this->window_width_;
+  height = this->window_height_;
 }
 
 GtkWindow *Window::pro_get_gtk_window() {

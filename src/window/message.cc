@@ -133,6 +133,8 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
   msg.type = msg.type_window;
   msg.window.type = msg.window.type_resize;
   msg_push_queue(msg);
+  //g_print("on_draw_resize\n");
+  gtk_window_get_size(source->gtk_window_, &source->window_width_, &source->window_height_);
   return true;
 }
 

@@ -33,6 +33,11 @@ private:
   static GAsyncQueue *msg_queue_;
   static size_t window_num_;
 
+  int window_width_;
+  int window_height_;
+  int window_min_width_;
+  int window_min_height_;
+
   GtkWidget *gtk_draw_;
   GtkWindow *gtk_window_;
   cairo_surface_t *cairo_surface_;
