@@ -49,7 +49,7 @@ GAsyncQueue *Window::msg_queue_ = nullptr;
 
 size_t Window::window_num_ = 0;
 
-void set_max_size(int &width, int &height)
+void Window::set_max_size(Window* this_, int &width, int &height)
 {
   #ifdef _WIN32
   if(width == -1)
@@ -57,14 +57,23 @@ void set_max_size(int &width, int &height)
   if(height == -1)
     height = GetSystemMetrics(SM_CYFULLSCREEN);
   #else
-  GdkScreen* screen = gdk_screen_get_default();
+  /*int title_bar_height = 0;
+  if(this_->init_flag_)
+  {
+    GdkWindow* X_window = gtk_widget_get_window(this_->gtk_draw_);
+    GdkRectangle rect;
+    gdk_window_get_frame_extents(X_window, &rect);
+    title_bar_height = rect.height - gdk_window_get_height(X_window);
+    g_print("titlebar_height=%d\n",title_bar_height);
+  }*/
+  GdkScreen* screen = gtk_window_get_screen(this_->gtk_window_);
   int mirror = gdk_screen_get_primary_monitor(screen);
   GdkRectangle area;
   gdk_screen_get_monitor_workarea(screen,mirror,&area);
   if(width == -1)
     width = area.width;
   if(height == -1)
-    height = area.height;
+    height = area.height - this_->title_bar_height_;
   #endif // _WIN32
 }
 
@@ -81,9 +90,11 @@ void Window::exec_create(Window *this_, int &width, int &height) {
   gtk_window_ = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
   gtk_window_set_position(gtk_window_, GTK_WIN_POS_CENTER);
   gtk_window_set_resizable(gtk_window_, false);
+  this_->init_flag_ = false;
+  this_->title_bar_height_ = 0;
 
   if(width == -1 || height == -1)
-    set_max_size(width, height);
+    set_max_size(this_, width, height);
   else
   {
     if (width <= 0)
@@ -111,7 +122,8 @@ void Window::exec_create(Window *this_, int &width, int &height) {
   GtkWidget *&gtk_draw_ = this_->gtk_draw_;
   gtk_draw_ = gtk_drawing_area_new();
 
-  gtk_widget_set_size_request(gtk_draw_, width, height);
+  //gtk_widget_set_size_request(gtk_draw_, width, height);
+  gtk_widget_set_size_request(GTK_WIDGET(gtk_window_), width, height);
 
   gtk_widget_add_events(gtk_draw_, GDK_BUTTON_PRESS_MASK |
                                    GDK_BUTTON_RELEASE_MASK |
@@ -186,9 +198,16 @@ void Window::exec_get_resizable(Window *this_, bool &resizable) {
 
 void Window::exec_set_size(Window *this_, int &width, int &height) {
   if(width == -1 || height == -1)
-    set_max_size(width, height);
+    set_max_size(this_, width, height);
+
+  if(width < this_->window_min_width_ && height < this_->window_min_height_)
+    return;
+  if(width == this_->window_width_ && height == this_->window_height_)
+    return;
+
   this_->window_width_ = width;
   this_->window_height_ = height;
+  this_->size_change_flag_ = false;
   if (gtk_window_get_resizable(this_->gtk_window_)) {
     gtk_window_resize(this_->gtk_window_, width, height);
   } else {
@@ -214,6 +233,8 @@ Window::Window(int width, int height) {
 
 void Window::show() {
   runner_call(exec_show, this);
+  while(init_flag_ == false)
+    g_usleep(1e2);
 }
 
 void Window::hide() {
@@ -240,7 +261,9 @@ bool Window::is_resizable() {
 }
 
 void Window::set_size(int width, int height) {
+  size_change_flag_ = true;
   runner_call(exec_set_size, this, &width, &height);
+  while(size_change_flag_ == false);
 }
 
 void Window::get_size(int &width, int &height) {

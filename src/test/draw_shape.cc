@@ -6,11 +6,10 @@ using namespace yage::draw;
 void test_draw_shape(void)
 {
   Window w(640,480);
+  //w.set_resizable(true);
   w.show();
   int width,height;
-  //w.set_resizable(true);
-  w.set_size(1024,576);
-  g_usleep(1e6);
+  w.set_size(-1,-1);
   w.get_size(width,height);
   g_print("window_width=%d,window_height=%d\n",width,height);
   w.set_resizable(true);

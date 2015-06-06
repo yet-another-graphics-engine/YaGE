@@ -37,11 +37,15 @@ private:
   int window_height_;
   int window_min_width_;
   int window_min_height_;
+  int title_bar_height_;
+  bool init_flag_;
+  bool size_change_flag_;
 
   GtkWidget *gtk_draw_;
   GtkWindow *gtk_window_;
   cairo_surface_t *cairo_surface_;
 
+  static void set_max_size(Window *this_, int &width, int &height);
   /*Not allow to copy the window object*/
   Window(const Window& window){}
   /*The following functions are working in the GUI thread*/
