@@ -121,7 +121,7 @@ bool InputDlg::show(std::string &str)
 void InputDlg::set_message(const std::string &text)
 {
   std::string utf_8_text = yage::util::convert_string(text);
-  runner_call(exec_set_message, this, const_cast<std::string*>(&text));
+  runner_call(exec_set_message, this, const_cast<std::string*>(&utf_8_text));
 }
 
 InputDlg::InputDlg(const std::string &title)

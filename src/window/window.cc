@@ -3,6 +3,9 @@
 #include "window.h"
 #include "../util/encoding.h"
 #ifdef _WIN32
+#ifdef _MSC_VER
+#define _X86_
+#endif
 #include <windef.h>
 #include <wingdi.h>
 #include <winuser.h>
@@ -28,7 +31,7 @@ int Window::init(int (*new_main)()) {
   msg_queue_ = g_async_queue_new();
   gtk_init(nullptr, nullptr);
 
-  #ifdef __WIN32
+  #ifdef _WIN32
   GtkSettings* settings = gtk_settings_get_default();
   gtk_settings_set_string_property(settings, "gtk-font-name", "Microsoft YaHei 10", "Sans 10");
   #endif // _WIN32
