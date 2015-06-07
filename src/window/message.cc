@@ -57,8 +57,6 @@ gboolean Window::msg_window_on_focus(GtkWidget *widget, GdkEvent *event, Window 
     GdkWindow* window = gtk_widget_get_window(widget);
     GdkRectangle area;
     gdk_window_get_frame_extents(window, &area);
-    g_print("current_window_full_width = %d,current_window_full_height = %d\n", area.width,area.height);
-    g_print("current_window_width = %d,current_window_height = %d\n", gdk_window_get_width(window),gdk_window_get_height(window));
     source->title_bar_height_ = area.height - gdk_window_get_height(window);
   }
   return false;
