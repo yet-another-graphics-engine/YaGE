@@ -28,7 +28,7 @@ namespace {
     draw::Circle circle;
     circle.center = draw::Point(x, y);
     circle.radius = r;
-    g_canvas->draw_circle(circle);
+    g_canvas->draw_circle(circle, *g_paint);
     g_window->update();
   }
 
@@ -38,7 +38,7 @@ namespace {
     ellipse.center = draw::Point(x, y);
     ellipse.xradius = radius_x;
     ellipse.yradius = radius_y;
-    g_canvas->draw_ellipse(ellipse);
+    g_canvas->draw_ellipse(ellipse, *g_paint);
     g_window->update();
   }
 
@@ -46,7 +46,7 @@ namespace {
     draw::Rect rect;
     rect.first = draw::Point(x1, y1);
     rect.second = draw::Point(x2, y2);
-    g_canvas->draw_rect(rect);
+    g_canvas->draw_rect(rect, *g_paint);
     g_window->update();
   }
 
@@ -58,7 +58,7 @@ namespace {
     sector.xradius = sector.yradius = r;
     sector.startangle = angle_begin;
     sector.endangle = angle_end;
-    g_canvas->draw_elliptical_sector(sector);
+    g_canvas->draw_elliptical_sector(sector, *g_paint);
     g_window->update();
   }
 }
@@ -79,6 +79,7 @@ void yage_init(int width, int height) {
   g_paint->background_color = Color(1, 1, 1, 1);
 
   g_window->set_canvas(*g_canvas);
+  g_window->show();
 }
 
 void yage_quit(void) {
@@ -197,7 +198,7 @@ void yage_arc_border(double x, double y, double r,
 void yage_line_border(double x1, double y1, double x2, double y2) {
   prepare_color(true, true);
   draw::Line line(draw::Point(x1, y1), draw::Point(x2, y2));
-  g_canvas->draw_line(line);
+  g_canvas->draw_line(line, *g_paint);
   g_window->update();
 }
 
