@@ -21,6 +21,7 @@ void yage_draw_pixel(double x, double y);
 
 void yage_set_font(const char *family, int size, int bold, int italic);
 void yage_set_fill_color(struct yage_color_t fill_color);
+void yage_set_font_color(struct yage_color_t font_color);
 void yage_set_border_color(struct yage_color_t border_color);
 void yage_set_border_thickness(double thickness);
 
@@ -45,13 +46,29 @@ void yage_line_border(double x1, double y1, double x2, double y2);
 
 void yage_printf(double x, double y, const char *format, ...);
 
+
+enum yage_message_type {
+  YageNop = 0,
+  YageKbd,
+  YageMouse,
+  YageWindow
+};
+
+enum yage_message_mouse_type {
+  YageMousePress = 1,
+  YageMouseRelease,
+  YageMouseMove
+};
+
+enum yage_message_window_type {
+  YageWindowEnter = 1,
+  YageWindowLeave,
+  YageWindowDestroy,
+  YageWindowResize
+};
+
 struct yage_message_t {
-  enum {
-    type_nop = 0,
-    type_kbd,
-    type_mouse,
-    type_window
-  } type;
+  enum yage_message_type type;
 
   void *source;
 
@@ -69,12 +86,8 @@ struct yage_message_t {
 
     struct {
       double x, y;
+      enum yage_message_mouse_type type;
 
-      enum {
-        type_press = 1,
-        type_release,
-        type_move
-      } type;
       bool is_left      : 1;
       bool is_right     : 1;
       bool is_middle    : 1;
@@ -85,12 +98,7 @@ struct yage_message_t {
     } mouse;
 
     struct {
-      enum {
-        type_enter = 1,
-        type_leave,
-        type_destroy,
-        type_resize
-      } type;
+      enum yage_message_window_type type;
     } window;
   };
 };
@@ -105,33 +113,33 @@ char *yage_dlg_file_open(const char *title);
 void yage_dlg_message(const char *title, const char *message);
 
 enum yage_dlg_button_t {
-  button_type_none = 0,
-  button_type_ok,
-  button_type_close,
-  button_type_cancel,
-  button_type_yes_no,
-  button_type_ok_cancel
+  kYageDlgButtonNone = 0,
+  kYageDlgButtonOk,
+  kYageDlgButtonClose,
+  kYageDlgButtonCancel,
+  kYageDlgButtonYesNo,
+  kYageDlgButtonOkCancel
 };
 
 enum yage_dlg_icon_t {
-  icon_type_none = 0,
-  icon_type_info,
-  icon_type_warning,
-  icon_type_question,
-  icon_type_error,
+  kYageDlgIconNone = 0,
+  kYageDlgIconInfo,
+  kYageDlgIconWarning,
+  kYageDlgIconQuestion,
+  kYageDlgIconError,
 };
 
 enum yage_dlg_result_t {
-    result_type_none = 0,
-    result_type_reject,
-    result_type_accept,
-    result_type_ok,
-    result_type_cancel,
-    result_type_close,
-    result_type_yes,
-    result_type_no,
-    result_type_apply,
-    result_type_help,
+  kYageDlgResultNone = 0,
+  kYageDlgResultReject,
+  kYageDlgResultAccept,
+  kYageDlgResultOk,
+  kYageDlgResultCancel,
+  kYageDlgResultClose,
+  kYageDlgResultYes,
+  kYageDlgResultNo,
+  kYageDlgResultApply,
+  kYageDlgResultHelp,
 };
 
 yage_dlg_result_t yage_dlg_question(const char *title,

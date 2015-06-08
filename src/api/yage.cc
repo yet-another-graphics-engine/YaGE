@@ -101,6 +101,13 @@ void yage_set_font(const char *family, int size, int bold, int italic) {
   if (italic >= 0)  g_paint->font.set_italic_status(italic ? true : false);
 }
 
+void yage_set_font_color(struct yage_color_t font_color) {
+  g_paint->font_color.r = font_color.r;
+  g_paint->font_color.g = font_color.g;
+  g_paint->font_color.b = font_color.b;
+  g_paint->font_color.a = font_color.a;
+}
+
 void yage_set_fill_color(struct yage_color_t fill_color) {
   g_fill_color.r = fill_color.r;
   g_fill_color.g = fill_color.g;
