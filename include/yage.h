@@ -22,6 +22,7 @@ void yage_draw_pixel(double x, double y, yage_color_t color);
 void yage_set_font(const char *family, int size, int bold, int italic);
 void yage_set_fill_color(struct yage_color_t fill_color);
 void yage_set_font_color(struct yage_color_t font_color);
+void yage_set_background_color(struct yage_color_t background_color);
 void yage_set_border_color(struct yage_color_t border_color);
 void yage_set_border_thickness(double thickness);
 
