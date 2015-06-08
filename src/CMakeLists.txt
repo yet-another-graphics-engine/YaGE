@@ -115,6 +115,7 @@ test/window_count.cc
 test/window_fix_size.cc
 test/window_msg.cc
 test/window_resize.cc
+test/api_yage.cc
 )
 
 target_link_libraries(yagetest yage)
