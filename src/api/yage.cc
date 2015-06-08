@@ -90,8 +90,13 @@ void yage_clear(void) {
   g_canvas->clear_all();
 }
 
-void yage_draw_pixel(double x, double y) {
-  // FIXME
+void yage_draw_pixel(double x, double y, yage_color_t color) {
+  g_paint->fill_color.r = color.r;
+  g_paint->fill_color.g = color.g;
+  g_paint->fill_color.b = color.b;
+  g_paint->fill_color.a = color.a;
+  draw_rectangle(x - 0.5, y - 0.5,
+                 x + 0.5, y + 0.5);
 }
 
 void yage_set_font(const char *family, int size, int bold, int italic) {

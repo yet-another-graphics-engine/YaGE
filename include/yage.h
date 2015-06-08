@@ -17,7 +17,7 @@ void yage_init(int width, int height);
 void yage_quit(void);
 void yage_clear(void);
 
-void yage_draw_pixel(double x, double y);
+void yage_draw_pixel(double x, double y, yage_color_t color);
 
 void yage_set_font(const char *family, int size, int bold, int italic);
 void yage_set_fill_color(struct yage_color_t fill_color);
