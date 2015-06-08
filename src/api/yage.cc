@@ -96,6 +96,7 @@ void yage_quit(void) {
 
 void yage_clear(void) {
   g_canvas->clear_all();
+  g_window->update();
 }
 
 void yage_draw_pixel(double x, double y, yage_color_t color) {
