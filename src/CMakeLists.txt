@@ -55,6 +55,7 @@ set(LIB_SOURCE_FILES
     draw/text.cc
     draw/paint.cc
     api/bgi.cc
+    api/yage.cc
     )
 
 if(WIN32)
