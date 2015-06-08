@@ -216,9 +216,9 @@ void yage_printf(double x, double y, const char *format, ...) {
   g_window->update();
 }
 
-void yage_get_message(struct yage_message_t *msg, int wait_ms) {
+int yage_get_message(struct yage_message_t *msg, int wait_ms) {
   // FIXME: add wait_ms support
-  window::Window::poll(*reinterpret_cast<window::Message *>(msg));
+  return window::Window::poll(*reinterpret_cast<window::Message *>(msg));
 }
 
 int  yage_get_key(void) {
@@ -231,11 +231,13 @@ int  yage_get_key(void) {
 }
 
 int  yage_dlg_font(const char *title) {
+  if (!title) title = "Choose Font";
   dialog::FontChooserDlg font_dlg(title, *g_window);
   return font_dlg.show(g_paint->font);
 }
 
 int  yage_dlg_color(const char *title, struct yage_color_t *color) {
+  if (!title) title = "Choose Color";
   dialog::ColorChooserDlg font_dlg(title, *g_window);
   draw::Color internal_coler;
 
@@ -248,6 +250,7 @@ int  yage_dlg_color(const char *title, struct yage_color_t *color) {
 }
 
 char *yage_dlg_file_save(const char *title) {
+  if (!title) title = "Save File";
   dialog::FileChooserDlg fc_dlg(dialog::FileChooserDlg::action_type_save,
                                 title, *g_window);
   std::string path;
@@ -256,6 +259,7 @@ char *yage_dlg_file_save(const char *title) {
 }
 
 char *yage_dlg_file_open(const char *title) {
+  if (!title) title = "Open File";
   dialog::FileChooserDlg fc_dlg(dialog::FileChooserDlg::action_type_open,
                                 title,
                                 *g_window);
@@ -269,8 +273,8 @@ void yage_dlg_message(const char *title, const char *message) {
   MessageDlg msg_dlg(MessageDlg::button_type_ok,
                      MessageDlg::icon_type_none,
                      *g_window);
-  msg_dlg.set_title(title);
-  msg_dlg.set_message(message);
+  if (title) msg_dlg.set_title(title);
+  if (message) msg_dlg.set_message(message);
   msg_dlg.show();
 }
 
@@ -282,15 +286,16 @@ yage_dlg_result_t yage_dlg_question(const char *title,
   MessageDlg msg_dlg(static_cast<dialog::MessageDlg::button_type>(button),
                      static_cast<dialog::MessageDlg::icon_type>(icon),
                      *g_window);
-  msg_dlg.set_title(title);
-  msg_dlg.set_message(message);
+  if (title) msg_dlg.set_title(title);
+  if (message) msg_dlg.set_message(message);
 
   return static_cast<yage_dlg_result_t>(msg_dlg.show());
 }
 
 int yage_input_int(const char *title, const char *message) {
+  if (!title) title = "Input An Integer";
   dialog::InputDlg dlg(title, *g_window);
-  dlg.set_message(message);
+  if (message) dlg.set_message(message);
 
   std::string str;
   dlg.show(str);
@@ -302,8 +307,9 @@ int yage_input_int(const char *title, const char *message) {
 }
 
 double yage_input_double(const char *title, const char *message) {
+  if (!title) title = "Input A Float Number";
   dialog::InputDlg dlg(title, *g_window);
-  dlg.set_message(message);
+  if (message) dlg.set_message(message);
 
   std::string str;
   dlg.show(str);
@@ -315,8 +321,9 @@ double yage_input_double(const char *title, const char *message) {
 }
 
 char *yage_input_line(const char *title, const char *message) {
+  if (!title) title = "Input Some Text";
   dialog::InputDlg dlg(title, *g_window);
-  dlg.set_message(message);
+  if (message) dlg.set_message(message);
 
   std::string str;
   dlg.show(str);
@@ -325,8 +332,9 @@ char *yage_input_line(const char *title, const char *message) {
 
 int yage_input_scanf(const char *title, const char *message,
                      const char *format, ...) {
+  if (!title) title = "Input Some Text";
   dialog::InputDlg dlg(title, *g_window);
-  dlg.set_message(message);
+  if (message) dlg.set_message(message);
 
   std::string str;
   dlg.show(str);

@@ -95,7 +95,7 @@ struct yage_message_t {
   };
 };
 
-void yage_get_message(struct yage_message_t *msg, int wait_ms);
+int yage_get_message(struct yage_message_t *msg, int wait_ms);
 int  yage_get_key(void);
 
 int  yage_dlg_font(const char *title);
