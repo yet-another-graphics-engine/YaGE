@@ -8,7 +8,7 @@ mark_as_advanced(VERSION_MAJOR VERSION_MINOR VERSION_PATCH)
 
 add_subdirectory(src)
 
-set(doxy_langs English Chinese)
+set(doxy_langs english chinese)
 
 find_package(Doxygen)
 option(BUILD_DOCUMENTATION "Create documentation (requires Doxygen)" ${DOXYGEN_FOUND})
@@ -21,7 +21,7 @@ if(BUILD_DOCUMENTATION)
 	file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc)
 
 	# dev
-	set(doxy_lang English)
+	set(doxy_lang english)
 	set(doxy_src ${PROJECT_SOURCE_DIR}/src/)
     set(doxy_file_out ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.dev)
     set(doxy_out_dir ${CMAKE_CURRENT_BINARY_DIR}/doc/dev/)
