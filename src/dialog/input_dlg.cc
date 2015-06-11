@@ -73,14 +73,12 @@ void InputDlg::exec_create(InputDlg *this_,
   g_signal_connect(this_->gtk_entry_, "icon-press",G_CALLBACK(msg_entry_on_icon_press),nullptr);
 
   GtkButton* button_ok = GTK_BUTTON(gtk_button_new_with_label("OK"));
-  gtk_button_set_always_show_image(button_ok, TRUE);
   gtk_button_set_image(button_ok, gtk_image_new_from_icon_name("gtk-ok", GTK_ICON_SIZE_SMALL_TOOLBAR));
   gtk_widget_set_size_request(GTK_WIDGET(button_ok),100,1);
   g_signal_connect(GTK_WIDGET(button_ok), "clicked",
                    G_CALLBACK(msg_button_ok_on_click), this_);
 
   GtkButton* button_cancel = GTK_BUTTON(gtk_button_new_with_label("Cancel"));
-  gtk_button_set_always_show_image(button_cancel, TRUE);
   gtk_button_set_image(button_cancel, gtk_image_new_from_icon_name("gtk-cancel", GTK_ICON_SIZE_SMALL_TOOLBAR));
   gtk_widget_set_size_request(GTK_WIDGET(button_cancel),100,1);
   g_signal_connect(GTK_WIDGET(button_cancel), "clicked",

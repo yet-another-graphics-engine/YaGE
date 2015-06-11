@@ -22,7 +22,6 @@ private:
   GtkDialog *gtk_dialog_;
   GtkEntry *gtk_entry_;
   GtkLabel *gtk_label_;
-  GtkTextBuffer *gtk_text_buffer_;
 
   static void exec_show(InputDlg *this_, std::string &yage_str, bool &ret);
   static void exec_set_message(InputDlg *this_, const std::string &text);
