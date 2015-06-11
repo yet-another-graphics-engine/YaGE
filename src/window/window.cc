@@ -148,7 +148,6 @@ void Window::exec_create(Window *this_, int &width, int &height) {
 
   // Add window counter
   ++Window::window_num_;
-  fprintf(stderr, "New window=%p widget=%p\n", this_, gtk_draw_);
 }
 
 void Window::exec_show(Window *this_) {

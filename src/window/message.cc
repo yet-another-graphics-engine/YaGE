@@ -153,7 +153,6 @@ gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *sou
 {
   cairo_surface_t* surface = source->cairo_surface_;
   size_t ref = cairo_surface_get_reference_count(surface);
-  fprintf(stderr, "surface_ref = %u\n", ref);
   if (surface) {
     cairo_set_source_surface(cairo, surface, 0, 0);
     cairo_paint(cairo);
