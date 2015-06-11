@@ -8,6 +8,10 @@
 #include "../dialog/message_dlg.h"
 #include "../dialog/input_dlg.h"
 
+#ifdef _MSC_VER
+#define strdup(x) _strdup(x)
+#endif
+
 using namespace yage;
 namespace {
   const draw::Color kTransparentColor(0, 0, 0, 0);
@@ -220,7 +224,11 @@ void yage_printf(double x, double y, const char *format, ...) {
 
   va_list args;
   va_start(args, format);
+#ifdef _MSC_VER
+  vsnprintf_s(buf, _count_of(buf), sizeof(buf), format, args);
+#else
   vsnprintf(buf, sizeof(buf), format, args);
+#endif
   va_end(args);
 
   yage::draw::Text text(buf);

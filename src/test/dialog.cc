@@ -6,6 +6,10 @@
 #include "../dialog/input_dlg.h"
 using namespace yage::dialog;
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4566)
+#endif
+
 void test_dialog_msg(Window &w)
 {
   MessageDlg msg_dlg(MessageDlg::button_type_yes_no, MessageDlg::icon_type_question, w);

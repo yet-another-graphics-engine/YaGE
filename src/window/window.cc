@@ -196,7 +196,7 @@ void Window::exec_set_resizable(Window *this_, bool &resizable) {
 
 void Window::exec_get_resizable(Window *this_, bool &resizable) {
   if(this_->gtk_window_)
-    resizable = gtk_window_get_resizable(this_->gtk_window_);
+    resizable = gtk_window_get_resizable(this_->gtk_window_) ? true : false;
   else
     resizable = false;
 }
@@ -238,8 +238,8 @@ Window::Window(int width, int height) {
 
 void Window::show() {
   runner_call(exec_show, this);
-  while(init_flag_ == false)
-    g_usleep(1e2);
+  while(!init_flag_)
+    g_usleep(100);
 }
 
 void Window::hide() {

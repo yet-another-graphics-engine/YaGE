@@ -18,5 +18,5 @@ void test_draw_pic()
   window.set_canvas(canvas);
   window.show();
   while(window.is_valid())
-    g_usleep(1e6);
+    g_usleep(1000000);
 }
