@@ -152,7 +152,6 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
 gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source)
 {
   cairo_surface_t* surface = source->cairo_surface_;
-  size_t ref = cairo_surface_get_reference_count(surface);
   if (surface) {
     cairo_set_source_surface(cairo, surface, 0, 0);
     cairo_paint(cairo);
