@@ -199,12 +199,12 @@ void yage_arc_border(double x, double y, double r,
                      double angle_begin, double angle_end) {
   prepare_color(true, true);
 
-  draw::EllipticSector arc;
+  draw::EllipticArc arc;
   arc.center = draw::Point(x, y);
   arc.xradius = arc.yradius = r;
   arc.startangle = angle_begin;
   arc.endangle = angle_end;
-  g_canvas->draw_elliptical_sector(arc, *g_paint);
+  g_canvas->draw_elliptical_arc(arc, *g_paint);
   g_window->update();
 }
 
