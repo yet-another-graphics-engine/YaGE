@@ -63,7 +63,6 @@ void InputDlg::exec_create(InputDlg *this_,
 
   this_->gtk_label_ = GTK_LABEL(gtk_label_new(nullptr));
   gtk_label_set_line_wrap(this_->gtk_label_, TRUE);
-  gtk_misc_set_alignment(GTK_MISC(this_->gtk_label_), 0, 0);
 
   this_->gtk_entry_ = GTK_ENTRY(gtk_entry_new());
   gtk_entry_set_icon_activatable(this_->gtk_entry_, GTK_ENTRY_ICON_SECONDARY, TRUE);
