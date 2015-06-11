@@ -225,7 +225,7 @@ void yage_printf(double x, double y, const char *format, ...) {
   va_list args;
   va_start(args, format);
 #ifdef _MSC_VER
-  vsnprintf_s(buf, _count_of(buf), sizeof(buf), format, args);
+  vsnprintf_s(buf, _countof(buf), sizeof(buf), format, args);
 #else
   vsnprintf(buf, sizeof(buf), format, args);
 #endif
