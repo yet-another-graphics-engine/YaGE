@@ -8,7 +8,7 @@
 #include "../dialog/message_dlg.h"
 #include "../dialog/input_dlg.h"
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 #define strdup(x) _strdup(x)
 #endif
 
