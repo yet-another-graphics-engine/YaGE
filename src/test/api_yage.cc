@@ -3,6 +3,7 @@
 #include <cstdlib>
 
 void test_api_yage(void) {
+  const double kPi = 3.1415926;
   yage_init(640, 480);
 
   yage_circle(          60, 40, 20);
@@ -27,11 +28,11 @@ void test_api_yage(void) {
   color.r = 0, color.g = 1, color.b = 0, color.a = 1;
   yage_set_fill_color(color);
 
-  yage_sector(          360, 140, 20, 0 * M_PI / 3, 2 * M_PI / 3);
-  yage_sector_fill(     460, 140, 20, 2 * M_PI / 3, 4 * M_PI / 3);
-  yage_sector_border(   560, 140, 20, 4 * M_PI / 3, 6 * M_PI / 3);
+  yage_sector(          360, 140, 20, 0 * kPi / 3, 2 * kPi / 3);
+  yage_sector_fill(     460, 140, 20, 2 * kPi / 3, 4 * kPi / 3);
+  yage_sector_border(   560, 140, 20, 4 * kPi / 3, 6 * kPi / 3);
 
-  yage_arc_border(      60, 240, 20, M_PI, 0);
+  yage_arc_border(      60, 240, 20, kPi, 0);
   yage_line_border(     140, 220, 160, 240);
 
   yage_get_key();
