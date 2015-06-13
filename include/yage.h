@@ -7,9 +7,20 @@
 #define YAGE_H_
 #include "stdint.h"
 
+/**
+ * \~english @brief main function redirect
+ * DO NOT INCLUDE THIS HEADER TO WRITE PROGRAM THAT DO NOT LINK TO YAGE
+ *
+ * \~chinese @brief main 函数重定向
+ * 请勿在不链接到 YaGE 的程序中包含此头文件
+ */
+#define main(...) yage_main(int argc, char *argv[])
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+int yage_main(int argc, char *argv[]);
 
 /**
  * \~english @brief An object holding color information.
