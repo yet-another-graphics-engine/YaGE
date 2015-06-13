@@ -46,6 +46,4 @@ if(BUILD_DOCUMENTATION)
 			COMMENT "Generating API documentation in ${doxy_lang} with Doxygen"
 			VERBATIM)
 	endforeach()
-
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/html DESTINATION share/doc)
 endif()
