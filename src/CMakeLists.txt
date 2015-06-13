@@ -101,7 +101,7 @@ endif()
 if (NOT WIN32)
     include(GNUInstallDirs)
     install(TARGETS yage DESTINATION ${CMAKE_INSTALL_LIBDIR})
-    install(FILES "../include/graphics.h" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    install(DIRECTORY "../include/" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 endif()
 
 add_executable(yagetest
