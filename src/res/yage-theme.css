@@ -1,0 +1,441 @@
+/*
+*	A Simple GTK Theme for YaGE (Only for MS-Windows version)
+*	Author: ShengYun Zhou
+*/
+@define-color base_color #5677FC;
+@define-color window_bg_color #EEEEEE;
+@define-color button_normal_color #FFFFFF;
+@define-color button_border_color #BDBDBD;
+@define-color button_hover_color @base_color;
+@define-color button_press_color #455EDE;
+@define-color text_color #000000;
+@define-color text_selected_color #FFFFFF;
+@define-color text_selected_bg_color @base_color;
+@define-color text_insensitive_color #9E9E9E;
+@define-color entry_bg_color #FFFFFF;
+@define-color entry_border_color #BDBDBD;
+@define-color entry_border_focus_color @button_hover_color;
+@define-color treeview_item_odd_bg_color #FFFFFF;
+@define-color treeview_item_even_bg_color #F5F5F5;
+@define-color treeview_bg_color @treeview_item_odd_bg_color;
+@define-color scrollbar_color #BDBDBD;
+@define-color scrollbar_hover_color @button_hover_color;
+@define-color scrollbar_press_color @button_press_color;
+@define-color menu_border_color @button_border_color;
+@define-color menuitem_bg_color #FCFCFC;
+@define-color menuitem_border_color @base_color;
+@define-color menuitem_hover_color @menuitem_border_color;
+ 
+* {
+    -GtkToolButton-icon-spacing: 4;
+	-GtkPaned-handle-size: 7;
+	-GtkButton-child-displacement-x: 0;
+    -GtkButton-child-displacement-y: 0;
+    -GtkButton-default-border: 0;
+    -GtkButton-image-spacing: 3;
+    -GtkButton-inner-border: 1;
+    -GtkButton-interior-focus: true;
+    -GtkCheckButton-indicator-size: 16;
+    -GtkCheckMenuItem-indicator-size: 16;
+	-GtkScrolledWindow-scrollbar-spacing: 0;
+    -GtkScrolledWindow-scrollbars-within-bevel: 1;
+	-GtkTreeView-expander-size: 11;
+    -GtkTreeView-horizontal-separator: 4;
+    -GtkExpander-expander-size: 11;
+    -GtkWidget-focus-line-width: 1;
+	-GtkWidget-focus-padding: 0;
+}
+
+/*Window*/
+
+GtkWindow{
+	-GtkWindow-resize-grip-width: 0;
+    -GtkWindow-resize-grip-height: 0;
+	border:none;
+	background-color:@window_bg_color;
+}
+
+/*Normal Button*/
+
+.button {
+    -GtkWidget-focus-padding: 1;
+    -GtkWidget-focus-line-width: 0;
+    padding: 4px 6px;
+	border-radius: 3px;
+    border: 1px solid @button_border_color;
+    background-color: @button_normal_color;
+    background-image: none;
+    color: @text_color;
+}
+
+.button:focus,
+.button:hover {
+    background-color: @button_hover_color;
+	color: @text_selected_color;
+}
+
+.button:active,
+.button:active:hover {
+    background-color: @button_press_color;
+	color:@text_selected_color;
+}
+
+/*Linked Button*/
+
+.linked .entry:first-child,
+.linked .button:first-child,
+.linked .button:active:first-child,
+.linked .button:active:hover:first-child{
+	border-radius: 0px;
+	border-width: 1px 0px 1px 1px;
+	border-color: @button_border_color;
+}
+
+.linked .button,
+.linked .button:active,
+.linked .button:active:hover{
+	border-radius: 0px;
+	border-width: 1px 0px 1px 0px;
+	border-color: @button_border_color;
+}
+
+.linked .button:last-child,
+.linked .button:active:last-child,
+.linked .button:active:hover:last-child {
+	border-radius: 0px;
+	border-width: 1px 1px 1px 0px;
+	border-color: @button_border_color;
+}
+
+.linked .button:active:first-child,
+.linked .button:active:hover:first-child,
+.linked .button:active,
+.linked .button:active:hover,
+.linked .button:active:last-child,
+.linked .button:active:hover:last-child {
+	background-color: @button_hover_color;
+	color: @text_selected_color;
+}
+
+.linked .button:hover:first-child,
+.linked .button:hover,
+.linked .button:hover:last-child {
+	background-color: shade(@button_hover_color, 1.3);
+}
+
+/*Label & Image*/
+
+GtkLabel {
+	background:none;
+	color: @text_color;
+}
+
+GtkLabel:hover,
+GtkLabel:active {
+	background:none;
+	color: @text_selected_color;
+}
+
+GtkLabel:selected {
+	background: @text_selected_bg_color;
+	color: @text_selected_color;
+}
+
+GtkImage {
+	background:none;
+}
+
+/*Entry*/
+
+GtkEntry {
+	padding: 4px;
+	border-radius: 3px;
+	background-color: @entry_bg_color;
+	border: 2px solid @entry_border_color;
+	color: @text_color;
+}
+
+GtkEntry:focus,
+GtkEntry:active {
+	border: 2px solid @entry_border_focus_color;
+	box-shadow: inset 0px 0px 1px @entry_border_focus_color;
+}
+
+GtkEntry:selected,
+GtkEntry:selected:focus {
+	background-color: @text_selected_bg_color;
+	color: @text_selected_color;
+}
+
+/*Cell in List*/
+
+.cell {
+    color: @text_color;
+    border-width: 0px;
+}
+
+.cell:selected,
+.cell:selected:focus {
+    background-color: @text_selected_bg_color;
+    color: @text_selected_color;
+}
+
+/*Colunm Header*/
+
+column-header .button,
+.content-view column-header .button {
+	border-radius: 0;
+    border-width: 0px 1px 1px 1px;
+}
+
+column-header .button GtkImage,
+column-header .button GtkLabel {
+    padding-left: 3px;
+    color: @text_color;
+}
+
+column-header:first-child .button,
+column-header:first-child .button:active,
+column-header:first-child .button:hover,
+column-header:first-child .button:backdrop,
+column-header:first-child .button:backdrop:hover,
+.content-view column-header:first-child .button {
+    border-width: 0px 0px 1px 0px;
+}
+
+column-header:last-child .button,
+column-header:last-child .button:active,
+column-header:last-child .button:hover,
+column-header:last-child .button:backdrop,
+column-header:last-child .button:backdrop:hover,
+.content-view column-header:last-child .button {
+    border-width: 0px 0px 1px 0px;
+}
+
+/*View and Tree View*/
+
+.frame {
+    border: 1px solid @button_border_color;
+}
+
+GtkTreeView.view.separator,
+GtkTreeView.separator,
+.separator,
+.separator:hover {
+    color: @button_border_color;
+    background-color: @button_border_color;
+}
+
+GtkTreeView {
+    -GtkTreeView-vertical-separator: 5px;
+    -GtkTreeView-horizontal-separator: 8px;
+	background-color: @treeview_bg_color;
+}
+
+GtkTreeView row:nth-child(even) {
+    background-color: @treeview_item_even_bg_color;
+    color: @text_color;
+}
+
+GtkTreeView row:nth-child(odd) {
+    background-color: @treeview_item_odd_bg_color;
+    color: @text_color;
+}
+
+/*Inline Toolbar*/
+
+.inline-toolbar.toolbar {
+	background-image: none;
+    background-color: @treeview_bg_color;
+    border: solid @button_border_color;
+    border-width: 0 1px 1px 1px;
+    color: @text_color;
+    box-shadow: none;
+}
+
+/*Scrollbar and Its Slider*/
+
+.scrollbar {
+	border:none;
+	background-color: @window_bg_color;
+    -GtkRange-trough-border: 2;
+    -GtkScrollbar-has-backward-stepper: false;
+    -GtkScrollbar-has-forward-stepper: false;
+    -GtkRange-slider-width: 10;
+    -GtkRange-stepper-spacing: 0;
+    -GtkRange-trough-under-steppers: 1;
+}
+
+.scrollbar.slider {
+	border:none;
+	background-image: none;
+    background-color: @scrollbar_color;
+}
+
+.scrollbar.slider:hover {
+	background-image: none;
+    background-color: @scrollbar_hover_color;
+}
+
+.scrollbar.slider:active,
+.scrollbar.slider:prelight:active {
+	background-image: none;
+    background-color: @scrollbar_press_color;
+}
+
+/*Menu and Menu Item*/
+
+.menu {
+	padding: 0px;
+	background-image: none;
+    background-color: @menuitem_bg_color;
+	border:1px solid @menu_border_color;
+	border-left-width: 4px;
+	border-left-color: @base_color;
+}
+
+.menuitem,
+.menu .menuitem,
+.popup .menuitem {	
+	padding: 6px 4px;
+	background-color: @menuitem_bg_color;
+	color: @text_color;
+	
+	-GtkMenuItem-arrow-scaling: 0.6;
+    -gtk-icon-style: symbolic;
+}
+
+.menuitem:active,
+.menuitem:hover,
+.menu .menuitem:active,
+.menu .menuitem:hover,
+.popup .menuitem:active,
+.popup .menuitem:hover {
+    background-color: @menuitem_hover_color;
+    color: @text_selected_color;
+	-GtkMenuItem-arrow-scaling: 0.6;
+    -gtk-icon-style: symbolic;
+}
+
+.menuitem GtkLabel:insensitive {
+    color: @text_insensitive_color;
+}
+
+.menuitem.separator {
+    color: @button_border_color;
+}
+
+.menu .menuitem.radio,
+.menu .menuitem.check {
+	background: none;
+	color: @text_color;
+}
+
+.menu .menuitem.radio:hover,
+.menu .menuitem.check:hover {
+	background: none;
+	color: @text_selected_color;
+}
+
+/*Spin Button*/
+
+.spinbutton {
+    border-radius: 3px;
+    border: 2px solid @button_border_color;
+	background-color: @button_normal_color;
+    color: @text_color;
+}
+
+.spinbutton:hover,
+.spinbutton:focus {
+    box-shadow: none;
+}
+
+.spinbutton .button {
+    border-radius: 0px;
+    background: none;
+    border: none;
+    padding: 2px 4px;
+    color: @text_color;
+}
+
+.spinbutton .button:focus
+.spinbutton .button:hover {
+    box-shadow: none;
+    background-color: @button_hover_color;
+}
+
+.spinbutton .button:active {
+    box-shadow: none;
+    background-color: @button_press_color;
+    color: @text_selected_color;
+}
+
+.spinbutton .entry {
+    color: @text_color;
+}
+
+/*Scale*/
+
+.scale {
+    padding: 0;
+    border-width: 0;
+    border-radius: 0;
+
+    -GtkRange-slider-width: 20;
+    -GtkRange-trough-border: 1;
+    -GtkScale-slider-length: 20;
+	color: @text_color;
+}
+
+.scale.slider {
+    border-radius: 20px;
+    background-color: @scrollbar_color;
+    background-image: none;
+
+}
+
+.scale.slider:hover {
+    background-color: shade(@scrollbar_color, 0.7);
+}
+
+
+.scale.trough {
+    margin: 7px 0;
+    border-radius: 0;
+    background-color: shade(@window_bg_color, 1.4);
+    background-image: none;
+}
+
+.scale.trough.vertical {
+    margin: 0 7px;
+}
+
+.menuitem.scale.highlight.left,
+.scale.highlight.left {
+    background-color: @base_color;
+    background-image: none;
+}
+
+.scale.highlight.bottom {
+    background-color: @base_color;
+    background-image: none;
+}
+
+/*Tooltip*/
+
+.tooltip,
+.overlay-bar {
+    padding: 4px 8px;
+    border: 1px solid @button_border_color;
+	border-bottom-width: 4px;
+	border-bottom-color: @base_color;
+    background-color: #FFFFFF;
+    color: @text_color;
+}
+
+.tooltip GtkLabel,
+.overlay-bar GtkLabel {
+	border:none;
+    color: @text_color;
+}

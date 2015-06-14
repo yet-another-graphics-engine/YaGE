@@ -25,6 +25,22 @@ void test_dialog_msg(Window &w)
   msg_dlg1.show();
 }
 
+void test_dialog_error(Window &w)
+{
+  MessageDlg msg_dlg(MessageDlg::button_type_close, MessageDlg::icon_type_error, w);
+  msg_dlg.set_title("<u>title</u>");
+  msg_dlg.set_message("<i>message: press a button</i>");
+  msg_dlg.show();
+}
+
+void test_dialog_wraning(Window &w)
+{
+  MessageDlg msg_dlg(MessageDlg::button_type_ok_cancel, MessageDlg::icon_type_warning, w);
+  msg_dlg.set_title("<u>title</u>");
+  msg_dlg.set_message("<i>message: press a button</i>");
+  msg_dlg.show();
+}
+
 void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
 {
   FileChooserDlg fc_dlg(type, "浏览文件", w);
@@ -107,6 +123,14 @@ void test_dialog()
 
       case 'g':
         test_dialog_input(w);
+        break;
+
+      case 'h':
+        test_dialog_error(w);
+        break;
+
+      case 'i':
+        test_dialog_wraning(w);
         break;
     }
   }

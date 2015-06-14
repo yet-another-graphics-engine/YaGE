@@ -52,11 +52,37 @@ void FileChooserDlg::exec_create(FileChooserDlg *this_,
       break;
   }
 
-  this_->gtk_dialog_ = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(
-      title, parent, action_type,
-      "_Cancel", GTK_RESPONSE_CANCEL,
-      "_Open", GTK_RESPONSE_ACCEPT,
-      nullptr));
+  #ifdef _WIN32
+  if(action_type == GTK_FILE_CHOOSER_ACTION_SAVE) {
+    this_->gtk_dialog_ = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(
+        title, parent, action_type,
+        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+        GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+        nullptr));
+  }
+  else {
+    this_->gtk_dialog_ = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(
+        title, parent, action_type,
+        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+        GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+        nullptr));
+  }
+  #else
+  if(action_type == GTK_FILE_CHOOSER_ACTION_SAVE) {
+    this_->gtk_dialog_ = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(
+        title, parent, action_type,
+        "_Cancel", GTK_RESPONSE_CANCEL,
+        "_Save", GTK_RESPONSE_ACCEPT,
+        nullptr));
+  }
+  else {
+    this_->gtk_dialog_ = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(
+        title, parent, action_type,
+        "_Cancel", GTK_RESPONSE_CANCEL,
+        "_Open", GTK_RESPONSE_ACCEPT,
+        nullptr));
+  }
+  #endif // _WIN32
 
   gtk_file_chooser_set_do_overwrite_confirmation(this_->gtk_dialog_, TRUE);
 }

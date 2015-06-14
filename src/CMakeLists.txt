@@ -24,7 +24,7 @@ else()
 endif()
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-    add_definitions(-Wno-deprecated-register) 
+    add_definitions(-Wno-deprecated-register)
     if(WIN32)
         add_definitions(-Wno-incompatible-ms-struct)
     endif()
@@ -60,6 +60,7 @@ set(LIB_SOURCE_FILES
 
 if(WIN32)
     list(APPEND LIB_SOURCE_FILES audio/mswin.cc)
+    list(APPEND LIB_SOURCE_FILES res/yage_theme.cc)
 elseif(APPLE)
     list(APPEND LIB_SOURCE_FILES audio/osx.mm)
 elseif(UNIX)

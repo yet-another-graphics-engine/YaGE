@@ -6,6 +6,7 @@
 #ifdef _MSC_VER
 #define _X86_
 #endif
+#include "../res/yage_theme.h"
 #include <windef.h>
 #include <wingdi.h>
 #include <winuser.h>
@@ -34,16 +35,15 @@ int Window::init(int (*new_main)()) {
   #ifdef _WIN32
   GtkSettings* settings = gtk_settings_get_default();
   gtk_settings_set_string_property(settings, "gtk-font-name", "Microsoft YaHei 10", "Sans 10");
-  //gtk_settings_set_string_property(settings, "gtk-icon-theme-name", "flattr", "gnome-light");
+  //gtk_settings_set_string_property(settings, "gtk-theme-name", "Default", "gnome-light");
   gtk_settings_set_long_property(settings, "gtk-xft-antialias", 1, nullptr);
   gtk_settings_set_string_property(settings, "gtk-xft-rgba", "rgb", "none");
+  yage::res::init_yage_theme();
   #endif // _WIN32
-
   int ret = 0;
   gpointer param[] = {reinterpret_cast<gpointer>(new_main), &ret};
   g_thread_new("YaGE user", reinterpret_cast<GThreadFunc>(user_thread), param);
   gtk_main();
-
   // user_thread() will set the value of ret
   return ret;
 }
@@ -63,15 +63,6 @@ void Window::set_max_size(Window* this_, int &width, int &height)
   if(height == -1)
     height = GetSystemMetrics(SM_CYFULLSCREEN);
   #else
-  /*int title_bar_height = 0;
-  if(this_->init_flag_)
-  {
-    GdkWindow* X_window = gtk_widget_get_window(this_->gtk_draw_);
-    GdkRectangle rect;
-    gdk_window_get_frame_extents(X_window, &rect);
-    title_bar_height = rect.height - gdk_window_get_height(X_window);
-    g_print("titlebar_height=%d\n",title_bar_height);
-  }*/
   GdkScreen* screen = gtk_window_get_screen(this_->gtk_window_);
   int mirror = gdk_screen_get_primary_monitor(screen);
   GdkRectangle area;
@@ -91,7 +82,6 @@ void Window::set_max_size(Window* this_, int &width, int &height)
  */
 void Window::exec_create(Window *this_, int &width, int &height) {
   this_->cairo_surface_ = nullptr;
-
   GtkWindow *&gtk_window_ = this_->gtk_window_;
   gtk_window_ = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
   gtk_window_set_position(gtk_window_, GTK_WIN_POS_CENTER);
