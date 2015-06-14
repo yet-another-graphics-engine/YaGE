@@ -137,11 +137,12 @@ void init_yage_icon_theme()
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_SAVE_AS, icon_set[i]);
         break;
     }
-
     gtk_icon_set_unref(icon_set[i]);
     g_object_unref(icon_factory[i]);
+
   }
 }
+
 void init_yage_theme()
 {
   //GtkCssProvider* css_provider = gtk_css_provider_get_named("YaGE", nullptr);

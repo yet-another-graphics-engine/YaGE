@@ -35,7 +35,7 @@ int Window::init(int (*new_main)()) {
   #ifdef _WIN32
   GtkSettings* settings = gtk_settings_get_default();
   gtk_settings_set_string_property(settings, "gtk-font-name", "Microsoft YaHei 10", "Sans 10");
-  //gtk_settings_set_string_property(settings, "gtk-theme-name", "Default", "gnome-light");
+  //gtk_settings_set_string_property(settings, "gtk-icon-theme-name", "Paper", "hicolor");
   gtk_settings_set_long_property(settings, "gtk-xft-antialias", 1, nullptr);
   gtk_settings_set_string_property(settings, "gtk-xft-rgba", "rgb", "none");
   yage::res::init_yage_theme();

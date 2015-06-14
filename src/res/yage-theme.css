@@ -242,6 +242,10 @@ GtkTreeView row:nth-child(odd) {
     color: @text_color;
 }
 
+GtkTreeView row:insensitive {
+	color: @text_insensitive_color;
+}
+
 /*Inline Toolbar*/
 
 .inline-toolbar.toolbar {
