@@ -1,3 +1,4 @@
+#include <gio/gio.h>
 #include "yage_theme.h"
 #include "yage_theme_css.h"
 #include "icon_yage_cancel.h"
@@ -137,10 +138,14 @@ void init_yage_icon_theme()
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_SAVE_AS, icon_set[i]);
         break;
     }
+
     gtk_icon_set_unref(icon_set[i]);
     g_object_unref(icon_factory[i]);
 
   }
+
+  GIcon* edit_clear_icon = g_themed_icon_new_with_default_fallbacks("xxx");
+  g_themed_icon_append_name(G_THEMED_ICON(edit_clear_icon), "edit-clear-symbolic");
 }
 
 void init_yage_theme()

@@ -145,6 +145,11 @@ GtkImage {
 	background:none;
 }
 
+GtkImage:insensitive,
+GtkImage:backdrop {
+	color: @text_insensitive_color;
+}
+
 /*Entry*/
 
 GtkEntry {
@@ -442,4 +447,38 @@ GtkTreeView row:insensitive {
 .overlay-bar GtkLabel {
 	border:none;
     color: @text_color;
+	transition: all 150ms ease-out;
+}
+
+GtkColorSwatch,
+GtkColorSwatch:selected {
+    border-width: 4px;
+    border-style: solid;
+    border-radius: 0px;
+    border-color: @window_bg_color;
+    background-color: transparent;
+    transition: all 200ms ease-out;
+}
+
+GtkColorSwatch:hover
+{
+    border-width: 0px;
+    border-radius: 5px;
+    border-color: @window_bg_color;
+    transition: all 200ms ease-in;
+}
+
+GtkColorSwatch.color-light:selected,
+GtkColorSwatch.color-dark:selected,
+GtkColorSwatch.color-light:selected:hover,
+GtkColorSwatch.color-dark:selected:hover {
+    background-image: none;
+	border-width: 0px;
+}
+
+GtkColorChooserWidget #add-color-button {
+    border-radius:3px;
+	border:1px solid @button_border_color;
+    background-color: @button_normal_color;
+    color: @base_color;
 }
