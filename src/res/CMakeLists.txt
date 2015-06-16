@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 2.6)
+file(GLOB PICTURES ./*.png)
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/res")
+
+foreach(PICTURE ${PICTURES})
+    get_filename_component(PICNAME ${PICTURE} NAME)
+    set(ICONNAME icon-${PICNAME})
+    string(REPLACE ".png" "" HEADERNAME ${ICONNAME})
+    string(MAKE_C_IDENTIFIER ${HEADERNAME} ICONNAME)
+    message(STATUS "Generating icon header ${ICONNAME}.h")
+    execute_process(COMMAND "gdk-pixbuf-csource" "--raw" "--name=binary_${ICONNAME}" "${PICTURE}" OUTPUT_FILE "${CMAKE_BINARY_DIR}/res/${ICONNAME}.h")
+endforeach()

@@ -59,8 +59,10 @@ set(LIB_SOURCE_FILES
     )
 
 if(WIN32)
+    add_subdirectory(res)
     list(APPEND LIB_SOURCE_FILES audio/mswin.cc)
     list(APPEND LIB_SOURCE_FILES res/yage_theme.cc)
+    INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/res/)
 elseif(APPLE)
     list(APPEND LIB_SOURCE_FILES audio/osx.mm)
 elseif(UNIX)
