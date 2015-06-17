@@ -1,0 +1,26 @@
+#pragma code_page(65001)
+
+1 VERSIONINFO
+FILEVERSION     0,1,0,0
+PRODUCTVERSION  0,1,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "Copyright © 2015 YaGE developers" "\0"
+      VALUE "FileDescription", "YaGE Test Application" "\0"
+      VALUE "FileVersion", "0.1" "\0"
+      VALUE "InternalName", "yagetest" "\0"
+      VALUE "LegalCopyright", "YaGE is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n\nYaGE is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.\n\nYou should have received a copy of the GNU Lesser General Public License along with YaGE.  If not, see <http://www.gnu.org/licenses/>." "\0"
+      VALUE "OriginalFilename", "yagetest.exe" "\0"
+      VALUE "ProductName", "YaGE" "\0"
+      VALUE "ProductVersion", "0.1" "\0"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
