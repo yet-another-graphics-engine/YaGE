@@ -6,7 +6,6 @@
 #include "icon_yage_edit_clear.h"
 #include "icon_yage_question.h"
 #include "icon_yage_information.h"
-#include "icon_yage_close.h"
 #include "icon_yage_error.h"
 #include "icon_yage_warning.h"
 #include "icon_yage_edit.h"
@@ -15,14 +14,13 @@
 #include "icon_yage_remove.h"
 #include "icon_yage_search.h"
 #include "icon_yage_folder.h"
-#include "icon_yage_file.h"
 #include "icon_yage_copy.h"
 #include "icon_yage_cut.h"
 #include "icon_yage_paste.h"
 #include "icon_yage_select_all.h"
 #include "icon_yage_open.h"
 #include "icon_yage_save.h"
-#define YAGE_ICON_NUM 25
+#define YAGE_ICON_NUM 24
 namespace yage{
 namespace res{
 
@@ -78,7 +76,7 @@ void init_yage_icon_theme()
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_DIALOG_ERROR, icon_set[i]);
         break;
       case 10:
-        icon_set[i] = gtk_icon_set_new_from_pixbuf(gdk_pixbuf_new_from_inline(-1, binary_icon_yage_close, FALSE, nullptr));
+        icon_set[i] = gtk_icon_set_new_from_pixbuf(gdk_pixbuf_new_from_inline(-1, binary_icon_yage_cancel, FALSE, nullptr));
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_CLOSE, icon_set[i]);
         break;
       case 11:
@@ -106,34 +104,30 @@ void init_yage_icon_theme()
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_DIRECTORY, icon_set[i]);
         break;
       case 17:
-        icon_set[i] = gtk_icon_set_new_from_pixbuf(gdk_pixbuf_new_from_inline(-1, binary_icon_yage_file, FALSE, nullptr));
-        gtk_icon_factory_add(icon_factory[i], GTK_STOCK_FILE, icon_set[i]);
-        break;
-      case 18:
         icon_set[i] = gtk_icon_set_new_from_pixbuf(gdk_pixbuf_new_from_inline(-1, binary_icon_yage_copy, FALSE, nullptr));
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_COPY, icon_set[i]);
         break;
-      case 19:
+      case 18:
         icon_set[i] = gtk_icon_set_new_from_pixbuf(gdk_pixbuf_new_from_inline(-1, binary_icon_yage_cut, FALSE, nullptr));
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_CUT, icon_set[i]);
         break;
-      case 20:
+      case 19:
         icon_set[i] = gtk_icon_set_new_from_pixbuf(gdk_pixbuf_new_from_inline(-1, binary_icon_yage_paste, FALSE, nullptr));
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_PASTE, icon_set[i]);
         break;
-      case 21:
+      case 20:
         icon_set[i] = gtk_icon_set_new_from_pixbuf(gdk_pixbuf_new_from_inline(-1, binary_icon_yage_select_all, FALSE, nullptr));
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_SELECT_ALL, icon_set[i]);
         break;
-      case 22:
+      case 21:
         icon_set[i] = gtk_icon_set_new_from_pixbuf(gdk_pixbuf_new_from_inline(-1, binary_icon_yage_open, FALSE, nullptr));
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_OPEN, icon_set[i]);
         break;
-      case 23:
+      case 22:
         icon_set[i] = gtk_icon_set_new_from_pixbuf(gdk_pixbuf_new_from_inline(-1, binary_icon_yage_save, FALSE, nullptr));
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_SAVE, icon_set[i]);
         break;
-      case 24:
+      case 23:
         icon_set[i] = gtk_icon_set_new_from_pixbuf(gdk_pixbuf_new_from_inline(-1, binary_icon_yage_save, FALSE, nullptr));
         gtk_icon_factory_add(icon_factory[i], GTK_STOCK_SAVE_AS, icon_set[i]);
         break;

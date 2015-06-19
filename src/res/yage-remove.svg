@@ -9,15 +9,15 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="20"
-   height="20"
-   id="svg4189"
+   width="40"
+   height="40"
+   id="svg5874"
    version="1.1"
    inkscape:version="0.91 r13725"
-   viewBox="0 0 20 20"
-   sodipodi:docname="list-add-symbolic.svg">
+   viewBox="0 0 40 40"
+   sodipodi:docname="yage-remove.svg">
   <defs
-     id="defs4191" />
+     id="defs5876" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -25,14 +25,13 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="62.784865"
-     inkscape:cx="8.9318801"
-     inkscape:cy="8.8014516"
+     inkscape:zoom="14"
+     inkscape:cx="12.322251"
+     inkscape:cy="19.843226"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
-     showguides="false"
      inkscape:window-width="1366"
      inkscape:window-height="705"
      inkscape:window-x="-8"
@@ -40,10 +39,10 @@
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
-       id="grid4737" />
+       id="grid6422" />
   </sodipodi:namedview>
   <metadata
-     id="metadata4194">
+     id="metadata5879">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -58,22 +57,21 @@
      id="layer1"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     transform="translate(0,4)">
+     transform="translate(0,-8)">
     <rect
-       style="fill:#999999;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4744"
-       width="14"
-       height="3"
-       x="3"
-       y="4.331049"
-       ry="2.8746901e-015" />
+       style="fill:#e51c23;fill-opacity:1;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect6424"
+       width="38"
+       height="38"
+       x="1"
+       y="9"
+       rx="5" />
     <rect
-       style="fill:#999999;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect4746"
-       width="3.0000005"
-       height="14"
-       x="8.4903231"
-       y="-0.98407263"
-       ry="2.8746901e-015" />
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect6426"
+       width="26"
+       height="8"
+       x="7"
+       y="24" />
   </g>
 </svg>

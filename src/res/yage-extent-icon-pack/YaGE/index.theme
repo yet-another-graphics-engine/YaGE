@@ -1,35 +1,35 @@
 [Icon Theme]
 Name=YaGE
-Comment=A Simple icon pack for YaGE(Only for Windows version).The icons come from Numix(https://github.com/numixproject/numix-icon-theme).
-Inherits=Adwaita,gnome,hicolor
+Comment=A Simple icon pack for YaGE(Only for Windows version).Designed by Shengyun Zhou.
+Inherits=Adwaita,hicolor
 
 # Directory list
-Directories=16x16/actions,16x16/mimetypes,16x16/places,symbolic/actions
+Directories=20x20/actions,20x20/mimetypes,20x20/places,symbolic/actions
 
 # Actions
 
-[16x16/actions]
+[20x20/actions]
 Context=Actions
-Size=16
+Size=20
 Type=Fixed
 
 [symbolic/actions]
 Context=Actions
-Size=16
-MinSize=16
+Size=20
+MinSize=20
 MaxSize=512
 Type=Scalable
 
 # MimeTypes
 
-[16x16/mimetypes]
+[20x20/mimetypes]
 Context=MimeTypes
-Size=16
+Size=20
 Type=Fixed
 
 # Places
 
-[16x16/places]
+[20x20/places]
 Context=Places
-Size=16
+Size=20
 Type=Fixed
