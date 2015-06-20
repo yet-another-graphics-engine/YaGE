@@ -83,12 +83,19 @@ void Window::set_max_size(Window* this_, int &width, int &height)
  */
 void Window::exec_create(Window *this_, int &width, int &height) {
   this_->cairo_surface_ = nullptr;
+
+  g_mutex_init(&this_->show_mutex_);
+  g_cond_init(&this_->show_cond_);
+  g_mutex_init(&this_->resize_mutex_);
+  g_cond_init(&this_->resize_cond_);
+  this_->show_flag_ = false;
+  this_->size_change_flag_ = true;
+  this_->title_bar_height_ = 0;
+
   GtkWindow *&gtk_window_ = this_->gtk_window_;
   gtk_window_ = GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
   gtk_window_set_position(gtk_window_, GTK_WIN_POS_CENTER);
   gtk_window_set_resizable(gtk_window_, false);
-  this_->init_flag_ = false;
-  this_->title_bar_height_ = 0;
 
   if(width == -1 || height == -1)
     set_max_size(this_, width, height);
@@ -155,6 +162,10 @@ void Window::exec_hide(Window *this_) {
 
 void Window::exec_destroy(Window *this_) {
   if (this_->gtk_window_) {
+    g_mutex_clear(&this_->show_mutex_);
+    g_mutex_clear(&this_->resize_mutex_);
+    g_cond_clear(&this_->show_cond_);
+    g_cond_clear(&this_->resize_cond_);
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_window_));
     this_->gtk_window_ = nullptr;
     this_->gtk_draw_ = nullptr;
@@ -193,17 +204,6 @@ void Window::exec_get_resizable(Window *this_, bool &resizable) {
 }
 
 void Window::exec_set_size(Window *this_, int &width, int &height) {
-  if(width == -1 || height == -1)
-    set_max_size(this_, width, height);
-
-  if(width < this_->window_min_width_ && height < this_->window_min_height_)
-    return;
-  if(width == this_->window_width_ && height == this_->window_height_)
-    return;
-
-  this_->window_width_ = width;
-  this_->window_height_ = height;
-  this_->size_change_flag_ = false;
   if (gtk_window_get_resizable(this_->gtk_window_)) {
     gtk_window_resize(this_->gtk_window_, width, height);
   } else {
@@ -212,6 +212,11 @@ void Window::exec_set_size(Window *this_, int &width, int &height) {
     geo.min_height = height;
     gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
                                   GDK_HINT_MIN_SIZE);
+  }
+  if(gtk_window_is_active(this_->gtk_window_) == FALSE)
+  {
+    g_cond_signal(&this_->resize_cond_);
+    return;
   }
 }
 
@@ -228,9 +233,13 @@ Window::Window(int width, int height) {
 }
 
 void Window::show() {
-  runner_call(exec_show, this);
-  while(!init_flag_)
-    g_usleep(100);
+  if(show_flag_)
+    return;
+  g_mutex_lock(&show_mutex_);
+  gdk_threads_add_idle(GSourceFunc(exec_show), this);
+  g_cond_wait(&show_cond_, &show_mutex_);
+  g_mutex_unlock(&show_mutex_);
+  show_flag_ = true;
 }
 
 void Window::hide() {
@@ -257,9 +266,19 @@ bool Window::is_resizable() {
 }
 
 void Window::set_size(int width, int height) {
+  if(width == -1 || height == -1)
+    set_max_size(this, width, height);
+  if(width < window_min_width_ && height < window_min_height_)
+    return;
+  if(width == window_width_ && height == window_height_)
+    return;
+
+  size_change_flag_ = false;
+  g_mutex_lock(&resize_mutex_);
+  runner_call_ex(exec_set_size, false, this, &width, &height);
+  g_cond_wait(&resize_cond_, &resize_mutex_);
+  g_mutex_unlock(&resize_mutex_);
   size_change_flag_ = true;
-  runner_call(exec_set_size, this, &width, &height);
-  while(size_change_flag_ == false);
 }
 
 void Window::get_size(int &width, int &height) {

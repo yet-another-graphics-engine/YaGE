@@ -51,13 +51,13 @@ gboolean Window::msg_window_on_focus(GtkWidget *widget, GdkEvent *event, Window 
                     msg.window.type_leave;
   msg_push_queue(msg);
 
-  if(source->init_flag_ == false)
+  if(source->show_flag_ == false)
   {
-    source->init_flag_ = true;
     GdkWindow* window = gtk_widget_get_window(widget);
     GdkRectangle area;
     gdk_window_get_frame_extents(window, &area);
     source->title_bar_height_ = area.height - gdk_window_get_height(window);
+    g_cond_signal(&source->show_cond_);
   }
   return false;
 }
@@ -142,10 +142,10 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
   msg.type = msg.type_window;
   msg.window.type = msg.window.type_resize;
   msg_push_queue(msg);
-  if(source->size_change_flag_ == false)
-    source->size_change_flag_ = true;
   //g_print("on_draw_resize\n");
   gtk_window_get_size(source->gtk_window_, &source->window_width_, &source->window_height_);
+  if(source->size_change_flag_ == false)
+    g_cond_signal(&source->resize_cond_);
   return true;
 }
 

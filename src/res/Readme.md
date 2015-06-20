@@ -22,7 +22,6 @@ Type the following command to enable libpixbufloader-svg.dll:
 gdk-pixbuf-query-loaders > %GTKDIR%\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache
 ```
 The `%GTKDIR%` is the directory where the GTK lib was installed.
-win32_tutorial
 
 Reference: [http://www.gtk.org/download/win32_tutorial.php](http://www.gtk.org/download/win32_tutorial.php)
 

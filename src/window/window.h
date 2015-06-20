@@ -2,6 +2,7 @@
 #define WINDOW_WINDOW_H_
 #include <string>
 #include <gtk/gtk.h>
+#include <glib.h>
 #include "message.h"
 #include "../draw/canvas.h"
 #include "../util/runner.h"
@@ -38,7 +39,11 @@ private:
   int window_min_width_;
   int window_min_height_;
   int title_bar_height_;
-  bool init_flag_;
+  GMutex show_mutex_;
+  GCond show_cond_;
+  GMutex resize_mutex_;
+  GCond resize_cond_;
+  bool show_flag_;
   bool size_change_flag_;
 
   GtkWidget *gtk_draw_;
