@@ -38,7 +38,7 @@ void test_api_yage(void) {
   yage_get_key();
 
   int val_int = yage_input_int("yage_input_int", nullptr);
-  double val_double = yage_input_double("yage_input_int", nullptr);
+  double val_double = yage_input_double("yage_input_double", nullptr);
   yage_dlg_font(nullptr);
   yage_dlg_color(nullptr, &color);
   yage_set_font_color(color);
