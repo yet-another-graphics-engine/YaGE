@@ -46,7 +46,7 @@ void test_api_yage(void) {
 
   char val_str[64];
   yage_input_scanf(nullptr, "Enter [str][num]", "%s %d", val_str, &val_int);
-  yage_set_font("Times New Roman", 10, true, true);
+  yage_set_font("Microsoft YaHei", 10, true, true);
   yage_printf(240, 240, "str = %s, num = %d", val_str, val_int);
 
   if (yage_dlg_question(nullptr, "Save file?",
