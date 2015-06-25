@@ -52,22 +52,17 @@ void clearviewport(void) {
 }
 
 void setcolor(color_t color) {
-    paint.line_color = yage::draw::Color(color);
-    paint.font_color = yage::draw::Color(color);
+    paint.set_line_color(yage::draw::Color(color));
+    paint.set_font_color(yage::draw::Color(color));
 }
 
 void setfillcolor(color_t color) {
-    paint.fill_color = yage::draw::Color(color);
-    paint.background_color = yage::draw::Color(color);
+    paint.set_fill_color(yage::draw::Color(color));
+    paint.set_background_color(yage::draw::Color(color));
 }
 
 void arcf(float x, float y, float startangle, float endangle, float radius) {
-    Paint p;
-    yage::draw::Color transparent(1, 1, 1, 0);
-    p.fill_color = transparent;
-    p.line_color = paint.line_color;
-    p.line_width = paint.line_width;
-
+    paint.style = Paint::draw_style_stroke;
     yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
     ellipsec.center = center;
@@ -76,7 +71,7 @@ void arcf(float x, float y, float startangle, float endangle, float radius) {
     ellipsec.xradius = radius;
     ellipsec.yradius = radius;
 
-    canvas->draw_elliptical_sector(ellipsec, p);
+    canvas->draw_elliptical_sector(ellipsec, paint);
     window->update();
 }
 
@@ -85,10 +80,7 @@ void arc(int x, int y, int startangle, int endangle, int radius) {
 }
 
 void bar(int left, int top, int right, int bottom) {
-    Paint p;
-    yage::draw::Color transparent(1, 1, 1, 0);
-    p.fill_color = paint.fill_color;
-    p.line_color = transparent;
+    paint.style = Paint::draw_style_fill;
 
     yage::draw::Rect rect;
     yage::draw::Point a(left, top);
@@ -96,23 +88,19 @@ void bar(int left, int top, int right, int bottom) {
     rect.first = a;
     rect.second = b;
 
-    canvas->draw_rect(rect, p);
+    canvas->draw_rect(rect, paint);
     window->update();
 }
 
 void circlef(float x, float y, float radius) {
-    Paint p;
-    p.line_color = paint.line_color;
-    p.fill_color = Color(1, 1, 1, 0);
-    p.line_width = paint.line_width;
-
+    paint.style = Paint::draw_style_stroke;
     yage::draw::Circle circle1;
     yage::draw::Point center(x, y);
     circle1.center = center;
     circle1.radius = radius;
     circle1.center = center;
 
-    canvas->draw_circle(circle1, p);
+    canvas->draw_circle(circle1, paint);
     window->update();
 }
 
@@ -121,11 +109,7 @@ void circle(int x, int y, int radius) {
 }
 
 void ellipsef(float x, float y, float startangle, float endangle, float xradius, float yradius) {
-    Paint p;
-    yage::draw::Color transparent(1, 1, 1, 0);
-    p.fill_color = transparent;
-    p.line_color = paint.line_color;
-    p.line_width = paint.line_width;
+    paint.style = Paint::draw_style_stroke;
 
     yage::draw::EllipticArc elliparc;
     yage::draw::Point center(x, y);
@@ -135,7 +119,7 @@ void ellipsef(float x, float y, float startangle, float endangle, float xradius,
     elliparc.xradius = xradius;
     elliparc.yradius = yradius;
 
-    canvas->draw_elliptical_arc(elliparc, p);
+    canvas->draw_elliptical_arc(elliparc, paint);
     window->update();
 }
 
@@ -144,14 +128,11 @@ void ellipse(int x, int y, int startangle, int endangle, int xradius, int yradiu
 }
 
 void fillellipsef(float x, float y, float xradius, float yradius) {
-    Paint p;
-    yage::draw::Color transparent(1, 1, 1, 0);
-    p.fill_color = paint.fill_color;
-    p.line_color = transparent;
+    paint.style = Paint::draw_style_fill;
 
     yage::draw::Ellipse ellipse1(yage::draw::Point(x, y), xradius, yradius);
 
-    canvas->draw_ellipse(ellipse1, p);
+    canvas->draw_ellipse(ellipse1, paint);
     window->update();
 }
 
@@ -160,6 +141,7 @@ void fillellipse(int x, int y, int xradius, int yradius) {
 }
 
 void line(int x1, int y1, int x2, int y2) {
+    paint.style = Paint::draw_style_stroke;
     yage::draw::Line line1(yage::draw::Point(x1, y1),
                            yage::draw::Point(x2, y2));
     canvas->draw_line(line1, paint);
@@ -167,10 +149,7 @@ void line(int x1, int y1, int x2, int y2) {
 }
 
 void pieslicef(float x, float y, float startangle, float endangle, float radius) {
-    Paint p;
-    yage::draw::Color transparent(1, 1, 1, 0);
-    p.fill_color = paint.fill_color;
-    p.line_color = transparent;
+    paint.style = Paint::draw_style_fill;
 
     yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
@@ -180,7 +159,7 @@ void pieslicef(float x, float y, float startangle, float endangle, float radius)
     ellipsec.xradius = radius;
     ellipsec.yradius = radius;
 
-    canvas->draw_elliptical_sector(ellipsec, p);
+    canvas->draw_elliptical_sector(ellipsec, paint);
     window->update();
 }
 
@@ -195,10 +174,8 @@ void pieslice(int x, int y, int startangle, int endangle, int radius) {
 
 void putpixel(int x, int y, color_t color) {
     Paint p;
-    yage::draw::Color transparent(1, 1, 1, 0);
-    p.line_color = transparent;
-    p.fill_color = yage::draw::Color(color);
-    p.line_width = paint.line_width;
+    p.style = Paint::draw_style_fill;
+    p.set_fill_color(yage::draw::Color(color));
 
     yage::draw::Rect pixel;
     yage::draw::Point a(x - 0.5, y - 0.5);
@@ -211,11 +188,7 @@ void putpixel(int x, int y, color_t color) {
 }
 
 void rectangle(int left, int top, int right, int bottom) {
-    Paint p;
-    yage::draw::Color transparent(1, 1, 1, 0);
-    p.fill_color = transparent;
-    p.line_color = paint.line_color;
-    p.line_width = paint.line_width;
+    paint.style = Paint::draw_style_stroke;
 
     yage::draw::Rect rect;
     yage::draw::Point a(left, top);
@@ -223,15 +196,12 @@ void rectangle(int left, int top, int right, int bottom) {
     rect.first = a;
     rect.second= b;
 
-    canvas->draw_rect(rect, p);
+    canvas->draw_rect(rect, paint);
     window->update();
 }
 
 void sectorf(float x, float y, float startangle, float endangle, float xradius, float yradius) {
-    Paint p;
-    yage::draw::Color transparent(1, 1, 1, 0);
-    p.fill_color = paint.fill_color;
-    p.line_color = transparent;
+    paint.style = Paint::draw_style_fill;
 
     yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
@@ -241,7 +211,7 @@ void sectorf(float x, float y, float startangle, float endangle, float xradius, 
     ellipsec.xradius = xradius;
     ellipsec.yradius = yradius;
 
-    canvas->draw_elliptical_sector(ellipsec, p);
+    canvas->draw_elliptical_sector(ellipsec, paint);
     window->update();
 }
 

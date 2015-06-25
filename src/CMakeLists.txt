@@ -57,6 +57,7 @@ set(LIB_SOURCE_FILES
     draw/font.cc
     draw/text.cc
     draw/paint.cc
+	draw/linear_gradient_color.cc
     api/bgi.cc
     api/yage.cc
     )

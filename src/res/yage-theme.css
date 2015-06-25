@@ -47,11 +47,17 @@
 
 /*Window*/
 
-GtkWindow{
+GtkWindow {
 	-GtkWindow-resize-grip-width: 0;
     -GtkWindow-resize-grip-height: 0;
 	border:none;
 	background-color:@window_bg_color;
+}
+
+/*Draw Area*/
+GtkDrawingArea {
+	background-image: none;
+	background-color: #FFFFFF;
 }
 
 /*Normal Button*/
@@ -179,7 +185,7 @@ GtkImage:backdrop {
     background: @entry_bg_color;
     color: @text_color;
     padding: 4px 3px 4px 7px;
-    border-radius: 5px;
+    border-radius: 3px;
     border: 2px solid @entry_border_color;
 }
 
@@ -342,6 +348,7 @@ GtkTreeView row:insensitive {
 .menu .menuitem,
 .popup .menuitem {	
 	padding: 6px 7px;
+	background-image: none;
 	background-color: @menuitem_bg_color;
 	color: @text_color;
 	
@@ -355,6 +362,7 @@ GtkTreeView row:insensitive {
 .menu .menuitem:hover,
 .popup .menuitem:active,
 .popup .menuitem:hover {
+	background-image: none;
     background-color: @menuitem_hover_color;
     color: @text_selected_color;
 	-GtkMenuItem-arrow-scaling: 0.6;

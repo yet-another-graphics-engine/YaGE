@@ -4,7 +4,7 @@ namespace yage {
 namespace draw {
 
 
-/*
+/**
  * Set the color by RGB and alpha channel.
  * @param a Alpha of the color; 0 for transparent and 1 for full color
  */

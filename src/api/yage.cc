@@ -23,17 +23,23 @@ namespace {
   draw::Color g_fill_color;
   draw::Color g_border_color;
 
-  inline void convert_color(const yage_color_t &color,
-                            draw::Color &internal_color) {
-    internal_color.r = color.r;
-    internal_color.g = color.g;
-    internal_color.b = color.b;
-    internal_color.a = color.a;
+  inline draw::Color convert_color(const yage_color_t &color) {
+    return draw::Color(color.r, color.g, color.b, color.a);
   }
 
   inline void prepare_color(bool is_fill, bool is_border) {
-    g_paint->line_color = is_border ? g_border_color : kTransparentColor;
-    g_paint->fill_color = is_fill ? g_fill_color : kTransparentColor;
+    if(is_border)
+    {
+      g_paint->style = Paint::draw_style_stroke;
+      g_paint->set_line_color(g_border_color);
+    }
+    if(is_fill)
+    {
+      g_paint->style = Paint::draw_style_fill;
+      g_paint->set_fill_color(g_fill_color);
+      if(is_border)
+        g_paint->style = Paint::draw_style_stroke_fill;
+    }
   }
 
   inline void draw_circle(double x, double y, double r) {
@@ -88,7 +94,7 @@ void yage_init(int width, int height) {
 
   g_fill_color = draw::Color(0.5, 0.5, 0.5, 1);
   g_border_color = draw::Color(0, 0, 0, 1);
-  g_paint->background_color = Color(1, 1, 1, 1);
+  g_paint->set_background_color(Color(1, 1, 1, 1));
 
   g_window->set_canvas(*g_canvas);
   g_window->show();
@@ -104,7 +110,8 @@ void yage_clear(void) {
 }
 
 void yage_draw_pixel(double x, double y, yage_color_t color) {
-  convert_color(color, g_paint->fill_color);
+  g_paint->style = Paint::draw_style_fill;
+  g_paint->set_fill_color(convert_color(color));
   draw_rectangle(x - 0.5, y - 0.5,
                  x + 0.5, y + 0.5);
 }
@@ -117,19 +124,19 @@ void yage_set_font(const char *family, int size, int bold, int italic) {
 }
 
 void yage_set_font_color(struct yage_color_t font_color) {
-  convert_color(font_color, g_paint->font_color);
+  g_paint->set_font_color(convert_color(font_color));
 }
 
 void yage_set_fill_color(struct yage_color_t fill_color) {
-  convert_color(fill_color, g_fill_color);
+  g_fill_color = convert_color(fill_color);
 }
 
 void yage_set_background_color(struct yage_color_t background_color) {
-  convert_color(background_color, g_paint->background_color);
+  g_paint->set_background_color(convert_color(background_color));
 }
 
 void yage_set_border_color(struct yage_color_t border_color) {
-  convert_color(border_color, g_border_color);
+  g_border_color = convert_color(border_color);
 }
 
 void yage_set_border_thickness(double thickness) {
