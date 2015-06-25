@@ -29,7 +29,7 @@ void Window::msg_window_on_destroy(GtkWidget *widget, Window *source)
 
   if(Window::quit_all_windows_destroyed && Window::window_num_ == 0)
   {
-    gtk_main_quit();
+    // gtk_main_quit(); FIXME!
     return;
   }
 
