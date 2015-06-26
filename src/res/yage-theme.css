@@ -7,7 +7,7 @@
 @define-color button_normal_color #FFFFFF;
 @define-color button_border_color #BDBDBD;
 @define-color button_hover_color @base_color;
-@define-color button_press_color shade(@base_color, 0.9);
+@define-color button_press_color shade(@base_color, 0.8);
 @define-color text_color #000000;
 @define-color text_selected_color #FFFFFF;
 @define-color text_selected_bg_color @base_color;
@@ -71,16 +71,19 @@ GtkDrawingArea {
     background-color: @button_normal_color;
     background-image: none;
     color: @text_color;
+	transition: all 150ms ease-out;
 }
 
 .button:focus {
 	background-color: @button_normal_color;
 	border: 1px solid @base_color;
 	box-shadow: inset 0px 0px 0px 1px @base_color;
+	transition: all 150ms ease-in;
 }
 
 .button:hover {
     background-color: @button_hover_color;
+	transition: all 150ms ease-in;
 }
 
 .button:active,
@@ -187,6 +190,7 @@ GtkImage:backdrop {
     padding: 4px 3px 4px 7px;
     border-radius: 3px;
     border: 2px solid @entry_border_color;
+	transition: all 150ms ease-out;
 }
 
 .entry:focus,
@@ -196,6 +200,7 @@ GtkImage:backdrop {
 	border-radius: 3px;
     border: 2px solid @entry_border_focus_color;
     box-shadow:inset 0px 0px 1px 0px @entry_border_focus_color;
+	transition: all 150ms ease-in;
 }
 
 .entry:selected {
@@ -219,6 +224,13 @@ GtkImage:backdrop {
     background-color: @text_selected_bg_color;
     color: @text_selected_color;
 }
+
+.row:prelight,
+.row:hover {
+	color: #FFFFFF;
+}
+
+
 
 /*Colunm Header*/
 
@@ -273,8 +285,10 @@ GtkTreeView.separator,
 }
 
 GtkTreeView {
-    -GtkTreeView-vertical-separator: 5px;
-    -GtkTreeView-horizontal-separator: 8px;
+    -GtkTreeView-vertical-separator: 5;
+    -GtkTreeView-horizontal-separator: 8;
+	-GtkWidget-focus-line-width: 1;
+    -GtkWidget-focus-padding: 1;
 	background-color: @treeview_bg_color;
 }
 
@@ -288,8 +302,48 @@ GtkTreeView row:nth-child(odd) {
     color: @text_color;
 }
 
+GtkTreeView row:hover {
+	color: @text_color;
+	background-color: shade(@base_color, 1.7);
+}
+
 GtkTreeView row:insensitive {
 	color: @text_insensitive_color;
+}
+
+/*Sidebar*/
+
+.sidebar,
+.sidebar.view,
+.sidebar .view,
+.sidebar GtkScrolledWindow {
+    background-color: @treeview_bg_color;
+    color: @text_color;
+}
+
+.sidebar row:selected,
+.sidebar row:selected:hover,
+.sidebar row:selected:focus,
+.sidebar .view row:selected,
+.sidebar .view row:selected:hover,
+.sidebar .view row:selected:focus {
+    background-color: shade(@base_color, 2.0);
+    background-image: none;
+	border-style: solid;
+	border-left-width: 3px;
+	border-left-color: @base_color;
+    color: @base_color;
+}
+
+
+.sidebar row:prelight,
+.sidebar .view row:prelight {
+    background-color: transparent;
+    background-image: none;
+	border-style: solid;
+	border-left-width: 3px;
+	border-left-color: @base_color;
+    color: @base_color;
 }
 
 /*Inline Toolbar*/
@@ -311,7 +365,7 @@ GtkTreeView row:insensitive {
     -GtkRange-trough-border: 2;
     -GtkScrollbar-has-backward-stepper: false;
     -GtkScrollbar-has-forward-stepper: false;
-    -GtkRange-slider-width: 10;
+    -GtkRange-slider-width: 13;
     -GtkRange-stepper-spacing: 0;
     -GtkRange-trough-under-steppers: 1;
 }
@@ -440,21 +494,25 @@ GtkTreeView row:insensitive {
 	color: @text_color;
 }
 
+
 .scale.slider {
     border-radius: 20px;
-    background-color: @scrollbar_color;
+	border: 1px solid @button_border_color;
+    background-color: @button_normal_color;
     background-image: none;
-
+	transition: all 150ms ease-out;
 }
 
 .scale.slider:hover {
-    background-color: shade(@scrollbar_color, 0.7);
+    background-color: shade(@button_normal_color, 0.8);
+	transition: all 150ms ease-in;
 }
 
 
 .scale.trough {
     margin: 7px 0;
-    border-radius: 0;
+    border-radius: 6px;
+	border: 1px solid @button_border_color;
     background-color: shade(@window_bg_color, 1.4);
     background-image: none;
 }
