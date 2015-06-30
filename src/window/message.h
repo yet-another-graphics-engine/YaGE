@@ -1,6 +1,16 @@
 #ifndef WINDOW_MESSAGE_H_
 #define WINDOW_MESSAGE_H_
+
+#ifndef _MSC_VER
 #include <stdint.h>
+#else
+#if _MSC_VER < 1600
+#include "../util/stdint.h"
+#else
+#include <stdint.h>
+#endif
+#endif
+
 #include <gtk/gtk.h>
 #include "window.h"
 

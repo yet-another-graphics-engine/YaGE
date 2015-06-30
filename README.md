@@ -22,7 +22,7 @@ Linux static library: [![Build Status](https://img.shields.io/travis/yet-another
 
 #### Build with Microsoft Visual Studio
 
-Because C++ 11 is used in the project, make sure that you have installed install Visual Studio 2012 or later.
+Because variadic macros are used in the project, make sure that you have installed install Visual Studio 2005 or later. (Express version of Visual C++ is also OK.)
 
 Install [CMake](http://www.cmake.org/download/) (Win32 Installer) and [GTK+ 3](http://www.gtk.org/download/win32.php) (All-in-one bundles), add the `bin` directory of CMake and GTK+ 3 into `PATH` environment variable.
 

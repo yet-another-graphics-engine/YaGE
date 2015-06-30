@@ -12,7 +12,7 @@ else()
 endif()
 
 # silence warning under Clang
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     add_definitions(-Wno-deprecated-register)
     if(WIN32)
         add_definitions(-Wno-incompatible-ms-struct)

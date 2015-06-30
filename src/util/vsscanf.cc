@@ -67,7 +67,11 @@ please send it my way. Thanks.
  * This code is in the Public Domain
  *
  */
+
+// Used on Visual C++ 2008 and later
 #define _CRT_SECURE_NO_WARNINGS
+// Used on old versions of Visual C++
+#define _CRT_SECURE_NO_DEPRECATE
 
 #include <stdio.h>
 #include <stdarg.h>
