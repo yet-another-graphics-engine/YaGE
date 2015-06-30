@@ -13,7 +13,7 @@
 #endif
 
 #ifdef _MSC_VER
-#if __cplusplus < 201103L
+#if _MSC_VER < 1800 // http://blogs.msdn.com/b/vcblog/archive/2013/07/19/c99-library-support-in-visual-studio-2013.aspx
 int vsscanf(const char *buffer, const char *format, va_list argPtr);
 #endif
 #endif

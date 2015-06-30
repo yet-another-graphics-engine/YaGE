@@ -391,7 +391,10 @@ bool mouse_msg::is_wheel() {
 
 mouse_msg getmouse() {
     mouse_msg ege_msg;
-    yage::window::Message msg;
+	yage::window::Message msg;
+	ege_msg.msg = 0;
+	ege_msg.x = -1;
+	ege_msg.y = -1;
     while(yage::window::Window::poll(msg)) {
         if (msg.type == yage::window::Message::type_mouse) {
             ege_msg.x = static_cast<int>(msg.mouse.x);
@@ -405,7 +408,7 @@ mouse_msg getmouse() {
             return ege_msg;
         }
     }
-	return mouse_msg();
+	return ege_msg;
 }
 
 /* Temp code end */
