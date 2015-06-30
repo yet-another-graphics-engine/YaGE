@@ -18,8 +18,8 @@
 #pragma warning(disable: 4800)
 #endif
 
-static yage::window::Window *window = nullptr;
-static yage::draw::Canvas *canvas = nullptr;
+static yage::window::Window *window = NULL;
+static yage::draw::Canvas *canvas = NULL;
 static yage::draw::Point canvas_position(0, 0);
 static yage::draw::Paint paint;
 //static yage::draw::Font simsun("SimSun", 12, false, false);
@@ -39,8 +39,8 @@ void initgraph(int width, int height) {
 void closegraph(void) {
     window->hide();
     delete window;
-    window = nullptr;
-    canvas = nullptr;
+    window = NULL;
+    canvas = NULL;
 }
 
 void cleardevice(void) {

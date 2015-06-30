@@ -18,26 +18,26 @@ namespace yage {
 namespace window {
 
 gpointer user_thread(gpointer *param) {
-  auto func = reinterpret_cast<int (*)(int, char**)>(param[0]);
-  auto &ret = *reinterpret_cast<int *>(param[1]);
+  int (*func)(int, char**) = reinterpret_cast<int (*)(int, char**)>(param[0]);
+  int &ret = *reinterpret_cast<int *>(param[1]);
 
   ret = func(argc, argv);
   gtk_main_quit();
-  return nullptr;
+  return NULL;
 }
 
 bool Window::quit_all_windows_destroyed = true;
 
 int Window::init(int (*new_main)()) {
   msg_queue_ = g_async_queue_new();
-  gtk_init(nullptr, nullptr);
+  gtk_init(NULL, NULL);
 
   #ifdef _WIN32
   GtkSettings* settings = gtk_settings_get_default();
   gtk_settings_set_string_property(settings, "gtk-font-name", "Microsoft YaHei 10", "Sans 10");
   gtk_settings_set_string_property(settings, "gtk-icon-theme-name", "YaGE", "hicolor");
-  gtk_settings_set_string_property(settings, "gtk-icon-sizes", "gtk-menu=20,20:gtk-dialog=60,60", nullptr);
-  gtk_settings_set_long_property(settings, "gtk-xft-antialias", 1, nullptr);
+  gtk_settings_set_string_property(settings, "gtk-icon-sizes", "gtk-menu=20,20:gtk-dialog=60,60", NULL);
+  gtk_settings_set_long_property(settings, "gtk-xft-antialias", 1, NULL);
   gtk_settings_set_string_property(settings, "gtk-xft-rgba", "rgb", "none");
   yage::res::init_yage_theme();
   #endif // _WIN32
@@ -52,7 +52,7 @@ int Window::init(int (*new_main)()) {
 /*
  * Static variables.
  */
-GAsyncQueue *Window::msg_queue_ = nullptr;
+GAsyncQueue *Window::msg_queue_ = NULL;
 
 size_t Window::window_num_ = 0;
 
@@ -82,7 +82,7 @@ void Window::set_max_size(Window* this_, int &width, int &height)
  * removed.
  */
 void Window::exec_create(Window *this_, int &width, int &height) {
-  this_->cairo_surface_ = nullptr;
+  this_->cairo_surface_ = NULL;
 
   g_mutex_init(&this_->show_mutex_);
   g_cond_init(&this_->show_cond_);
@@ -167,8 +167,8 @@ void Window::exec_destroy(Window *this_) {
     g_cond_clear(&this_->show_cond_);
     g_cond_clear(&this_->resize_cond_);
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_window_));
-    this_->gtk_window_ = nullptr;
-    this_->gtk_draw_ = nullptr;
+    this_->gtk_window_ = NULL;
+    this_->gtk_draw_ = NULL;
   }
 }
 
@@ -183,14 +183,14 @@ void Window::exec_set_resizable(Window *this_, bool &resizable) {
     gtk_window_set_resizable(this_->gtk_window_, resizable);
     geo.min_width = this_->window_min_width_;
     geo.min_height = this_->window_min_height_;
-    gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
+    gtk_window_set_geometry_hints(this_->gtk_window_, NULL, &geo,
                                   GDK_HINT_MIN_SIZE);
   }
   else if(gtk_window_get_resizable(this_->gtk_window_) && resizable == false)
   {
     geo.min_width = this_->window_width_;
     geo.min_height = this_->window_height_;
-    gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
+    gtk_window_set_geometry_hints(this_->gtk_window_, NULL, &geo,
                                   GDK_HINT_MIN_SIZE);
     gtk_window_set_resizable(this_->gtk_window_, resizable);
   }
@@ -210,7 +210,7 @@ void Window::exec_set_size(Window *this_, int &width, int &height) {
     GdkGeometry geo;
     geo.min_width = width;
     geo.min_height = height;
-    gtk_window_set_geometry_hints(this_->gtk_window_, nullptr, &geo,
+    gtk_window_set_geometry_hints(this_->gtk_window_, NULL, &geo,
                                   GDK_HINT_MIN_SIZE);
   }
   if(gtk_window_is_active(this_->gtk_window_) == FALSE)
@@ -298,7 +298,7 @@ void Window::set_canvas(Canvas &canvas) {
   // Maintain Cairo's internal reference counter:
   // Decrease the previous counter when window exits or binds to a new surface
   // Increase the counter of the new surface
-  if (cairo_surface_ != nullptr)
+  if (cairo_surface_ != NULL)
     cairo_surface_destroy(cairo_surface_);
   cairo_surface_ = canvas.pro_get_cairo_surface();
   cairo_surface_reference(cairo_surface_);
@@ -317,7 +317,7 @@ Window::~Window() {
 }
 
 bool Window::is_valid() {
-  return gtk_draw_ != nullptr && gtk_window_ != nullptr;
+  return gtk_draw_ != NULL && gtk_window_ != NULL;
 }
 
 bool Window::poll(Message &msg, bool block) {
@@ -326,7 +326,7 @@ bool Window::poll(Message &msg, bool block) {
   gpointer pmsg = block ? g_async_queue_pop(Window::msg_queue_)
                         : g_async_queue_try_pop(Window::msg_queue_);
 
-  if (pmsg == nullptr) {
+  if (pmsg == NULL) {
     msg.type = msg.type_nop;
   } else {
     msg = *reinterpret_cast<Message *>(pmsg);

@@ -1,9 +1,10 @@
 #include "test.h"
 #include <vector>
 #include <ctime>
-using test_callback_t = void (*)(void);
-vector<pair<test_callback_t, string>> g_tests;
-using TestIter = decltype(g_tests)::iterator;
+typedef void (*test_callback_t)(void);
+typedef vector<pair<test_callback_t, string> > test_container_t;
+test_container_t g_tests;
+typedef test_container_t::iterator test_iter_t;
 
 void test_init(void);
 
@@ -16,9 +17,9 @@ void sleep_sec(int seconds) {
 }
 
 bool fuzzy_string_match(const string &lazy, const string &full) {
-  auto j = full.begin();
+  string::const_iterator j = full.begin();
 
-  for (auto i = lazy.begin(); i != lazy.end(); ++i) {
+  for (string::const_iterator i = lazy.begin(); i != lazy.end(); ++i) {
     for (; j != full.end(); ++j) {
       if (*i == *j) goto match_next;
     }
@@ -32,7 +33,7 @@ match_next:
 
 void test_show_list() {
   fprintf(stderr, "Availiable tests:\n");
-  for (auto i = g_tests.begin(); i != g_tests.end(); ++i) {
+  for (test_iter_t i = g_tests.begin(); i != g_tests.end(); ++i) {
     fprintf(stderr, "\t%s\n", i->second.c_str());
   }
 }
@@ -43,10 +44,10 @@ void test_show_usage() {
   fprintf(stderr, "\t%s !\n", yage::argv[0]);
 }
 
-TestIter test_match(const string &lazy_name) {
-  auto test_iter = g_tests.end();
+test_iter_t test_match(const string &lazy_name) {
+  test_iter_t test_iter = g_tests.end();
 
-  for (auto i = g_tests.begin(); i != g_tests.end(); ++i) {
+  for (test_iter_t i = g_tests.begin(); i != g_tests.end(); ++i) {
     if (!fuzzy_string_match(lazy_name, i->second)) continue;
     if (test_iter != g_tests.end()) {
       // multiple match
@@ -60,7 +61,7 @@ TestIter test_match(const string &lazy_name) {
   return test_iter;
 }
 
-void test_run(TestIter test_iter) {
+void test_run(test_iter_t test_iter) {
   fprintf(stderr, "INFO: Running test_%s()\n", test_iter->second.c_str());
   clock_t start_time = clock();
 
@@ -85,7 +86,7 @@ extern "C" int yage_main() {
       return 0;
     }
 
-    auto test_iter = test_match(test_name);
+    test_iter_t test_iter = test_match(test_name);
     if (test_iter != g_tests.end()) {
       test_run(test_iter);
       return 0;

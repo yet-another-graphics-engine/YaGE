@@ -158,8 +158,10 @@ void Canvas::draw_text(Text &text) {
 
 void Canvas::draw_poly(Poly &poly, const Paint &paint) {
     init_brush(paint);
-    for (const auto &i : poly.vertex) {
-        cairo_line_to(brush_, i.x, i.y);
+    for (Poly::Vertexes::iterator p = poly.vertex.begin();
+        p != poly.vertex.end();
+        ++p) {
+        cairo_line_to(brush_, p->x, p->y);
     }
     cairo_close_path(brush_);
     shape_fill_and_stroke_(paint);

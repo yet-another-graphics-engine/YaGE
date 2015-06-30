@@ -37,7 +37,7 @@ struct Line {
 };
 
 struct Poly {
-    using Vertexes = std::vector<Point>;
+    typedef std::vector<Point> Vertexes;
     Vertexes vertex;
 };
 

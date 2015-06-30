@@ -37,24 +37,24 @@ void test_api_yage(void) {
 
   yage_get_key();
 
-  int val_int = yage_input_int("yage_input_int", nullptr);
-  double val_double = yage_input_double("yage_input_double", nullptr);
-  yage_dlg_font(nullptr);
-  yage_dlg_color(nullptr, &color);
+  int val_int = yage_input_int("yage_input_int", NULL);
+  double val_double = yage_input_double("yage_input_double", NULL);
+  yage_dlg_font(NULL);
+  yage_dlg_color(NULL, &color);
   yage_set_font_color(color);
   yage_printf(240, 200, "int = %d, double = %lf", val_int, val_double);
 
   char val_str[64];
-  yage_input_scanf(nullptr, "Enter [str][num]", "%s %d", val_str, &val_int);
+  yage_input_scanf(NULL, "Enter [str][num]", "%s %d", val_str, &val_int);
   yage_set_font("Microsoft YaHei", 10, true, true);
   yage_printf(240, 240, "str = %s, num = %d", val_str, val_int);
 
-  if (yage_dlg_question(nullptr, "Save file?",
+  if (yage_dlg_question(NULL, "Save file?",
                         kYageDlgIconQuestion,
                         kYageDlgButtonYesNo) == kYageDlgResultYes) {
-    yage_dlg_message(nullptr, yage_dlg_file_save(nullptr));;
+    yage_dlg_message(NULL, yage_dlg_file_save(NULL));;
   } else {
-    yage_dlg_message(nullptr, yage_dlg_file_open(nullptr));;
+    yage_dlg_message(NULL, yage_dlg_file_open(NULL));;
   }
 
   yage_message_t msg;

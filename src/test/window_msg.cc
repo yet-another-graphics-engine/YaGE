@@ -2,7 +2,7 @@
 
 #define P_PROP(type, name, format) fprintf(stderr, #name"="#format", ", msg.type.name)
 #define P_NAME(type) \
-  case msg.type:\
+  case Message::type:\
   fprintf(stderr, #type ": ")
 
 #define P_STOP() \

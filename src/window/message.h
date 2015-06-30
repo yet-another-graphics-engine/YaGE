@@ -1,6 +1,6 @@
 #ifndef WINDOW_MESSAGE_H_
 #define WINDOW_MESSAGE_H_
-#include <cstdint>
+#include <stdint.h>
 #include <gtk/gtk.h>
 #include "window.h"
 

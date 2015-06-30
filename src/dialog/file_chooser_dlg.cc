@@ -7,7 +7,7 @@ namespace dialog {
 FileChooserDlg::FileChooserDlg(action_type action, const std::string &title)
 {
   std::string utf_8_title = yage::util::convert_string(title);
-  runner_call(exec_create, this, &action, const_cast<char *>(utf_8_title.c_str()), nullptr);
+  runner_call(exec_create, this, &action, const_cast<char *>(utf_8_title.c_str()), NULL);
 }
 
 FileChooserDlg::FileChooserDlg(action_type action, const std::string &title, Window &window)
@@ -26,7 +26,7 @@ void FileChooserDlg::exec_destroy(FileChooserDlg *this_)
 {
   if (this_->gtk_dialog_) {
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
-    this_->gtk_dialog_ = nullptr;
+    this_->gtk_dialog_ = NULL;
   }
 }
 
@@ -58,14 +58,14 @@ void FileChooserDlg::exec_create(FileChooserDlg *this_,
         title, parent, action_type,
         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
         GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-        nullptr));
+        NULL));
   }
   else {
     this_->gtk_dialog_ = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(
         title, parent, action_type,
         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
         GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-        nullptr));
+        NULL));
   }
   #else
   if(action_type == GTK_FILE_CHOOSER_ACTION_SAVE) {
@@ -73,14 +73,14 @@ void FileChooserDlg::exec_create(FileChooserDlg *this_,
         title, parent, action_type,
         "_Cancel", GTK_RESPONSE_CANCEL,
         "_Save", GTK_RESPONSE_ACCEPT,
-        nullptr));
+        NULL));
   }
   else {
     this_->gtk_dialog_ = GTK_FILE_CHOOSER(gtk_file_chooser_dialog_new(
         title, parent, action_type,
         "_Cancel", GTK_RESPONSE_CANCEL,
         "_Open", GTK_RESPONSE_ACCEPT,
-        nullptr));
+        NULL));
   }
   #endif // _WIN32
 
@@ -91,7 +91,7 @@ void FileChooserDlg::exec_show(FileChooserDlg *this_,
                                    std::string &std_str,
                                    bool &ret)
 {
-  char *c_str = nullptr;
+  char *c_str = NULL;
   ret = false;
 
   gint run_ret = gtk_dialog_run(GTK_DIALOG(this_->gtk_dialog_));

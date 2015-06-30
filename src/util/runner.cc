@@ -14,8 +14,10 @@ struct SyncData {
   GMutex mutex;
 };
 
+typedef void (*callback_t)(void *, void *, void *, void*);
+
 struct CallParam {
-  void (*callback)(void *, void *, void *, void*);
+  callback_t callback;
   SyncData *sync_data;
   bool wait;
   void *p0;
@@ -26,7 +28,7 @@ struct CallParam {
 
 void glib_destroy_notify(gpointer data)
 {
-  auto sync_data = reinterpret_cast<SyncData *>(data);
+  SyncData *sync_data = reinterpret_cast<SyncData *>(data);
   g_mutex_clear(&sync_data->mutex);
   g_cond_clear(&sync_data->cond);
   delete sync_data;
@@ -44,8 +46,8 @@ gboolean gtk_source_func(CallParam &data)
 void call(void *callback, bool wait,
           void *p0, void *p1, void *p2, void *p3)
 {
-  auto sync_data = reinterpret_cast<SyncData *>(g_private_get(&key));
-  if (sync_data == nullptr) {
+  SyncData *sync_data = reinterpret_cast<SyncData *>(g_private_get(&key));
+  if (sync_data == NULL) {
     sync_data = new SyncData;
     g_mutex_init(&sync_data->mutex);
     g_cond_init(&sync_data->cond);
@@ -53,7 +55,7 @@ void call(void *callback, bool wait,
   }
 
   CallParam &param = *(new CallParam);
-  param.callback = reinterpret_cast<decltype(CallParam::callback)>(callback);
+  param.callback = reinterpret_cast<callback_t>(callback);
   param.sync_data = sync_data;
   param.wait = wait;
   param.p0 = p0;

@@ -33,7 +33,7 @@ void InputDlg::exec_destroy(InputDlg *this_)
 {
   if (this_->gtk_dialog_) {
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
-    this_->gtk_dialog_ = nullptr;
+    this_->gtk_dialog_ = NULL;
   }
 }
 
@@ -61,7 +61,7 @@ void InputDlg::exec_create(InputDlg *this_,
   gtk_box_pack_start(dialog_box, gtk_separator_new(GTK_ORIENTATION_HORIZONTAL), FALSE, FALSE, 5);
   gtk_box_pack_start(dialog_box, GTK_WIDGET(button_box), FALSE, FALSE, 5);
 
-  this_->gtk_label_ = GTK_LABEL(gtk_label_new(nullptr));
+  this_->gtk_label_ = GTK_LABEL(gtk_label_new(NULL));
   gtk_label_set_line_wrap(this_->gtk_label_, TRUE);
 
   this_->gtk_entry_ = GTK_ENTRY(gtk_entry_new());
@@ -73,7 +73,7 @@ void InputDlg::exec_create(InputDlg *this_,
   #endif // _WIN32
   g_signal_connect(this_->gtk_entry_, "activate",
                    G_CALLBACK(msg_entry_on_enter_key), this_);
-  g_signal_connect(this_->gtk_entry_, "icon-press",G_CALLBACK(msg_entry_on_icon_press),nullptr);
+  g_signal_connect(this_->gtk_entry_, "icon-press",G_CALLBACK(msg_entry_on_icon_press),NULL);
 
   #ifdef _WIN32
   GtkButton* button_ok = GTK_BUTTON(gtk_button_new_from_stock(GTK_STOCK_OK));
@@ -136,7 +136,7 @@ void InputDlg::set_message(const std::string &text)
 InputDlg::InputDlg(const std::string &title)
 {
   std::string utf_8_title = yage::util::convert_string(title);
-  runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()), nullptr);
+  runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()), NULL);
 }
 
 InputDlg::InputDlg(const std::string &title, Window &window)

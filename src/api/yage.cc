@@ -17,9 +17,9 @@ namespace {
   const draw::Color kTransparentColor(0, 0, 0, 0);
   const size_t kMaxTextBuffer = 2048;
 
-  window::Window *g_window = nullptr;
-  draw::Canvas *g_canvas = nullptr;
-  draw::Paint *g_paint = nullptr;
+  window::Window *g_window = NULL;
+  draw::Canvas *g_canvas = NULL;
+  draw::Paint *g_paint = NULL;
   draw::Color g_fill_color;
   draw::Color g_border_color;
 
@@ -275,7 +275,7 @@ char *yage_dlg_file_save(const char *title) {
   dialog::FileChooserDlg fc_dlg(dialog::FileChooserDlg::action_type_save,
                                 title, *g_window);
   std::string path;
-  if (!fc_dlg.show(path)) return nullptr;
+  if (!fc_dlg.show(path)) return NULL;
   return strdup(path.c_str());
 }
 
@@ -285,7 +285,7 @@ char *yage_dlg_file_open(const char *title) {
                                 title,
                                 *g_window);
   std::string path;
-  if (!fc_dlg.show(path)) return nullptr;
+  if (!fc_dlg.show(path)) return NULL;
   return strdup(path.c_str());
 }
 

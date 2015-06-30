@@ -40,7 +40,7 @@ UnixPlayer::~UnixPlayer() {
 }
 
 bool UnixPlayer::play() {
-  auto state = gst_element_set_state(pipeline_, GST_STATE_PLAYING);
+  GstStateChangeReturn state = gst_element_set_state(pipeline_, GST_STATE_PLAYING);
   is_playing_ = (state != GST_STATE_CHANGE_FAILURE);
   return is_playing_;
 }
@@ -77,7 +77,7 @@ UnixPlayer::UnixPlayer(const std::string &url) : Player() {
   bus_ = gst_pipeline_get_bus(GST_PIPELINE(pipeline_));
   gst_bus_add_watch(bus_, reinterpret_cast<GstBusFunc>(bus_callback), this);
 
-  g_object_set(G_OBJECT(pipeline_), "uri", url_.c_str(), nullptr);
+  g_object_set(G_OBJECT(pipeline_), "uri", url_.c_str(), NULL);
 }
 
 }

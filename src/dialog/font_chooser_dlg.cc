@@ -8,7 +8,7 @@ namespace dialog {
 FontChooserDlg::FontChooserDlg(const std::string &title)
 {
   std::string utf_8_title = yage::util::convert_string(title);
-  runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()), nullptr);
+  runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()), NULL);
 }
 
 FontChooserDlg::FontChooserDlg(const std::string &title, Window &window)
@@ -27,7 +27,7 @@ void FontChooserDlg::exec_destroy(FontChooserDlg *this_)
 {
   if (this_->gtk_dialog_) {
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
-    this_->gtk_dialog_ = nullptr;
+    this_->gtk_dialog_ = NULL;
   }
 }
 

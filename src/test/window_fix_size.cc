@@ -6,7 +6,7 @@ void test_window_fix_size()
   w.show();
   Message msg;
 
-  Window *t = nullptr;
+  Window *t = NULL;
   while (Window::poll(msg)) {
     if (msg.type != msg.type_kbd) continue;
     if (!msg.kbd.is_press) continue;

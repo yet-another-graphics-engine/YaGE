@@ -18,13 +18,13 @@ void Window::msg_push_queue(Message &msg)
 
 void Window::msg_window_on_destroy(GtkWidget *widget, Window *source)
 {
-  source->gtk_draw_ = nullptr;
-  source->gtk_window_ = nullptr;
+  source->gtk_draw_ = NULL;
+  source->gtk_window_ = NULL;
   --Window::window_num_;
 
-  if (source->cairo_surface_ != nullptr) {
+  if (source->cairo_surface_ != NULL) {
     cairo_surface_destroy(source->cairo_surface_);
-    source->cairo_surface_= nullptr;
+    source->cairo_surface_= NULL;
   }
 
   if(Window::quit_all_windows_destroyed && Window::window_num_ == 0)

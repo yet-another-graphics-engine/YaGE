@@ -7,10 +7,10 @@ namespace util {
 namespace runner {
 
 void call(void *callback, bool wait,
-          void *p0 = nullptr,
-          void *p1 = nullptr,
-          void *p2 = nullptr,
-          void *p3 = nullptr);
+          void *p0 = NULL,
+          void *p1 = NULL,
+          void *p2 = NULL,
+          void *p3 = NULL);
 
 }  // namespace runner
 }  // namespace util

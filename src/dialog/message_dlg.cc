@@ -53,7 +53,7 @@ void MessageDlg::exec_create(MessageDlg *this_,
   }
 
   this_->gtk_dialog_ = gtk_message_dialog_new(
-      parent, GTK_DIALOG_MODAL, msg_type, btn_type, nullptr);
+      parent, GTK_DIALOG_MODAL, msg_type, btn_type, NULL);
 }
 
 void MessageDlg::exec_set_title(MessageDlg *this_, char *title)
@@ -112,13 +112,13 @@ void MessageDlg::exec_destroy(MessageDlg *this_)
 {
   if (this_->gtk_dialog_) {
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_dialog_));
-    this_->gtk_dialog_ = nullptr;
+    this_->gtk_dialog_ = NULL;
   }
 }
 
 MessageDlg::MessageDlg(button_type button, icon_type icon)
 {
-  runner_call(exec_create, this, &button, &icon, nullptr);
+  runner_call(exec_create, this, &button, &icon, NULL);
 }
 
 MessageDlg::MessageDlg(button_type button, icon_type icon, Window &window)
