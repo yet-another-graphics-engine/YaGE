@@ -4,12 +4,9 @@
 #include "../util/encoding.h"
 #ifdef _WIN32
 #ifdef _MSC_VER
-#define _X86_
 #endif
 #include "../res/yage_theme.h"
-#include <windef.h>
-#include <wingdi.h>
-#include <winuser.h>
+#include <windows.h>
 #endif // _WIN32
 
 using namespace yage::util;

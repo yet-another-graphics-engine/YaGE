@@ -349,7 +349,7 @@ void lineto(int x, int y) {
 /* Temp code start */
 
 typedef struct mouse_msg {
-    unsigned int msg = 0;
+    unsigned int msg;
     int x;
     int y;
     bool is_move();

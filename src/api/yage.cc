@@ -12,6 +12,12 @@
 #define strdup(x) _strdup(x)
 #endif
 
+#ifdef _MSC_VER
+#if __cplusplus < 201103L
+int vsscanf(const char *buffer, const char *format, va_list argPtr);
+#endif
+#endif
+
 using namespace yage;
 namespace {
   const draw::Color kTransparentColor(0, 0, 0, 0);
