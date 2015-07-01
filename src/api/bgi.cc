@@ -272,7 +272,11 @@ void xyprintf(int x, int y, const char *format, ...) {
     char buf[512];
     va_start(args, format);
 #ifdef _MSC_VER
+#if _MSC_VER > 1300
     sprintf_s(buf, 512, format, args);
+#else
+    _snprintf(buf, 512, format, args);
+#endif
 #else
     snprintf(buf, 512, format, args);
 #endif
@@ -298,11 +302,11 @@ int inputbox_getline(const char *title, const char *text, char *buffer, int leng
     dlg.set_message(text);
     std::string content;
     dlg.show(content);
-    #ifndef _MSC_VER
-    strncpy(buffer, content.c_str(), length - 1);
-    #else
+#if defined(_MSC_VER) && _MSC_VER > 1200
     strncpy_s(buffer, length, content.c_str(), _TRUNCATE);
-    #endif
+#else
+    strncpy(buffer, content.c_str(), length - 1);
+#endif
     return 0;
 }
 

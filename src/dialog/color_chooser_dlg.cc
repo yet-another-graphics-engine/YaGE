@@ -11,7 +11,7 @@ ColorChooserDlg::ColorChooserDlg(const std::string &title)
   runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()), NULL);
 }
 
-ColorChooserDlg::ColorChooserDlg(const std::string &title, Window &window)
+ColorChooserDlg::ColorChooserDlg(const std::string &title, yage::window::Window &window)
 {
   std::string utf_8_title = yage::util::convert_string(title);
   runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()),

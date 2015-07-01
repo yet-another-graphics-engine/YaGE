@@ -121,7 +121,7 @@ MessageDlg::MessageDlg(button_type button, icon_type icon)
   runner_call(exec_create, this, &button, &icon, NULL);
 }
 
-MessageDlg::MessageDlg(button_type button, icon_type icon, Window &window)
+MessageDlg::MessageDlg(button_type button, icon_type icon, yage::window::Window &window)
 {
   runner_call(exec_create, this, &button, &icon, window.pro_get_gtk_window());
 }

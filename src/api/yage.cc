@@ -231,7 +231,11 @@ void yage_printf(double x, double y, const char *format, ...) {
   va_list args;
   va_start(args, format);
 #ifdef _MSC_VER
+#if _MSC_VER > 1300
   vsnprintf_s(buf, _countof(buf), sizeof(buf), format, args);
+#else
+  _vsnprintf(buf, sizeof(buf), format, args);
+#endif
 #else
   vsnprintf(buf, sizeof(buf), format, args);
 #endif
