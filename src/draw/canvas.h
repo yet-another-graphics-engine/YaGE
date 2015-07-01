@@ -32,11 +32,11 @@ class Canvas {
         int width_;
         int height_;
 
-        void init_brush(const Paint &paint);
-        void shape_fill_and_stroke_(const Paint &paint);
-        void shape_stroke_(const Paint &paint);
+        void init_brush(Paint &paint);
+        void shape_fill_and_stroke_(Paint &paint);
+        void shape_stroke_(Paint &paint);
         void pro_draw_elliptic_arc_(Point center, double xradius, double yradius, double startangle, double endangle,
-                                    const Paint &paint, bool draw_sector = false);
+                                    Paint &paint, bool draw_sector = false);
     public:
         /**
          * @brief Creates a blank canvas.
@@ -71,7 +71,7 @@ class Canvas {
          * @param line Indicates the region where the line will be drawn.
          * @param paint The paint used to draw this line.
          */
-        void draw_line(Line &line, const Paint &paint);
+        void draw_line(Line &line,Paint &paint);
 
         /**
          * @brief Draws a line on the canvas with the default paint.
@@ -84,7 +84,7 @@ class Canvas {
          * @param poly Indicates the region where the polygon will be drawn.
          * @param paint The paint used to draw this polygon.
          */
-        void draw_poly(Poly &poly, const Paint &paint);
+        void draw_poly(Poly &poly, Paint &paint);
 
         /**
          * @brief Draws a polygon on the canvas with the default paint.
@@ -97,7 +97,7 @@ class Canvas {
          * @param rect Indicates the region where the rectangle will be drawn.
          * @param paint The paint used to draw this rectangle.
          */
-        void draw_rect(Rect &rect, const Paint &paint);
+        void draw_rect(Rect &rect, Paint &paint);
 
         /**
          * @brief Draws a rectangle on the canvas with the default paint.
@@ -110,7 +110,7 @@ class Canvas {
          * @param elliparc Indicates the region where the arc will be drawn.
          * @param paint The paint used to draw this arc.
          */
-        void draw_elliptical_arc(EllipticArc &elliparc, const Paint &paint);
+        void draw_elliptical_arc(EllipticArc &elliparc, Paint &paint);
 
         /**
          * @brief Draws an arc on the canvas with the default paint.
@@ -123,7 +123,7 @@ class Canvas {
          * @param ellipsec Indicates the region where the sector will be drawn.
          * @param paint The paint used to draw this sector.
          */
-        void draw_elliptical_sector(EllipticSector &ellipsec, const Paint &paint);
+        void draw_elliptical_sector(EllipticSector &ellipsec, Paint &paint);
 
         /**
          * @brief Draws a sector on the canvas with the default paint.
@@ -136,7 +136,7 @@ class Canvas {
          * @param ellipse Indicates the region where the ellipse will be drawn.
          * @param paint The paint used to draw this ellipse.
          */
-        void draw_ellipse(Ellipse &ellipse, const Paint &paint);
+        void draw_ellipse(Ellipse &ellipse, Paint &paint);
 
         /**
          * @brief Draws an ellipse on the canvas with the default paint.
@@ -149,7 +149,7 @@ class Canvas {
          * @param circle Indicates the region where the circle will be drawn.
          * @param paint The paint used to draw this circle.
          */
-        void draw_circle(Circle &circle, const Paint &paint);
+        void draw_circle(Circle &circle, Paint &paint);
 
         /**
          * @brief Draws a circle on the canvas with the default paint.
@@ -165,7 +165,7 @@ class Canvas {
          * @note The size info of the text is in Paint::font.
          * @see Font
          */
-        void draw_text(Text &text, const Paint &paint);
+        void draw_text(Text &text, Paint &paint);
 
         /**
          * @brief Draws a text on the canvas with the default paint.
@@ -183,7 +183,7 @@ class Canvas {
          * this position.
          * @param paint The paint used to draw the content of the another canvas.
          */
-        void draw_canvas(Canvas &canvas, Point position, const Paint &paint);
+        void draw_canvas(Canvas &canvas, Point position, Paint &paint);
 
         /**
          * @brief Draws the content of an another canvas on this canvas with the default paint.
@@ -199,7 +199,7 @@ class Canvas {
          * @param paint The paint used to clear this canvas.
          * @note The color used to fill this canvas is according to Paint::background_color.
          */
-        void clear_all(const Paint &paint);
+        void clear_all(Paint &paint);
 
         /**
          * @brief Clear all the content of this canvas by filling the whole canvas with
@@ -215,7 +215,7 @@ class Canvas {
          * @note The viewport info is in the paint.You can use the function Paint::set_viewport to set the viewport.
          * @note The color used to fill the viewport is according to Paint::background_color.
          */
-        void clear_viewport(const Paint &paint);
+        void clear_viewport( Paint &paint);
 
         /**
          * @brief Save the content of this canvas to a PDF file.

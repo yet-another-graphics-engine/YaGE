@@ -75,7 +75,7 @@ void test_dialog_color_font(Window &w)
   yage::draw::Text text("YaGE 我能吞下玻璃而不伤身体");
   text.position = yage::draw::Point(0, 0);
   Paint p;
-  p.font_color = color;
+  p.set_font_color(color);
   p.font = font;
 
   Canvas c(640, 480);

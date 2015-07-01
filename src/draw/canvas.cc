@@ -59,7 +59,7 @@ void Canvas::get_size(int& width,int& height) {
     height=height_;
 }
 
-void Canvas::init_brush(const Paint &paint) {
+void Canvas::init_brush(Paint &paint) {
     cairo_reset_clip(brush_);
     if (!paint.is_viewport_full_canvas()) {
         Point left_top, right_bottom;
@@ -73,29 +73,30 @@ void Canvas::init_brush(const Paint &paint) {
     cairo_set_matrix(brush_, paint.pro_get_cairo_matrix());
 }
 
-void Canvas::shape_fill_and_stroke_(const Paint &paint) {
-    cairo_scale(brush_, 1.0, 1.0);
-    cairo_set_source_rgba(brush_,
-                          paint.fill_color.r,
-                          paint.fill_color.g,
-                          paint.fill_color.b,
-                          paint.fill_color.a);
-    cairo_fill_preserve(brush_);
+void Canvas::shape_fill_and_stroke_(Paint &paint) {
+    if(paint.style != Paint::draw_style_stroke)
+    {
+      //cairo_scale(brush_, 1.0, 1.0);
+      cairo_set_source(brush_, paint.pro_get_fill_color_pattern());
+      if(paint.style == Paint::draw_style_fill)
+        cairo_fill(brush_);
+      else
+        cairo_fill_preserve(brush_);
+    }
     shape_stroke_(paint);
 }
 
-void Canvas::shape_stroke_(const Paint &paint) {
-    cairo_scale(brush_, 1.0, 1.0);
-    cairo_set_line_width(brush_, paint.line_width);
-    cairo_set_source_rgba(brush_,
-                          paint.line_color.r,
-                          paint.line_color.g,
-                          paint.line_color.b,
-                          paint.line_color.a);
-    cairo_stroke(brush_);
+void Canvas::shape_stroke_(Paint &paint) {
+    if(paint.style != Paint::draw_style_fill)
+    {
+      //cairo_scale(brush_, 1.0, 1.0);
+      cairo_set_line_width(brush_, paint.line_width);
+      cairo_set_source(brush_, paint.pro_get_line_color_pattern());
+      cairo_stroke(brush_);
+    }
 }
 
-void Canvas::draw_line(Line &line, const Paint& paint) {
+void Canvas::draw_line(Line &line, Paint& paint) {
     init_brush(paint);
     cairo_move_to(brush_, line.first.x, line.first.y);
     cairo_line_to(brush_, line.second.x, line.second.y);
@@ -110,7 +111,7 @@ void Canvas::draw_line(Line &line) {
 void Canvas::pro_draw_elliptic_arc_(Point center,
                                     double xradius, double yradius,
                                     double startangle, double endangle,
-                                    const Paint &paint, bool draw_sector) {
+                                    Paint &paint, bool draw_sector) {
     // Drawing Elliptic Arc procedure
     // Finally, we will draw a arc with radius of 0 at (0, 0)
     init_brush(paint);
@@ -127,6 +128,8 @@ void Canvas::pro_draw_elliptic_arc_(Point center,
     }
 
     cairo_restore(brush_);
+    cairo_restore(brush_);
+    cairo_save(brush_);
     if (draw_sector) {
         shape_fill_and_stroke_(paint);
     } else {
@@ -135,18 +138,14 @@ void Canvas::pro_draw_elliptic_arc_(Point center,
     cairo_restore(brush_);
 }
 
-void Canvas::draw_text(Text &text, const Paint &paint) {
+void Canvas::draw_text(Text &text, Paint &paint) {
     init_brush(paint);
     PangoLayout *layout = pango_cairo_create_layout(brush_);
     pango_layout_set_text(layout, text.get_text().c_str(), -1);
     pango_layout_set_font_description(layout,
                                       paint.font.pro_get_pango_font());
     cairo_translate(brush_, text.position.x, text.position.y);
-    cairo_set_source_rgba(brush_,
-                          paint.font_color.r,
-                          paint.font_color.g,
-                          paint.font_color.b,
-                          paint.font_color.a);
+    cairo_set_source(brush_, paint.pro_get_font_color_pattern());
     pango_cairo_show_layout(brush_, layout);
     g_object_unref(layout);
     cairo_restore(brush_);
@@ -156,7 +155,7 @@ void Canvas::draw_text(Text &text) {
     draw_text(text, paint_);
 }
 
-void Canvas::draw_poly(Poly &poly, const Paint &paint) {
+void Canvas::draw_poly(Poly &poly, Paint &paint) {
     init_brush(paint);
     for (Poly::Vertexes::iterator p = poly.vertex.begin();
         p != poly.vertex.end();
@@ -172,7 +171,7 @@ void Canvas::draw_poly(Poly &poly) {
     draw_poly(poly, paint_);
 }
 
-void Canvas::draw_rect(Rect &rect, const Paint &paint) {
+void Canvas::draw_rect(Rect &rect, Paint &paint) {
     init_brush(paint);
     const Point &a = rect.first;
     const Point &b = rect.second;
@@ -185,7 +184,7 @@ void Canvas::draw_rect(Rect &rect) {
     draw_rect(rect, paint_);
 }
 
-void Canvas::draw_elliptical_arc(EllipticArc &elliparc, const Paint &paint) {
+void Canvas::draw_elliptical_arc(EllipticArc &elliparc, Paint &paint) {
     pro_draw_elliptic_arc_(elliparc.center,
                            elliparc.xradius, elliparc.yradius,
                            elliparc.startangle, elliparc.endangle,
@@ -200,7 +199,7 @@ void Canvas::draw_elliptical_arc(EllipticArc &elliparc) {
 }
 
 void Canvas::draw_elliptical_sector(EllipticSector &ellipsec,
-                                    const Paint &paint) {
+                                    Paint &paint) {
     pro_draw_elliptic_arc_(ellipsec.center,
                            ellipsec.xradius, ellipsec.yradius,
                            ellipsec.startangle, ellipsec.endangle,
@@ -214,7 +213,7 @@ void Canvas::draw_elliptical_sector(EllipticSector &ellipsec) {
                            paint_, true);
 }
 
-void Canvas::draw_ellipse(Ellipse &ellipse, const Paint &paint) {
+void Canvas::draw_ellipse(Ellipse &ellipse, Paint &paint) {
     pro_draw_elliptic_arc_(ellipse.center,
                            ellipse.xradius, ellipse.yradius,
                            0, 2 * M_PI,
@@ -228,7 +227,7 @@ void Canvas::draw_ellipse(Ellipse &ellipse) {
                            paint_, true);
 }
 
-void Canvas::draw_circle(Circle &circle, const Paint &paint) {
+void Canvas::draw_circle(Circle &circle, Paint &paint) {
     pro_draw_elliptic_arc_(circle.center,
                            circle.radius, circle.radius,
                            0, 2 * M_PI,
@@ -242,7 +241,7 @@ void Canvas::draw_circle(Circle &circle) {
                            paint_, true);
 }
 
-void Canvas::draw_canvas(Canvas &canvas, Point position, const Paint &paint) {
+void Canvas::draw_canvas(Canvas &canvas, Point position, Paint &paint) {
     init_brush(paint);
     cairo_set_source_surface(brush_, canvas.pro_get_cairo_surface(),
                              position.x, position.y);
@@ -262,13 +261,10 @@ cairo_t *Canvas::pro_get_brush(void) {
     return brush_;
 }
 
-void Canvas::clear_all(const Paint &paint) {
+void Canvas::clear_all(Paint &paint) {
     cairo_reset_clip(brush_);
     cairo_save(brush_);
-    cairo_set_source_rgba(brush_, paint.background_color.r,
-                                  paint.background_color.g,
-                                  paint.background_color.b,
-                                  paint.background_color.a);
+    cairo_set_source(brush_, paint.pro_get_background_color_pattern());
     cairo_paint(brush_);
     cairo_restore(brush_);
 }
@@ -277,12 +273,9 @@ void Canvas::clear_all(void) {
     clear_all(paint_);
 }
 
-void Canvas::clear_viewport(const Paint &paint) {
+void Canvas::clear_viewport(Paint &paint) {
     init_brush(paint);
-    cairo_set_source_rgba(brush_, paint.background_color.r,
-                                  paint.background_color.g,
-                                  paint.background_color.b,
-                                  paint.background_color.a);
+    cairo_set_source(brush_, paint.pro_get_background_color_pattern());
     cairo_paint(brush_);
     cairo_restore(brush_);
 }

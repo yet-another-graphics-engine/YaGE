@@ -14,6 +14,12 @@ using namespace yage::util;
 namespace yage {
 namespace window {
 
+GMutex Window::show_mutex_;
+GCond Window::show_cond_;
+GMutex Window::resize_mutex_;
+GCond Window::resize_cond_;
+
+
 gpointer user_thread(gpointer *param) {
   int (*func)(int, char**) = reinterpret_cast<int (*)(int, char**)>(param[0]);
   int &ret = *reinterpret_cast<int *>(param[1]);
@@ -23,11 +29,14 @@ gpointer user_thread(gpointer *param) {
   return NULL;
 }
 
-bool Window::quit_all_windows_destroyed = true;
 
 int Window::init(int (*new_main)()) {
   msg_queue_ = g_async_queue_new();
   gtk_init(NULL, NULL);
+  g_mutex_init(&show_mutex_);
+  g_cond_init(&show_cond_);
+  g_mutex_init(&resize_mutex_);
+  g_cond_init(&resize_cond_);
 
   #ifdef _WIN32
   GtkSettings* settings = gtk_settings_get_default();
@@ -80,11 +89,6 @@ void Window::set_max_size(Window* this_, int &width, int &height)
  */
 void Window::exec_create(Window *this_, int &width, int &height) {
   this_->cairo_surface_ = NULL;
-
-  g_mutex_init(&this_->show_mutex_);
-  g_cond_init(&this_->show_cond_);
-  g_mutex_init(&this_->resize_mutex_);
-  g_cond_init(&this_->resize_cond_);
   this_->show_flag_ = false;
   this_->size_change_flag_ = true;
   this_->title_bar_height_ = 0;
@@ -159,10 +163,6 @@ void Window::exec_hide(Window *this_) {
 
 void Window::exec_destroy(Window *this_) {
   if (this_->gtk_window_) {
-    g_mutex_clear(&this_->show_mutex_);
-    g_mutex_clear(&this_->resize_mutex_);
-    g_cond_clear(&this_->show_cond_);
-    g_cond_clear(&this_->resize_cond_);
     gtk_widget_destroy(GTK_WIDGET(this_->gtk_window_));
     this_->gtk_window_ = NULL;
     this_->gtk_draw_ = NULL;
@@ -212,7 +212,7 @@ void Window::exec_set_size(Window *this_, int &width, int &height) {
   }
   if(gtk_window_is_active(this_->gtk_window_) == FALSE)
   {
-    g_cond_signal(&this_->resize_cond_);
+    g_cond_signal(&Window::resize_cond_);
     return;
   }
 }
@@ -233,7 +233,7 @@ void Window::show() {
   if(show_flag_)
     return;
   g_mutex_lock(&show_mutex_);
-  gdk_threads_add_idle(GSourceFunc(exec_show), this);
+  runner_call_ex(exec_show, false, this);
   g_cond_wait(&show_cond_, &show_mutex_);
   g_mutex_unlock(&show_mutex_);
   show_flag_ = true;
@@ -245,6 +245,7 @@ void Window::hide() {
 
 void Window::destroy() {
   runner_call(exec_destroy, this);
+  Window::window_num_--;
 }
 
 void Window::set_title(const std::string &title) {
@@ -302,7 +303,8 @@ void Window::set_canvas(Canvas &canvas) {
 }
 
 void Window::update() {
-  runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_draw_));
+  if(is_valid())
+    runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_draw_));
 }
 
 void Window::quit() {
@@ -310,7 +312,8 @@ void Window::quit() {
 }
 
 Window::~Window() {
-  destroy();
+  if(is_valid())
+    destroy();
 }
 
 bool Window::is_valid() {

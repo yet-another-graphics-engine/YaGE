@@ -39,10 +39,10 @@ private:
   int window_min_width_;
   int window_min_height_;
   int title_bar_height_;
-  GMutex show_mutex_;
-  GCond show_cond_;
-  GMutex resize_mutex_;
-  GCond resize_cond_;
+  static GMutex show_mutex_;
+  static GCond show_cond_;
+  static GMutex resize_mutex_;
+  static GCond resize_cond_;
   bool show_flag_;
   bool size_change_flag_;
 
@@ -94,14 +94,8 @@ private:
   static gboolean msg_draw_on_draw(     GtkWidget *widget,
                                         cairo_t *cairo,
                                         Window *source);
+
 public:
-
-  /**
-   * @brief The flag that whether the program exits automatically when all the window
-   * Objects are destroyed.The default value is true.
-   */
-  static bool quit_all_windows_destroyed;
-
   /**
    * @brief Executes the given function in an additional user thread.
    * @note The function will be called automatically to execute the code in the function "int main()"

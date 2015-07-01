@@ -27,12 +27,6 @@ void Window::msg_window_on_destroy(GtkWidget *widget, Window *source)
     source->cairo_surface_= NULL;
   }
 
-  if(Window::quit_all_windows_destroyed && Window::window_num_ == 0)
-  {
-    gtk_main_quit();
-    return;
-  }
-
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_window;
@@ -57,7 +51,7 @@ gboolean Window::msg_window_on_focus(GtkWidget *widget, GdkEvent *event, Window 
     GdkRectangle area;
     gdk_window_get_frame_extents(window, &area);
     source->title_bar_height_ = area.height - gdk_window_get_height(window);
-    g_cond_signal(&source->show_cond_);
+    g_cond_signal(&Window::show_cond_);
   }
   return false;
 }
@@ -145,13 +139,14 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
   //g_print("on_draw_resize\n");
   gtk_window_get_size(source->gtk_window_, &source->window_width_, &source->window_height_);
   if(source->size_change_flag_ == false)
-    g_cond_signal(&source->resize_cond_);
+    g_cond_signal(&Window::resize_cond_);
   return true;
 }
 
 gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *source)
 {
   cairo_surface_t* surface = source->cairo_surface_;
+  cairo_save(cairo);
   if (surface) {
     cairo_set_source_surface(cairo, surface, 0, 0);
     cairo_paint(cairo);
@@ -160,6 +155,7 @@ gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *sou
     cairo_set_source_rgb(cairo,1,1,1);
     cairo_paint(cairo);
   }
+  cairo_restore(cairo);
   return true;
 }
 
