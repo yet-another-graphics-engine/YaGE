@@ -380,6 +380,49 @@ int yage_input_scanf(const char *title, const char *message,
 
   int ret_val;
 #if defined(_MSC_VER) && _MSC_VER < 1800
+  /*
+   * The struct of stack till now:
+   *
+   *     [High]
+   *     [Caller's ebp]
+   *     caller_local_vars
+   *     ...(size unknown)
+   *     format
+   *     message
+   *     title
+   *     return_address(by `call xxx`)
+   *     saved_caller_ebp(by `push ebp`)
+   *     local_vars
+   *     [esp]
+   *     [Low]
+   *
+   * To emulate `vsscanf` by `sscanf`, we need to know every variables pushed
+   * on stack. The push sequence for cdecl is reversed: ..., format, message,
+   * title, from highest address to lowest address.
+   *
+   * The definition of `sscanf` is:
+   *     int sscanf(const char *string, const char *format, ...);
+   *
+   * We will form a stack to call `sscanf`:
+   *
+   *     [High]
+   *     [Caller's ebp]                 -> args_high
+   *     caller_local_vars
+   *     ...(size unknown)
+   *     format
+   *     message                        -> args_low
+   *     title
+   *     return_address(by `call xxx`)
+   *     saved_caller_ebp(by `push ebp`)
+   *     local_vars
+         copied_call_local_vars
+   *     copied_caller_local_vars       copied but not used
+   *     copied_...                     \
+   *     copied_format                  | used by sscanf
+   *     string                         /
+   *     [Low]
+   */
+
   message = str.c_str();
   char *args_low = (char *)&message;
   char *args_high = (char *)*((void **)&title - 2);
@@ -387,16 +430,19 @@ int yage_input_scanf(const char *title, const char *message,
 
   char *orign_esp;
   _asm {
-    mov orign_esp, esp
-    sub esp, args_size
+    mov orign_esp, esp      // backup original ebp
+    sub esp, args_size      // allocate space for storing new stack
   }
+
+  // copy stack
   memcpy(orign_esp - args_size, args_low, args_size);
 
   _asm {
     call dword ptr [sscanf]
-    mov ret_val, eax
-    mov esp, orign_esp
+    mov ret_val, eax        // save return value
+    mov esp, orign_esp      // restore esp
   }
+
 #else
   va_list args;
   va_start(args, format);
