@@ -1,4 +1,5 @@
 #include <cstring>
+#include <cstdarg>
 #include <sstream>
 #include "../../include/yage.h"
 #include "../window/window.h"
@@ -377,12 +378,32 @@ int yage_input_scanf(const char *title, const char *message,
   std::string str;
   dlg.show(str);
 
+  int ret_val;
+#if defined(_MSC_VER) && _MSC_VER < 1800
+  message = str.c_str();
+  char *args_low = (char *)&message;
+  char *args_high = (char *)*((void **)&title - 2);
+  size_t args_size = args_high - args_low;
+
+  char *orign_esp;
+  _asm {
+    mov orign_esp, esp
+    sub esp, args_size
+  }
+  memcpy(orign_esp - args_size, args_low, args_size);
+
+  _asm {
+    call dword ptr [sscanf]
+    mov ret_val, eax
+    mov esp, orign_esp
+  }
+#else
   va_list args;
   va_start(args, format);
-  int ret = vsscanf(str.c_str(), format, args);
+  ret_val = vsscanf(str.c_str(), format, args);
   va_end(args);
-
-  return ret;
+#endif
+  return ret_val;
 }
 
-}
+} // extern "C"

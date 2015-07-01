@@ -55,10 +55,6 @@ if(WIN32)
     INCLUDE_DIRECTORIES(${CMAKE_BINARY_DIR}/res/)
 endif()
 
-if(MSVC AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 18)
-    list(APPEND LIB_SOURCE_FILES util/vsscanf.cc)
-endif()
-
 # Audio support files
 if(WIN32)
     list(APPEND LIB_SOURCE_FILES audio/mswin.cc)

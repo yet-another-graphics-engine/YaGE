@@ -45,9 +45,9 @@ void test_api_yage(void) {
   yage_printf(240, 200, "int = %d, double = %lf", val_int, val_double);
 
   char val_str[64];
-  yage_input_scanf(NULL, "Enter [str][num]", "%s %d", val_str, &val_int);
+  int num_scanned = yage_input_scanf(NULL, "Enter [str][num]", "%s %d", val_str, &val_int);
   yage_set_font("Microsoft YaHei", 10, true, true);
-  yage_printf(240, 240, "str = %s, num = %d", val_str, val_int);
+  yage_printf(240, 240, "num_scanned = %d, str = %s, num = %d", num_scanned, val_str, val_int);
 
   if (yage_dlg_question(NULL, "Save file?",
                         kYageDlgIconQuestion,
