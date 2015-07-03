@@ -1,3 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_DEPRECATE
+
 #include <cstring>
 #include <cstdarg>
 #include <sstream>
@@ -11,12 +14,6 @@
 
 #ifdef _WIN32
 #define strdup(x) _strdup(x)
-#endif
-
-#ifdef _MSC_VER
-#if _MSC_VER < 1800 // http://blogs.msdn.com/b/vcblog/archive/2013/07/19/c99-library-support-in-visual-studio-2013.aspx
-int vsscanf(const char *buffer, const char *format, va_list argPtr);
-#endif
 #endif
 
 using namespace yage;
@@ -368,6 +365,10 @@ char *yage_input_line(const char *title, const char *message) {
   dlg.show(str);
   return strdup(str.c_str());
 }
+
+#if defined(_MSC_VER) && _MSC_VER < 1800
+#pragma optimize("", off) // Disable optimization of `yage_input_scanf` function. Enable optimization will cause program crash.
+#endif
 
 int yage_input_scanf(const char *title, const char *message,
                      const char *format, ...) {
