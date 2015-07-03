@@ -1,12 +1,15 @@
 version: 1.0.{build}
+cache:
+- C:\GTK
+environment:
+  ftpinfo:
+    secure: Dy4cv6w20/AfqUS85nVN4A==
+#init:
+#- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 before_build:
-- curl -O http://win32builder.gnome.org/gtk+-bundle_3.6.4-20130921_win32.zip
-- 7z x gtk+-bundle_3.6.4-20130921_win32.zip -oC:\GTK
-- set PATH=C:\GTK\bin;%PATH%
-- gdk-pixbuf-query-loaders > C:\GTK\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache
-- md build
-- cd build
-- cmake .. -G "Visual Studio 12 2013"
-build:
-  project: C:/projects/yage/build/YaGE.sln
-  verbosity: detailed
+- cd C:\projects\yage && pkg\AppVeyor\avconfig.cmd
+build_script:
+- cd C:\projects\yage && pkg\AppVeyor\avbuilder.cmd
+- 'echo Build finished'
+#on_finish:
+#- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
