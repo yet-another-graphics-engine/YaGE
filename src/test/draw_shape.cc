@@ -1,6 +1,10 @@
 ﻿#include "test.h"
 #include <math.h>
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4566)
+#endif
+
 using namespace yage::draw;
 
 void test_draw_shape(void)
