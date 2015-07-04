@@ -128,8 +128,11 @@ std::string Font::get_win32_font_family_eng_name(const std::string& font_family)
   HDC hdc = pango_win32_get_dc();
   LOGFONT lgf = *win32_default_font;
   HFONT hfont, oldhfont;
+#if defined(_MSC_VER) && _MSC_VER > 1300
+  strcpy_s(lgf.lfFaceName, 32, ansi_font_family);
+#else
   strcpy(lgf.lfFaceName, ansi_font_family);
-
+#endif
   std::string temp_result;
   char* result, *name;
   const char* charset;
