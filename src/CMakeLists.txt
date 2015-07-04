@@ -98,6 +98,7 @@ endif()
 if(MINGW)
     set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_EXE_LINKER_FLAGS}")
     set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -Wl,--exclude-libs,libgcc_eh.a ${CMAKE_SHARED_LINKER_FLAGS}")
+    list(APPEND LIB_SOURCE_FILES util/snprintf.c) # Used to replace default poisonous MSVCRT-provided `vsnprintf`
 endif()
 
 # Add GTK dependency

@@ -16,6 +16,10 @@
 #define strdup(x) _strdup(x)
 #endif
 
+#ifdef __MINGW32__ // `vsnprintf` that MinGW provides uses MSVCRT library, which is not C99 compatible
+#include "../util/snprintf.h"
+#endif
+
 using namespace yage;
 namespace {
   const draw::Color kTransparentColor(0, 0, 0, 0);
