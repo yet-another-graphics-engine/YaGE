@@ -93,9 +93,11 @@ if (MSVC)
         set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc14)
     endif()
     LINK_DIRECTORIES(${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
-else (MINGW) # Static libgcc has issues now: _Unwind_resume redefined.
-    #set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_EXE_LINKER_FLAGS}")
-    #set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_SHARED_LINKER_FLAGS}")
+endif()
+
+if(MINGW)
+    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_EXE_LINKER_FLAGS}")
+    set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -Wl,--exclude-libs,libgcc_eh.a ${CMAKE_SHARED_LINKER_FLAGS}")
 endif()
 
 # Add GTK dependency
