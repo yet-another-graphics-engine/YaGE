@@ -50,7 +50,7 @@ void test_draw_shape(void)
   paint.set_line_color(color);
   canvas.draw_rect(rect,paint);
 
-  Font times("Times New Roman", 12, true, true);
+  Font times("某个并不存在的字体", 12, false, false);
   paint.font = times;
   Text text("Yet another Graphics Engine");
   Color yellow(1, 1, 0, 1);

@@ -18,12 +18,21 @@ char *utf_16_to_utf_8(const wchar_t *wstr);
 
 /**
  * @author Shengyun Zhou (GGGZ-1101-28@live.cn)
+ * @brief Check if the string is encoded with ASCII
+ * @param str A C-style string.
+ * @param str_length The length of the string.
+ * @return Returns true if the string is encoded with ASCII.
+ */
+bool is_string_ASCII(const char *str, int str_length);
+
+/**
+ * @author Shengyun Zhou (GGGZ-1101-28@live.cn)
  * @brief Check if the string is encoded with UTF-8.
  * @param str A C-style string.
  * @param str_length The length of the string.
  * @return Returns true if the string is encoded with UTF-8.
  */
-bool is_string_utf_8(const char *str,int str_length);
+bool is_string_utf_8(const char *str, int str_length);
 
 /**
  * @author Shengyun Zhou (GGGZ-1101-28@live.cn)

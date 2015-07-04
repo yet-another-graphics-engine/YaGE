@@ -6,9 +6,22 @@
 namespace yage {
 namespace util {
 
-bool is_string_utf_8(const char *str,int str_length)
+bool is_string_ASCII(const char *str, int str_length)
 {
-  char c;
+  unsigned char c;
+  int i;
+  for(i = 0; i < str_length; i++)
+  {
+    c = str[i];
+    if((c & 0x80) != 0)
+      return false;
+  }
+  return true;
+}
+
+bool is_string_utf_8(const char *str, int str_length)
+{
+  unsigned char c;
   int i,j,byte_num;
   for(i = 0; i < str_length; i++)
   {

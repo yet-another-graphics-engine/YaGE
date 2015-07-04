@@ -38,11 +38,16 @@ void init() {
   gtk_init(NULL, NULL);
 
 #ifdef _WIN32
+  g_print("system font:%s\n", Font::get_font_family_yage_default().c_str());
+  std::string global_font = Font::get_win32_font_family_eng_name(Font::get_font_family_yage_default());
+  global_font += " 10";
   GtkSettings* settings = gtk_settings_get_default();
-  gtk_settings_set_string_property(settings, "gtk-font-name", "Microsoft YaHei 10", "Sans 10");
+  gtk_settings_set_string_property(settings, "gtk-font-name", global_font.c_str(), "Sans 10");
   gtk_settings_set_string_property(settings, "gtk-icon-theme-name", "YaGE", "hicolor");
   gtk_settings_set_string_property(settings, "gtk-icon-sizes", "gtk-menu=20,20:gtk-dialog=60,60", NULL);
   gtk_settings_set_long_property(settings, "gtk-xft-antialias", 1, NULL);
+  gtk_settings_set_long_property(settings, "gtk-xft-hinting", 1, NULL);
+  gtk_settings_set_string_property(settings, "gtk-xft-hintstyle", "hintfull", NULL);
   gtk_settings_set_string_property(settings, "gtk-xft-rgba", "rgb", "none");
   yage::res::init_yage_theme();
 #endif  // _WIN32

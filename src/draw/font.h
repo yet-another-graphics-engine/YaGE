@@ -3,30 +3,27 @@
 #include <pango/pango-font.h>
 #include <string>
 
-#ifdef __WIN32
-#define YAGE_DEFAULT_FONT "Tahoma"
-#elif defined(__APPLE__)
-#if MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_9
-#define YAGE_DEFAULT_FONT "Lucida Grande"
-#else
-#define YAGE_DEFAULT_FONT "Helvetica Neue"
-#endif
-#else
-#define YAGE_DEFAULT_FONT "Sans Serif"
-#endif
-
 namespace yage {
 namespace draw {
 
 class Font {
 private:
     PangoFontDescription *description_;
+    static const char* yage_default_font_;
+    #ifdef _WIN32
+    static const char* get_win32_default_font_family();
+    #endif // _WIN32
 public:
-    Font(const std::string &family = YAGE_DEFAULT_FONT, int size = 12, bool is_bold = false, bool is_italic = false);
+    Font(const std::string &family = yage_default_font_, int size = 12, bool is_bold = false, bool is_italic = false);
     Font(Font &font);
     Font &operator=(Font &font);
     ~Font();
 
+    #ifdef _WIN32
+    static std::string get_win32_font_family_eng_name(const std::string& font_family);
+    #endif // _WIN32
+
+    static std::string get_font_family_yage_default();
     std::string get_font_family(void) const;
     int get_size(void) const;
     bool get_bold_status(void) const;
