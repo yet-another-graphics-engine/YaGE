@@ -1,4 +1,4 @@
-#include "test.h"
+ï»¿#include "test.h"
 #include <math.h>
 
 using namespace yage::draw;
@@ -50,7 +50,7 @@ void test_draw_shape(void)
   paint.set_line_color(color);
   canvas.draw_rect(rect,paint);
 
-  Font times("Ä³¸ö²¢²»´æÔÚµÄ×ÖÌå", 12, false, false);
+  Font times("æŸä¸ªå¹¶ä¸å­˜åœ¨çš„å­—ä½“", 12, false, false);
   paint.font = times;
   Text text("Yet another Graphics Engine");
   Color yellow(1, 1, 0, 1);

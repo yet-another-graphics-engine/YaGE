@@ -279,9 +279,15 @@ bool Window::is_resizable() {
 void Window::set_size(int width, int height) {
   if(width == -1 || height == -1)
     set_max_size(this, width, height);
+  //printf("to width = %d, to height = %d, now-width = %d now-height = %d min-width=%d min-height=%d\n",
+  //        width, height, window_width_, window_height_, window_min_width_, window_min_height_);
+  if(width == window_width_ && height == window_height_)
+    return;
   if(width < window_min_width_ && height < window_min_height_)
     return;
-  if(width == window_width_ && height == window_height_)
+  if(width < window_min_width_ && height == window_height_)
+    return;
+  if(width == window_width_ && height < window_min_height_)
     return;
 
   size_change_flag_ = false;
