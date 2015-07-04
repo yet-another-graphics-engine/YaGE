@@ -13,14 +13,14 @@ using yage::draw::Point;
 
 void Window::msg_push_queue(Message &msg)
 {
-  g_async_queue_push(Window::msg_queue_, &msg);
+  g_async_queue_push(msg_queue, &msg);
 }
 
 void Window::msg_window_on_destroy(GtkWidget *widget, Window *source)
 {
   source->gtk_draw_ = NULL;
   source->gtk_window_ = NULL;
-  --Window::window_num_;
+  --window_num;
 
   if (source->cairo_surface_ != NULL) {
     cairo_surface_destroy(source->cairo_surface_);
@@ -51,7 +51,7 @@ gboolean Window::msg_window_on_focus(GtkWidget *widget, GdkEvent *event, Window 
     GdkRectangle area;
     gdk_window_get_frame_extents(window, &area);
     source->title_bar_height_ = area.height - gdk_window_get_height(window);
-    g_cond_signal(&Window::show_cond_);
+    g_cond_signal(&show_cond);
   }
   return false;
 }
@@ -139,7 +139,7 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
   //g_print("on_draw_resize\n");
   gtk_window_get_size(source->gtk_window_, &source->window_width_, &source->window_height_);
   if(source->size_change_flag_ == false)
-    g_cond_signal(&Window::resize_cond_);
+    g_cond_signal(&resize_cond);
   return true;
 }
 

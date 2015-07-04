@@ -8,7 +8,7 @@ void test_window_resize()
   int x = 300, y = 300;
 
   Message msg;
-  while (Window::poll(msg)) {
+  while (yage::window::poll(msg)) {
     if (msg.type != msg.type_kbd) continue;
     if (!msg.kbd.is_press) continue;
 

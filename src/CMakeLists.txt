@@ -77,9 +77,8 @@ elseif(UNIX)
     ADD_DEFINITIONS(${GSTREAMER_CFLAGS_OTHER})
 endif()
 
-add_library(yage STATIC ${LIB_SOURCE_FILES})
-
 if (MSVC)
+    add_library(yage STATIC ${LIB_SOURCE_FILES})
     if (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 14 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 15) # Visual C++ 2005
         set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc8)
     elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 15 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 16) # Visual C++ 2008
@@ -94,6 +93,9 @@ if (MSVC)
         set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc14)
     endif()
     LINK_DIRECTORIES(${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
+else (MINGW) # Static libgcc has issues now: _Unwind_resume redefined.
+    #set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_EXE_LINKER_FLAGS}")
+    #set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ ${CMAKE_SHARED_LINKER_FLAGS}")
 endif()
 
 # Add GTK dependency
@@ -112,6 +114,7 @@ if (MSVC)
     # pkg-config generates a flag that is not applicable on MSVC: -mms-bitfields
 else()
     ADD_DEFINITIONS(${GTK3_CFLAGS_OTHER})
+    add_library(yage SHARED ${LIB_SOURCE_FILES})
 endif()
 
 # install library and headers
@@ -155,15 +158,15 @@ endif()
 
 # Audio libraries
 if (APPLE)
-    target_link_libraries(yagetest ${FOUNDATION_LIBRARY} ${AVFOUNDATION_LIBRARY} ${COREMEDIA_LIBRARY})
+    target_link_libraries(yage ${FOUNDATION_LIBRARY} ${AVFOUNDATION_LIBRARY} ${COREMEDIA_LIBRARY})
 elseif(UNIX)
-    target_link_libraries(yagetest ${GSTREAMER_LIBRARIES})
+    target_link_libraries(yage ${GSTREAMER_LIBRARIES})
 endif()
 
 # GTK libraries
 if (MSVC) # library required by MSVC is pretty different than others; Update: GTK libraries are automatically linked via pragma in header. It is reserved for historical and debugging purpose.
     # target_link_libraries(yagetest "atk-1.0.lib" "cairo.lib" "fontconfig.lib" "gailutil.lib" "gdk-win32-3.0.lib" "gdk_pixbuf-2.0.lib" "gio-2.0.lib" "glib-2.0.lib" "gmodule-2.0.lib" "gobject-2.0.lib" "gthread-2.0.lib" "gtk-win32-3.0.lib" "pango-1.0.lib" "pangocairo-1.0.lib" "pangoft2-1.0.lib" "pangowin32-1.0.lib")
 else()
-    target_link_libraries(yagetest ${GTK3_LIBRARIES})
+    target_link_libraries(yage ${GTK3_LIBRARIES})
 endif()
 

@@ -7,7 +7,7 @@ void test_window_fix_size()
   Message msg;
 
   Window *t = NULL;
-  while (Window::poll(msg)) {
+  while (yage::window::poll(msg)) {
     if (msg.type != msg.type_kbd) continue;
     if (!msg.kbd.is_press) continue;
 

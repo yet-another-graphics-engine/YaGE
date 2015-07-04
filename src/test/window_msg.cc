@@ -15,7 +15,7 @@ void test_window_msg()
   w.show();
 
   Message msg;
-  while (Window::poll(msg)) {
+  while (yage::window::poll(msg)) {
     switch (msg.type) {
       P_NAME(type_nop);
       P_STOP();

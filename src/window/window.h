@@ -8,13 +8,43 @@
 #include "../util/runner.h"
 
 namespace yage {
+
 namespace draw {
   class Canvas;
 }
 
 namespace window {
-
 struct Message;
+
+extern GAsyncQueue *msg_queue;
+extern size_t window_num;
+
+extern GMutex show_mutex;
+extern GCond show_cond;
+extern GMutex resize_mutex;
+extern GCond resize_cond;
+
+/**
+ * @brief Initialize the graphics environment.
+ * Initialize sync data structures, message queue and GTK, then set customize
+ * style on Microsoft Windows.
+ */
+void init();
+
+/**
+ * @brief Gets a message from pool.
+ *
+ * @param block: If no message available, whether block until new message comes.
+ * @param [out] msg: The arrived message will be written here
+ * @return Returns false when there are no window left, thus no messages can be
+ *  generated. Returns true when new message can arrive in the future.
+ */
+bool poll(Message &msg, bool block = true);
+
+/**
+ * @brief Closes all windows and exit the program.
+ */
+void quit();
 
 /**
  * @brief yage::window::Window is the most important part of GUI in a YaGE program.
@@ -31,18 +61,11 @@ struct Message;
  */
 class Window {
 private:
-  static GAsyncQueue *msg_queue_;
-  static size_t window_num_;
-
   int window_width_;
   int window_height_;
   int window_min_width_;
   int window_min_height_;
   int title_bar_height_;
-  static GMutex show_mutex_;
-  static GCond show_cond_;
-  static GMutex resize_mutex_;
-  static GCond resize_cond_;
   bool show_flag_;
   bool size_change_flag_;
 
@@ -96,31 +119,6 @@ private:
                                         Window *source);
 
 public:
-  /**
-   * @brief Executes the given function in an additional user thread.
-   * @note The function will be called automatically to execute the code in the function "int main()"
-   * when the program starts.
-   * @param new_main The given function.
-   * @return Returns the value which the function new_main returns.
-   * @attention DO NOT call it manually.
-   */
-  static int init(int (*new_main)());
-
-  /**
-   * @brief Gets a message from pool.
-   *
-   * @param block: If no message available, whether block until new message comes.
-   * @param [out] msg: The arrived message will be written here
-   * @return Returns false when there are no window left, thus no messages can be
-   *  generated. Returns true when new message can arrive in the future.
-   */
-  static bool poll(Message &msg, bool block = true);
-
-  /**
-   * @brief Closes the window and exit the program.
-   */
-  static void quit();
-
   /**
    * @brief Creates a new window.
    * @param start_width The initial width of the window.The default value is 640.If the value is -1,

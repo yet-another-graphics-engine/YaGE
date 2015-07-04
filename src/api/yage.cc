@@ -105,7 +105,7 @@ void yage_init(int width, int height) {
 }
 
 void yage_quit(void) {
-  window::Window::quit();
+  window::quit();
 }
 
 void yage_clear(void) {
@@ -254,12 +254,12 @@ void yage_printf(double x, double y, const char *format, ...) {
 
 int yage_get_message(struct yage_message_t *msg, int wait_ms) {
   // FIXME: add wait_ms support
-  return window::Window::poll(*reinterpret_cast<window::Message *>(msg));
+  return window::poll(*reinterpret_cast<window::Message *>(msg));
 }
 
 int  yage_get_key(void) {
   window::Message msg;
-  while (window::Window::poll(msg)) {
+  while (window::poll(msg)) {
     if (msg.type != msg.type_kbd) continue;
     return msg.kbd.keyval;
   }

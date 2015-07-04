@@ -14,31 +14,30 @@ using namespace yage::util;
 namespace yage {
 namespace window {
 
-GMutex Window::show_mutex_;
-GCond Window::show_cond_;
-GMutex Window::resize_mutex_;
-GCond Window::resize_cond_;
+/*
+ * Static variables
+ */
+GAsyncQueue *msg_queue = NULL;
+size_t window_num = 0;
 
+GMutex show_mutex;
+GCond show_cond;
+GMutex resize_mutex;
+GCond resize_cond;
 
-gpointer user_thread(gpointer *param) {
-  int (*func)(int, char**) = reinterpret_cast<int (*)(int, char**)>(param[0]);
-  int &ret = *reinterpret_cast<int *>(param[1]);
+/*
+ * Local functions
+ */
+void init() {
+  msg_queue = g_async_queue_new();
+  g_mutex_init(&show_mutex);
+  g_cond_init(&show_cond);
+  g_mutex_init(&resize_mutex);
+  g_cond_init(&resize_cond);
 
-  ret = func(argc, argv);
-  gtk_main_quit();
-  return NULL;
-}
-
-
-int Window::init(int (*new_main)()) {
-  msg_queue_ = g_async_queue_new();
   gtk_init(NULL, NULL);
-  g_mutex_init(&show_mutex_);
-  g_cond_init(&show_cond_);
-  g_mutex_init(&resize_mutex_);
-  g_cond_init(&resize_cond_);
 
-  #ifdef _WIN32
+#ifdef _WIN32
   GtkSettings* settings = gtk_settings_get_default();
   gtk_settings_set_string_property(settings, "gtk-font-name", "Microsoft YaHei 10", "Sans 10");
   gtk_settings_set_string_property(settings, "gtk-icon-theme-name", "YaGE", "hicolor");
@@ -46,22 +45,31 @@ int Window::init(int (*new_main)()) {
   gtk_settings_set_long_property(settings, "gtk-xft-antialias", 1, NULL);
   gtk_settings_set_string_property(settings, "gtk-xft-rgba", "rgb", "none");
   yage::res::init_yage_theme();
-  #endif // _WIN32
-  int ret = 0;
-  gpointer param[] = {reinterpret_cast<gpointer>(new_main), &ret};
-  g_thread_new("YaGE user", reinterpret_cast<GThreadFunc>(user_thread), param);
-  gtk_main();
-  // user_thread() will set the value of ret
-  return ret;
+#endif  // _WIN32
+}
+
+bool poll(Message &msg, bool block) {
+  if (window_num == 0) return false;
+
+  gpointer pmsg = block ? g_async_queue_pop(msg_queue)
+                        : g_async_queue_try_pop(msg_queue);
+
+  if (pmsg == NULL) {
+    msg.type = msg.type_nop;
+  } else {
+    msg = *reinterpret_cast<Message *>(pmsg);
+    delete reinterpret_cast<Message *>(pmsg);
+  }
+  return true;
+}
+
+void quit() {
+  gtk_main_quit();
 }
 
 /*
- * Static variables.
+ * Member functions
  */
-GAsyncQueue *Window::msg_queue_ = NULL;
-
-size_t Window::window_num_ = 0;
-
 void Window::set_max_size(Window* this_, int &width, int &height)
 {
   #ifdef _WIN32
@@ -146,7 +154,7 @@ void Window::exec_create(Window *this_, int &width, int &height) {
   gtk_container_add(GTK_CONTAINER(gtk_window_), gtk_draw_);
 
   // Add window counter
-  ++Window::window_num_;
+  ++window_num;
 }
 
 void Window::exec_show(Window *this_) {
@@ -212,7 +220,7 @@ void Window::exec_set_size(Window *this_, int &width, int &height) {
   }
   if(gtk_window_is_active(this_->gtk_window_) == FALSE)
   {
-    g_cond_signal(&Window::resize_cond_);
+    g_cond_signal(&resize_cond);
     return;
   }
 }
@@ -232,10 +240,10 @@ Window::Window(int width, int height) {
 void Window::show() {
   if(show_flag_)
     return;
-  g_mutex_lock(&show_mutex_);
+  g_mutex_lock(&show_mutex);
   runner_call_ex(exec_show, false, this);
-  g_cond_wait(&show_cond_, &show_mutex_);
-  g_mutex_unlock(&show_mutex_);
+  g_cond_wait(&show_cond, &show_mutex);
+  g_mutex_unlock(&show_mutex);
   show_flag_ = true;
 }
 
@@ -245,7 +253,7 @@ void Window::hide() {
 
 void Window::destroy() {
   runner_call(exec_destroy, this);
-  Window::window_num_--;
+  window_num--;
 }
 
 void Window::set_title(const std::string &title) {
@@ -272,10 +280,10 @@ void Window::set_size(int width, int height) {
     return;
 
   size_change_flag_ = false;
-  g_mutex_lock(&resize_mutex_);
+  g_mutex_lock(&resize_mutex);
   runner_call_ex(exec_set_size, false, this, &width, &height);
-  g_cond_wait(&resize_cond_, &resize_mutex_);
-  g_mutex_unlock(&resize_mutex_);
+  g_cond_wait(&resize_cond, &resize_mutex);
+  g_mutex_unlock(&resize_mutex);
   size_change_flag_ = true;
 }
 
@@ -307,10 +315,6 @@ void Window::update() {
     runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_draw_));
 }
 
-void Window::quit() {
-  gtk_main_quit();
-}
-
 Window::~Window() {
   if(is_valid())
     destroy();
@@ -318,21 +322,6 @@ Window::~Window() {
 
 bool Window::is_valid() {
   return gtk_draw_ != NULL && gtk_window_ != NULL;
-}
-
-bool Window::poll(Message &msg, bool block) {
-  if (Window::window_num_ == 0) return false;
-
-  gpointer pmsg = block ? g_async_queue_pop(Window::msg_queue_)
-                        : g_async_queue_try_pop(Window::msg_queue_);
-
-  if (pmsg == NULL) {
-    msg.type = msg.type_nop;
-  } else {
-    msg = *reinterpret_cast<Message *>(pmsg);
-    delete reinterpret_cast<Message *>(pmsg);
-  }
-  return true;
 }
 
 }  // namespace window

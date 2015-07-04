@@ -1,12 +1,13 @@
 #ifndef YAGE_GRAPHICS_H
 #define YAGE_GRAPHICS_H
 
+#include "yage/common.h"
+
 #ifndef _EGE_H_
 #define _EGE_H_
 #else
 #error Please do not include "graphics.h" (Easy Graphics Engine version) before including "graphics.h" provided by YaGE
 #endif
-
 
 #ifndef _YAGE_DISABLE_BGI_WARNINGS
 #ifdef _MSC_VER
@@ -16,18 +17,9 @@
 #endif
 #endif
 
-#include <yage/msvc.h>
-
-/* main function redirect
- * DO NOT INCLUDE THIS HEADER TO WRITE PROGRAM THAT DO NOT LINK TO YAGE
- */
-#define main(...) yage_main(int argc, char *argv[])
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-int yage_main(int argc, char *argv[]);
 
 /* Level 1 start */
 typedef unsigned int color_t;

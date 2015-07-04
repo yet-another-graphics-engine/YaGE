@@ -259,7 +259,7 @@ void xyprintf(int x, int y, const char *format, ...) {
 
 int getch(void) {
     yage::window::Message msg;
-    while(yage::window::Window::poll(msg)) {
+    while(yage::window::poll(msg)) {
         if (msg.type == yage::window::Message::type_kbd) {
             return msg.kbd.keyval;
         }
@@ -369,7 +369,7 @@ mouse_msg getmouse() {
 	ege_msg.msg = 0;
 	ege_msg.x = -1;
 	ege_msg.y = -1;
-    while(yage::window::Window::poll(msg)) {
+    while(yage::window::poll(msg)) {
         if (msg.type == yage::window::Message::type_mouse) {
             ege_msg.x = static_cast<int>(msg.mouse.x);
             ege_msg.y = static_cast<int>(msg.mouse.y);

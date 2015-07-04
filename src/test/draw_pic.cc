@@ -17,6 +17,7 @@ void test_draw_pic()
   Window window(width,height);
   window.set_canvas(canvas);
   window.show();
-  while(window.is_valid())
-    g_usleep(1000000);
+  yage::window::Message msg;
+  while(yage::window::poll(msg)) {
+  }
 }

@@ -46,7 +46,7 @@ void test_dialog_fc(FileChooserDlg::action_type type, Window &w)
   FileChooserDlg fc_dlg(type, "浏览文件", w);
   std::string path;
   if (fc_dlg.show(path)) {
-    g_printerr("Path: %s\n", path.c_str());
+    fprintf(stderr, "Path: %s\n", path.c_str());
   }
 }
 
@@ -92,7 +92,7 @@ void test_dialog()
   w.show();
   Message msg;
 
-  while (Window::poll(msg)) {
+  while (yage::window::poll(msg)) {
     if (msg.type != msg.type_kbd) continue;
     if (!msg.kbd.is_press) continue;
 

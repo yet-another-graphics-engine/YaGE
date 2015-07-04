@@ -1,4 +1,5 @@
 #include "test.h"
+#include "../main.h"
 #include <vector>
 #include <ctime>
 typedef void (*test_callback_t)(void);
@@ -71,16 +72,16 @@ void test_run(test_iter_t test_iter) {
                   static_cast<double>(clock() - start_time) / CLOCKS_PER_SEC);
 }
 
-extern "C" int yage_main() {
+extern "C" int yage_main(int argc, char **argv) {
   test_init();
 
-  if (yage::argc == 1) {
+  if (argc == 1) {
     test_run(--g_tests.end());
     return 0;
   }
 
-  if (yage::argc == 2) {
-    string test_name = yage::argv[1];
+  if (argc == 2) {
+    string test_name = argv[1];
     if (test_name == "!") {
       test_show_list();
       return 0;
@@ -100,6 +101,9 @@ extern "C" int yage_main() {
   return -2;
 }
 
+int main(int argc, char **argv) {
+    return yage_lib_init(argc, argv, yage_main);
+}
 /*
  * To add tests to framework:
  *

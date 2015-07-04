@@ -11,7 +11,7 @@ void test_draw_shape(void)
   int width,height;
   w.set_size(-1,-1);
   w.get_size(width,height);
-  g_print("window_width=%d,window_height=%d\n",width,height);
+  printf("window_width=%d, window_height=%d\n", width, height);
   w.set_resizable(true);
   Canvas canvas(1024,576);
   std::string pic_name = "";
@@ -62,7 +62,7 @@ void test_draw_shape(void)
   w.update();
 
   Message msg;
-  while (Window::poll(msg)) {
+  while (yage::window::poll(msg)) {
     if (msg.type != msg.type_mouse) continue;
     if (msg.mouse.type != msg.mouse.type_move) continue;
     if (!msg.mouse.is_left) continue;

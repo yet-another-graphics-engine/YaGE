@@ -1,37 +1,18 @@
 ﻿/**
- * @file yage.h
+ * @file main.h
  * @brief \~english Declaration for exported YaGE API.
  *        \~chinese YaGE 的导出 API 声明。
  */
 #ifndef YAGE_H_
 #define YAGE_H_
 
-#ifndef _MSC_VER
-#include <stdint.h>
-#else
-#if _MSC_VER < 1600
-#include "yage/stdint.h"
-#else
-#include <stdint.h>
-#endif
-#endif
-
-#include "yage/msvc.h"
-
-/**
- * \~english @brief main function redirect
- * DO NOT INCLUDE THIS HEADER TO WRITE PROGRAM THAT DO NOT LINK TO YAGE
- *
- * \~chinese @brief main 函数重定向
- * 请勿在不链接到 YaGE 的程序中包含此头文件
- */
-#define main(...) yage_main(int argc, char *argv[])
+#include "yage/common.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-int yage_main(int argc, char *argv[]);
+//int yage_main(int argc, char *argv[]);
 
 /**
  * \~english @brief An object holding color information.

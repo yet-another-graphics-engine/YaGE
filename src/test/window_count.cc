@@ -9,7 +9,7 @@ void test_window_count(void)
   int n = 0;
 
   Message msg;
-  while (Window::poll(msg)) {
+  while (yage::window::poll(msg)) {
     if (msg.type != msg.type_mouse) continue;
     if (msg.mouse.type != msg.mouse.type_press) continue;
     if (msg.mouse.is_left) {
