@@ -34,7 +34,7 @@ InstallDir "$PROGRAMFILES\YaGE"
 
 ; Installer
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "LICENSE"
+!insertmacro MUI_PAGE_LICENSE "../../LICENSE"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
@@ -64,26 +64,21 @@ VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "0.1.0.0"
 
 Section "install" ;Installation info
     SetOutPath "$INSTDIR"
-    File /r include
-    File /r lib
-    File /r gtk3
-    File /oname=license.txt LICENSE
+    File /r ..\..\include
+    File /oname=license.txt ..\..\LICENSE
 
-    ; Detect if Visual C++ 2013 Runtime installed, if not, install it
-    ClearErrors
-    SetRegView 32
-    Push $0
-    ReadRegDWORD $0 HKLM SOFTWARE\Microsoft\VisualStudio\12.0\VC\Runtimes\x86 Installed
-    IfErrors +2 0 ; Detect registry key exists: not set, set (may installed)
-        IntCmpU $0 1 +4 0 0 ; Detect if installed: installed, not installed, not installed
-            SetOutPath "$PLUGINSDIR"
-            File vcredist_x86.exe
-            Exec '"$PLUGINSDIR\vcredist_x86.exe" /passive'
-    Pop $0
+    SetOutPath "$INSTDIR\lib"
+    File ..\..\build-bin\build-vc9\lib\Release\yagevc9.lib
+    File ..\..\build-bin\build-vc10\lib\Release\yagevc10.lib
+    File ..\..\build-bin\build-vc11\lib\Release\yagevc11.lib
+    File ..\..\build-bin\build-vc12\lib\Release\yagevc12.lib
+
+    SetOutPath "$INSTDIR\gtk3"
+    File /r C:\GTK\*
 
     Push $4
     ; Write MSBuild config file at $4 register, and using $5, $6 register preserved
-    
+
     StrCpy $4 $LOCALAPPDATA\Microsoft\MSBuild\v4.0\Microsoft.Cpp.Win32.user.props
     IfFileExists "$4" 0 finishwriteconfig
     Push $6
@@ -144,15 +139,15 @@ writecontents:
     ; dynamic library TODO
     ${xml::GotoPath} /Project/ItemDefinitionGroup/Link/AdditionalLibraryDirectories $5
     ${xml::GetText} $6 $5
-    ${StrContains} $5 "$INSTDIR\lib;" $6
+    ${StrContains} $5 "$INSTDIR\lib;$INSTDIR\gtk3\lib" $6
     StrCmp $5 "" 0 +2
-    ${xml::SetText} "$INSTDIR\lib;$6" $5
+    ${xml::SetText} "$INSTDIR\lib;$INSTDIR\gtk3\lib;$6" $5
     ; static library
     ${xml::GotoPath} /Project/ItemDefinitionGroup/Lib/AdditionalLibraryDirectories $5
     ${xml::GetText} $6 $5
-    ${StrContains} $5 "$INSTDIR\lib;" $6
+    ${StrContains} $5 "$INSTDIR\lib;$INSTDIR\gtk3\lib" $6
     StrCmp $5 "" 0 +2
-    ${xml::SetText} "$INSTDIR\lib;$6" $5
+    ${xml::SetText} "$INSTDIR\lib;$INSTDIR\gtk3\lib;$6" $5
     ${xml::SaveFile} "" $5
 finishwritexml:
     ${xml::Unload}

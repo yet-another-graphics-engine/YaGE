@@ -26,7 +26,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 set(LIB_SOURCE_FILES
-    yage.cc
+    main.cc
     util/encoding.cc
     window/message.cc
     window/window.cc
@@ -43,7 +43,7 @@ set(LIB_SOURCE_FILES
     draw/font.cc
     draw/text.cc
     draw/paint.cc
-	draw/linear_gradient_color.cc
+    draw/linear_gradient_color.cc
     api/bgi.cc
     api/yage.cc
     )
@@ -78,6 +78,23 @@ elseif(UNIX)
 endif()
 
 add_library(yage STATIC ${LIB_SOURCE_FILES})
+
+if (MSVC)
+    if (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 14 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 15) # Visual C++ 2005
+        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc8)
+    elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 15 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 16) # Visual C++ 2008
+        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc9)
+    elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 16 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 17) # Visual C++ 2010
+        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc10)
+    elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 17 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 18) # Visual C++ 2012
+        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc11)
+    elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 18 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 19) # Visual C++ 2013
+        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc12)
+    elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 19 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 20) # Visual C++ 2015
+        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc14)
+    endif()
+    LINK_DIRECTORIES(${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
+endif()
 
 # Add GTK dependency
 # CMake x GTK from https://gist.github.com/fracek/3323924
@@ -130,7 +147,11 @@ endif()
 
 add_executable(yagetest ${YAGE_TEST_SOURCE_FILES})
 
-target_link_libraries(yagetest yage)
+if (MSVC)
+    add_dependencies(yagetest yage)
+else()
+    target_link_libraries(yagetest yage)
+endif()
 
 # Audio libraries
 if (APPLE)
@@ -140,8 +161,8 @@ elseif(UNIX)
 endif()
 
 # GTK libraries
-if (MSVC) # library required by MSVC is pretty different than others
-    target_link_libraries(yagetest "atk-1.0.lib" "cairo.lib" "fontconfig.lib" "gailutil.lib" "gdk-win32-3.0.lib" "gdk_pixbuf-2.0.lib" "gio-2.0.lib" "glib-2.0.lib" "gmodule-2.0.lib" "gobject-2.0.lib" "gthread-2.0.lib" "gtk-win32-3.0.lib" "pango-1.0.lib" "pangocairo-1.0.lib" "pangoft2-1.0.lib" "pangowin32-1.0.lib")
+if (MSVC) # library required by MSVC is pretty different than others; Update: GTK libraries are automatically linked via pragma in header. It is reserved for historical and debugging purpose.
+    # target_link_libraries(yagetest "atk-1.0.lib" "cairo.lib" "fontconfig.lib" "gailutil.lib" "gdk-win32-3.0.lib" "gdk_pixbuf-2.0.lib" "gio-2.0.lib" "glib-2.0.lib" "gmodule-2.0.lib" "gobject-2.0.lib" "gthread-2.0.lib" "gtk-win32-3.0.lib" "pango-1.0.lib" "pangocairo-1.0.lib" "pangoft2-1.0.lib" "pangowin32-1.0.lib")
 else()
     target_link_libraries(yagetest ${GTK3_LIBRARIES})
 endif()

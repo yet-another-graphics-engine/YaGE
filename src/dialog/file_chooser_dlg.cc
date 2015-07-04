@@ -1,5 +1,5 @@
 #include "file_chooser_dlg.h"
-#include "../yage.h"
+#include "../main.h"
 #include "../util/encoding.h"
 
 namespace yage {

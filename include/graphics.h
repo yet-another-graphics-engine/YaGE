@@ -16,6 +16,8 @@
 #endif
 #endif
 
+#include <yage/msvc.h>
+
 /* main function redirect
  * DO NOT INCLUDE THIS HEADER TO WRITE PROGRAM THAT DO NOT LINK TO YAGE
  */

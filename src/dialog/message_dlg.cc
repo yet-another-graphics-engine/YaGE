@@ -1,4 +1,4 @@
-#include "../yage.h"
+#include "../main.h"
 #include "message_dlg.h"
 #include "../util/encoding.h"
 

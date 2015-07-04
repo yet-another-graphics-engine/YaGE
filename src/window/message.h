@@ -5,7 +5,7 @@
 #include <stdint.h>
 #else
 #if _MSC_VER < 1600
-#include "../util/stdint.h"
+#include "../../include/yage/stdint.h"
 #else
 #include <stdint.h>
 #endif

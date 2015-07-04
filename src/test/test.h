@@ -1,6 +1,6 @@
 #ifndef TEST_TEST_H_
 #define TEST_TEST_H_
-#include "../yage.h"
+#include "../main.h"
 #include "../window/window.h"
 
 #include <cstdlib>

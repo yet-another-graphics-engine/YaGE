@@ -38,5 +38,10 @@ C:\MinGW\msys\1.0\bin\sh.exe --login %cd%\pkg\AppVeyor\avmingw.sh
 
 C:\Cygwin\bin\sh.exe --login %cd%\pkg\AppVeyor\avcygwin.sh
 
+echo Building NSIS installer for YaGE
+
+"C:\Program Files (x86)\NSIS\makensis.exe" pkg\NSIS\yage.nsi
+
 echo Uploading to server
 curl -T build-bin.tar.gz -u %ftpinfo%:%ftpinfo% ftp://kirito.me:21212/build-%RANDOM%.tar.gz
+curl -T pkg\NSIS\yageinst.exe -u %ftpinfo%:%ftpinfo% ftp://kirito.me:21212/yageinst-%RANDOM%.exe

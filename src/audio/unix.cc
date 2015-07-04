@@ -1,4 +1,4 @@
-#include "../yage.h"
+#include "../main.h"
 #include "unix.h"
 
 namespace yage {

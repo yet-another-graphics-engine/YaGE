@@ -1,4 +1,4 @@
-#include "../yage.h"
+#include "../main.h"
 #include "../draw/canvas.h"
 #include "window.h"
 #include "../util/encoding.h"
