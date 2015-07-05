@@ -425,19 +425,19 @@ struct yage_message {
      * \~chinese @brief 描述键盘消息的对象
      */
     struct {
-      bool is_press;                        ///< \~english @brief Whether the key is pressed or released
+      uint8_t is_press;                     ///< \~english @brief Whether the key is pressed or released
                                             ///< \~chinese @brief 键是被按下还是被释放
       uint32_t keyval;                      ///< \~english @brief A character representing what will appear on a text box when you press current key, like 'a', 'b', ...
                                             ///< \~chinese @brief 表示键的字符，即当文本框中按下此键输出的内容，例如 'a', 'b', ...
       uint16_t keycode;                     ///< \~english @brief A number repersenting position of the physical key, like 38, 39, ...
                                             ///< \~chinese @brief 表示键在键盘上物理位置的数字，例如 38, 39, ...
-      bool is_modkey    : 1;                ///< \~english @brief Whether the key is a modifier, like Ctrl / Alt / Shift
+      uint8_t is_modkey    : 1;             ///< \~english @brief Whether the key is a modifier, like Ctrl / Alt / Shift
                                             ///< \~chinese @brief 键是否为控制键，例如 Ctrl / Alt / Shift
-      bool modkey_alt   : 1;                ///< \~english @brief Whether Alt key is pressed
+      uint8_t modkey_alt   : 1;             ///< \~english @brief Whether Alt key is pressed
                                             ///< \~chinese @brief Alt 键是否被按下
-      bool modkey_ctrl  : 1;                ///< \~english @brief Whether Ctrl key is pressed
+      uint8_t modkey_ctrl  : 1;             ///< \~english @brief Whether Ctrl key is pressed
                                             ///< \~chinese @brief Ctrl 键是否被按下
-      bool modkey_shift : 1;                ///< \~english @brief Whether Shift key is pressed
+      uint8_t modkey_shift : 1;             ///< \~english @brief Whether Shift key is pressed
                                             ///< \~chinese @brief Shift 键是否被按下
     } kbd;
 
@@ -452,17 +452,17 @@ struct yage_message {
                                             ///< \~chinese @brief 光标的 Y 坐标
       enum yage_message_mouse_type type;    ///< \~english @brief Type of mouse message
                                             ///< \~chinese @brief 鼠标消息的类型
-      bool is_left      : 1;                ///< \~english @brief Whether the left button is pressed
+      uint8_t is_left      : 1;             ///< \~english @brief Whether the left button is pressed
                                             ///< \~chinese @brief 鼠标左键是否被按下
-      bool is_right     : 1;                ///< \~english @brief Whether the right button is pressed
+      uint8_t is_right     : 1;             ///< \~english @brief Whether the right button is pressed
                                             ///< \~chinese @brief 鼠标右键是否被按下
-      bool is_middle    : 1;                ///< \~english @brief Whether the middle button is pressed
+      uint8_t is_middle    : 1;             ///< \~english @brief Whether the middle button is pressed
                                             ///< \~chinese @brief 鼠标中键是否被按下
-      bool modkey_alt   : 1;                ///< \~english @brief Whether Alt key is pressed
+      uint8_t modkey_alt   : 1;             ///< \~english @brief Whether Alt key is pressed
                                             ///< \~chinese @brief Alt 键是否被按下
-      bool modkey_ctrl  : 1;                ///< \~english @brief Whether Ctrl key is pressed
+      uint8_t modkey_ctrl  : 1;             ///< \~english @brief Whether Ctrl key is pressed
                                             ///< \~chinese @brief Ctrl 键是否被按下
-      bool modkey_shift : 1;                ///< \~english @brief Whether Shift key is pressed
+      uint8_t modkey_shift : 1;             ///< \~english @brief Whether Shift key is pressed
                                             ///< \~chinese @brief Shift 键是否被按下
     } mouse;
 

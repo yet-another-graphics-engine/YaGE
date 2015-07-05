@@ -31,14 +31,14 @@ struct Message {
 
   union {
     struct {
-      bool is_press;
+      uint8_t is_press;
       uint32_t keyval;
       uint16_t keycode;
 
-      bool is_modkey    : 1;
-      bool modkey_alt   : 1;
-      bool modkey_ctrl  : 1;
-      bool modkey_shift : 1;
+      uint8_t is_modkey    : 1;
+      uint8_t modkey_alt   : 1;
+      uint8_t modkey_ctrl  : 1;
+      uint8_t modkey_shift : 1;
     } kbd;
 
     struct {
@@ -49,13 +49,14 @@ struct Message {
         type_release,
         type_move
       } type;
-      bool is_left      : 1;
-      bool is_right     : 1;
-      bool is_middle    : 1;
 
-      bool modkey_alt   : 1;
-      bool modkey_ctrl  : 1;
-      bool modkey_shift : 1;
+      uint8_t is_left      : 1;
+      uint8_t is_right     : 1;
+      uint8_t is_middle    : 1;
+
+      uint8_t modkey_alt   : 1;
+      uint8_t modkey_ctrl  : 1;
+      uint8_t modkey_shift : 1;
     } mouse;
 
     struct {
