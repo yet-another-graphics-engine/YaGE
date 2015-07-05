@@ -10,7 +10,7 @@ void test_api_yage(void) {
   yage_circle_fill(     160, 40, 20);
   yage_circle_border(   260, 40, 20);
 
-  yage_color_t color;
+  yage_color color;
   color.r = 1, color.g = 0, color.b = 0, color.a = 1;
   yage_set_border_color(color);
 
@@ -57,9 +57,9 @@ void test_api_yage(void) {
     yage_dlg_message(NULL, yage_dlg_file_open(NULL));;
   }
 
-  yage_message_t msg;
+  yage_message msg;
   while (yage_get_message(&msg, 0)) {
-    if (msg.type != YageMouse) continue;
+    if (msg.type != kYageMouse) continue;
     if (msg.mouse.is_right) yage_clear();
     if (msg.mouse.is_middle) yage_quit();
 

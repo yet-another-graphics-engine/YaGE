@@ -12,13 +12,11 @@
 extern "C" {
 #endif
 
-//int yage_main(int argc, char *argv[]);
-
 /**
  * \~english @brief An object holding color information.
  * \~chinese @brief 存储颜色信息的结构体。
  */
-struct yage_color_t {
+struct yage_color {
   double r; ///< \~english Red, range: 0.0 to 1.0
             ///< \~chinese 红色，区间为 0.0 至 1.0
   double g; ///< \~english Green, range: 0.0 to 1.0
@@ -70,7 +68,7 @@ void yage_clear(void);
  * @param y       像素的 Y 坐标
  * @param color   欲填充的颜色
  */
-void yage_draw_pixel(double x, double y, yage_color_t color);
+void yage_draw_pixel(double x, double y, struct yage_color color);
 
 /**
  * \~english @brief Set the font family, size and style of font.
@@ -96,7 +94,7 @@ void yage_set_font(const char *family, int size, int bold, int italic);
  * @param fill_color 新的填充色
  * \see yage_set_border_color
  */
-void yage_set_fill_color(struct yage_color_t fill_color);
+void yage_set_fill_color(struct yage_color fill_color);
 
 /**
  * \~english @brief Set the font color.
@@ -105,7 +103,7 @@ void yage_set_fill_color(struct yage_color_t fill_color);
  * \~chinese @brief 设置字体的颜色。
  * @param font_color 新的字体色
  */
-void yage_set_font_color(struct yage_color_t font_color);
+void yage_set_font_color(struct yage_color font_color);
 
 /**
  * \~english @brief Set the background color.
@@ -117,7 +115,7 @@ void yage_set_font_color(struct yage_color_t font_color);
  * \see yage_clear
  *
  */
-void yage_set_background_color(struct yage_color_t background_color);
+void yage_set_background_color(struct yage_color background_color);
 
 /**
  * \~english @brief Set the border color of shapes.
@@ -128,7 +126,7 @@ void yage_set_background_color(struct yage_color_t background_color);
  * @param border_color 新的边框颜色
  * \see yage_set_fill_color
  */
-void yage_set_border_color(struct yage_color_t border_color);
+void yage_set_border_color(struct yage_color border_color);
 
 /**
  * \~english @brief Set the border thickness of shapes.
@@ -372,14 +370,14 @@ void yage_printf(double x, double y, const char *format, ...);
  * \~chinese @brief 描述消息的主要类型的数据类型。
  */
 enum yage_message_type {
-  YageNop = 0,  ///< \~english No information. Simply ignore messages of this type.
-                ///< \~chinese 无信息。忽略此类消息即可
-  YageKbd,      ///< \~english Keyboard message, such as pressing or releasing a key. Use `kbd` member to retrieve keyboard data
-                ///< \~chinese 键盘消息，包括键盘的按下、释放。使用 `kbd` 成员来获取键盘数据
-  YageMouse,    ///< \~english Mouse message, such as pressing or releasing a button, or moving the cursor. Use `mouse` member to retrieve mouse data
-                ///< \~chinese 鼠标消息，包括按下或释放按键或移动光标。使用 `mouse` 成员来获取鼠标数据
-  YageWindow    ///< \~english Window message, such as getting or losing focus. Use `window` member to retrieve window data
-                ///< \~chinese 窗口消息，包括获得或丢失焦点。使用 `window` 成员来获取鼠标数据
+  kYageNop = 0,  ///< \~english No information. Simply ignore messages of this type.
+                 ///< \~chinese 无信息。忽略此类消息即可
+  kYageKbd,      ///< \~english Keyboard message, such as pressing or releasing a key. Use `kbd` member to retrieve keyboard data
+                 ///< \~chinese 键盘消息，包括键盘的按下、释放。使用 `kbd` 成员来获取键盘数据
+  kYageMouse,    ///< \~english Mouse message, such as pressing or releasing a button, or moving the cursor. Use `mouse` member to retrieve mouse data
+                 ///< \~chinese 鼠标消息，包括按下或释放按键或移动光标。使用 `mouse` 成员来获取鼠标数据
+  kYageWindow    ///< \~english Window message, such as getting or losing focus. Use `window` member to retrieve window data
+                 ///< \~chinese 窗口消息，包括获得或丢失焦点。使用 `window` 成员来获取鼠标数据
 };
 
 /**
@@ -387,12 +385,12 @@ enum yage_message_type {
  * \~chinese @brief 描述鼠标消息类型的数据类型。
  */
 enum yage_message_mouse_type {
-  YageMousePress = 1,   ///< \~english Some Mouse button is pressed
-                        ///< \~chinese 鼠标的某按钮被按下
-  YageMouseRelease,     ///< \~english Some Mouse button is released
-                        ///< \~chinese 鼠标的某按钮被释放
-  YageMouseMove         ///< \~english Cursor is moving
-                        ///< \~chinese 鼠标光标在移动
+  kYageMousePress = 1,   ///< \~english Some Mouse button is pressed
+                         ///< \~chinese 鼠标的某按钮被按下
+  kYageMouseRelease,     ///< \~english Some Mouse button is released
+                         ///< \~chinese 鼠标的某按钮被释放
+  kYageMouseMove         ///< \~english Cursor is moving
+                         ///< \~chinese 鼠标光标在移动
 };
 
 /**
@@ -400,21 +398,21 @@ enum yage_message_mouse_type {
  * \~chinese @brief 描述窗口消息类型的数据类型。
  */
 enum yage_message_window_type {
-  YageWindowEnter = 1,  ///< \~english Window gaines focus
-                        ///< \~chinese 窗口获得焦点
-  YageWindowLeave,      ///< \~english Window loses focus
-                        ///< \~chinese 窗口失去焦点
-  YageWindowDestroy,    ///< \~english Window has been destroyed
-                        ///< \~chinese 窗口被销毁
-  YageWindowResize      ///< \~english Window has been resized
-                        ///< \~chinese 窗口大小改变
+  kYageWindowEnter = 1,  ///< \~english Window gaines focus
+                         ///< \~chinese 窗口获得焦点
+  kYageWindowLeave,      ///< \~english Window loses focus
+                         ///< \~chinese 窗口失去焦点
+  kYageWindowDestroy,    ///< \~english Window has been destroyed
+                         ///< \~chinese 窗口被销毁
+  kYageWindowResize      ///< \~english Window has been resized
+                         ///< \~chinese 窗口大小改变
 };
 
 /**
  * \~english @brief Object describing all types of message.
  * \~chinese @brief 描述窗口消息的对象。
  */
-struct yage_message_t {
+struct yage_message {
   enum yage_message_type type;              ///< \~english @brief Main type of message
                                             ///< \~chinese @brief 消息的主要类型
 
@@ -491,7 +489,7 @@ struct yage_message_t {
  * @param wait_ms   队列中没有消息时，最长的等待时间
  * @return          消息队列是否可用。当全部窗口已经关闭时，返回值为 `FALSE`
  */
-int  yage_get_message(struct yage_message_t *msg, int wait_ms);
+int  yage_get_message(struct yage_message *msg, int wait_ms);
 
 /**
  * \~english @brief Wait until the next key press, and return the key value.
@@ -524,7 +522,7 @@ int  yage_dlg_font(const char *title);
  * @param[out] color 颜色对象的返回地址
  * @return          颜色对象是否被设置
  */
-int  yage_dlg_color(const char *title, struct yage_color_t *color);
+int  yage_dlg_color(const char *title, struct yage_color *color);
 
 /**
  * \~english @brief Get path by showing a file save dialog.
@@ -567,7 +565,7 @@ void yage_dlg_message(const char *title, const char *message);
  * \~english @brief Data type describing types of buttons in question dialog.
  * \~chinese @brief 描述询问对话框中按钮类型的数据类型。
  */
-enum yage_dlg_button_t {
+enum yage_dlg_button_type {
   kYageDlgButtonNone = 0,   ///< \~english No button
                             ///< \~chinese 无按钮
   kYageDlgButtonOk,         ///< \~english "OK" button
@@ -586,7 +584,7 @@ enum yage_dlg_button_t {
  * \~english @brief Data type describing types of icons in question dialog.
  * \~chinese @brief 描述询问对话框中图标类型的数据类型。
  */
-enum yage_dlg_icon_t {
+enum yage_dlg_icon_type {
   kYageDlgIconNone = 0,     ///< \~english No icon
                             ///< \~chinese 无图标
   kYageDlgIconInfo,         ///< \~english Information icon
@@ -603,7 +601,7 @@ enum yage_dlg_icon_t {
  * \~english @brief Data type describing types of user responses in question dialog.
  * \~chinese @brief 描述用户在询问对话框中的选择数据类型。
  */
-enum yage_dlg_result_t {
+enum yage_dlg_result_type {
   kYageDlgResultNone = 0,   ///< \~english No result
                             ///< \~chinese 无结果
   kYageDlgResultReject,     ///< \~english Reject button
@@ -641,10 +639,11 @@ enum yage_dlg_result_t {
  * @param button    对话框的按钮
  * @return          用户的选择
  */
-yage_dlg_result_t yage_dlg_question(const char *title,
-                                    const char *message,
-                                    yage_dlg_icon_t icon,
-                                    yage_dlg_button_t button);
+enum yage_dlg_result_type
+yage_dlg_question(const char *title,
+                  const char *message,
+                  enum yage_dlg_icon_type icon,
+                  enum yage_dlg_button_type button);
 
 /**
  * \~english @brief Get an integer by showing a input dialog.

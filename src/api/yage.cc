@@ -31,7 +31,7 @@ namespace {
   draw::Color g_fill_color;
   draw::Color g_border_color;
 
-  inline draw::Color convert_color(const yage_color_t &color) {
+  inline draw::Color convert_color(const yage_color &color) {
     return draw::Color(color.r, color.g, color.b, color.a);
   }
 
@@ -117,7 +117,7 @@ void yage_clear(void) {
   g_window->update();
 }
 
-void yage_draw_pixel(double x, double y, yage_color_t color) {
+void yage_draw_pixel(double x, double y, yage_color color) {
   g_paint->style = Paint::draw_style_fill;
   g_paint->set_fill_color(convert_color(color));
   draw_rectangle(x - 0.5, y - 0.5,
@@ -131,19 +131,19 @@ void yage_set_font(const char *family, int size, int bold, int italic) {
   if (italic >= 0)  g_paint->font.set_italic_status(italic ? true : false);
 }
 
-void yage_set_font_color(struct yage_color_t font_color) {
+void yage_set_font_color(struct yage_color font_color) {
   g_paint->set_font_color(convert_color(font_color));
 }
 
-void yage_set_fill_color(struct yage_color_t fill_color) {
+void yage_set_fill_color(struct yage_color fill_color) {
   g_fill_color = convert_color(fill_color);
 }
 
-void yage_set_background_color(struct yage_color_t background_color) {
+void yage_set_background_color(struct yage_color background_color) {
   g_paint->set_background_color(convert_color(background_color));
 }
 
-void yage_set_border_color(struct yage_color_t border_color) {
+void yage_set_border_color(struct yage_color border_color) {
   g_border_color = convert_color(border_color);
 }
 
@@ -256,7 +256,7 @@ void yage_printf(double x, double y, const char *format, ...) {
   g_window->update();
 }
 
-int yage_get_message(struct yage_message_t *msg, int wait_ms) {
+int yage_get_message(struct yage_message *msg, int wait_ms) {
   // FIXME: add wait_ms support
   return window::poll(*reinterpret_cast<window::Message *>(msg));
 }
@@ -276,7 +276,7 @@ int  yage_dlg_font(const char *title) {
   return font_dlg.show(g_paint->font);
 }
 
-int  yage_dlg_color(const char *title, struct yage_color_t *color) {
+int  yage_dlg_color(const char *title, struct yage_color *color) {
   if (!title) title = "Choose Color";
   dialog::ColorChooserDlg font_dlg(title, *g_window);
   draw::Color internal_coler;
@@ -318,10 +318,11 @@ void yage_dlg_message(const char *title, const char *message) {
   msg_dlg.show();
 }
 
-yage_dlg_result_t yage_dlg_question(const char *title,
-                                    const char *message,
-                                    yage_dlg_icon_t icon,
-                                    yage_dlg_button_t button) {
+yage_dlg_result_type yage_dlg_question(
+    const char *title,
+    const char *message,
+    yage_dlg_icon_type icon,
+    yage_dlg_button_type button) {
   using dialog::MessageDlg;
   MessageDlg msg_dlg(static_cast<dialog::MessageDlg::button_type>(button),
                      static_cast<dialog::MessageDlg::icon_type>(icon),
@@ -329,7 +330,7 @@ yage_dlg_result_t yage_dlg_question(const char *title,
   if (title) msg_dlg.set_title(title);
   if (message) msg_dlg.set_message(message);
 
-  return static_cast<yage_dlg_result_t>(msg_dlg.show());
+  return static_cast<yage_dlg_result_type>(msg_dlg.show());
 }
 
 int yage_input_int(const char *title, const char *message) {
