@@ -13,7 +13,7 @@ set builddir2=build-vc11
 set builddir3=build-vc10
 set builddir4=build-vc9
 
-set PATH=C:\GTK\bin;%PATH%
+set PATH=C:\GTK\bin;C:\Doxygen;%PATH%
 
 set buildno=1
 :build

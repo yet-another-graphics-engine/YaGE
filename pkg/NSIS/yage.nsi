@@ -64,6 +64,9 @@ Section "install" ;Installation info
     SetOutPath "$INSTDIR"
     File /r ..\..\include
     File /oname=license.txt ..\..\LICENSE
+    File /r ..\..\build-bin\doc
+    CreateShortcut "$DESKTOP\YaGE English documentation.lnk" "$INSTDIR\doc\english\yage_8h.html"
+    CreateShortcut "$DESKTOP\YaGE Chinese documentation.lnk" "$INSTDIR\doc\chinese\yage_8h.html"
 
     SetOutPath "$INSTDIR\lib"
     File ..\..\build-bin\build-vc9\lib\Release\yagevc9.lib
@@ -77,19 +80,19 @@ Section "install" ;Installation info
 
     SetOutPath "$INSTDIR\gtk3\bin"
     File C:\GTK\bin\*.dll
-    
+
     SetOutPath "$INSTDIR\gtk3"
     File /r C:\GTK\etc
-    
+
     SetOutPath "$INSTDIR\gtk3\lib"
     File C:\GTK\lib\*.def
     File C:\GTK\lib\*.lib
     File /r C:\GTK\lib\gdk-pixbuf-2.0
     File /r C:\GTK\lib\gtk-3.0
-    
+
     SetOutPath "$INSTDIR\gtk3\share\glib-2.0"
     File /r C:\GTK\share\glib-2.0\schemas
-    
+
     SetOutPath "$INSTDIR\gtk3\share"
     File /r C:\GTK\share\locale
 
@@ -179,6 +182,8 @@ SectionEnd
 
 Section "Uninstall" ;Uninstaller
     RMDir /r "$INSTDIR\*.*"
+    Delete "$DESKTOP\YaGE English documentation.lnk"
+    Delete "$DESKTOP\YaGE Chinese documentation.lnk"
     !insertmacro un.RemoveFromPath "$INSTDIR\gtk3\bin"
 SectionEnd
 

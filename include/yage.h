@@ -1,5 +1,5 @@
 ﻿/**
- * @file main.h
+ * @file yage.h
  * @brief \~english Declaration for exported YaGE API.
  *        \~chinese YaGE 的导出 API 声明。
  */

@@ -26,5 +26,13 @@ if not exist "C:\Program Files (x86)\NSIS" (
     copy Plugins\x86-ansi\ExecDos.dll "C:\Program Files (x86)\NSIS\Plugins"
 )
 
+if not exist "C:\Doxygen" (
+    md C:\Doxygen
+    echo "Installing Doxygen"
+    curl -O http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.10.windows.x64.bin.zip
+    7z x doxygen-1.8.10.windows.x64.bin.zip
+    copy doxygen.exe C:\Doxygen
+)
+
 :: echo "Preparing Cygwin packages ..."
 :: C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -P libgtk3-devel -P cmake -P libgstreamer0.10-devel

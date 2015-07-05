@@ -13,12 +13,17 @@ cmake .. -G "MSYS Makefiles"
 echo Building for MinGW/MSYS ...
 make
 
+echo Building Documentation ...
+make doc-chinese
+make doc-english
+
 cd ..
 mkdir -p build-bin/build-mingw
 
 echo Copying to binary directory
 cp -r build-mingw/bin/ build-bin/build-mingw
 cp -r build-mingw/lib/ build-bin/build-mingw
+cp -r build-mingw/doc/ build-bin/
 
 if ! [ -f "/C/Program Files (x86)/NSIS/Plugins/path.dll" ]
 then

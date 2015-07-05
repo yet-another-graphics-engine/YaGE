@@ -2,6 +2,7 @@ version: 1.0.{build}
 cache:
 - C:\GTK
 - C:\Program Files (x86)\NSIS
+- C:\Doxygen
 environment:
   ftpinfo:
     secure: Dy4cv6w20/AfqUS85nVN4A==
