@@ -22,17 +22,41 @@
 #    pragma comment(lib, "pangowin32-1.0.lib")
 
 #if _MSC_VER == 1400 // Visual C++ 2005
-#    pragma comment(lib, "yagevc8.lib")
+#    ifdef _DEBUG
+#        pragma comment(lib, "yagevc8d.lib")
+#    else
+#        pragma comment(lib, "yagevc8.lib")
+#    endif
 #elif _MSC_VER == 1500 // Visual C++ 2008
-#    pragma comment(lib, "yagevc9.lib")
+#    ifdef _DEBUG
+#        pragma comment(lib, "yagevc9d.lib")
+#    else
+#        pragma comment(lib, "yagevc9.lib")
+#    endif
 #elif _MSC_VER == 1600 // Visual C++ 2010
-#    pragma comment(lib, "yagevc10.lib")
+#    ifdef _DEBUG
+#        pragma comment(lib, "yagevc10d.lib")
+#    else
+#        pragma comment(lib, "yagevc10.lib")
+#    endif
 #elif _MSC_VER == 1700 // Visual C++ 2012
-#    pragma comment(lib, "yagevc11.lib")
+#    ifdef _DEBUG
+#        pragma comment(lib, "yagevc11d.lib")
+#    else
+#        pragma comment(lib, "yagevc11.lib")
+#    endif
 #elif _MSC_VER == 1800 // Visual C++ 2013
-#    pragma comment(lib, "yagevc12.lib")
+#    ifdef _DEBUG
+#        pragma comment(lib, "yagevc12d.lib")
+#    else
+#        pragma comment(lib, "yagevc12.lib")
+#    endif
 #elif _MSC_VER == 1900 // Visual C++ 2015 RC
-#    pragma comment(lib, "yagevc14.lib")
+#    ifdef _DEBUG
+#        pragma comment(lib, "yagevc14d.lib")
+#    else
+#        pragma comment(lib, "yagevc14.lib")
+#    endif
 #endif
 
 #else

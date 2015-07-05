@@ -80,17 +80,23 @@ endif()
 if (MSVC)
     add_library(yage STATIC ${LIB_SOURCE_FILES})
     if (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 14 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 15) # Visual C++ 2005
-        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc8)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_DEBUG yagevc8d)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_RELEASE yagevc8)
     elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 15 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 16) # Visual C++ 2008
-        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc9)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_DEBUG yagevc9d)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_RELEASE yagevc9)
     elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 16 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 17) # Visual C++ 2010
-        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc10)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_DEBUG yagevc10d)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_RELEASE yagevc10)
     elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 17 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 18) # Visual C++ 2012
-        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc11)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_DEBUG yagevc11d)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_RELEASE yagevc11)
     elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 18 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 19) # Visual C++ 2013
-        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc12)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_DEBUG yagevc12d)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_RELEASE yagevc12)
     elseif (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 19 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 20) # Visual C++ 2015
-        set_target_properties(yage PROPERTIES OUTPUT_NAME yagevc14)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_DEBUG yagevc14d)
+        set_target_properties(yage PROPERTIES OUTPUT_NAME_RELEASE yagevc14)
     endif()
     LINK_DIRECTORIES(${CMAKE_ARCHIVE_OUTPUT_DIRECTORY})
 endif()

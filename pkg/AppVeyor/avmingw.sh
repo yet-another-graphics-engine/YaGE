@@ -19,3 +19,14 @@ mkdir -p build-bin/build-mingw
 echo Copying to binary directory
 cp -r build-mingw/bin/ build-bin/build-mingw
 cp -r build-mingw/lib/ build-bin/build-mingw
+
+if ! [ -f "/C/Program Files (x86)/NSIS/Plugins/path.dll" ]
+then
+    cd pkg/NSIS/plugin
+    make
+    cp path.dll "/C/Program Files (x86)/NSIS/Plugins/"
+    cd ../../..
+fi
+
+echo Packing files
+tar czvf build-bin.tar.gz build-bin

@@ -24,7 +24,8 @@ if %buildno% leq 4 (
     cd !builddir%buildno%!
     echo "Configuring for !generator%buildno%! ..."
     cmake .. -G !generator%buildno%!
-    echo "Building for !generator%buildno%! (Release) ..."
+    echo "Building for !generator%buildno%! (Debug, Release) ..."
+    cmake --build . --config Debug -- /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
     cmake --build . --config Release -- /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
     cd ..
     md build-bin\!builddir%buildno%!
@@ -36,11 +37,11 @@ if %buildno% leq 4 (
 
 C:\MinGW\msys\1.0\bin\sh.exe --login %cd%\pkg\AppVeyor\avmingw.sh
 
-C:\Cygwin\bin\sh.exe --login %cd%\pkg\AppVeyor\avcygwin.sh
+:: C:\Cygwin\bin\sh.exe --login %cd%\pkg\AppVeyor\avcygwin.sh
 
 echo Building NSIS installer for YaGE
 
-"C:\Program Files (x86)\NSIS\makensis.exe" pkg\NSIS\yage.nsi
+"C:\Program Files (x86)\NSIS\makensis.exe" /V3 pkg\NSIS\yage.nsi
 
 echo Uploading to server
 curl -T build-bin.tar.gz -u %ftpinfo%:%ftpinfo% ftp://kirito.me:21212/build-%RANDOM%.tar.gz

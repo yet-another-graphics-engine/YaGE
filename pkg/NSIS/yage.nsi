@@ -1,7 +1,5 @@
 ; YaGE NSIS Installer Script
-; place LICENSE, include and lib directories here.
-; place GTK+ bundle extracted to gtk3 directory and VC 2013 runtime with original filename here.
-; To make installer, run `make` under shell
+; The script is designed to run on AppVeyor, refer to pkg\AppVeyor directory for more information.
 
 CRCCheck On
 
@@ -69,12 +67,31 @@ Section "install" ;Installation info
 
     SetOutPath "$INSTDIR\lib"
     File ..\..\build-bin\build-vc9\lib\Release\yagevc9.lib
+    File ..\..\build-bin\build-vc9\lib\Debug\yagevc9d.lib
     File ..\..\build-bin\build-vc10\lib\Release\yagevc10.lib
+    File ..\..\build-bin\build-vc10\lib\Debug\yagevc10d.lib
     File ..\..\build-bin\build-vc11\lib\Release\yagevc11.lib
+    File ..\..\build-bin\build-vc11\lib\Debug\yagevc11d.lib
     File ..\..\build-bin\build-vc12\lib\Release\yagevc12.lib
+    File ..\..\build-bin\build-vc12\lib\Debug\yagevc12d.lib
 
+    SetOutPath "$INSTDIR\gtk3\bin"
+    File C:\GTK\bin\*.dll
+    
     SetOutPath "$INSTDIR\gtk3"
-    File /r C:\GTK\*
+    File /r C:\GTK\etc
+    
+    SetOutPath "$INSTDIR\gtk3\lib"
+    File C:\GTK\lib\*.def
+    File C:\GTK\lib\*.lib
+    File /r C:\GTK\lib\gdk-pixbuf-2.0
+    File /r C:\GTK\lib\gtk-3.0
+    
+    SetOutPath "$INSTDIR\gtk3\share\glib-2.0"
+    File /r C:\GTK\share\glib-2.0\schemas
+    
+    SetOutPath "$INSTDIR\gtk3\share"
+    File /r C:\GTK\share\locale
 
     Push $4
     ; Write MSBuild config file at $4 register, and using $5, $6 register preserved
@@ -155,16 +172,14 @@ finishwritexml:
     Pop $6
 finishwriteconfig:
     Pop $4
-    Push "$INSTDIR\gtk3\bin"
-    Call AddToPath
+    path::AddToPath "$INSTDIR\gtk3\bin"
     ExecDos::exec "$INSTDIR\gtk3\bin\gdk-pixbuf-query-loaders.exe" "" "$INSTDIR\gtk3\lib\gdk-pixbuf-2.0\2.10.0\loaders.cache"
     WriteUninstaller "$INSTDIR\uninst.exe"
 SectionEnd
 
 Section "Uninstall" ;Uninstaller
     RMDir /r "$INSTDIR\*.*"
-    Push "$INSTDIR\gtk3\bin"
-    Call un.RemoveFromPath
+    !insertmacro un.RemoveFromPath "$INSTDIR\gtk3\bin"
 SectionEnd
 
 Function .onInit

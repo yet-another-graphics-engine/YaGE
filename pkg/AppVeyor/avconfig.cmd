@@ -26,5 +26,5 @@ if not exist "C:\Program Files (x86)\NSIS" (
     copy Plugins\x86-ansi\ExecDos.dll "C:\Program Files (x86)\NSIS\Plugins"
 )
 
-echo "Preparing Cygwin packages ..."
-C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -P libgtk3-devel -P cmake -P libgstreamer0.10-devel
+:: echo "Preparing Cygwin packages ..."
+:: C:\cygwin\setup-x86.exe -qnNdO -R C:/cygwin -s http://cygwin.mirror.constant.com -P libgtk3-devel -P cmake -P libgstreamer0.10-devel

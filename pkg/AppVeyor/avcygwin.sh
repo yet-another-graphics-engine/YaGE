@@ -18,6 +18,3 @@ mkdir -p build-bin/build-cygwin
 echo Copying to binary directory
 cp -r build-cygwin/bin/ build-bin/build-cygwin
 cp -r build-cygwin/lib/ build-bin/build-cygwin
-
-echo Packing files
-tar czvf build-bin.tar.gz build-bin
