@@ -10,7 +10,7 @@
 */
 #ifdef __cplusplus
 #define main(...) \
-  * _yage_dummy_var = NULL; \
+  * _yage_dummy_var = 0; \
   int yage_main(int argc, char *argv[]); \
   extern "C" int yage_lib_init(int argc, char **argv, int (*yage_main)(int, char**)); \
   int main(int argc, char *argv[]) { \
