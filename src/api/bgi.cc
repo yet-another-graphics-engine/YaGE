@@ -18,6 +18,10 @@
 #pragma warning(disable: 4800)
 #endif
 
+#ifdef __MINGW32__ // `vsnprintf` that MinGW provides uses MSVCRT library, which is not C99 compatible
+#include "../util/snprintf.h"
+#endif
+
 static yage::window::Window *window = NULL;
 static yage::draw::Canvas *canvas = NULL;
 static yage::draw::Point canvas_position(0, 0);
@@ -66,8 +70,8 @@ void arcf(float x, float y, float startangle, float endangle, float radius) {
     yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
     ellipsec.center = center;
-    ellipsec.startangle = startangle;
-    ellipsec.endangle = endangle;
+    ellipsec.startangle = startangle * M_PI / 180;
+    ellipsec.endangle = endangle * M_PI / 180;
     ellipsec.xradius = radius;
     ellipsec.yradius = radius;
 
@@ -114,8 +118,8 @@ void ellipsef(float x, float y, float startangle, float endangle, float xradius,
     yage::draw::EllipticArc elliparc;
     yage::draw::Point center(x, y);
     elliparc.center = center;
-    elliparc.startangle = startangle;
-    elliparc.endangle = endangle;
+    elliparc.startangle = startangle * M_PI / 180;
+    elliparc.endangle = endangle * M_PI / 180;
     elliparc.xradius = xradius;
     elliparc.yradius = yradius;
 
@@ -154,8 +158,8 @@ void pieslicef(float x, float y, float startangle, float endangle, float radius)
     yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
     ellipsec.center = center;
-    ellipsec.startangle = startangle;
-    ellipsec.endangle = endangle;
+    ellipsec.startangle = startangle * M_PI / 180;
+    ellipsec.endangle = endangle * M_PI / 180;
     ellipsec.xradius = radius;
     ellipsec.yradius = radius;
 
@@ -206,8 +210,8 @@ void sectorf(float x, float y, float startangle, float endangle, float xradius, 
     yage::draw::EllipticSector ellipsec;
     yage::draw::Point center(x, y);
     ellipsec.center = center;
-    ellipsec.startangle = startangle;
-    ellipsec.endangle = endangle;
+    ellipsec.startangle = startangle * M_PI / 180;
+    ellipsec.endangle = endangle * M_PI / 180;
     ellipsec.xradius = xradius;
     ellipsec.yradius = yradius;
 
@@ -243,12 +247,12 @@ void xyprintf(int x, int y, const char *format, ...) {
     va_start(args, format);
 #ifdef _MSC_VER
 #if _MSC_VER > 1300
-    sprintf_s(buf, 512, format, args);
+    vsprintf_s(buf, 512, format, args);
 #else
-    _snprintf(buf, 512, format, args);
+    _vsnprintf(buf, 512, format, args);
 #endif
 #else
-    snprintf(buf, 512, format, args);
+    vsnprintf(buf, 512, format, args);
 #endif
     va_end(args);
     yage::draw::Text text1(buf);
@@ -316,12 +320,58 @@ void lineto(int x, int y) {
     line(canvas_position.x, canvas_position.y, x, y);
 }
 
-void drawlines(int numlines, const int *polypoints){
-    for(int i=0; i<=numlines; ++i){
-        line(polypoints[4 * i], polypoints[ 4 * i + 1 ],
-             polypoints[4 * i + 2 ], polypoints[ 4 * i + 3 ]);
+/* Level 2 start */
+
+void drawlines(int num_lines, const int points[]) {
+    for(int i = 0; i < num_lines; ++i){
+        line(points[4 * i], points[ 4 * i + 1 ],
+             points[4 * i + 2 ], points[ 4 * i + 3 ]);
     }
 }
+
+void drawpoly(int num_points, const int *poly_points) {
+    paint.style = Paint::draw_style_stroke;
+    Poly poly;
+    for (int i = 0; i < num_points; i++) {
+        Point point(poly_points[2 * i], poly_points[2 * i + 1]);
+        poly.vertex.push_back(point);
+    }
+    canvas->draw_poly(poly, paint);
+    window->update();
+}
+
+void fillpoly(int num_points, const int *poly_points) {
+    paint.style = Paint::draw_style_fill;
+    Poly poly;
+    for (int i = 0; i < num_points; i++) {
+        Point point(poly_points[2 * i], poly_points[2 * i + 1]);
+        poly.vertex.push_back(point);
+    }
+    canvas->draw_poly(poly, paint);
+    window->update();
+}
+
+void putpixels(int num_points, int *points_and_colors) {
+    for (int i = 0; i < num_points; i++) {
+        putpixel(points_and_colors[3 * i], points_and_colors[3 * i + 1], points_and_colors[3 * i + 2]);
+    }
+}
+
+void getString(char *buffer, int length, const char *title) {
+    inputbox_getline(title, "Input a string", buffer, length);
+}
+
+char getChar(const char *text) {
+    char buf[2];
+    inputbox_getline("Input a char", text, buf, 2);
+    return buf[0];
+}
+
+void getCoords(int tops[], int num_coords, char *title) {
+    fprintf(stderr, "WARNING: Not implemented now.\n");
+}
+
+/* Level 2 end */
 
 #ifdef __cplusplus
 };

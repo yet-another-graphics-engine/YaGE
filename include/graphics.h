@@ -84,16 +84,19 @@ void delay_ms(long miliseconds);
 
 /* Level 2 start */
 void drawlines(int num_lines, const int points[]);
-void drawpoly(int num_lines, const int poly_points[]);
+void drawpoly(int num_points, const int poly_points[]);
 void fillpoly(int num_points, const int poly_points[]);
 void putpixels(int num_points, int points_and_colors[]);
+void getString(char *buffer, int length, const char *title);
+char getChar(const char *text);
+void getCoords(int tops[], int num_coords, char *title);
 /* Level 2 end */
 
-/* Level 3 temp start */
+/* Level 3 start */
 
 void lineto(int x, int y);
 
-/* Level 3 temp end */
+/* Level 3 end */
 
 #ifdef __cplusplus
 };
