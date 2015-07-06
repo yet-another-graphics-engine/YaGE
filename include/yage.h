@@ -28,6 +28,19 @@ struct yage_color {
 };
 
 /**
+ * \~english @brief Get yage_color() from a string.
+ * @param color_str a string, in English, descripting the color
+ * @return a struct representing the color
+ * \remark If no suitable color is found, black color is returned.
+ *
+ * \~chinese @brief 通过字符串获得 yage_color() 结构体
+ * @param color_str 描述颜色的英文字符串
+ * @return 颜色信息结构体
+ * \remark 如果没有找到合适的颜色信息，返回黑色。
+ */
+struct yage_color yage_color_from_string(const char *color_str);
+
+/**
  * \~english @brief Initialize the drawing components and create a fix-sized window.
  * @param width  the width of the window to create
  * @param height the height of the window to create

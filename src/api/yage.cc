@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cstdarg>
 #include <sstream>
+#include <algorithm>
 #include "../../include/yage.h"
 #include "../window/window.h"
 #include "../dialog/color_chooser_dlg.h"
@@ -90,6 +91,40 @@ namespace {
 }
 
 extern "C" {
+
+struct yage_color yage_color_from_string(const char *color_str) {
+  std::string s = color_str;
+  std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+
+  static const struct mapper {
+    const char* name;
+    yage_color color;
+  } map[] = {
+    {"black",         {0.0,    0.0,    0.0,    1}},
+    {"blue",          {0.0,    0.0,    0.6588, 1}},
+    {"green",         {0.0,    0.6588, 0.0,    1}},
+    {"cyan",          {0.0,    0.6588, 0.6588, 1}},
+    {"red",           {0.6588, 0.0,    0.0,    1}},
+    {"magenta",       {0.6588, 0.0,    0.6588, 1}},
+    {"brown",         {0.6588, 0.6588, 0.0,    1}},
+    {"light gray",    {0.6588, 0.6588, 0.6588, 1}},
+    {"dark gray",     {0.3294, 0.3294, 0.3294, 1}},
+    {"light blue",    {0.3294, 0.3294, 0.9882, 1}},
+    {"light green",   {0.3294, 0.9882, 0.3294, 1}},
+    {"light cyan",    {0.3294, 0.9882, 0.9882, 1}},
+    {"light red",     {0.9882, 0.3294, 0.3294, 1}},
+    {"light magenta", {0.9882, 0.3294, 0.9882, 1}},
+    {"yellow",        {0.9882, 0.9882, 0.3294, 1}},
+    {"white",         {0.9882, 0.9882, 0.9882, 1}},
+    {NULL,            {0.9882, 0.9882, 0.9882, 1}},
+  };
+
+  for (const mapper *p = map; p->name; ++p) {
+    if (p->name == s) return p->color;
+  }
+
+  return map[0].color;
+}
 
 void yage_init(int width, int height) {
   if (g_window) delete g_window;
