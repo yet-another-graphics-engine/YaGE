@@ -79,6 +79,8 @@ endif()
 
 if (MSVC)
     add_library(yage STATIC ${LIB_SOURCE_FILES})
+    list(REMOVE_ITEM CMAKE_CXX_FLAGS_DEBUG /Zi)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Z7")
     if (${CMAKE_CXX_COMPILER_VERSION} VERSION_GREATER 14 AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 15) # Visual C++ 2005
         set_target_properties(yage PROPERTIES OUTPUT_NAME_DEBUG yagevc8d)
         set_target_properties(yage PROPERTIES OUTPUT_NAME_RELEASE yagevc8)
