@@ -45,6 +45,54 @@ void yage_init(int width, int height);
 void yage_quit(void);
 
 /**
+ * \~english @brief A struct representing a canvas.
+ *           The struct is opaque, user can create a canvas by
+ *           yage_canvas_create() or yage_canvas_load_image() and free the
+ *           canvas by yage_canvas_delete().
+ *
+ * \~chinese @brief 表示画布的结构体。
+ *          这是一个不包含细节的结构体。可以通过 yage_canvas_create() 或
+ *          yage_canvas_load_image() 创建一个画布，通过 yage_canvas_delete()
+ *          来释放一个画布。
+ */
+struct yage_canvas;
+
+/**
+ * \~english @brief Create a fix-sized canvas.
+ * @param width  the width of the canvas to create
+ * @param height the height of the canvas to create
+ * @return the new canvas
+ *
+ * \~chinese @brief 创建一个固定大小的画布。
+ * @param width  新画布的宽度
+ * @param height 新画布的高度
+ * @return 新创建的画布
+ */
+struct yage_canvas *yage_canvas_create(int width, int height);
+
+/**
+ * \~english @brief Create a canvas and set the content to the specified image.
+ * @param path the path to load the image
+ * @return the new canvas
+ * \remark Free the canvas by yage_canvas_delete() after use.
+ *
+ * \~chinese @brief 创建一个新画布，并将其内容设置为图片。
+ * @param path 载入的图片路径
+ * @return 新创建的画布
+ * \remark 在使用完后通过 yage_canvas_delete() 删除画布。
+ */
+struct yage_canvas *yage_canvas_load_image(const char *path);
+
+/**
+ * \~english @brief Free an unused canvas.
+ * @param canvas The canvas to free
+ *
+ * \~chinese @brief 删除不再使用的画布。
+ * @param canvas 待删除的画布
+ */
+void yage_canvas_delete(struct yage_canvas *canvas);
+
+/**
  * \~english @brief Clean the canvas.
  *
  * Fill the whole canvas with background color.
@@ -70,6 +118,22 @@ void yage_clear(void);
  */
 void yage_draw_pixel(double x, double y, struct yage_color color);
 
+/**
+ * \~english @brief Draw a canvas at specified position with given scale
+ * @param x       the X coordinate for the top-left corner of the canvas to draw
+ * @param y       the Y coordinate for the top-left corner of the canvas to draw
+ * @param xscale  scale for X coordinate
+ * @param yscale  scale for Y coordinate
+ *
+ * \~chinese @brief 在指定位置缩放并画出某画布的内容
+ * @param x       某画布左上角在被画的画布的 X 坐标
+ * @param y       某画布左上角在被画的画布的 Y 坐标
+ * @param xscale  X 坐标的缩放比例
+ * @param yscale  Y 坐标的缩放比例
+ */
+
+void yage_draw_canvas(struct yage_canvas *canvas,
+                      double x, double y, double xscale, double yscale);
 /**
  * \~english @brief Set the font family, size and style of font.
  * @param family  The family of the font. Use NULL to skip this setting

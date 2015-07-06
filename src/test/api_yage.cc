@@ -35,6 +35,12 @@ void test_api_yage(void) {
   yage_arc_border(      60, 240, 20, kPi, 0);
   yage_line_border(     140, 220, 160, 240);
 
+  struct yage_canvas *canvas = yage_canvas_load_image("../src/res/yage-open.svg");
+  yage_draw_canvas(canvas, 240, 220, 1, 1);
+  yage_draw_canvas(canvas, 240, 220, 0.5, 0.5);
+  yage_draw_canvas(canvas, 240, 220, 0.2, 0.2);
+  yage_canvas_delete(canvas);
+
   yage_get_key();
 
   int val_int = yage_input_int("yage_input_int", NULL);

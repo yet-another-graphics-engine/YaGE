@@ -108,6 +108,21 @@ void yage_init(int width, int height) {
   g_window->show();
 }
 
+struct yage_canvas *yage_canvas_create(int width, int height) {
+  draw::Canvas *canvas = new draw::Canvas(height, width);
+  return reinterpret_cast<struct yage_canvas *>(canvas);
+}
+
+struct yage_canvas *yage_canvas_load_image(const char *path) {
+  draw::Canvas *canvas = new draw::Canvas(path);
+  return reinterpret_cast<struct yage_canvas *>(canvas);
+}
+
+void yage_canvas_delete(struct yage_canvas *canvas) {
+  draw::Canvas *canvas_obj = reinterpret_cast<draw::Canvas *>(canvas);
+  delete canvas_obj;
+}
+
 void yage_quit(void) {
   window::quit();
 }
@@ -122,6 +137,14 @@ void yage_draw_pixel(double x, double y, yage_color color) {
   g_paint->set_fill_color(convert_color(color));
   draw_rectangle(x - 0.5, y - 0.5,
                  x + 0.5, y + 0.5);
+}
+
+void yage_draw_canvas(struct yage_canvas *canvas,
+                      double x, double y, double xscale, double yscale) {
+  draw::Canvas *canvas_obj = reinterpret_cast<draw::Canvas *>(canvas);
+  draw::Paint paint;
+  paint.set_scale(xscale, yscale);
+  g_canvas->draw_canvas(*canvas_obj, draw::Point(x / xscale, y / yscale), paint);
 }
 
 void yage_set_font(const char *family, int size, int bold, int italic) {
