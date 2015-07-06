@@ -129,5 +129,6 @@ void test_init(void) {
   TEST_ADD(draw_pic);
   TEST_ADD(draw_perf);
   TEST_ADD(api_yage);
+  TEST_ADD(api_bgi);
 }
 
