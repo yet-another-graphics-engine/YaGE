@@ -80,6 +80,7 @@ Section "install" ;Installation info
 
     SetOutPath "$INSTDIR\gtk3\bin"
     File C:\GTK\bin\*.dll
+    File C:\GTK\bin\gdk-pixbuf-query-loaders.exe
 
     SetOutPath "$INSTDIR\gtk3"
     File /r C:\GTK\etc
@@ -95,6 +96,9 @@ Section "install" ;Installation info
 
     SetOutPath "$INSTDIR\gtk3\share"
     File /r C:\GTK\share\locale
+
+    SetOutPath "$INSTDIR\gtk3\share\icons"
+    File /r ..\..\src\res\yage-extent-icon-pack\YaGE
 
     Push $4
     ; Write MSBuild config file at $4 register, and using $5, $6 register preserved
