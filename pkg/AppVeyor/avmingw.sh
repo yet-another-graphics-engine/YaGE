@@ -25,7 +25,7 @@ cp -r build-mingw/bin/ build-bin/build-mingw
 cp -r build-mingw/lib/ build-bin/build-mingw
 cp -r build-mingw/doc/ build-bin/
 
-if ! [ -f "/C/Program Files (x86)/NSIS/Plugins/path.dll" ]
+if ! [ -f "/C/Program Files (x86)/NSIS/Plugins/path.dll" ] || [ "/C/Program Files (x86)/NSIS/Plugins/path.dll" -ot "pkg/NSIS/plugin/path.c" ]
 then
     cd pkg/NSIS/plugin
     make
