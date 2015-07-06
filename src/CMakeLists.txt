@@ -145,6 +145,7 @@ set(YAGE_TEST_SOURCE_FILES
     test/window_msg.cc
     test/window_resize.cc
     test/api_yage.cc
+    test/api_bgi.cc
     )
 
 # Add YaGE test resource files

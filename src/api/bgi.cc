@@ -316,6 +316,13 @@ void lineto(int x, int y) {
     line(canvas_position.x, canvas_position.y, x, y);
 }
 
+void drawlines(int numlines, const int *polypoints){
+    for(int i=0; i<=numlines; ++i){
+        line(polypoints[4 * i], polypoints[ 4 * i + 1 ],
+             polypoints[4 * i + 2 ], polypoints[ 4 * i + 3 ]);
+    }
+}
+
 #ifdef __cplusplus
 };
 #endif
