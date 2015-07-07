@@ -11,7 +11,6 @@ Canvas::Canvas(int width, int height) : paint_() {
 
     surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     brush_ = cairo_create(surface_);
-    clear_all();
 }
 
 Canvas::Canvas(const std::string &filename) : paint_() {

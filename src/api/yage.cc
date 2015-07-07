@@ -27,6 +27,7 @@ namespace {
   const size_t kMaxTextBuffer = 2048;
 
   window::Window *g_window = NULL;
+  draw::Canvas *g_canvas_bg = NULL;
   draw::Canvas *g_canvas = NULL;
   draw::Paint *g_paint = NULL;
   draw::Color g_fill_color;
@@ -51,12 +52,17 @@ namespace {
     }
   }
 
+  inline void update() {
+    g_canvas_bg->draw_canvas(*g_canvas, draw::Point(0, 0));
+    g_window->update();
+  }
+
   inline void draw_circle(double x, double y, double r) {
     draw::Circle circle;
     circle.center = draw::Point(x, y);
     circle.radius = r;
     g_canvas->draw_circle(circle, *g_paint);
-    g_window->update();
+    update();
   }
 
   inline void draw_ellipse(double x, double y,
@@ -66,7 +72,7 @@ namespace {
     ellipse.xradius = radius_x;
     ellipse.yradius = radius_y;
     g_canvas->draw_ellipse(ellipse, *g_paint);
-    g_window->update();
+    update();
   }
 
   inline void draw_rectangle(double x1, double y1, double x2, double y2) {
@@ -74,7 +80,7 @@ namespace {
     rect.first = draw::Point(x1, y1);
     rect.second = draw::Point(x2, y2);
     g_canvas->draw_rect(rect, *g_paint);
-    g_window->update();
+    update();
   }
 
   inline void draw_sector(double x, double y, double r,
@@ -86,7 +92,7 @@ namespace {
     sector.startangle = angle_begin;
     sector.endangle = angle_end;
     g_canvas->draw_elliptical_sector(sector, *g_paint);
-    g_window->update();
+    update();
   }
 }
 
@@ -128,18 +134,21 @@ struct yage_color yage_color_from_string(const char *color_str) {
 
 void yage_init(int width, int height) {
   if (g_window) delete g_window;
-  if (g_canvas) delete g_canvas;
   if (g_paint) delete g_paint;
+  if (g_canvas) delete g_canvas;
+  if (g_canvas_bg) delete g_canvas_bg;
 
   g_window = new window::Window(width, height);
   g_canvas = new draw::Canvas(width, height);
+  g_canvas_bg = new draw::Canvas(width, height);
   g_paint = new draw::Paint;
 
   g_fill_color = draw::Color(0.5, 0.5, 0.5, 1);
   g_border_color = draw::Color(0, 0, 0, 1);
   g_paint->set_background_color(Color(1, 1, 1, 1));
 
-  g_window->set_canvas(*g_canvas);
+  g_window->set_canvas(*g_canvas_bg);
+  g_canvas_bg->clear_all(*g_paint);
   g_window->show();
 }
 
@@ -169,8 +178,8 @@ void yage_quit(void) {
 }
 
 void yage_clear(void) {
-  g_canvas->clear_all();
-  g_window->update();
+  g_canvas_bg->clear_all();
+  update();
 }
 
 void yage_draw_pixel(double x, double y, yage_color color) {
@@ -186,7 +195,7 @@ void yage_draw_canvas(struct yage_canvas *canvas,
   draw::Paint paint;
   paint.set_scale(xscale, yscale);
   g_canvas->draw_canvas(*canvas_obj, draw::Point(x / xscale, y / yscale), paint);
-  g_window->update();
+  update();
 }
 
 void yage_set_font(const char *family, int size, int bold, int italic) {
@@ -206,6 +215,8 @@ void yage_set_fill_color(struct yage_color fill_color) {
 
 void yage_set_background_color(struct yage_color background_color) {
   g_paint->set_background_color(convert_color(background_color));
+  g_canvas_bg->clear_all(*g_paint);
+  update();
 }
 
 void yage_set_border_color(struct yage_color border_color) {
@@ -289,14 +300,14 @@ void yage_arc_border(double x, double y, double r,
   arc.startangle = angle_begin;
   arc.endangle = angle_end;
   g_canvas->draw_elliptical_arc(arc, *g_paint);
-  g_window->update();
+  update();
 }
 
 void yage_line_border(double x1, double y1, double x2, double y2) {
   prepare_color(true, true);
   draw::Line line(draw::Point(x1, y1), draw::Point(x2, y2));
   g_canvas->draw_line(line, *g_paint);
-  g_window->update();
+  update();
 }
 
 void yage_printf(double x, double y, const char *format, ...) {
@@ -318,7 +329,7 @@ void yage_printf(double x, double y, const char *format, ...) {
   yage::draw::Text text(buf);
   text.position = draw::Point(x, y);
   g_canvas->draw_text(text, *g_paint);
-  g_window->update();
+  update();
 }
 
 int yage_get_message(struct yage_message *msg, int wait_ms) {
