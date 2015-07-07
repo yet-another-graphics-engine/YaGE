@@ -228,6 +228,15 @@ void yage_set_border_color(struct yage_color border_color);
 void yage_set_border_thickness(double thickness);
 
 /**
+ * \~english @brief Set the title of the window
+ * @param[in] title Title of the window. Pass `NULL` to use default title
+ *
+ * \~chinese @brief 设置窗口标题
+ * @param[in] title 窗口的标题。传入 `NULL` 以使用默认标题
+ */
+void yage_set_title(const char *title);
+
+/**
  * \~english @brief Draw border and fill a circle.
  * @param x  the X coordinate of the center of the circle
  * @param y  the Y coordinate of the center of the circle

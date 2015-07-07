@@ -5,6 +5,7 @@
 #include <cstdarg>
 #include <sstream>
 #include <algorithm>
+#include "../main.h"
 #include "../../include/yage.h"
 #include "../window/window.h"
 #include "../dialog/color_chooser_dlg.h"
@@ -150,6 +151,7 @@ void yage_init(int width, int height) {
 
   g_window->set_canvas(*g_canvas_bg);
   g_canvas_bg->clear_all(*g_paint);
+  g_window->set_title(version_string);
   g_window->show();
 }
 
@@ -228,6 +230,10 @@ void yage_set_border_color(struct yage_color border_color) {
 
 void yage_set_border_thickness(double thickness) {
   g_paint->line_width = thickness;
+}
+
+void yage_set_title(const char *title) {
+  g_window->set_title(title ? title : version_string);
 }
 
 void yage_circle(double x, double y, double r) {

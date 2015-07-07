@@ -6,6 +6,10 @@ namespace yage {
 extern int argc;
 extern char **argv;
 
+extern const int version_major;
+extern const int version_minor;
+extern const int version_patch;
+extern const char *version_string;
 
 }  // namespace yage
 
