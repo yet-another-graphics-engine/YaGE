@@ -70,8 +70,21 @@ void test_api_yage(void) {
     yage_dlg_message(NULL, yage_dlg_file_open(NULL));;
   }
 
+  struct yage_canvas *btest1 = yage_canvas_load_image("../src/res/yage-open.svg");
+  struct yage_canvas *btest2 = yage_canvas_load_image("../src/res/yage-save.svg");
+  struct yage_canvas *btest3 = yage_canvas_load_image("../src/res/yage-remove.svg");
+  struct yage_button *buttontest = yage_button_create_empty();
+  yage_button_set_size(buttontest, 100, 100);
+  yage_button_set_position(buttontest, 300, 100);
+  yage_button_set_image(buttontest, btest1);
+  yage_button_set_focused_image(buttontest, btest2);
+  yage_button_set_clicked_image(buttontest, btest3);
+
+  yage_button_update(buttontest);
+
   yage_message msg;
   while (yage_get_message(&msg, 0)) {
+    if (yage_button_clicked(buttontest, &msg)) yage_dlg_message("Fuck you!", "Fuck you");
     if (msg.type != kYageMouse) continue;
     if (msg.mouse.is_right) yage_clear();
     if (msg.mouse.is_middle) yage_quit();
@@ -79,5 +92,4 @@ void test_api_yage(void) {
     if (!msg.mouse.is_left) continue;
     yage_draw_pixel(msg.mouse.x, msg.mouse.y, color);
   }
-
 }

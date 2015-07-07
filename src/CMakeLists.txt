@@ -53,6 +53,7 @@ set(LIB_SOURCE_FILES
     draw/animation.cc
     api/bgi.cc
     api/yage.cc
+    api/yage_button.cc
     )
 
 # Win32 GTK theme

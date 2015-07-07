@@ -1658,6 +1658,171 @@ char *yage_input_line(const char *title, const char *message);
  */
 int yage_input_scanf(const char *title, const char *message, const char *format, ...);
 
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @breif Create a new empty button
+ * @return The new button
+ *
+ * @~chinese
+ * @breif 创建一个新的空按钮
+ * @return 新创建的按钮
+ */
+struct yage_button *yage_button_create_empty(void);
+
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @breif Create a new button
+ * @param x The X coordinate for the top-left corner of the button.
+ * @param y The Y coordinate for the top-left corner of the button.
+ * @param width The width of the button.
+ * @param height The height of the button.
+ * @param general_image The image displayed at the general time
+ * @param focused_image The image displayed when the button is focused. Pass `NULL` to use gerenal image.
+ * @param clicked_image The image displayed when the button is clicked. Pass `NULL` to use focused image.
+ * @return The new button
+ *
+ * @~chinese
+ * @breif 创建一个新按钮
+ * @param x 按钮在画布上的 X 坐标
+ * @param y 按钮在画布上的 Y 坐标
+ * @param width 按钮的宽
+ * @param height 按钮的高
+ * @param general_image 按钮在一般状态显示的图像
+ * @param focused_image 按钮在获得焦点时显示的图像，传入 `NULL` 以使用一般状态时的图像
+ * @param clicked_image 按钮在按下时显示的图像，传入 `NULL` 以使用按钮获得焦点时显示的图像
+ * @return 新创建的按钮
+ */
+struct yage_button *yage_button_create(int x, int y, int width, int height,
+                                       struct yage_canvas *general_image,
+                                       struct yage_canvas *focused_image,
+                                       struct yage_canvas *clicked_image);
+
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @brief Free an unused button.
+ * @param button The button to free
+ *
+ * @~chinese
+ * @brief 删除不再使用的按钮。
+ * @param canvas 待删除的按钮
+ */
+void yage_button_delete(struct yage_button *button);
+
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @brief Set the size of the button
+ * @param button The button to set
+ * @param width The width of the button.
+ * @param height The height of the button.
+ *
+ * @~chinese
+ * @brief 设置按钮的大小
+ * @param button 要设置的按钮
+ * @param width 按钮的宽
+ * @param height 按钮的高
+ */
+void yage_button_set_size(struct yage_button *button, int width, int height);
+
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @breif Set the position of the button
+ * @param button The button to set
+ * @param x The X coordinate for the top-left corner of the button.
+ * @param y The Y coordinate for the top-left corner of the button.
+ *
+ * @~chinese
+ * @brief 设置按钮的位置
+ * @param button 要设置的按钮
+ * @param x 按钮在画布上的 X 坐标
+ * @param y 按钮在画布上的 Y 坐标
+ */
+void yage_button_set_position(struct yage_button *button, int x, int y);
+
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @brief Set the image displayed at the general time
+ * @param button The button to set
+ * @param general_image The image displayed at the general time
+ *
+ * @~chinese
+ * @brief 设置按钮在一般状态显示的图像
+ * @param button 要设置的按钮
+ * @param general_image 按钮在一般状态显示的图像
+ */
+void yage_button_set_image(struct yage_button *button, struct yage_canvas *general_image);
+
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @brief Set the image displayed when the button is focused.
+ * @param button The button to set
+ * @param focused_image The image displayed when the button is focused. Pass `NULL` to use gerenal image.
+ *
+ * @~chinese
+ * @brief 设置按钮在获得焦点时显示的图像
+ * @param button 要设置的按钮
+ * @param focused_image 按钮在获得焦点时显示的图像，传入 `NULL` 以使用一般状态时的图像
+ */
+void yage_button_set_focused_image(struct yage_button *button, struct yage_canvas *focused_image);
+
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @brief Set the image displayed when the button is clicked.
+ * @param button The button to set
+ * @param focused_image The image displayed when the button is focused. Pass `NULL` to use gerenal image.
+ *
+ * @~chinese
+ * @brief 设置按钮在按下时显示的图像
+ * @param button 要设置的按钮
+ * @param clicked_image 按钮在按下时显示的图像，传入 `NULL` 以使用按钮获得焦点时显示的图像
+ */
+void yage_button_set_clicked_image(struct yage_button *button, struct yage_canvas *clicked_image);
+
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @brief Check whether the button is clicked from the message
+ * @param button The button to be checked
+ * @param msg The message from message queue.
+ * @return Whether the button is clicked.
+ *
+ * @~chinese
+ * @brief 从消息中检查按钮是否被按下
+ * @param button 要检查的按钮
+ * @param msg 从消息队列中获取的消息
+ * @return 按钮是否被按下
+ */
+bool yage_button_clicked(struct yage_button *button, struct yage_message *msg);
+
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @brief Update the display status of the button
+ * @param button The button to update
+ *
+ * @~chinese
+ * @brief 更新按钮的显示状态
+ * @param button 要更新的按钮
+ */
+void yage_button_update(struct yage_button *button);
+
 #ifdef __cplusplus
 }  // extern "C"
 #endif

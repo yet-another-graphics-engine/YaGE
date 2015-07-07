@@ -13,6 +13,7 @@ namespace yage {
   extern window::Window *g_window;
   extern draw::Canvas *g_canvas_bg;
   extern draw::Canvas *g_canvas;
+  extern draw::Canvas *g_canvas_btn;
   extern draw::Paint *g_paint;
   extern draw::Color g_fill_color;
   extern draw::Color g_border_color;

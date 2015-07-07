@@ -31,6 +31,7 @@ namespace yage {
   window::Window *g_window = NULL;
   draw::Canvas *g_canvas_bg = NULL;
   draw::Canvas *g_canvas = NULL;
+  draw::Canvas *g_canvas_btn = NULL;
   draw::Paint *g_paint = NULL;
   draw::Color g_fill_color;
   draw::Color g_border_color;
@@ -54,9 +55,10 @@ namespace yage {
     }
   }
 
-  inline void update() {
+  void update() {
     g_canvas_bg->clear_all(*g_paint);
     g_canvas_bg->draw_canvas(*g_canvas, draw::Point(0, 0));
+    g_canvas_bg->draw_canvas(*g_canvas_btn, draw::Point(0, 0));
     g_window->update();
   }
 
@@ -156,7 +158,8 @@ void yage_init(int width, int height) {
   g_window    = new window::Window(width, height);
   g_canvas    = new draw::Canvas(width, height);
   g_canvas_bg = new draw::Canvas(width, height);
-  g_paint     = new draw::Paint;
+  g_canvas_btn = new draw::Canvas(width, height);
+  g_paint = new draw::Paint;
 
   g_fill_color = draw::Color(0.5, 0.5, 0.5, 1);
   g_border_color = draw::Color(0, 0, 0, 1);
@@ -709,4 +712,4 @@ int yage_input_scanf(const char *title, const char *message,
   return ret_val;
 }
 
-} // extern "C"
+}  // extern "C"
