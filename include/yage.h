@@ -1350,7 +1350,7 @@ int  yage_dlg_font(const char *title);
 int  yage_dlg_color(const char *title, struct yage_color *color);
 
 /**
- * @addtogroup interact_dlg
+ * @ingroup interact_dlg
  *
  * @~english
  * @brief Get path by showing a file save dialog.
