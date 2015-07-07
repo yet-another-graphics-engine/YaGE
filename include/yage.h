@@ -354,7 +354,7 @@ struct yage_animation *yage_animation_load_image(const char *path);
  * @param y          the Y coordinate for the top-left corner of the source animated image on screen
  *
  * @~chinese
- * @brief 在屏幕指定位置缩放并画出原始动态图的内容。
+ * @brief 在屏幕指定位置画出原始动态图的内容。
  * @param animation  原始动态图
  * @param x          原始画布左上角在屏幕上的 X 坐标
  * @param y          原始画布左上角在屏幕上的 Y 坐标
@@ -1662,11 +1662,11 @@ int yage_input_scanf(const char *title, const char *message, const char *format,
  * @ingroup interact_button
  *
  * @~english
- * @breif Create a new empty button
+ * @brief Create a new empty button
  * @return The new button
  *
  * @~chinese
- * @breif 创建一个新的空按钮
+ * @brief 创建一个新的空按钮
  * @return 新创建的按钮
  */
 struct yage_button *yage_button_create_empty(void);
@@ -1675,7 +1675,7 @@ struct yage_button *yage_button_create_empty(void);
  * @ingroup interact_button
  *
  * @~english
- * @breif Create a new button
+ * @brief Create a new button
  * @param x The X coordinate for the top-left corner of the button.
  * @param y The Y coordinate for the top-left corner of the button.
  * @param width The width of the button.
@@ -1686,7 +1686,7 @@ struct yage_button *yage_button_create_empty(void);
  * @return The new button
  *
  * @~chinese
- * @breif 创建一个新按钮
+ * @brief 创建一个新按钮
  * @param x 按钮在画布上的 X 坐标
  * @param y 按钮在画布上的 Y 坐标
  * @param width 按钮的宽
@@ -1710,7 +1710,7 @@ struct yage_button *yage_button_create(int x, int y, int width, int height,
  *
  * @~chinese
  * @brief 删除不再使用的按钮。
- * @param canvas 待删除的按钮
+ * @param button 待删除的按钮
  */
 void yage_button_delete(struct yage_button *button);
 
@@ -1735,7 +1735,7 @@ void yage_button_set_size(struct yage_button *button, int width, int height);
  * @ingroup interact_button
  *
  * @~english
- * @breif Set the position of the button
+ * @brief Set the position of the button
  * @param button The button to set
  * @param x The X coordinate for the top-left corner of the button.
  * @param y The Y coordinate for the top-left corner of the button.
@@ -1784,7 +1784,7 @@ void yage_button_set_focused_image(struct yage_button *button, struct yage_canva
  * @~english
  * @brief Set the image displayed when the button is clicked.
  * @param button The button to set
- * @param focused_image The image displayed when the button is focused. Pass `NULL` to use gerenal image.
+ * @param clicked_image The image displayed when the button is clicked. Pass `NULL` to use gerenal image.
  *
  * @~chinese
  * @brief 设置按钮在按下时显示的图像
