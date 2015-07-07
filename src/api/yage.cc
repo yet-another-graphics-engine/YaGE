@@ -158,6 +158,12 @@ void yage_canvas_delete(struct yage_canvas *canvas) {
   delete canvas_obj;
 }
 
+void yage_canvas_get_size(struct yage_canvas *canvas,
+                          int *height, int *width) {
+  draw::Canvas *canvas_obj = reinterpret_cast<draw::Canvas *>(canvas);
+  canvas_obj->get_size(*height, *width);
+}
+
 void yage_quit(void) {
   window::quit();
 }

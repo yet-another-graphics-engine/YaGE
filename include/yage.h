@@ -119,6 +119,19 @@ void yage_canvas_delete(struct yage_canvas *canvas);
 void yage_clear(void);
 
 /**
+ * \~english @brief Get the height and width of the canvas.
+ * @param canvas the canvas to obtain information from
+ * @param[out] height return location to the height of the canvas
+ * @param[out] width  return location to the width of the canvas
+ *
+ * \~chinese @brief 获取画布的宽度和高度。
+ * @param canvas 需要获取信息的画布
+ * @param[out] height 返回画布高度的地址
+ * @param[out] width  返回画布宽度的地址
+ */
+void yage_canvas_get_size(struct yage_canvas *canvas, int *height, int *width);
+
+/**
  * \~english @brief Draw specified color to a pixel.
  * @param x       the X coordinate of the pixel
  * @param y       the Y coordinate of the pixel

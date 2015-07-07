@@ -36,6 +36,8 @@ void test_api_yage(void) {
   yage_line_border(     140, 220, 160, 240);
 
   struct yage_canvas *canvas = yage_canvas_load_image("../src/res/yage-open.svg");
+  int height, width;
+  yage_canvas_get_size(canvas, &height, &width);
   yage_draw_canvas(canvas, 540, 220, 1, 1);
   yage_draw_canvas(canvas, 540, 220, 0.5, 0.5);
   yage_draw_canvas(canvas, 540, 220, 0.2, 0.2);
@@ -46,7 +48,9 @@ void test_api_yage(void) {
   int val_int = yage_input_int("yage_input_int", NULL);
   double val_double = yage_input_double("yage_input_double", NULL);
   yage_set_font_color(yage_color_from_string("Cyan"));
-  yage_printf(240, 200, "int = %d, double = %lf", val_int, val_double);
+
+  yage_printf(240, 200, "size = %d x %d, int = %d, double = %lf",
+              height, width, val_int, val_double);
 
   yage_dlg_font(NULL);
   yage_dlg_color(NULL, &color);
