@@ -36,7 +36,9 @@
   int yage_main(int argc, char *argv[]); \
   extern "C" int yage_lib_init(int argc, char **argv, int (*yage_main)(int, char**)); \
   __pragma(comment(linker, "/subsystem:windows")) \
-  int __stdcall WinMain(void *hInstance, void *hPrevInstance, char *lpCmdLine, int nCmdShow) { \
+  struct HINSTANCE__; \
+  typedef HINSTANCE__ *HINSTANCE; \
+  int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, char *lpCmdLine, int nCmdShow) { \
     int argc = __argc; \
     char **argv = __argv; \
     return yage_lib_init(argc, argv, yage_main); \
