@@ -264,6 +264,7 @@ void Canvas::clear_all(Paint &paint) {
     cairo_reset_clip(brush_);
     cairo_save(brush_);
     cairo_set_source(brush_, paint.pro_get_background_color_pattern());
+    cairo_set_operator(brush_, CAIRO_OPERATOR_SOURCE);
     cairo_paint(brush_);
     cairo_restore(brush_);
 }

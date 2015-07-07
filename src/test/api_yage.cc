@@ -44,9 +44,8 @@ void test_api_yage(void) {
   yage_draw_canvas(canvas, 540, 220, 0.2, 0.2);
   yage_canvas_delete(canvas);
 
-  yage_get_key();
+  yage_set_background_color(yage_color_from_string("green"));
 
-  yage_set_background_color(yage_color_from_string("white"));
   int val_int = yage_input_int("yage_input_int", NULL);
   double val_double = yage_input_double("yage_input_double", NULL);
   yage_set_font_color(yage_color_from_string("Cyan"));

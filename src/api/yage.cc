@@ -53,6 +53,7 @@ namespace {
   }
 
   inline void update() {
+    g_canvas_bg->clear_all(*g_paint);
     g_canvas_bg->draw_canvas(*g_canvas, draw::Point(0, 0));
     g_window->update();
   }
@@ -178,7 +179,9 @@ void yage_quit(void) {
 }
 
 void yage_clear(void) {
-  g_canvas_bg->clear_all();
+  draw::Paint transparent;
+  transparent.set_background_color(draw::Color(0, 0, 0, 0));
+  g_canvas->clear_all(transparent);
   update();
 }
 
