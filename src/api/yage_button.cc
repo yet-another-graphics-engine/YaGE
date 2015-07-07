@@ -15,6 +15,7 @@ namespace yage {
         is_focused_ = false;
         is_clicked_ = false;
     }
+
     Button::Button(int x, int y, int width, int height, Canvas &general_image, Canvas &focused_image, Canvas &clicked_image) {
         x_ = x;
         y_ = y;
@@ -30,6 +31,11 @@ namespace yage {
     }
 
     Button::~Button() {
+      yage::draw::Paint paint;
+      paint.set_viewport(yage::draw::Point(x_, y_),
+                         yage::draw::Point(x_ + width_, y_ + height_));
+      paint.set_background_color(yage::draw::Color(0, 0, 0, 0));
+      g_canvas_btn->clear_viewport(paint);
         if (general_image_) delete general_image_;
         if (focused_image_) delete focused_image_;
         if (clicked_image_) delete clicked_image_;

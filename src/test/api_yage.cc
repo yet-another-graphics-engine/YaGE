@@ -80,11 +80,17 @@ void test_api_yage(void) {
   yage_button_set_focused_image(buttontest, btest2);
   yage_button_set_clicked_image(buttontest, btest3);
 
+  struct yage_button *buttontest1;
+  buttontest1 = yage_button_create(400, 100, 100, 100, btest1, btest2, btest3);
+
   yage_button_update(buttontest);
+  yage_button_update(buttontest1);
 
   yage_message msg;
   while (yage_get_message(&msg, 0)) {
-    if (yage_button_clicked(buttontest, &msg)) yage_dlg_message("Fuck you!", "Fuck you");
+    if (buttontest && yage_button_clicked(buttontest, &msg)) yage_button_delete(buttontest), buttontest = NULL;
+    if (buttontest1 && yage_button_clicked(buttontest1, &msg)) yage_button_delete(buttontest1), buttontest1 = NULL;
+
     if (msg.type != kYageMouse) continue;
     if (msg.mouse.is_right) yage_clear();
     if (msg.mouse.is_middle) yage_quit();
