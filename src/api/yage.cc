@@ -108,6 +108,11 @@ using namespace yage::api::yage;
 
 extern "C" {
 
+void yage_sleep(double second) {
+  gulong micor_seconds = static_cast<gulong>(second * G_USEC_PER_SEC);
+  g_usleep(micor_seconds);
+}
+
 struct yage_color yage_color_from_string(const char *color_str) {
   std::string s = color_str;
   std::transform(s.begin(), s.end(), s.begin(), ::tolower);

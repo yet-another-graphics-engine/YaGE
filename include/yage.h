@@ -189,6 +189,21 @@ struct yage_color yage_color_from_string(const char *color_str);
  * @ingroup system
  *
  * @~english
+ * @brief Pause execution of current function for some duration.
+ * @param second the duration, in seconds
+ * @remark the minimum supported duration is 1/1000000(1e-6) second。
+ *
+ * @~chinese
+ * @brief 一段时间内暂停当前函数的执行。
+ * @param second 暂停的时长，以秒计算
+ * @remark 最小支持的暂停时长为 1/1000000(1e-6) 秒。
+ */
+void yage_sleep(double second);
+
+/**
+ * @ingroup system
+ *
+ * @~english
  * @brief Initialize the drawing components and create a fix-sized window.
  * @param width  the width of the window to create
  * @param height the height of the window to create
