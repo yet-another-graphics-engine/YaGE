@@ -102,10 +102,21 @@ namespace yage {
 
     void Button::update_button() {
         Canvas *image = general_image_;
-        if (is_focused_ && !is_clicked_ && focused_image_ != NULL)
-            image = focused_image_;
-        if (is_focused_ && is_clicked_ && clicked_image_ != NULL)
-            image = clicked_image_;
+        if (is_focused_ && !is_clicked_) {
+            if (focused_image_ != NULL)
+                image = focused_image_;
+            else
+                image = general_image_;
+        }
+
+        if (is_focused_ && is_clicked_) {
+            if (clicked_image_ != NULL)
+                image = clicked_image_;
+            else if (focused_image_ != NULL)
+                image = focused_image_;
+            else
+                image = general_image_;
+        }
         int raw_width, raw_height;
         double xscale = 1.0, yscale = 1.0;
         draw::Paint paint;
