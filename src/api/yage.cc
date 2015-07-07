@@ -186,6 +186,7 @@ void yage_draw_canvas(struct yage_canvas *canvas,
   draw::Paint paint;
   paint.set_scale(xscale, yscale);
   g_canvas->draw_canvas(*canvas_obj, draw::Point(x / xscale, y / yscale), paint);
+  g_window->update();
 }
 
 void yage_set_font(const char *family, int size, int bold, int italic) {
