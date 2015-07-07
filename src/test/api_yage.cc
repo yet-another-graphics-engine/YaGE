@@ -36,6 +36,8 @@ void test_api_yage(void) {
 
   yage_arc_border(      60, 240, 20, kPi, 0);
   yage_line_border(     140, 220, 160, 240);
+  double points[] = {100, 200, 200, 100, 0, 0};
+  yage_poly(sizeof(points) / sizeof(points[0]) / 2, points);
 
   struct yage_canvas *canvas = yage_canvas_load_image("../src/res/yage-open.svg");
   int height, width;

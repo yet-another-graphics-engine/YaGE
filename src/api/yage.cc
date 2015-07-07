@@ -102,6 +102,16 @@ namespace yage {
     update();
   }
 
+  inline void draw_poly(draw::Canvas &canvas,
+                        int num_points, const double *poly_points) {
+    Poly poly;
+    for (int i = 0; i < num_points; i++) {
+        Point point(poly_points[2 * i], poly_points[2 * i + 1]);
+        poly.vertex.push_back(point);
+    }
+    canvas.draw_poly(poly, *g_paint);
+    update();
+  }
 }  // namespace yage
 }  // namespace api
 }  // namespace yage
@@ -370,6 +380,39 @@ void yage_canvas_rectangle_border(struct yage_canvas *canvas,
 void yage_rectangle_border(double x1, double y1, double x2, double y2) {
   prepare_color(false, true);
   draw_rectangle(*g_canvas, x1, y1, x2, y2);
+}
+
+void yage_canvas_poly(struct yage_canvas *canvas,
+                      int num_points, const double *poly_points) {
+  prepare_color(true, true);
+  draw_poly(*STRUCT_TO_CANVAS(canvas), num_points, poly_points);
+}
+
+void yage_poly(int num_points, const double *poly_points) {
+  prepare_color(true, true);
+  draw_poly(*g_canvas, num_points, poly_points);
+}
+
+void yage_canvas_poly_fill(struct yage_canvas *canvas,
+                           int num_points, const double *poly_points) {
+  prepare_color(true, false);
+  draw_poly(*STRUCT_TO_CANVAS(canvas), num_points, poly_points);
+}
+
+void yage_poly_fill(int num_points, const double *poly_points) {
+  prepare_color(true, false);
+  draw_poly(*g_canvas, num_points, poly_points);
+}
+
+void yage_canvas_poly_border(struct yage_canvas *canvas,
+                             int num_points, const double *poly_points) {
+  prepare_color(false, true);
+  draw_poly(*STRUCT_TO_CANVAS(canvas), num_points, poly_points);
+}
+
+void yage_poly_border(int num_points, const double *poly_points) {
+  prepare_color(false, true);
+  draw_poly(*g_canvas, num_points, poly_points);
 }
 
 void yage_canvas_sector(struct yage_canvas *canvas,

@@ -990,6 +990,105 @@ void yage_canvas_rectangle_border(struct yage_canvas *canvas,
  * @ingroup draw_shape
  *
  * @~english
+ * @brief Draw border and fill a polygon.
+ * @param num_points the number of vertexes of the polygon
+ * @param poly_points the coordinates of each vertex, like `{X1, Y1, X2, Y2, X3, Y3, ...}`, number of elements counts to 2 * num_points
+ *
+ * @~chinese
+ * @brief 画多边形的边框并填充。
+ * @param num_points 多边形顶点数量
+ * @param poly_points 多边形的顶点坐标，类似于 `{X1, Y1, X2, Y2, X3, Y3, ...}`，共 2 * num_points 个元素
+ */
+void yage_poly(int num_points, const double *poly_points);
+
+/**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border and fill a polygon.
+ * @param canvas    the canvas to draw on
+ * @param num_points the number of vertexes of the polygon
+ * @param poly_points the coordinates of each vertex, like `{X1, Y1, X2, Y2, X3, Y3, ...}`, number of elements counts to 2 * num_points
+ *
+ * @~chinese
+ * @brief 画多边形的边框并填充。
+ * @param canvas    被绘制的画布
+ * @param num_points 多边形顶点数量
+ * @param poly_points 多边形的顶点坐标，类似于 `{X1, Y1, X2, Y2, X3, Y3, ...}`，共 2 * num_points 个元素
+ */
+void yage_canvas_poly(struct yage_canvas *canvas,
+                      int num_points, const double *poly_points);
+
+/**
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Fill a polygon, don't fill.
+ * @param num_points the number of vertexes of the polygon
+ * @param poly_points the coordinates of each vertex, like `{X1, Y1, X2, Y2, X3, Y3, ...}`, number of elements counts to 2 * num_points
+ *
+ * @~chinese
+ * @brief 填充多边形，不要画边框。
+ * @param num_points 多边形顶点数量
+ * @param poly_points 多边形的顶点坐标，类似于 `{X1, Y1, X2, Y2, X3, Y3, ...}`，共 2 * num_points 个元素
+ */
+void yage_poly_fill(int num_points, const double *poly_points);
+
+/**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Fill a polygon, don't fill.
+ * @param canvas    the canvas to draw on
+ * @param num_points the number of vertexes of the polygon
+ * @param poly_points the coordinates of each vertex, like `{X1, Y1, X2, Y2, X3, Y3, ...}`, number of elements counts to 2 * num_points
+ *
+ * @~chinese
+ * @brief 填充多边形，不要画边框。
+ * @param canvas    被绘制的画布
+ * @param num_points 多边形顶点数量
+ * @param poly_points 多边形的顶点坐标，类似于 `{X1, Y1, X2, Y2, X3, Y3, ...}`，共 2 * num_points 个元素
+ */
+void yage_canvas_poly_fill(struct yage_canvas *canvas,
+                           int num_points, const double *poly_points);
+
+/**
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw border of a polygon, don't fill.
+ * @param num_points the number of vertexes of the polygon
+ * @param poly_points the coordinates of each vertex, like `{X1, Y1, X2, Y2, X3, Y3, ...}`, number of elements counts to 2 * num_points
+ *
+ * @~chinese
+ * @brief 画多边形边框，不要填充。
+ * @param num_points 多边形顶点数量
+ * @param poly_points 多边形的顶点坐标，类似于 `{X1, Y1, X2, Y2, X3, Y3, ...}`，共 2 * num_points 个元素
+ */
+void yage_poly_border(int num_points, const double *poly_points);
+
+/**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border of a polygon, don't fill.
+ * @param canvas    the canvas to draw on
+ * @param num_points the number of vertexes of the polygon
+ * @param poly_points the coordinates of each vertex, like `{X1, Y1, X2, Y2, X3, Y3, ...}`, number of elements counts to 2 * num_points
+ *
+ * @~chinese
+ * @brief 画多边形边框，不要填充。
+ * @param canvas    被绘制的画布
+ * @param num_points 多边形顶点数量
+ * @param poly_points 多边形的顶点坐标，类似于 `{X1, Y1, X2, Y2, X3, Y3, ...}`，共 2 * num_points 个元素
+ */
+void yage_canvas_poly_border(struct yage_canvas *canvas,
+                             int num_points, const double *poly_points);
+
+/**
+ * @ingroup draw_shape
+ *
+ * @~english
  * @brief Draw border and fill a sector.
  * @param x           the X coordinate of the center
  * @param y           the Y coordinate of the center
