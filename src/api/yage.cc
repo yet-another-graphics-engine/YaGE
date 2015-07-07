@@ -20,6 +20,9 @@
 #include "../util/snprintf.h"
 #endif
 
+#define STRUCT_TO_CANVAS(x) (reinterpret_cast<yage::draw::Canvas *>(x))
+#define CANVAS_TO_STRUCT(x) (reinterpret_cast<struct yage_canvas *>(x))
+
 using namespace yage;
 namespace yage {
 namespace api {
@@ -57,33 +60,35 @@ namespace yage {
     g_window->update();
   }
 
-  inline void draw_circle(double x, double y, double r) {
+  inline void draw_circle(draw::Canvas &canvas, double x, double y, double r) {
     draw::Circle circle;
     circle.center = draw::Point(x, y);
     circle.radius = r;
-    g_canvas->draw_circle(circle, *g_paint);
+    canvas.draw_circle(circle, *g_paint);
     update();
   }
 
-  inline void draw_ellipse(double x, double y,
+  inline void draw_ellipse(draw::Canvas &canvas, double x, double y,
                            double radius_x, double radius_y) {
     draw::Ellipse ellipse;
     ellipse.center = draw::Point(x, y);
     ellipse.xradius = radius_x;
     ellipse.yradius = radius_y;
-    g_canvas->draw_ellipse(ellipse, *g_paint);
+    canvas.draw_ellipse(ellipse, *g_paint);
     update();
   }
 
-  inline void draw_rectangle(double x1, double y1, double x2, double y2) {
+  inline void draw_rectangle(draw::Canvas &canvas,
+                             double x1, double y1, double x2, double y2) {
     draw::Rect rect;
     rect.first = draw::Point(x1, y1);
     rect.second = draw::Point(x2, y2);
-    g_canvas->draw_rect(rect, *g_paint);
+    canvas.draw_rect(rect, *g_paint);
     update();
   }
 
-  inline void draw_sector(double x, double y, double r,
+  inline void draw_sector(draw::Canvas &canvas,
+                          double x, double y, double r,
                           double angle_begin, double angle_end) {
     draw::EllipticSector sector;
     sector.center.x = x;
@@ -91,7 +96,7 @@ namespace yage {
     sector.xradius = sector.yradius = r;
     sector.startangle = angle_begin;
     sector.endangle = angle_end;
-    g_canvas->draw_elliptical_sector(sector, *g_paint);
+    canvas.draw_elliptical_sector(sector, *g_paint);
     update();
   }
 
@@ -138,72 +143,88 @@ struct yage_color yage_color_from_string(const char *color_str) {
 }
 
 void yage_init(int width, int height) {
-  if (g_window) delete g_window;
-  if (g_paint) delete g_paint;
-  if (g_canvas) delete g_canvas;
-  if (g_canvas_bg) delete g_canvas_bg;
+  if (g_window)     delete g_window;
+  if (g_paint)      delete g_paint;
+  if (g_canvas)     delete g_canvas;
+  if (g_canvas_bg)  delete g_canvas_bg;
 
-  g_window = new window::Window(width, height);
-  g_canvas = new draw::Canvas(width, height);
+  g_window    = new window::Window(width, height);
+  g_canvas    = new draw::Canvas(width, height);
   g_canvas_bg = new draw::Canvas(width, height);
-  g_paint = new draw::Paint;
+  g_paint     = new draw::Paint;
 
   g_fill_color = draw::Color(0.5, 0.5, 0.5, 1);
   g_border_color = draw::Color(0, 0, 0, 1);
   g_paint->set_background_color(Color(1, 1, 1, 1));
 
-  g_window->set_canvas(*g_canvas_bg);
   g_canvas_bg->clear_all(*g_paint);
+  g_window->set_canvas(*g_canvas_bg);
   g_window->set_title(version_string);
   g_window->show();
 }
 
-struct yage_canvas *yage_canvas_create(int width, int height) {
-  draw::Canvas *canvas = new draw::Canvas(height, width);
-  return reinterpret_cast<struct yage_canvas *>(canvas);
-}
-
-struct yage_canvas *yage_canvas_load_image(const char *path) {
-  draw::Canvas *canvas = new draw::Canvas(path);
-  return reinterpret_cast<struct yage_canvas *>(canvas);
-}
-
-void yage_canvas_delete(struct yage_canvas *canvas) {
-  draw::Canvas *canvas_obj = reinterpret_cast<draw::Canvas *>(canvas);
-  delete canvas_obj;
-}
-
-void yage_canvas_get_size(struct yage_canvas *canvas,
-                          int *height, int *width) {
-  draw::Canvas *canvas_obj = reinterpret_cast<draw::Canvas *>(canvas);
-  canvas_obj->get_size(*height, *width);
-}
 
 void yage_quit(void) {
   window::quit();
 }
 
-void yage_clear(void) {
+struct yage_canvas *yage_canvas_create(int width, int height) {
+  return CANVAS_TO_STRUCT(new draw::Canvas(height, width));
+}
+
+struct yage_canvas *yage_canvas_load_image(const char *path) {
+  return CANVAS_TO_STRUCT(new draw::Canvas(path));
+}
+
+void yage_canvas_delete(struct yage_canvas *canvas) {
+  delete STRUCT_TO_CANVAS(canvas);
+}
+
+void yage_canvas_get_size(struct yage_canvas *canvas,
+                          int *height, int *width) {
+  STRUCT_TO_CANVAS(canvas)->get_size(*height, *width);
+}
+
+void yage_canvas_clear(struct yage_canvas *canvas) {
   draw::Paint transparent;
   transparent.set_background_color(draw::Color(0, 0, 0, 0));
-  g_canvas->clear_all(transparent);
+  STRUCT_TO_CANVAS(canvas)->clear_all(transparent);
   update();
 }
 
-void yage_draw_pixel(double x, double y, yage_color color) {
+void yage_clear(void) {
+  yage_canvas_clear(CANVAS_TO_STRUCT(g_canvas));
+}
+
+void yage_canvas_draw_pixel(struct yage_canvas *canvas,
+                            double x, double y, struct yage_color color) {
   g_paint->style = Paint::draw_style_fill;
   g_paint->set_fill_color(convert_color(color));
-  draw_rectangle(x - 0.5, y - 0.5,
+  draw_rectangle(*STRUCT_TO_CANVAS(canvas),
+                 x - 0.5, y - 0.5,
                  x + 0.5, y + 0.5);
+}
+
+void yage_draw_pixel(double x, double y, struct yage_color color) {
+  yage_canvas_draw_pixel(CANVAS_TO_STRUCT(g_canvas), x, y, color);
+}
+
+void yage_canvas_draw_canvas(struct yage_canvas *dst, struct yage_canvas *src,
+                             double x, double y,
+                             double xscale, double yscale) {
+  draw::Paint paint;
+  paint.set_scale(xscale, yscale);
+
+  STRUCT_TO_CANVAS(dst)->draw_canvas(*STRUCT_TO_CANVAS(src),
+                                     draw::Point(x / xscale, y / yscale),
+                                     paint);
+  update();
 }
 
 void yage_draw_canvas(struct yage_canvas *canvas,
                       double x, double y, double xscale, double yscale) {
-  draw::Canvas *canvas_obj = reinterpret_cast<draw::Canvas *>(canvas);
-  draw::Paint paint;
-  paint.set_scale(xscale, yscale);
-  g_canvas->draw_canvas(*canvas_obj, draw::Point(x / xscale, y / yscale), paint);
-  update();
+  return yage_canvas_draw_canvas(CANVAS_TO_STRUCT(g_canvas), canvas,
+                                 x, y, xscale, yscale);
 }
 
 void yage_set_font(const char *family, int size, int bold, int italic) {
@@ -239,71 +260,152 @@ void yage_set_title(const char *title) {
   g_window->set_title(title ? title : version_string);
 }
 
+void yage_canvas_circle(struct yage_canvas *canvas,
+                        double x, double y, double r) {
+  prepare_color(true, true);
+  draw_circle(*STRUCT_TO_CANVAS(canvas), x, y, r);
+}
+
 void yage_circle(double x, double y, double r) {
   prepare_color(true, true);
-  draw_circle(x, y, r);
+  draw_circle(*g_canvas, x, y, r);
+}
+
+void yage_canvas_circle_fill(struct yage_canvas *canvas,
+                             double x, double y, double r) {
+  prepare_color(true, false);
+  draw_circle(*STRUCT_TO_CANVAS(canvas), x, y, r);
 }
 
 void yage_circle_fill(double x, double y, double r) {
   prepare_color(true, false);
-  draw_circle(x, y, r);
+  draw_circle(*g_canvas, x, y, r);
+}
+
+void yage_canvas_circle_border(struct yage_canvas *canvas,
+                               double x, double y, double r) {
+  prepare_color(false, true);
+  draw_circle(*STRUCT_TO_CANVAS(canvas), x, y, r);
 }
 
 void yage_circle_border(double x, double y, double r) {
   prepare_color(false, true);
-  draw_circle(x, y, r);
+  draw_circle(*g_canvas, x, y, r);
+}
+
+void yage_canvas_ellipse(struct yage_canvas *canvas,
+                         double x, double y,
+                         double radius_x, double radius_y) {
+  prepare_color(true, true);
+  draw_ellipse(*STRUCT_TO_CANVAS(canvas), x, y, radius_x, radius_y);
 }
 
 void yage_ellipse(double x, double y, double radius_x, double radius_y) {
   prepare_color(true, true);
-  draw_ellipse(x, y, radius_x, radius_y);
+  draw_ellipse(*g_canvas, x, y, radius_x, radius_y);
 }
 
-void yage_ellipse_fill(double x, double y, double radius_x, double radius_y) {
+void yage_canvas_ellipse_fill(struct yage_canvas *canvas,
+                              double x, double y,
+                              double radius_x, double radius_y) {
   prepare_color(true, false);
-  draw_ellipse(x, y, radius_x, radius_y);
+  draw_ellipse(*STRUCT_TO_CANVAS(canvas), x, y, radius_x, radius_y);
 }
 
-void yage_ellipse_border(double x, double y, double radius_x, double radius_y) {
+void yage_ellipse_fill(double x, double y,
+                       double radius_x, double radius_y) {
+  prepare_color(true, false);
+  draw_ellipse(*g_canvas, x, y, radius_x, radius_y);
+}
+
+void yage_canvas_ellipse_border(struct yage_canvas *canvas,
+                                double x, double y,
+                                double radius_x, double radius_y) {
   prepare_color(false, true);
-  draw_ellipse(x, y, radius_x, radius_y);
+  draw_ellipse(*STRUCT_TO_CANVAS(canvas), x, y, radius_x, radius_y);
+}
+
+void yage_ellipse_border(double x, double y,
+                         double radius_x, double radius_y) {
+  prepare_color(false, true);
+  draw_ellipse(*g_canvas, x, y, radius_x, radius_y);
+}
+
+void yage_canvas_rectangle(struct yage_canvas *canvas,
+                           double x1, double y1, double x2, double y2) {
+  prepare_color(true, true);
+  draw_rectangle(*STRUCT_TO_CANVAS(canvas), x1, y1, x2, y2);
 }
 
 void yage_rectangle(double x1, double y1, double x2, double y2) {
   prepare_color(true, true);
-  draw_rectangle(x1, y1, x2, y2);
+  draw_rectangle(*g_canvas, x1, y1, x2, y2);
+}
+
+void yage_canvas_rectangle_fill(struct yage_canvas *canvas,
+                                double x1, double y1, double x2, double y2) {
+  prepare_color(true, false);
+  draw_rectangle(*STRUCT_TO_CANVAS(canvas), x1, y1, x2, y2);
 }
 
 void yage_rectangle_fill(double x1, double y1, double x2, double y2) {
   prepare_color(true, false);
-  draw_rectangle(x1, y1, x2, y2);
+  draw_rectangle(*g_canvas, x1, y1, x2, y2);
+}
+
+void yage_canvas_rectangle_border(struct yage_canvas *canvas,
+                                  double x1, double y1, double x2, double y2) {
+  prepare_color(false, true);
+  draw_rectangle(*STRUCT_TO_CANVAS(canvas), x1, y1, x2, y2);
 }
 
 void yage_rectangle_border(double x1, double y1, double x2, double y2) {
   prepare_color(false, true);
-  draw_rectangle(x1, y1, x2, y2);
+  draw_rectangle(*g_canvas, x1, y1, x2, y2);
+}
+
+void yage_canvas_sector(struct yage_canvas *canvas,
+                        double x, double y, double r,
+                        double angle_begin, double angle_end) {
+  prepare_color(true, true);
+  draw_sector(*STRUCT_TO_CANVAS(canvas), x, y, r, angle_begin, angle_end);
 }
 
 void yage_sector(double x, double y, double r,
                  double angle_begin, double angle_end) {
   prepare_color(true, true);
-  draw_sector(x, y, r, angle_begin, angle_end);
+  draw_sector(*g_canvas, x, y, r, angle_begin, angle_end);
+}
+
+void yage_canvas_sector_fill(struct yage_canvas *canvas,
+                             double x, double y, double r,
+                             double angle_begin, double angle_end) {
+  prepare_color(true, false);
+  draw_sector(*STRUCT_TO_CANVAS(canvas), x, y, r, angle_begin, angle_end);
 }
 
 void yage_sector_fill(double x, double y, double r,
                       double angle_begin, double angle_end) {
   prepare_color(true, false);
-  draw_sector(x, y, r, angle_begin, angle_end);
+  draw_sector(*g_canvas, x, y, r, angle_begin, angle_end);
+}
+
+void yage_canvas_sector_border(struct yage_canvas *canvas,
+                               double x, double y, double r,
+                               double angle_begin, double angle_end) {
+  prepare_color(false, true);
+  draw_sector(*STRUCT_TO_CANVAS(canvas), x, y, r, angle_begin, angle_end);
 }
 
 void yage_sector_border(double x, double y, double r,
                         double angle_begin, double angle_end) {
   prepare_color(false, true);
-  draw_sector(x, y, r, angle_begin, angle_end);
+  draw_sector(*g_canvas, x, y, r, angle_begin, angle_end);
 }
 
-void yage_arc_border(double x, double y, double r,
-                     double angle_begin, double angle_end) {
+void yage_canvas_arc_border(struct yage_canvas *canvas,
+                            double x, double y, double r,
+                            double angle_begin, double angle_end) {
   prepare_color(true, true);
 
   draw::EllipticArc arc;
@@ -311,14 +413,48 @@ void yage_arc_border(double x, double y, double r,
   arc.xradius = arc.yradius = r;
   arc.startangle = angle_begin;
   arc.endangle = angle_end;
-  g_canvas->draw_elliptical_arc(arc, *g_paint);
+  STRUCT_TO_CANVAS(canvas)->draw_elliptical_arc(arc, *g_paint);
+  update();
+}
+
+void yage_arc_border(double x, double y, double r,
+                     double angle_begin, double angle_end) {
+  yage_canvas_arc_border(CANVAS_TO_STRUCT(g_canvas),
+                         x, y, r, angle_begin, angle_end);
+}
+
+void yage_canvas_line_border(struct yage_canvas *canvas,
+                             double x1, double y1, double x2, double y2) {
+  prepare_color(true, true);
+  draw::Line line(draw::Point(x1, y1), draw::Point(x2, y2));
+  g_canvas->draw_line(line, *g_paint);
   update();
 }
 
 void yage_line_border(double x1, double y1, double x2, double y2) {
-  prepare_color(true, true);
-  draw::Line line(draw::Point(x1, y1), draw::Point(x2, y2));
-  g_canvas->draw_line(line, *g_paint);
+  yage_canvas_line_border(CANVAS_TO_STRUCT(g_canvas), x1, y1, x2, y2);
+}
+
+void yage_canvas_printf(struct yage_canvas *canvas,
+                        double x, double y, const char *format, ...) {
+  char buf[kMaxTextBuffer];
+
+  va_list args;
+  va_start(args, format);
+#ifdef _MSC_VER
+#if _MSC_VER > 1300
+  vsnprintf_s(buf, _countof(buf), sizeof(buf), format, args);
+#else
+  _vsnprintf(buf, sizeof(buf), format, args);
+#endif
+#else
+  vsnprintf(buf, sizeof(buf), format, args);
+#endif
+  va_end(args);
+
+  yage::draw::Text text(buf);
+  text.position = draw::Point(x, y);
+  STRUCT_TO_CANVAS(canvas)->draw_text(text, *g_paint);
   update();
 }
 
@@ -406,11 +542,11 @@ void yage_dlg_message(const char *title, const char *message) {
   msg_dlg.show();
 }
 
-yage_dlg_result_type yage_dlg_question(
-    const char *title,
-    const char *message,
-    yage_dlg_icon_type icon,
-    yage_dlg_button_type button) {
+yage_dlg_result_type
+yage_dlg_question(const char *title,
+                  const char *message,
+                  yage_dlg_icon_type icon,
+                  yage_dlg_button_type button) {
   using dialog::MessageDlg;
   MessageDlg msg_dlg(static_cast<dialog::MessageDlg::button_type>(button),
                      static_cast<dialog::MessageDlg::icon_type>(icon),

@@ -44,38 +44,62 @@ extern "C" {
 
 /**
  * @~english
- * @defgroup draw_canvas Canvas
- * @ingroup draw
- * @brief A container for shapes and images.
- *
- * @~chinese
- * @defgroup draw_canvas 画布
- * @ingroup draw
- * @brief 图形和图像的容器。
- */
-
-/**
- * @~english
  * @defgroup draw_shape Shape
- * @ingroup draw
  * @brief Draw a shape, with or without border and fill.
+ * @ingroup draw
  *
  * @~chinese
  * @defgroup draw_shape 图形
- * @ingroup draw
  * @brief 画图形，可选填充或边框。
+ * @ingroup draw
  */
 
 /**
  * @~english
  * @defgroup draw_text Text
- * @ingroup draw
  * @brief Print text, with customizable fonts.
+ * @ingroup draw
  *
  * @~chinese
  * @defgroup draw_text 文字
- * @ingroup draw
  * @brief 显示文字，可定制字体。
+ * @ingroup draw
+ */
+
+/**
+ * @~english
+ * @defgroup draw_canvas Canvas
+ * @brief A container for shapes and images.
+ * @ingroup draw
+ *
+ * @~chinese
+ * @defgroup draw_canvas 画布
+ * @brief 图形和图像的容器。
+ * @ingroup draw
+ */
+
+/**
+ * @~english
+ * @defgroup draw_canvas_shape Shape
+ * @brief Draw a shape in canvas, with or without border and fill.
+ * @ingroup draw_canvas
+ *
+ * @~chinese
+ * @defgroup draw_canvas_shape 图形
+ * @brief 在画布内画图形，可选填充或边框。
+ * @ingroup draw_canvas
+ */
+
+/**
+ * @~english
+ * @defgroup draw_canvas_text Text
+ * @brief Print text in canvas, with customizable fonts.
+ * @ingroup draw_canvas
+ *
+ * @~chinese
+ * @defgroup draw_canvas_text 文字
+ * @brief 在画布内显示文字，可定制字体。
+ * @ingroup draw_canvas
  */
 
 /**
@@ -91,45 +115,47 @@ extern "C" {
 /**
  * @~english
  * @defgroup interact_msg Message
- * @ingroup interact
  * @brief Messages representing events from keyboard, mouse and window.
+ * @ingroup interact
  *
  * @~chinese
  * @defgroup interact_msg 消息
  * @brief 表示键盘、鼠标和窗口事件的消息。
+ * @ingroup interact
  */
 
 /**
  * @~english
  * @defgroup interact_dlg Dialog
- * @ingroup interact
  * @brief Dialogs show in front of main window for specefied interaction usage.
+ * @ingroup interact
  *
  * @~chinese
  * @defgroup interact_dlg 对话框
- * @ingroup interact
  * @brief 在主窗口前显示的窗口，供特定的交互用途。
+ * @ingroup interact
  */
 
 /**
  * @~english
  * @defgroup interact_input Input
- * @ingroup interact
  * @brief Get string, number, or customized format from user's text input.
+ * @ingroup interact
  *
  * @~chinese
  * @defgroup interact_input 输入
- * @ingroup interact
  * @brief 从用户输入的文本中读取字符串、数字，或是自定义格式的数据。
+ * @ingroup interact
  */
 
 /**
- * @ingroup draw_color
  * @~english
  * @brief An object holding color information.
+ * @ingroup draw_color
  *
  * @~chinese
  * @brief 存储颜色信息的结构体。
+ * @ingroup draw_color
  */
 struct yage_color {
   double r; ///< @~english Red, range: 0.0 to 1.0
@@ -255,18 +281,34 @@ void yage_canvas_delete(struct yage_canvas *canvas);
  * @ingroup draw
  *
  * @~english
- * @brief Clean the canvas.
+ * @brief Clean the screen.
  *
- * Fill the whole canvas with background color.
+ * Fill the whole screen with background color.
+ *
+ * @~chinese
+ * @brief 清空屏幕内容。
+ *
+ * 将整个屏幕填充为背景色。
  * \see yage_set_background_color
+ */
+void yage_clear(void);
+
+/**
+ * @ingroup draw_canvas
+ *
+ * @~english
+ * @brief Clean the whole canvas.
+ * @param canvas    the canvas to clear
+ *
+ * Set the whole canvas to transparent.
+ * @param canvas    被清空的画布
  *
  * @~chinese
  * @brief 清空画布内容。
  *
- * 将整个画布填充为背景色。
- * \see yage_set_background_color
+ * 将整个画布设置为透明。
  */
-void yage_clear(void);
+void yage_canvas_clear(struct yage_canvas *canvas);
 
 /**
  * @ingroup draw_canvas
@@ -303,7 +345,27 @@ void yage_canvas_get_size(struct yage_canvas *canvas, int *height, int *width);
 void yage_draw_pixel(double x, double y, struct yage_color color);
 
 /**
- * @ingroup draw_canvas
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw specified color to a pixel on canvas.
+ * @param canvas  the canvas to draw on
+ * @param x       the X coordinate of the pixel
+ * @param y       the Y coordinate of the pixel
+ * @param color   the color to set
+ *
+ * @~chinese
+ * @brief 在画布指定位置的像素上填充颜色。
+ * @param canvas  被绘制的画布
+ * @param x       像素的 X 坐标
+ * @param y       像素的 Y 坐标
+ * @param color   欲填充的颜色
+ */
+void yage_canvas_draw_pixel(struct yage_canvas *canvas,
+                            double x, double y, struct yage_color color);
+
+/**
+ * @ingroup draw_shape
  *
  * @~english
  * @brief Draw source canvas on screen at specified position with given scale.
@@ -323,6 +385,32 @@ void yage_draw_pixel(double x, double y, struct yage_color color);
  */
 void yage_draw_canvas(struct yage_canvas *canvas,
                       double x, double y, double xscale, double yscale);
+
+/**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw source canvas on screen at specified position with given scale.
+ * @param dst     the source canvas
+ * @param src     the destination canvas
+ * @param x       the X coordinate for the top-left corner of the source canvas on destination canvas
+ * @param y       the Y coordinate for the top-left corner of the source canvas on destination canvas
+ * @param xscale  scale for X coordinate
+ * @param yscale  scale for Y coordinate
+ *
+ * @~chinese
+ * @brief 在目标画布指定位置缩放并画出原始画布的内容。
+ * @param dst     目标画布
+ * @param src     原始画布
+ * @param x       原始画布左上角在目标画布上的 X 坐标
+ * @param y       原始画布左上角在目标画布上的 Y 坐标
+ * @param xscale  X 坐标的缩放比例
+ * @param yscale  Y 坐标的缩放比例
+ */
+void yage_canvas_draw_canvas(struct yage_canvas *dst, struct yage_canvas *src,
+                             double x, double y,
+                             double xscale, double yscale);
+
 /**
  * @ingroup draw_text
  *
@@ -445,6 +533,26 @@ void yage_set_title(const char *title);
 void yage_circle(double x, double y, double r);
 
 /**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border and fill a circle.
+ * @param canvas  the canvas to draw on
+ * @param x  the X coordinate of the center of the circle
+ * @param y  the Y coordinate of the center of the circle
+ * @param r  the radius of the circle
+ *
+ * @~chinese
+ * @brief 画边框并填充圆。
+ * @param canvas  被绘制的画布
+ * @param x  圆心的 X 坐标
+ * @param y  圆心的 Y 坐标
+ * @param r  圆的半径
+ */
+void yage_canvas_circle(struct yage_canvas *canvas,
+                        double x, double y, double r);
+
+/**
  * @ingroup draw_shape
  *
  * @~english
@@ -462,6 +570,26 @@ void yage_circle(double x, double y, double r);
 void yage_circle_fill(double x, double y, double r);
 
 /**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Fill a circle, don't draw border.
+ * @param canvas  the canvas to draw on
+ * @param x  the X coordinate of the center of the circle
+ * @param y  the Y coordinate of the center of the circle
+ * @param r  the radius of the circle
+ *
+ * @~chinese
+ * @brief 填充圆，不画边框。
+ * @param canvas  被绘制的画布
+ * @param x  圆心的 X 坐标
+ * @param y  圆心的 Y 坐标
+ * @param r  圆的半径
+ */
+void yage_canvas_circle_fill(struct yage_canvas *canvas,
+                             double x, double y, double r);
+
+/**
  * @ingroup draw_shape
  *
  * @~english
@@ -477,6 +605,26 @@ void yage_circle_fill(double x, double y, double r);
  * @param r  圆的半径
  */
 void yage_circle_border(double x, double y, double r);
+
+/**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border of a circle, don't fill.
+ * @param canvas  the canvas to draw on
+ * @param x  the X coordinate of the center of the circle
+ * @param y  the Y coordinate of the center of the circle
+ * @param r  the radius of the circle
+ *
+ * @~chinese
+ * @brief 画圆的边框，不要填充。
+ * @param canvas  被绘制的画布
+ * @param x  圆心的 X 坐标
+ * @param y  圆心的 Y 坐标
+ * @param r  圆的半径
+ */
+void yage_canvas_circle_border(struct yage_canvas *canvas,
+                               double x, double y, double r);
 
 /**
  * @ingroup draw_shape
@@ -498,6 +646,29 @@ void yage_circle_border(double x, double y, double r);
 void yage_ellipse(double x, double y, double radius_x, double radius_y);
 
 /**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border and fill an ellipse.
+ * @param canvas    the canvas to draw on
+ * @param x         the X coordinate of the center of the ellipse
+ * @param y         the Y coordinate of the center of the ellipse
+ * @param radius_x  the X radius of the ellipse
+ * @param radius_y  the Y radius of the ellipse
+ *
+ * @~chinese
+ * @brief 画边框并填充椭圆。
+ * @param canvas    被绘制的画布
+ * @param x         椭圆圆心的 X 坐标
+ * @param y         椭圆圆心的 Y 坐标
+ * @param radius_x  椭圆的 X 轴半径坐标
+ * @param radius_y  椭圆的 Y 轴半径坐标
+ */
+void yage_canvas_ellipse(struct yage_canvas *canvas,
+                         double x, double y,
+                         double radius_x, double radius_y);
+
+/**
  * @ingroup draw_shape
  *
  * @~english
@@ -515,6 +686,29 @@ void yage_ellipse(double x, double y, double radius_x, double radius_y);
  * @param radius_y  椭圆的 Y 轴半径坐标
  */
 void yage_ellipse_fill(double x, double y, double radius_x, double radius_y);
+
+/**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Fill an ellipse, don't draw border.
+ * @param canvas    the canvas to draw on
+ * @param x         the X coordinate of the center of the ellipse
+ * @param y         the Y coordinate of the center of the ellipse
+ * @param radius_x  the X radius of the ellipse
+ * @param radius_y  the Y radius of the ellipse
+ *
+ * @~chinese
+ * @brief 填充椭圆，不画边框。
+ * @param canvas    被绘制的画布
+ * @param x         椭圆圆心的 X 坐标
+ * @param y         椭圆圆心的 Y 坐标
+ * @param radius_x  椭圆的 X 轴半径坐标
+ * @param radius_y  椭圆的 Y 轴半径坐标
+ */
+void yage_canvas_ellipse_fill(struct yage_canvas *canvas,
+                              double x, double y,
+                              double radius_x, double radius_y);
 
 /**
  * @ingroup draw_shape
@@ -536,6 +730,29 @@ void yage_ellipse_fill(double x, double y, double radius_x, double radius_y);
 void yage_ellipse_border(double x, double y, double radius_x, double radius_y);
 
 /**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border of an ellipse, don't fill.
+ * @param canvas    the canvas to draw on
+ * @param x         the X coordinate of the center of the ellipse
+ * @param y         the Y coordinate of the center of the ellipse
+ * @param radius_x  the X radius of the ellipse
+ * @param radius_y  the Y radius of the ellipse
+ *
+ * @~chinese
+ * @brief 画椭圆边框，不要填充。
+ * @param canvas    被绘制的画布
+ * @param x         椭圆圆心的 X 坐标
+ * @param y         椭圆圆心的 Y 坐标
+ * @param radius_x  椭圆的 X 轴半径坐标
+ * @param radius_y  椭圆的 Y 轴半径坐标
+ */
+void yage_canvas_ellipse_border(struct yage_canvas *canvas,
+                                double x, double y,
+                                double radius_x, double radius_y);
+
+/**
  * @ingroup draw_shape
  *
  * @~english
@@ -553,6 +770,28 @@ void yage_ellipse_border(double x, double y, double radius_x, double radius_y);
  * @param y2        矩形同一条对角线上另一点的 Y 坐标
  */
 void yage_rectangle(double x1, double y1, double x2, double y2);
+
+/**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border and fill a rectangle.
+ * @param canvas    the canvas to draw on
+ * @param x1        the X coordinate of a point on one diagonal line.
+ * @param y1        the Y coordinate of the point on one diagonal line.
+ * @param x2        the X coordinate of another point on the same diagonal line.
+ * @param y2        the Y coordinate of the point on the same diagonal line.
+ *
+ * @~chinese
+ * @brief 画矩形的边框并填充。
+ * @param canvas    被绘制的画布
+ * @param x1        矩形某条对角线上一点的 X 坐标
+ * @param y1        矩形某条对角线上一点的 Y 坐标
+ * @param x2        矩形同一条对角线上另一点的 X 坐标
+ * @param y2        矩形同一条对角线上另一点的 Y 坐标
+ */
+void yage_canvas_rectangle(struct yage_canvas *canvas,
+                           double x1, double y1, double x2, double y2);
 
 /**
  * @ingroup draw_shape
@@ -574,6 +813,29 @@ void yage_rectangle(double x1, double y1, double x2, double y2);
 void yage_rectangle_fill(double x1, double y1, double x2, double y2);
 
 /**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Fill a rectangle, don't fill.
+ * @param canvas    the canvas to draw on
+ * @param x1        the X coordinate of a point on one diagonal line.
+ * @param y1        the Y coordinate of the point on one diagonal line.
+ * @param x2        the X coordinate of another point on the same diagonal line.
+ * @param y2        the Y coordinate of the point on the same diagonal line.
+ *
+ * @~chinese
+ * @brief 填充矩形，不要画边框。
+ * @param canvas    被绘制的画布
+ * @param canvas    被绘制的画布
+ * @param x1        矩形某条对角线上一点的 X 坐标
+ * @param y1        矩形某条对角线上一点的 Y 坐标
+ * @param x2        矩形同一条对角线上另一点的 X 坐标
+ * @param y2        矩形同一条对角线上另一点的 Y 坐标
+ */
+void yage_canvas_rectangle_fill(struct yage_canvas *canvas,
+                                double x1, double y1, double x2, double y2);
+
+/**
  * @ingroup draw_shape
  *
  * @~english
@@ -591,6 +853,28 @@ void yage_rectangle_fill(double x1, double y1, double x2, double y2);
  * @param y2        矩形同一条对角线上另一点的 Y 坐标
  */
 void yage_rectangle_border(double x1, double y1, double x2, double y2);
+
+/**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border of a rectangle, don't fill.
+ * @param canvas    the canvas to draw on
+ * @param x1        the X coordinate of a point on one diagonal line.
+ * @param y1        the Y coordinate of the point on one diagonal line.
+ * @param x2        the X coordinate of another point on the same diagonal line.
+ * @param y2        the Y coordinate of the point on the same diagonal line.
+ *
+ * @~chinese
+ * @brief 画矩形边框，不要填充。
+ * @param canvas    被绘制的画布
+ * @param x1        矩形某条对角线上一点的 X 坐标
+ * @param y1        矩形某条对角线上一点的 Y 坐标
+ * @param x2        矩形同一条对角线上另一点的 X 坐标
+ * @param y2        矩形同一条对角线上另一点的 Y 坐标
+ */
+void yage_canvas_rectangle_border(struct yage_canvas *canvas,
+                                  double x1, double y1, double x2, double y2);
 
 /**
  * @ingroup draw_shape
@@ -614,6 +898,31 @@ void yage_rectangle_border(double x1, double y1, double x2, double y2);
 void yage_sector(double x, double y, double r, double angle_begin, double angle_end);
 
 /**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border and fill a sector.
+ * @param canvas    the canvas to draw on
+ * @param x           the X coordinate of the center
+ * @param y           the Y coordinate of the center
+ * @param r           the radius of the sector
+ * @param angle_begin the beginning angle of the sector, in radian
+ * @param angle_end   the end angle of the sector, in radian
+ *
+ * @~chinese
+ * @brief 画扇形的边框并填充。
+ * @param canvas    被绘制的画布
+ * @param x           扇形圆心的 X 坐标
+ * @param y           扇形圆心的 Y 坐标
+ * @param r           扇形的半径
+ * @param angle_begin 圆心角的开始，弧度制
+ * @param angle_end   圆心角的结束，弧度制
+ */
+void yage_canvas_sector(struct yage_canvas *canvas,
+                        double x, double y, double r,
+                        double angle_begin, double angle_end);
+
+/**
  * @ingroup draw_shape
  *
  * @~english
@@ -633,6 +942,31 @@ void yage_sector(double x, double y, double r, double angle_begin, double angle_
  * @param angle_end   圆心角的结束，弧度制
  */
 void yage_sector_fill(double x, double y, double r, double angle_begin, double angle_end);
+
+/**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Fill a sector, don't draw border.
+ * @param canvas      the canvas to draw on
+ * @param x           the X coordinate of the center
+ * @param y           the Y coordinate of the center
+ * @param r           the radius of the sector
+ * @param angle_begin the beginning angle of the sector, in radian
+ * @param angle_end   the end angle of the sector, in radian
+ *
+ * @~chinese
+ * @brief 填充扇形，不要画边框。
+ * @param canvas      被绘制的画布
+ * @param x           扇形圆心的 X 坐标
+ * @param y           扇形圆心的 Y 坐标
+ * @param r           扇形的半径
+ * @param angle_begin 圆心角的开始，弧度制
+ * @param angle_end   圆心角的结束，弧度制
+ */
+void yage_canvas_sector_fill(struct yage_canvas *canvas,
+                             double x, double y, double r,
+                             double angle_begin, double angle_end);
 
 /**
  * @ingroup draw_shape
@@ -656,6 +990,31 @@ void yage_sector_fill(double x, double y, double r, double angle_begin, double a
 void yage_sector_border(double x, double y, double r, double angle_begin, double angle_end);
 
 /**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border of a sector, don't fill.
+ * @param canvas      the canvas to draw on
+ * @param x           the X coordinate of the center
+ * @param y           the Y coordinate of the center
+ * @param r           the radius of the sector
+ * @param angle_begin the beginning angle of the sector, in radian
+ * @param angle_end   the end angle of the sector, in radian
+ *
+ * @~chinese
+ * @brief 画扇形的边框，不要填充。
+ * @param canvas      被绘制的画布
+ * @param x           扇形圆心的 X 坐标
+ * @param y           扇形圆心的 Y 坐标
+ * @param r           扇形的半径
+ * @param angle_begin 圆心角的开始，弧度制
+ * @param angle_end   圆心角的结束，弧度制
+ */
+void yage_canvas_sector_border(struct yage_canvas *canvas,
+                               double x, double y, double r,
+                               double angle_begin, double angle_end);
+
+/**
  * @ingroup draw_shape
  *
  * @~english
@@ -677,6 +1036,31 @@ void yage_sector_border(double x, double y, double r, double angle_begin, double
 void yage_arc_border(double x, double y, double r, double angle_begin, double angle_end);
 
 /**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw border of an arc.
+ * @param canvas      the canvas to draw on
+ * @param x           the X coordinate of the center
+ * @param y           the Y coordinate of the center
+ * @param r           the radius of the sector
+ * @param angle_begin the beginning angle of the arc, in radian
+ * @param angle_end   the end angle of the sector, in radian
+ *
+ * @~chinese
+ * @brief 画弧。
+ * @param canvas      被绘制的画布
+ * @param x           圆心的 X 坐标
+ * @param y           圆心的 Y 坐标
+ * @param r           弧的半径
+ * @param angle_begin 圆心角的开始，弧度制
+ * @param angle_end   圆心角的结束，弧度制
+ */
+void yage_canvas_arc_border(struct yage_canvas *canvas,
+                            double x, double y, double r,
+                            double angle_begin, double angle_end);
+
+/**
  * @ingroup draw_shape
  *
  * @~english
@@ -696,6 +1080,28 @@ void yage_arc_border(double x, double y, double r, double angle_begin, double an
 void yage_line_border(double x1, double y1, double x2, double y2);
 
 /**
+ * @ingroup draw_canvas_shape
+ *
+ * @~english
+ * @brief Draw line.
+ * @param canvas    the canvas to draw on
+ * @param x1        the X coordinate of a point
+ * @param y1        the Y coordinate of the point
+ * @param x2        the X coordinate of another point
+ * @param y2        the Y coordinate of the point
+ *
+ * @~chinese
+ * @brief 画直线段。
+ * @param canvas    被绘制的画布
+ * @param x1        某点的 X 坐标
+ * @param y1        此点的 Y 坐标
+ * @param x2        另一点的 X 坐标
+ * @param y2        另一点的 Y 坐标
+ */
+void yage_canvas_line_border(struct yage_canvas *canvas,
+                             double x1, double y1, double x2, double y2);
+
+/**
  * @ingroup draw_text
  *
  * @~english
@@ -713,6 +1119,28 @@ void yage_line_border(double x1, double y1, double x2, double y2);
  * @param[in] ...     待格式化并输出的数据
  */
 void yage_printf(double x, double y, const char *format, ...);
+
+/**
+ * @ingroup draw_canvas_text
+ *
+ * @~english
+ * @brief Format and print text at given position.
+ * @param canvas      the canvas to draw on
+ * @param x           the X coordinate at the beginning of the text
+ * @param y           the Y coordinate at the beginning of the text
+ * @param[in] format  Output format, like printf()
+ * @param[in] ...     Data to format and print
+ *
+ * @~chinese
+ * @brief 格式化并在指定位置打印文字。
+ * @param canvas      被绘制的画布
+ * @param x           文字起点的 X 坐标
+ * @param y           文字起点的 Y 坐标
+ * @param[in] format  输出格式，标准同 printf()
+ * @param[in] ...     待格式化并输出的数据
+ */
+void yage_canvas_printf(struct yage_canvas *canvas,
+                        double x, double y, const char *format, ...);
 
 /**
  * @~english
