@@ -485,6 +485,28 @@ void yage_printf(double x, double y, const char *format, ...) {
   update();
 }
 
+struct yage_animation *yage_animation_load_image(const char *path){
+  Animation *animation = new Animation(path);
+  if (animation->is_valid()) {
+    return reinterpret_cast<struct yage_animation *>(animation);
+  } else {
+    return NULL;
+  }
+}
+
+void yage_draw_animation(struct yage_animation *animation, double x, double y) {
+  if (animation) {
+    Point pos(x, y);
+    g_window->draw_animation(*reinterpret_cast<Animation *>(animation), pos);
+  }
+}
+
+void yage_animation_delete(struct yage_animation *animation) {
+  if (animation) {
+    delete reinterpret_cast<Animation *>(animation);
+  }
+}
+
 int yage_get_message(struct yage_message *msg, int wait_ms) {
   // FIXME: add wait_ms support
   return window::poll(*reinterpret_cast<window::Message *>(msg));

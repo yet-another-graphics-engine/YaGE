@@ -50,6 +50,7 @@ set(LIB_SOURCE_FILES
     draw/text.cc
     draw/paint.cc
     draw/linear_gradient_color.cc
+    draw/animation.cc
     api/bgi.cc
     api/yage.cc
     )
@@ -148,6 +149,7 @@ set(YAGE_TEST_SOURCE_FILES
     test/draw_perf.cc
     test/draw_shape.cc
     test/draw_pic.cc
+    test/draw_animation.cc
     test/window_count.cc
     test/window_fix_size.cc
     test/window_msg.cc
