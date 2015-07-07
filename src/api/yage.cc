@@ -1,13 +1,11 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_DEPRECATE
 
+#include "yage.h"
 #include <cstring>
 #include <cstdarg>
 #include <sstream>
 #include <algorithm>
-#include "../main.h"
-#include "../../include/yage.h"
-#include "../window/window.h"
 #include "../dialog/color_chooser_dlg.h"
 #include "../dialog/font_chooser_dlg.h"
 #include "../dialog/file_chooser_dlg.h"
@@ -23,9 +21,9 @@
 #endif
 
 using namespace yage;
-namespace {
-  const draw::Color kTransparentColor(0, 0, 0, 0);
-  const size_t kMaxTextBuffer = 2048;
+namespace yage {
+namespace api {
+namespace yage {
 
   window::Window *g_window = NULL;
   draw::Canvas *g_canvas_bg = NULL;
@@ -96,7 +94,12 @@ namespace {
     g_canvas->draw_elliptical_sector(sector, *g_paint);
     update();
   }
-}
+
+}  // namespace yage
+}  // namespace api
+}  // namespace yage
+
+using namespace yage::api::yage;
 
 extern "C" {
 
