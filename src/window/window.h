@@ -11,6 +11,7 @@ namespace yage {
 
 namespace draw {
   class Canvas;
+  class Animation;
 }
 
 namespace window {
@@ -71,6 +72,7 @@ private:
 
   GtkWidget *gtk_draw_;
   GtkWindow *gtk_window_;
+  GtkFixed *gtk_container_;
   cairo_surface_t *cairo_surface_;
 
   static void set_max_size(Window *this_, int &width, int &height);
@@ -81,6 +83,7 @@ private:
   static void exec_show(Window *this_);
   static void exec_hide(Window *this_);
   static void exec_redraw(GtkWidget *gtk_draw);
+  static void exec_redraw_animation(Window* this_, Animation &animation, Point &position);
   static void exec_destroy(Window *this_);
   static void exec_set_title(Window *this_, char *title);
   static void exec_set_resizable(Window *this_, bool &resizable);
@@ -215,6 +218,16 @@ public:
    * the window will be filled by white color the next time when the window updates.
    */
   void set_canvas(Canvas &canvas);
+
+  /**
+   * @brief Draws an animated image on canvas with position
+   * @param animation an animated image to draw
+   * @param position The start(left-top) position in this canvas.Drawing will start from
+   * this position.
+   *
+   * Use Animation::~Animation to remove animation
+   */
+  void draw_animation(Animation &animation, Point &position);
 
   /**
    * @brief Lets the window use the canvas which it binds to update its interface.
