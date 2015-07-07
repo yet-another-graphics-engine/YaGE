@@ -367,7 +367,7 @@ void yage_draw_animation(struct yage_animation *animation, double x, double y);
  * @~english
  * @brief Free an animated image that will not be used and
  * remove it from screen.
- * @param canvas The canvas to free
+ * @param animation The animated image to free
  *
  * @~chinese
  * @brief 删除不再使用的动态图，并将其从屏幕上移除。
