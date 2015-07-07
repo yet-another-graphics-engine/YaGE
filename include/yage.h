@@ -1,7 +1,7 @@
 ﻿/**
  * @file yage.h
- * @brief \~english Declaration for exported YaGE API.
- *        \~chinese YaGE 的导出 API 声明。
+ * @brief @~english Declaration for exported YaGE API.
+ *        @~chinese YaGE 的导出 API 声明。
  */
 #ifndef YAGE_H_
 #define YAGE_H_
@@ -13,70 +13,208 @@ extern "C" {
 #endif
 
 /**
- * \~english @brief An object holding color information.
- * \~chinese @brief 存储颜色信息的结构体。
+ * @~english
+ * @defgroup draw_color Color
+ * @brief Setting and using color.
+ *
+ * @~chinese
+ * @defgroup draw_color 颜色
+ * @brief 设置并使用颜色。
+ */
+
+/**
+ * @~english
+ * @defgroup system System
+ * @brief Program level control.
+ *
+ * @~chinese
+ * @defgroup system 系统
+ * @brief 全程序级别的控制。
+ */
+
+/**
+ * @~english
+ * @defgroup draw Draw
+ * @brief Draw shapes and images.
+ *
+ * @~chinese
+ * @defgroup draw 绘图
+ * @brief 绘制图形和图像。
+ */
+
+/**
+ * @~english
+ * @defgroup draw_canvas Canvas
+ * @ingroup draw
+ * @brief A container for shapes and images.
+ *
+ * @~chinese
+ * @defgroup draw_canvas 画布
+ * @ingroup draw
+ * @brief 图形和图像的容器。
+ */
+
+/**
+ * @~english
+ * @defgroup draw_shape Shape
+ * @ingroup draw
+ * @brief Draw a shape, with or without border and fill.
+ *
+ * @~chinese
+ * @defgroup draw_shape 图形
+ * @ingroup draw
+ * @brief 画图形，可选填充或边框。
+ */
+
+/**
+ * @~english
+ * @defgroup draw_text Text
+ * @ingroup draw
+ * @brief Print text, with customizable fonts.
+ *
+ * @~chinese
+ * @defgroup draw_text 文字
+ * @ingroup draw
+ * @brief 显示文字，可定制字体。
+ */
+
+/**
+ * @~english
+ * @defgroup interact Interaction
+ * @brief Interact with user inputs.
+ *
+ * @~chinese
+ * @defgroup interact 交互
+ * @brief 与用户交互。
+ */
+
+/**
+ * @~english
+ * @defgroup interact_msg Message
+ * @ingroup interact
+ * @brief Messages representing events from keyboard, mouse and window.
+ *
+ * @~chinese
+ * @defgroup interact_msg 消息
+ * @brief 表示键盘、鼠标和窗口事件的消息。
+ */
+
+/**
+ * @~english
+ * @defgroup interact_dlg Dialog
+ * @ingroup interact
+ * @brief Dialogs show in front of main window for specefied interaction usage.
+ *
+ * @~chinese
+ * @defgroup interact_dlg 对话框
+ * @ingroup interact
+ * @brief 在主窗口前显示的窗口，供特定的交互用途。
+ */
+
+/**
+ * @~english
+ * @defgroup interact_input Input
+ * @ingroup interact
+ * @brief Get string, number, or customized format from user's text input.
+ *
+ * @~chinese
+ * @defgroup interact_input 输入
+ * @ingroup interact
+ * @brief 从用户输入的文本中读取字符串、数字，或是自定义格式的数据。
+ */
+
+/**
+ * @ingroup draw_color
+ * @~english
+ * @brief An object holding color information.
+ *
+ * @~chinese
+ * @brief 存储颜色信息的结构体。
  */
 struct yage_color {
-  double r; ///< \~english Red, range: 0.0 to 1.0
-            ///< \~chinese 红色，区间为 0.0 至 1.0
-  double g; ///< \~english Green, range: 0.0 to 1.0
-            ///< \~chinese 绿色，区间为 0.0 至 1.0
-  double b; ///< \~english Blue, range: 0.0 to 1.0
-            ///< \~chinese 蓝色，区间为 0.0 至 1.0
-  double a; ///< \~english Alpha, range: 0.0 (transparent) to 1.0 (nontransparent)
-            ///< \~chinese 透明度，区间为 0.0（透明）至 1.0（不透明）
+  double r; ///< @~english Red, range: 0.0 to 1.0
+            ///< @~chinese 红色，区间为 0.0 至 1.0
+  double g; ///< @~english Green, range: 0.0 to 1.0
+            ///< @~chinese 绿色，区间为 0.0 至 1.0
+  double b; ///< @~english Blue, range: 0.0 to 1.0
+            ///< @~chinese 蓝色，区间为 0.0 至 1.0
+  double a; ///< @~english Alpha, range: 0.0 (transparent) to 1.0 (nontransparent)
+            ///< @~chinese 透明度，区间为 0.0（透明）至 1.0（不透明）
 };
 
 /**
- * \~english @brief Get yage_color() from a string.
+ * @ingroup draw_color
+ *
+ * @~english
+ * @brief Get yage_color from a string.
  * @param color_str a string, in English, descripting the color
  * @return a struct representing the color
- * \remark If no suitable color is found, black color is returned.
+ * @remark If no suitable color is found, black color is returned.
  *
- * \~chinese @brief 通过字符串获得 yage_color() 结构体
+ * @~chinese
+ * @brief 通过字符串获得 yage_color 结构体。
  * @param color_str 描述颜色的英文字符串
  * @return 颜色信息结构体
- * \remark 如果没有找到合适的颜色信息，返回黑色。
+ * @remark 如果没有找到合适的颜色信息，返回黑色。
  */
 struct yage_color yage_color_from_string(const char *color_str);
 
 /**
- * \~english @brief Initialize the drawing components and create a fix-sized window.
+ * @ingroup system
+ *
+ * @~english
+ * @brief Initialize the drawing components and create a fix-sized window.
  * @param width  the width of the window to create
  * @param height the height of the window to create
  *
- * \~chinese @brief 初始化绘图组件，并创建一个指定大小的窗口。
+ * @~chinese
+ * @brief 初始化绘图组件，并创建一个指定大小的窗口。
  * @param width  新窗口的宽度
  * @param height 新窗口的高度
  */
 void yage_init(int width, int height);
 
 /**
- * \~english @brief Close all windows and quit app.
- * \~chinese @brief 关闭全部窗口并退出程序。
+ * @ingroup system
+ *
+ * @~english
+ * @brief Close all windows and quit program.
+ *
+ * @~chinese
+ * @brief 关闭全部窗口并退出程序。
  */
 void yage_quit(void);
 
 /**
- * \~english @brief A struct representing a canvas.
- *           The struct is opaque, user can create a canvas by
- *           yage_canvas_create() or yage_canvas_load_image() and free the
- *           canvas by yage_canvas_delete().
+ * @ingroup draw_canvas
  *
- * \~chinese @brief 表示画布的结构体。
- *          这是一个不包含细节的结构体。可以通过 yage_canvas_create() 或
- *          yage_canvas_load_image() 创建一个画布，通过 yage_canvas_delete()
- *          来释放一个画布。
+ * @~english
+ * @brief A struct representing a canvas.
+ *
+ * The struct is opaque, user can create
+ * a canvas by yage_canvas_create() or yage_canvas_load_image() and free the
+ * canvas by yage_canvas_delete().
+ *
+ * @~chinese
+ * @brief 表示画布的结构体。
+ *
+ * 这是一个不包含细节的结构体。可以通过 yage_canvas_create() 或
+ * yage_canvas_load_image() 创建一个画布，通过 yage_canvas_delete()
+ * 来释放一个画布。
  */
 struct yage_canvas;
 
 /**
- * \~english @brief Create a fix-sized canvas.
+ * @ingroup draw_canvas
+ *
+ * @~english
+ * @brief Create a fix-sized canvas.
  * @param width  the width of the canvas to create
  * @param height the height of the canvas to create
  * @return the new canvas
  *
- * \~chinese @brief 创建一个固定大小的画布。
+ * @~chinese
+ * @brief 创建一个固定大小的画布。
  * @param width  新画布的宽度
  * @param height 新画布的高度
  * @return 新创建的画布
@@ -84,34 +222,46 @@ struct yage_canvas;
 struct yage_canvas *yage_canvas_create(int width, int height);
 
 /**
- * \~english @brief Create a canvas and set the content to the specified image.
+ * @ingroup draw_canvas
+ *
+ * @~english
+ * @brief Create a canvas and set the content to the specified image.
  * @param path the path to load the image
  * @return the new canvas
- * \remark Free the canvas by yage_canvas_delete() after use.
+ * @remark Free the canvas by yage_canvas_delete() after use.
  *
- * \~chinese @brief 创建一个新画布，并将其内容设置为图片。
+ * @~chinese
+ * @brief 创建一个新画布，并将其内容设置为图片。
  * @param path 载入的图片路径
  * @return 新创建的画布
- * \remark 在使用完后通过 yage_canvas_delete() 删除画布。
+ * @remark 在使用完后通过 yage_canvas_delete() 删除画布。
  */
 struct yage_canvas *yage_canvas_load_image(const char *path);
 
 /**
- * \~english @brief Free an unused canvas.
+ * @ingroup draw_canvas
+ *
+ * @~english
+ * @brief Free an unused canvas.
  * @param canvas The canvas to free
  *
- * \~chinese @brief 删除不再使用的画布。
+ * @~chinese
+ * @brief 删除不再使用的画布。
  * @param canvas 待删除的画布
  */
 void yage_canvas_delete(struct yage_canvas *canvas);
 
 /**
- * \~english @brief Clean the canvas.
+ * @ingroup draw
+ *
+ * @~english
+ * @brief Clean the canvas.
  *
  * Fill the whole canvas with background color.
  * \see yage_set_background_color
  *
- * \~chinese @brief 清空画布内容。
+ * @~chinese
+ * @brief 清空画布内容。
  *
  * 将整个画布填充为背景色。
  * \see yage_set_background_color
@@ -119,12 +269,16 @@ void yage_canvas_delete(struct yage_canvas *canvas);
 void yage_clear(void);
 
 /**
- * \~english @brief Get the height and width of the canvas.
+ * @ingroup draw_canvas
+ *
+ * @~english
+ * @brief Get the height and width of the canvas.
  * @param canvas the canvas to obtain information from
  * @param[out] height return location to the height of the canvas
  * @param[out] width  return location to the width of the canvas
  *
- * \~chinese @brief 获取画布的宽度和高度。
+ * @~chinese
+ * @brief 获取画布的宽度和高度。
  * @param canvas 需要获取信息的画布
  * @param[out] height 返回画布高度的地址
  * @param[out] width  返回画布宽度的地址
@@ -132,12 +286,16 @@ void yage_clear(void);
 void yage_canvas_get_size(struct yage_canvas *canvas, int *height, int *width);
 
 /**
- * \~english @brief Draw specified color to a pixel.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw specified color to a pixel.
  * @param x       the X coordinate of the pixel
  * @param y       the Y coordinate of the pixel
  * @param color   the color to set
  *
- * \~chinese @brief 在指定位置的像素上填充颜色。
+ * @~chinese
+ * @brief 在指定位置的像素上填充颜色。
  * @param x       像素的 X 坐标
  * @param y       像素的 Y 坐标
  * @param color   欲填充的颜色
@@ -145,29 +303,38 @@ void yage_canvas_get_size(struct yage_canvas *canvas, int *height, int *width);
 void yage_draw_pixel(double x, double y, struct yage_color color);
 
 /**
- * \~english @brief Draw a canvas at specified position with given scale
- * @param x       the X coordinate for the top-left corner of the canvas to draw
- * @param y       the Y coordinate for the top-left corner of the canvas to draw
+ * @ingroup draw_canvas
+ *
+ * @~english
+ * @brief Draw source canvas on screen at specified position with given scale.
+ * @param canvas  the source canvas
+ * @param x       the X coordinate for the top-left corner of the source canvas on screen
+ * @param y       the Y coordinate for the top-left corner of the source canvas on screen
  * @param xscale  scale for X coordinate
  * @param yscale  scale for Y coordinate
  *
- * \~chinese @brief 在指定位置缩放并画出某画布的内容
- * @param x       某画布左上角在被画的画布的 X 坐标
- * @param y       某画布左上角在被画的画布的 Y 坐标
+ * @~chinese
+ * @brief 在屏幕指定位置缩放并画出原始画布的内容。
+ * @param canvas  原始画布
+ * @param x       原始画布左上角在屏幕上的 X 坐标
+ * @param y       原始画布左上角在屏幕上的 Y 坐标
  * @param xscale  X 坐标的缩放比例
  * @param yscale  Y 坐标的缩放比例
  */
-
 void yage_draw_canvas(struct yage_canvas *canvas,
                       double x, double y, double xscale, double yscale);
 /**
- * \~english @brief Set the font family, size and style of font.
+ * @ingroup draw_text
+ *
+ * @~english
+ * @brief Set the font family, size and style of font.
  * @param family  The family of the font. Use NULL to skip this setting
  * @param size    The size of the font. Use a negative number to skip this setting
  * @param bold    Pass 0 for nonbold font, >0 for bold font, <0 to skip this setting
  * @param italic  Pass 0 for nonitalic font, >0 for italic font, <0 to skip this setting
  *
- * \~chinese @brief 设置字体名称、大小和样式。
+ * @~chinese
+ * @brief 设置字体名称、大小和样式。
  * @param family  字体的名称。传入 NULL 以跳过本项设置
  * @param size    字体的大小。传入一个负数以跳过本项设置
  * @param bold    传入 0 关闭粗体， >0 打开粗体， <0 跳过本项设置
@@ -176,31 +343,43 @@ void yage_draw_canvas(struct yage_canvas *canvas,
 void yage_set_font(const char *family, int size, int bold, int italic);
 
 /**
- * \~english @brief Set the fill color in shapes.
+ * @ingroup draw_color
+ *
+ * @~english
+ * @brief Set the fill color in shapes.
  * @param fill_color The new fill color
  * \see yage_set_border_color
  *
- * \~chinese @brief 设置形状里填充的颜色。
+ * @~chinese
+ * @brief 设置形状里填充的颜色。
  * @param fill_color 新的填充色
  * \see yage_set_border_color
  */
 void yage_set_fill_color(struct yage_color fill_color);
 
 /**
- * \~english @brief Set the font color.
+ * @ingroup draw_color
+ *
+ * @~english
+ * @brief Set the font color.
  * @param font_color The new font color
  *
- * \~chinese @brief 设置字体的颜色。
+ * @~chinese
+ * @brief 设置字体的颜色。
  * @param font_color 新的字体色
  */
 void yage_set_font_color(struct yage_color font_color);
 
 /**
- * \~english @brief Set the background color.
+ * @ingroup draw_color
+ *
+ * @~english
+ * @brief Set the background color.
  * @param background_color The new background color
  * \see yage_clear
  *
- * \~chinese @brief 设置背景色。
+ * @~chinese
+ * @brief 设置背景色。
  * @param background_color 新的背景色
  * \see yage_clear
  *
@@ -208,41 +387,57 @@ void yage_set_font_color(struct yage_color font_color);
 void yage_set_background_color(struct yage_color background_color);
 
 /**
- * \~english @brief Set the border color of shapes.
+ * @ingroup draw_color
+ *
+ * @~english
+ * @brief Set the border color of shapes.
  * @param border_color The new border color
  * \see yage_set_fill_color
  *
- * \~chinese @brief 设置图形边框的颜色。
+ * @~chinese
+ * @brief 设置图形边框的颜色。
  * @param border_color 新的边框颜色
  * \see yage_set_fill_color
  */
 void yage_set_border_color(struct yage_color border_color);
 
 /**
- * \~english @brief Set the border thickness of shapes.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Set the border thickness of shapes.
  * @param thickness The new border thickness
  *
- * \~chinese @brief 设置图形边框的粗细。
+ * @~chinese
+ * @brief 设置图形边框的粗细。
  * @param thickness 新的边框粗细
  */
 void yage_set_border_thickness(double thickness);
 
 /**
- * \~english @brief Set the title of the window
+ * @ingroup system
+ *
+ * @~english
+ * @brief Set the title of the window
  * @param[in] title Title of the window. Pass `NULL` to use default title
  *
- * \~chinese @brief 设置窗口标题
+ * @~chinese
+ * @brief 设置窗口标题
  * @param[in] title 窗口的标题。传入 `NULL` 以使用默认标题
  */
 void yage_set_title(const char *title);
 
 /**
- * \~english @brief Draw border and fill a circle.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw border and fill a circle.
  * @param x  the X coordinate of the center of the circle
  * @param y  the Y coordinate of the center of the circle
  * @param r  the radius of the circle
  *
- * \~chinese @brief 画边框并填充圆。
+ * @~chinese
+ * @brief 画边框并填充圆。
  * @param x  圆心的 X 坐标
  * @param y  圆心的 Y 坐标
  * @param r  圆的半径
@@ -250,12 +445,16 @@ void yage_set_title(const char *title);
 void yage_circle(double x, double y, double r);
 
 /**
- * \~english @brief Fill a circle, don't draw border.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Fill a circle, don't draw border.
  * @param x  the X coordinate of the center of the circle
  * @param y  the Y coordinate of the center of the circle
  * @param r  the radius of the circle
  *
- * \~chinese @brief 填充圆，不画边框。
+ * @~chinese
+ * @brief 填充圆，不画边框。
  * @param x  圆心的 X 坐标
  * @param y  圆心的 Y 坐标
  * @param r  圆的半径
@@ -263,12 +462,16 @@ void yage_circle(double x, double y, double r);
 void yage_circle_fill(double x, double y, double r);
 
 /**
- * \~english @brief Draw border of a circle, don't fill.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw border of a circle, don't fill.
  * @param x  the X coordinate of the center of the circle
  * @param y  the Y coordinate of the center of the circle
  * @param r  the radius of the circle
  *
- * \~chinese @brief 画圆的边框，不要填充。
+ * @~chinese
+ * @brief 画圆的边框，不要填充。
  * @param x  圆心的 X 坐标
  * @param y  圆心的 Y 坐标
  * @param r  圆的半径
@@ -276,13 +479,17 @@ void yage_circle_fill(double x, double y, double r);
 void yage_circle_border(double x, double y, double r);
 
 /**
- * \~english @brief Draw border and fill an ellipse.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw border and fill an ellipse.
  * @param x         the X coordinate of the center of the ellipse
  * @param y         the Y coordinate of the center of the ellipse
  * @param radius_x  the X radius of the ellipse
  * @param radius_y  the Y radius of the ellipse
  *
- * \~chinese @brief 画边框并填充椭圆。
+ * @~chinese
+ * @brief 画边框并填充椭圆。
  * @param x         椭圆圆心的 X 坐标
  * @param y         椭圆圆心的 Y 坐标
  * @param radius_x  椭圆的 X 轴半径坐标
@@ -291,13 +498,17 @@ void yage_circle_border(double x, double y, double r);
 void yage_ellipse(double x, double y, double radius_x, double radius_y);
 
 /**
- * \~english @brief Fill an ellipse, don't draw border.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Fill an ellipse, don't draw border.
  * @param x         the X coordinate of the center of the ellipse
  * @param y         the Y coordinate of the center of the ellipse
  * @param radius_x  the X radius of the ellipse
  * @param radius_y  the Y radius of the ellipse
  *
- * \~chinese @brief 填充椭圆，不画边框。
+ * @~chinese
+ * @brief 填充椭圆，不画边框。
  * @param x         椭圆圆心的 X 坐标
  * @param y         椭圆圆心的 Y 坐标
  * @param radius_x  椭圆的 X 轴半径坐标
@@ -306,13 +517,17 @@ void yage_ellipse(double x, double y, double radius_x, double radius_y);
 void yage_ellipse_fill(double x, double y, double radius_x, double radius_y);
 
 /**
- * \~english @brief Draw border of an ellipse, don't fill.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw border of an ellipse, don't fill.
  * @param x         the X coordinate of the center of the ellipse
  * @param y         the Y coordinate of the center of the ellipse
  * @param radius_x  the X radius of the ellipse
  * @param radius_y  the Y radius of the ellipse
  *
- * \~chinese @brief 画椭圆边框，不要填充。
+ * @~chinese
+ * @brief 画椭圆边框，不要填充。
  * @param x         椭圆圆心的 X 坐标
  * @param y         椭圆圆心的 Y 坐标
  * @param radius_x  椭圆的 X 轴半径坐标
@@ -321,13 +536,17 @@ void yage_ellipse_fill(double x, double y, double radius_x, double radius_y);
 void yage_ellipse_border(double x, double y, double radius_x, double radius_y);
 
 /**
- * \~english @brief Draw border and fill a rectangle.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw border and fill a rectangle.
  * @param x1        the X coordinate of a point on one diagonal line.
  * @param y1        the Y coordinate of the point on one diagonal line.
  * @param x2        the X coordinate of another point on the same diagonal line.
  * @param y2        the Y coordinate of the point on the same diagonal line.
  *
- * \~chinese @brief 画矩形的边框并填充。
+ * @~chinese
+ * @brief 画矩形的边框并填充。
  * @param x1        矩形某条对角线上一点的 X 坐标
  * @param y1        矩形某条对角线上一点的 Y 坐标
  * @param x2        矩形同一条对角线上另一点的 X 坐标
@@ -336,13 +555,17 @@ void yage_ellipse_border(double x, double y, double radius_x, double radius_y);
 void yage_rectangle(double x1, double y1, double x2, double y2);
 
 /**
- * \~english @brief Fill a rectangle, don't fill.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Fill a rectangle, don't fill.
  * @param x1        the X coordinate of a point on one diagonal line.
  * @param y1        the Y coordinate of the point on one diagonal line.
  * @param x2        the X coordinate of another point on the same diagonal line.
  * @param y2        the Y coordinate of the point on the same diagonal line.
  *
- * \~chinese @brief 填充矩形，不要画边框。
+ * @~chinese
+ * @brief 填充矩形，不要画边框。
  * @param x1        矩形某条对角线上一点的 X 坐标
  * @param y1        矩形某条对角线上一点的 Y 坐标
  * @param x2        矩形同一条对角线上另一点的 X 坐标
@@ -351,13 +574,17 @@ void yage_rectangle(double x1, double y1, double x2, double y2);
 void yage_rectangle_fill(double x1, double y1, double x2, double y2);
 
 /**
- * \~english @brief Draw border of a rectangle, don't fill.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw border of a rectangle, don't fill.
  * @param x1        the X coordinate of a point on one diagonal line.
  * @param y1        the Y coordinate of the point on one diagonal line.
  * @param x2        the X coordinate of another point on the same diagonal line.
  * @param y2        the Y coordinate of the point on the same diagonal line.
  *
- * \~chinese @brief 画矩形边框，不要填充。
+ * @~chinese
+ * @brief 画矩形边框，不要填充。
  * @param x1        矩形某条对角线上一点的 X 坐标
  * @param y1        矩形某条对角线上一点的 Y 坐标
  * @param x2        矩形同一条对角线上另一点的 X 坐标
@@ -366,14 +593,18 @@ void yage_rectangle_fill(double x1, double y1, double x2, double y2);
 void yage_rectangle_border(double x1, double y1, double x2, double y2);
 
 /**
- * \~english @brief Draw border and fill a sector.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw border and fill a sector.
  * @param x           the X coordinate of the center
  * @param y           the Y coordinate of the center
  * @param r           the radius of the sector
  * @param angle_begin the beginning angle of the sector, in radian
  * @param angle_end   the end angle of the sector, in radian
  *
- * \~chinese @brief 画扇形的边框并填充。
+ * @~chinese
+ * @brief 画扇形的边框并填充。
  * @param x           扇形圆心的 X 坐标
  * @param y           扇形圆心的 Y 坐标
  * @param r           扇形的半径
@@ -383,14 +614,18 @@ void yage_rectangle_border(double x1, double y1, double x2, double y2);
 void yage_sector(double x, double y, double r, double angle_begin, double angle_end);
 
 /**
- * \~english @brief Fill a sector, don't draw border.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Fill a sector, don't draw border.
  * @param x           the X coordinate of the center
  * @param y           the Y coordinate of the center
  * @param r           the radius of the sector
  * @param angle_begin the beginning angle of the sector, in radian
  * @param angle_end   the end angle of the sector, in radian
  *
- * \~chinese @brief 填充扇形，不要画边框。
+ * @~chinese
+ * @brief 填充扇形，不要画边框。
  * @param x           扇形圆心的 X 坐标
  * @param y           扇形圆心的 Y 坐标
  * @param r           扇形的半径
@@ -400,14 +635,18 @@ void yage_sector(double x, double y, double r, double angle_begin, double angle_
 void yage_sector_fill(double x, double y, double r, double angle_begin, double angle_end);
 
 /**
- * \~english @brief Draw border of a sector, don't fill.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw border of a sector, don't fill.
  * @param x           the X coordinate of the center
  * @param y           the Y coordinate of the center
  * @param r           the radius of the sector
  * @param angle_begin the beginning angle of the sector, in radian
  * @param angle_end   the end angle of the sector, in radian
  *
- * \~chinese @brief 画扇形的边框，不要填充。
+ * @~chinese
+ * @brief 画扇形的边框，不要填充。
  * @param x           扇形圆心的 X 坐标
  * @param y           扇形圆心的 Y 坐标
  * @param r           扇形的半径
@@ -417,14 +656,18 @@ void yage_sector_fill(double x, double y, double r, double angle_begin, double a
 void yage_sector_border(double x, double y, double r, double angle_begin, double angle_end);
 
 /**
- * \~english @brief Draw border of an arc.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw border of an arc.
  * @param x           the X coordinate of the center
  * @param y           the Y coordinate of the center
  * @param r           the radius of the sector
  * @param angle_begin the beginning angle of the arc, in radian
  * @param angle_end   the end angle of the sector, in radian
  *
- * \~chinese @brief 画弧。
+ * @~chinese
+ * @brief 画弧。
  * @param x           圆心的 X 坐标
  * @param y           圆心的 Y 坐标
  * @param r           弧的半径
@@ -434,13 +677,17 @@ void yage_sector_border(double x, double y, double r, double angle_begin, double
 void yage_arc_border(double x, double y, double r, double angle_begin, double angle_end);
 
 /**
- * \~english @brief Draw line.
+ * @ingroup draw_shape
+ *
+ * @~english
+ * @brief Draw line.
  * @param x1        the X coordinate of a point
  * @param y1        the Y coordinate of the point
  * @param x2        the X coordinate of another point
  * @param y2        the Y coordinate of the point
  *
- * \~chinese @brief 画直线段。
+ * @~chinese
+ * @brief 画直线段。
  * @param x1        某点的 X 坐标
  * @param y1        此点的 Y 坐标
  * @param x2        另一点的 X 坐标
@@ -449,13 +696,17 @@ void yage_arc_border(double x, double y, double r, double angle_begin, double an
 void yage_line_border(double x1, double y1, double x2, double y2);
 
 /**
- * \~english @brief Format and print text at given position.
+ * @ingroup draw_text
+ *
+ * @~english
+ * @brief Format and print text at given position.
  * @param x           the X coordinate at the beginning of the text
  * @param y           the Y coordinate at the beginning of the text
  * @param[in] format  Output format, like printf()
  * @param[in] ...     Data to format and print
  *
- * \~chinese @brief 格式化并在指定位置打印文字。
+ * @~chinese
+ * @brief 格式化并在指定位置打印文字。
  * @param x           文字起点的 X 坐标
  * @param y           文字起点的 Y 坐标
  * @param[in] format  输出格式，标准同 printf()
@@ -463,53 +714,69 @@ void yage_line_border(double x1, double y1, double x2, double y2);
  */
 void yage_printf(double x, double y, const char *format, ...);
 
-
 /**
- * \~english @brief Data type describing main types of message.
- * \~chinese @brief 描述消息的主要类型的数据类型。
+ * @~english
+ * @brief Data type describing main types of message.
+ * @~chinese
+ * @brief 描述消息的主要类型的数据类型。
  */
 enum yage_message_type {
-  kYageNop = 0,  ///< \~english No information. Simply ignore messages of this type.
-                 ///< \~chinese 无信息。忽略此类消息即可
-  kYageKbd,      ///< \~english Keyboard message, such as pressing or releasing a key. Use `kbd` member to retrieve keyboard data
-                 ///< \~chinese 键盘消息，包括键盘的按下、释放。使用 `kbd` 成员来获取键盘数据
-  kYageMouse,    ///< \~english Mouse message, such as pressing or releasing a button, or moving the cursor. Use `mouse` member to retrieve mouse data
-                 ///< \~chinese 鼠标消息，包括按下或释放按键或移动光标。使用 `mouse` 成员来获取鼠标数据
-  kYageWindow    ///< \~english Window message, such as getting or losing focus. Use `window` member to retrieve window data
-                 ///< \~chinese 窗口消息，包括获得或丢失焦点。使用 `window` 成员来获取鼠标数据
+  kYageNop = 0,  ///< @~english No information. Simply ignore messages of this type.
+                 ///< @~chinese 无信息。忽略此类消息即可
+  kYageKbd,      ///< @~english Keyboard message, such as pressing or releasing a key. Use `kbd` member to retrieve keyboard data
+                 ///< @~chinese 键盘消息，包括键盘的按下、释放。使用 `kbd` 成员来获取键盘数据
+  kYageMouse,    ///< @~english Mouse message, such as pressing or releasing a button, or moving the cursor. Use `mouse` member to retrieve mouse data
+                 ///< @~chinese 鼠标消息，包括按下或释放按键或移动光标。使用 `mouse` 成员来获取鼠标数据
+  kYageWindow    ///< @~english Window message, such as getting or losing focus. Use `window` member to retrieve window data
+                 ///< @~chinese 窗口消息，包括获得或丢失焦点。使用 `window` 成员来获取鼠标数据
 };
 
 /**
- * \~english @brief Data type describing types of mouse message.
- * \~chinese @brief 描述鼠标消息类型的数据类型。
+ * @ingroup interact_msg
+ *
+ * @~english
+ * @brief Data type describing types of mouse message.
+ *
+ * @~chinese
+ * @brief 描述鼠标消息类型的数据类型。
  */
 enum yage_message_mouse_type {
-  kYageMousePress = 1,   ///< \~english Some Mouse button is pressed
-                         ///< \~chinese 鼠标的某按钮被按下
-  kYageMouseRelease,     ///< \~english Some Mouse button is released
-                         ///< \~chinese 鼠标的某按钮被释放
-  kYageMouseMove         ///< \~english Cursor is moving
-                         ///< \~chinese 鼠标光标在移动
+  kYageMousePress = 1,   ///< @~english Some Mouse button is pressed
+                         ///< @~chinese 鼠标的某按钮被按下
+  kYageMouseRelease,     ///< @~english Some Mouse button is released
+                         ///< @~chinese 鼠标的某按钮被释放
+  kYageMouseMove         ///< @~english Cursor is moving
+                         ///< @~chinese 鼠标光标在移动
 };
 
 /**
- * \~english @brief Data type describing types of window message.
- * \~chinese @brief 描述窗口消息类型的数据类型。
+ * @ingroup interact_msg
+ *
+ * @~english
+ * @brief Data type describing types of window message.
+ *
+ * @~chinese
+ * @brief 描述窗口消息类型的数据类型。
  */
 enum yage_message_window_type {
-  kYageWindowEnter = 1,  ///< \~english Window gaines focus
-                         ///< \~chinese 窗口获得焦点
-  kYageWindowLeave,      ///< \~english Window loses focus
-                         ///< \~chinese 窗口失去焦点
-  kYageWindowDestroy,    ///< \~english Window has been destroyed
-                         ///< \~chinese 窗口被销毁
-  kYageWindowResize      ///< \~english Window has been resized
-                         ///< \~chinese 窗口大小改变
+  kYageWindowEnter = 1,  ///< @~english Window gaines focus
+                         ///< @~chinese 窗口获得焦点
+  kYageWindowLeave,      ///< @~english Window loses focus
+                         ///< @~chinese 窗口失去焦点
+  kYageWindowDestroy,    ///< @~english Window has been destroyed
+                         ///< @~chinese 窗口被销毁
+  kYageWindowResize      ///< @~english Window has been resized
+                         ///< @~chinese 窗口大小改变
 };
 
 /**
- * \~english @brief Object describing all types of message.
- * \~chinese @brief 描述窗口消息的对象。
+ * @ingroup interact_msg
+ *
+ * @~english
+ * @brief Object describing all types of message.
+ *
+ * @~chinese
+ * @brief 描述窗口消息的对象。
  */
 struct yage_message {
   enum yage_message_type type;              ///< \~english @brief Main type of message
@@ -577,13 +844,17 @@ struct yage_message {
 };
 
 /**
- * \~english @brief Get a message from message queue.
+ * @ingroup interact_msg
+ *
+ * @~english
+ * @brief Get a message from message queue.
  * @param[out] msg  Return location to message
  * @param wait_ms   Maximium wait time if no message is available
  * @return          Whether the message queue is availiable.
  *                  When all windows are closed, the return value is `FALSE`
  *
- * \~chinese @brief 从消息队列中拉取一条消息。
+ * @~chinese
+ * @brief 从消息队列中拉取一条消息。
  * @param[out] msg  消息的返回地址
  * @param wait_ms   队列中没有消息时，最长的等待时间
  * @return          消息队列是否可用。当全部窗口已经关闭时，返回值为 `FALSE`
@@ -591,32 +862,44 @@ struct yage_message {
 int  yage_get_message(struct yage_message *msg, int wait_ms);
 
 /**
- * \~english @brief Wait until the next key press, and return the key value.
+ * @ingroup interact_msg
+ *
+ * @~english
+ * @brief Wait until the next key press, and return the key value.
  * @return A character repersenting current key
  *
- * \~chinese @brief 等待下一次键盘输入，并返回键值。
+ * @~chinese
+ * @brief 等待下一次键盘输入，并返回键值。
  * @return 表示键值的字符
  */
 int  yage_get_key(void);
 
 /**
- * \~english @brief Show font chooser dialog and change font according to user input.
+ * @ingroup interact_dlg
+ *
+ * @~english
+ * @brief Show font chooser dialog and change font according to user input.
  * @param[in] title Title of the dialog. Pass `NULL` to use default title
  * @return          Whether user changed font settings
  *
- * \~chinese @brief 显示字体选择对话框并根据用户输入修改字体。
+ * @~chinese
+ * @brief 显示字体选择对话框并根据用户输入修改字体。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @return          用户是否修改了字体设置
  */
 int  yage_dlg_font(const char *title);
 
 /**
- * \~english @brief Get color by showing a color chooser dialog.
+ * @ingroup interact_dlg
+ *
+ * @~english
+ * @brief Get color by showing a color chooser dialog.
  * @param[in] title Title of the dialog. Pass `NULL` to use default title
  * @param[out] color Return location of the color
  * @return          Whether the color is set
  *
- * \~chinese @brief 通过显示颜色选择对话框获得颜色对象。
+ * @~chinese
+ * @brief 通过显示颜色选择对话框获得颜色对象。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @param[out] color 颜色对象的返回地址
  * @return          颜色对象是否被设置
@@ -624,114 +907,145 @@ int  yage_dlg_font(const char *title);
 int  yage_dlg_color(const char *title, struct yage_color *color);
 
 /**
- * \~english @brief Get path by showing a file save dialog.
+ * @addtogroup interact_dlg
+ *
+ * @~english
+ * @brief Get path by showing a file save dialog.
  * @param[in] title Title of the dialog. Pass `NULL` to use default title
  * @return          Pointer to the path
- * \remark          Free returned pointer to path after use.
+ * @remark          Free returned pointer to path after use.
  *
- * \~chinese @brief 通过显示保存文件对话框获得文件路径。
+ * @~chinese
+ * @brief 通过显示保存文件对话框获得文件路径。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @return          指向路径字符串的指针
- * \remark          在使用完毕后，释放返回的指针所指向的内存。
+ * @remark          在使用完毕后，释放返回的指针所指向的内存。
  */
 char *yage_dlg_file_save(const char *title);
 
 /**
- * \~english @brief Get path by showing a file open dialog.
+ * @ingroup interact_dlg
+ *
+ * @~english
+ * @brief Get path by showing a file open dialog.
  * @param[in] title Title of the dialog. Pass `NULL` to use default title
  * @return          Pointer to the path
- * \remark          Free returned pointer to path after use.
+ * @remark          Free returned pointer to path after use.
  *
- * \~chinese @brief 通过显示打开文件对话框获得文件路径。
+ * @~chinese
+ * @brief 通过显示打开文件对话框获得文件路径。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @return          指向路径字符串的指针
- * \remark          在使用完毕后，释放返回的指针所指向的内存。
+ * @remark          在使用完毕后，释放返回的指针所指向的内存。
  */
 char *yage_dlg_file_open(const char *title);
 
 /**
- * \~english @brief Show a message dialog.
+ * @ingroup interact_dlg
+ *
+ * @~english
+ * @brief Show a message dialog.
  * @param[in] title Title of the dialog. Pass `NULL` to use default title
  * @param[in] message Content of the dialog. Pass `NULL` to use default content
  *
- * \~chinese @brief 显示消息对话框。
+ * @~chinese
+ * @brief 显示消息对话框。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @param[in] message 对话框的内容。传入 `NULL` 以使用默认内容
  */
 void yage_dlg_message(const char *title, const char *message);
 
 /**
- * \~english @brief Data type describing types of buttons in question dialog.
- * \~chinese @brief 描述询问对话框中按钮类型的数据类型。
+ * @ingroup interact_dlg
+ *
+ * @~english
+ * @brief Data type describing types of buttons in question dialog.
+ *
+ * @~chinese
+ * @brief 描述询问对话框中按钮类型的数据类型。
  */
 enum yage_dlg_button_type {
-  kYageDlgButtonNone = 0,   ///< \~english No button
-                            ///< \~chinese 无按钮
-  kYageDlgButtonOk,         ///< \~english "OK" button
-                            ///< \~chinese "确定" 按钮
-  kYageDlgButtonClose,      ///< \~english "Close" button
-                            ///< \~chinese "关闭" 按钮
-  kYageDlgButtonCancel,     ///< \~english "Cancel" button
-                            ///< \~chinese "取消" 按钮
-  kYageDlgButtonYesNo,      ///< \~english "Yes" and "No" Button
-                            ///< \~chinese "是" 和 "否" 按钮
-  kYageDlgButtonOkCancel    ///< \~english "OK" and "Cancel" button
-                            ///< \~chinese "确定" 和 "取消" 按钮
+  kYageDlgButtonNone = 0,   ///< @~english No button
+                            ///< @~chinese 无按钮
+  kYageDlgButtonOk,         ///< @~english "OK" button
+                            ///< @~chinese "确定" 按钮
+  kYageDlgButtonClose,      ///< @~english "Close" button
+                            ///< @~chinese "关闭" 按钮
+  kYageDlgButtonCancel,     ///< @~english "Cancel" button
+                            ///< @~chinese "取消" 按钮
+  kYageDlgButtonYesNo,      ///< @~english "Yes" and "No" Button
+                            ///< @~chinese "是" 和 "否" 按钮
+  kYageDlgButtonOkCancel    ///< @~english "OK" and "Cancel" button
+                            ///< @~chinese "确定" 和 "取消" 按钮
 };
 
 /**
- * \~english @brief Data type describing types of icons in question dialog.
- * \~chinese @brief 描述询问对话框中图标类型的数据类型。
+ * @ingroup interact_dlg
+ *
+ * @~english
+ * @brief Data type describing types of icons in question dialog.
+ *
+ * @~chinese
+ * @brief 描述询问对话框中图标类型的数据类型。
  */
 enum yage_dlg_icon_type {
-  kYageDlgIconNone = 0,     ///< \~english No icon
-                            ///< \~chinese 无图标
-  kYageDlgIconInfo,         ///< \~english Information icon
-                            ///< \~chinese 信息图标
-  kYageDlgIconWarning,      ///< \~english Warning icon
-                            ///< \~chinese 警告图标
-  kYageDlgIconQuestion,     ///< \~english Question icon
-                            ///< \~chinese 疑问图标
-  kYageDlgIconError,        ///< \~english Error icon
-                            ///< \~chinese 错误图标
+  kYageDlgIconNone = 0,     ///< @~english No icon
+                            ///< @~chinese 无图标
+  kYageDlgIconInfo,         ///< @~english Information icon
+                            ///< @~chinese 信息图标
+  kYageDlgIconWarning,      ///< @~english Warning icon
+                            ///< @~chinese 警告图标
+  kYageDlgIconQuestion,     ///< @~english Question icon
+                            ///< @~chinese 疑问图标
+  kYageDlgIconError,        ///< @~english Error icon
+                            ///< @~chinese 错误图标
 };
 
 /**
- * \~english @brief Data type describing types of user responses in question dialog.
- * \~chinese @brief 描述用户在询问对话框中的选择数据类型。
+ * @ingroup interact_dlg
+ *
+ * @~english
+ * @brief Data type describing types of user responses in question dialog.
+ *
+ * @~chinese
+ * @brief 描述用户在询问对话框中的选择数据类型。
  */
 enum yage_dlg_result_type {
-  kYageDlgResultNone = 0,   ///< \~english No result
-                            ///< \~chinese 无结果
-  kYageDlgResultReject,     ///< \~english Reject button
-                            ///< \~chinese "拒绝" 按钮
-  kYageDlgResultAccept,     ///< \~english "Accept" button
-                            ///< \~chinese "接受" 按钮
-  kYageDlgResultOk,         ///< \~english "OK" button
-                            ///< \~chinese "确定" 按钮
-  kYageDlgResultCancel,     ///< \~english "Cancel" button
-                            ///< \~chinese "取消" 按钮
-  kYageDlgResultClose,      ///< \~english "Close" button
-                            ///< \~chinese "关闭" 按钮
-  kYageDlgResultYes,        ///< \~english "Yes" button
-                            ///< \~chinese "是" 按钮
-  kYageDlgResultNo,         ///< \~english "No" button
-                            ///< \~chinese "否" 按钮
-  kYageDlgResultApply,      ///< \~english "Apply" button
-                            ///< \~chinese "应用" 按钮
-  kYageDlgResultHelp,       ///< \~english "Help" button
-                            ///< \~chinese "帮助" 按钮
+  kYageDlgResultNone = 0,   ///< @~english No result
+                            ///< @~chinese 无结果
+  kYageDlgResultReject,     ///< @~english Reject button
+                            ///< @~chinese "拒绝" 按钮
+  kYageDlgResultAccept,     ///< @~english "Accept" button
+                            ///< @~chinese "接受" 按钮
+  kYageDlgResultOk,         ///< @~english "OK" button
+                            ///< @~chinese "确定" 按钮
+  kYageDlgResultCancel,     ///< @~english "Cancel" button
+                            ///< @~chinese "取消" 按钮
+  kYageDlgResultClose,      ///< @~english "Close" button
+                            ///< @~chinese "关闭" 按钮
+  kYageDlgResultYes,        ///< @~english "Yes" button
+                            ///< @~chinese "是" 按钮
+  kYageDlgResultNo,         ///< @~english "No" button
+                            ///< @~chinese "否" 按钮
+  kYageDlgResultApply,      ///< @~english "Apply" button
+                            ///< @~chinese "应用" 按钮
+  kYageDlgResultHelp,       ///< @~english "Help" button
+                            ///< @~chinese "帮助" 按钮
 };
 
 /**
- * \~english @brief Show a question dialog and get user's response.
+ * @ingroup interact_dlg
+ *
+ * @~english
+ * @brief Show a question dialog and get user's response.
  * @param[in] title Title of the dialog. Pass `NULL` to use default title
  * @param[in] message Content of the dialog. Pass `NULL` to use default content
  * @param icon      Icon in the dialog
  * @param button    Combinations of buttons in dialog
  * @return          User's response
  *
- * \~chinese @brief 显示询问对话框，并读取用户的选择
+ * @~chinese
+ * @brief 显示询问对话框，并读取用户的选择
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @param[in] message 对话框的内容。传入 `NULL` 以使用默认内容
  * @param icon      对话框的图标
@@ -745,12 +1059,16 @@ yage_dlg_question(const char *title,
                   enum yage_dlg_button_type button);
 
 /**
- * \~english @brief Get an integer by showing a input dialog.
+ * @ingroup interact_input
+ *
+ * @~english
+ * @brief Get an integer by showing a input dialog.
  * @param[in] title Title of the dialog. Pass `NULL` to use default title
  * @param[in] message Content of the dialog. Pass `NULL` to use default content
  * @return          The integer input by user
  *
- * \~chinese @brief 通过显示输入对话框，获取一个整数。
+ * @~chinese
+ * @brief 通过显示输入对话框，获取一个整数。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @param[in] message 对话框的内容。传入 `NULL` 以使用默认内容
  * @return          用户输入的整数
@@ -758,12 +1076,16 @@ yage_dlg_question(const char *title,
 int yage_input_int(const char *title, const char *message);
 
 /**
- * \~english @brief Get a floating number by showing a input dialog.
+ * @ingroup interact_input
+ *
+ * @~english
+ * @brief Get a floating number by showing a input dialog.
  * @param[in] title Title of the dialog. Pass `NULL` to use default title
  * @param[in] message Content of the dialog. Pass `NULL` to use default content
  * @return          The floating number input by user
  *
- * \~chinese @brief 通过显示输入对话框，获取一个浮点数。
+ * @~chinese
+ * @brief 通过显示输入对话框，获取一个浮点数。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @param[in] message 对话框的内容。传入 `NULL` 以使用默认内容
  * @return          用户输入的浮点数
@@ -771,29 +1093,37 @@ int yage_input_int(const char *title, const char *message);
 double yage_input_double(const char *title, const char *message);
 
 /**
- * \~english @brief Get user's input in input dialog.
+ * @ingroup interact_input
+ *
+ * @~english
+ * @brief Get user's input in input dialog.
  * @param[in] title Title of the dialog. Pass `NULL` to use default title
  * @param[in] message Content of the dialog. Pass `NULL` to use default content
  * @return          Pointer to the string
- * \remark          Free returned pointer to path after use.
+ * @remark          Free returned pointer to path after use.
  *
- * \~chinese @brief 获取用户在输入对话框中的输入。
+ * @~chinese
+ * @brief 获取用户在输入对话框中的输入。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @param[in] message 对话框的内容。传入 `NULL` 以使用默认内容
  * @return          指向用户输入内容的指针
- * \remark          在使用完毕后，释放返回的指针所指向的内存。
+ * @remark          在使用完毕后，释放返回的指针所指向的内存。
  */
 char *yage_input_line(const char *title, const char *message);
 
 /**
- * \~english @brief Get user's input in input dialog and convert the format.
+ * @ingroup interact_input
+ *
+ * @~english
+ * @brief Get user's input in input dialog and convert the format.
  * @param[in] title Title of the dialog. Pass `NULL` to use default title
  * @param[in] message Content of the dialog. Pass `NULL` to use default content
  * @param[in] format Format to convert the data, like `scanf`
  * @param[out] ...  Location of data to write
  * @return          Number of variables written
  *
- * \~chinese @brief 获取并按照格式转换用户在输入对话框中的输入。
+ * @~chinese
+ * @brief 获取并按照格式转换用户在输入对话框中的输入。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @param[in] message 对话框的内容。传入 `NULL` 以使用默认内容
  * @param[in] format 转换的格式，如同 `scanf`
