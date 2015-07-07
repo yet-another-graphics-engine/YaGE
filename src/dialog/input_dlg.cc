@@ -51,6 +51,7 @@ void InputDlg::exec_create(InputDlg *this_,
   gtk_window_set_icon_name(GTK_WINDOW(this_->gtk_dialog_),"gtk-edit");
   gtk_window_set_position(GTK_WINDOW(this_->gtk_dialog_),GTK_WIN_POS_CENTER);
   gtk_dialog_set_default_response(this_->gtk_dialog_, GTK_RESPONSE_OK);
+  gtk_window_set_transient_for(GTK_WINDOW(this_->gtk_dialog_), parent);
 
   GtkBox* dialog_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
   GtkBox* label_box = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
