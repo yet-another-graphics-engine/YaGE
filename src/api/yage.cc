@@ -207,7 +207,7 @@ void yage_quit(void) {
 }
 
 struct yage_canvas *yage_canvas_create(int width, int height) {
-  return CANVAS_TO_STRUCT(new draw::Canvas(height, width));
+  return CANVAS_TO_STRUCT(new draw::Canvas(width, height));
 }
 
 struct yage_canvas *yage_canvas_load_image(const char *path) {
@@ -219,8 +219,8 @@ void yage_canvas_delete(struct yage_canvas *canvas) {
 }
 
 void yage_canvas_get_size(struct yage_canvas *canvas,
-                          int *height, int *width) {
-  STRUCT_TO_CANVAS(canvas)->get_size(*height, *width);
+                          int *width, int *height) {
+  STRUCT_TO_CANVAS(canvas)->get_size(*width, *height);
 }
 
 void yage_canvas_clear(struct yage_canvas *canvas) {
