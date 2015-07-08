@@ -213,7 +213,7 @@ void yage_button_update(struct yage_button *button) {
 
 void yage_button_set_visibility(struct yage_button *button, int is_visible) {
     yage::Button *button_obj = reinterpret_cast<yage::Button *>(button);
-    button_obj->set_visibility(is_visible);
+    button_obj->set_visibility(is_visible ? true : false);
 }
 
 }  // extern "C"
