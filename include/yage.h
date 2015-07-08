@@ -235,6 +235,36 @@ struct yage_color yage_color_from_string(const char *color_str);
 void yage_sleep(double second);
 
 /**
+ * @ingroup draw
+ *
+ * @~english
+ * @brief Set whether the screen should automatically update when canvas changes.
+ * @param mode automatically update or not
+ * @remark Default behavior is automatically update on changes.
+ *         For performance related drawing, disable auto update and call
+ *         yage_draw_update() when everything on screen is ready.
+ *
+ * @~chinese
+ * @brief 设置当画布变动时，屏幕是否自动更新。
+ * @param mode 是否自动更新
+ * @remark 默认行为是在变动时自动更新屏幕。对于高性能绘图情况，禁用自动更新，当画布内容绘制完全时，调用 yage_draw_update() 。
+ */
+void yage_draw_set_auto_update(int mode);
+
+/**
+ * @ingroup draw
+ *
+ * @~english
+ * @brief Update the screen manually.
+ * @remark When auto update is disabled by yage_draw_set_auto_update(FALSE), calling this function updates the screen. When auto update is enabled (by default), there's no need to call this function.
+ *
+ * @~chinese
+ * @brief 手动更新屏幕。
+ * @remark 当自动更新被 yage_draw_set_auto_update(FALSE) 所禁用时，调用本函数以更新屏幕。当自动更新启用时（默认情况），不需要调用本函数。
+ */
+void yage_draw_update();
+
+/**
  * @ingroup system
  *
  * @~english

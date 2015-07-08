@@ -38,6 +38,7 @@ namespace yage {
   draw::Paint *g_paint = NULL;
   draw::Color g_fill_color;
   draw::Color g_border_color;
+  bool g_auto_update;
 
   inline draw::Color convert_color(const yage_color &color) {
     return draw::Color(color.r, color.g, color.b, color.a);
@@ -58,11 +59,15 @@ namespace yage {
     }
   }
 
-  void update() {
+  void force_update() {
     g_canvas_bg->clear_all(*g_paint);
     g_canvas_bg->draw_canvas(*g_canvas, draw::Point(0, 0));
     g_canvas_bg->draw_canvas(*g_canvas_btn, draw::Point(0, 0));
     g_window->update();
+  }
+
+  inline void update() {
+    if (g_auto_update) force_update();
   }
 
   inline void draw_circle(draw::Canvas &canvas, double x, double y, double r) {
@@ -128,6 +133,14 @@ void yage_sleep(double second) {
   g_usleep(micor_seconds);
 }
 
+void yage_draw_set_auto_update(int mode) {
+  g_auto_update = mode ? true : false;
+}
+
+void yage_draw_update() {
+  force_update();
+}
+
 struct yage_color yage_color_from_string(const char *color_str) {
   std::string s = color_str;
   std::transform(s.begin(), s.end(), s.begin(), ::tolower);
@@ -168,11 +181,13 @@ void yage_init(int width, int height) {
   if (g_canvas)     delete g_canvas;
   if (g_canvas_bg)  delete g_canvas_bg;
 
-  g_window    = new window::Window(width, height);
-  g_canvas    = new draw::Canvas(width, height);
-  g_canvas_bg = new draw::Canvas(width, height);
+  g_window     = new window::Window(width, height);
+  g_canvas     = new draw::Canvas(width, height);
+  g_canvas_bg  = new draw::Canvas(width, height);
   g_canvas_btn = new draw::Canvas(width, height);
-  g_paint = new draw::Paint;
+  g_paint      = new draw::Paint;
+
+  g_auto_update = true;
 
   g_fill_color = draw::Color(0.5, 0.5, 0.5, 1);
   g_border_color = draw::Color(0, 0, 0, 1);
