@@ -65,8 +65,8 @@ Section "install" ;Installation info
     File /r ..\..\include
     File /oname=license.txt ..\..\LICENSE
     File /r ..\..\build-bin\doc
-    CreateShortcut "$DESKTOP\YaGE English documentation.lnk" "$INSTDIR\doc\english\yage_8h.html"
-    CreateShortcut "$DESKTOP\YaGE Chinese documentation.lnk" "$INSTDIR\doc\chinese\yage_8h.html"
+    CreateShortcut "$DESKTOP\YaGE English documentation.lnk" "$INSTDIR\doc\english\modules.html"
+    CreateShortcut "$DESKTOP\YaGE Chinese documentation.lnk" "$INSTDIR\doc\chinese\modules.html"
 
     SetOutPath "$INSTDIR\lib"
     File ..\..\build-bin\build-vc9\lib\Release\yagevc9.lib
