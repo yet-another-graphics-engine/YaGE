@@ -120,7 +120,7 @@ namespace yage {
         int raw_width, raw_height;
         double xscale = 1.0, yscale = 1.0;
         draw::Paint paint;
-        general_image_->get_size(raw_width, raw_height);
+        image->get_size(raw_width, raw_height);
         if (raw_width > 0 && width_ > 0) xscale = 1.0 * width_ / raw_width;
         if (raw_height > 0 && height_ > 0) yscale = 1.0 * height_ / raw_height;
         paint.set_scale(xscale, yscale);
