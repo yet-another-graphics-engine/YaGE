@@ -499,7 +499,7 @@ void yage_canvas_line_border(struct yage_canvas *canvas,
                              double x1, double y1, double x2, double y2) {
   prepare_color(true, true);
   draw::Line line(draw::Point(x1, y1), draw::Point(x2, y2));
-  g_canvas->draw_line(line, *g_paint);
+  STRUCT_TO_CANVAS(canvas)->draw_line(line, *g_paint);
   update();
 }
 
