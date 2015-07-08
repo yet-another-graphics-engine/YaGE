@@ -16,6 +16,9 @@ private:
     Canvas *clicked_image_;
     bool is_focused_;
     bool is_clicked_;
+    bool is_updated_;
+    yage::draw::Paint priv_btn_;
+    bool is_visible_;
 
 public:
     Button();
@@ -28,6 +31,7 @@ public:
     void set_clicked_image(Canvas &image);
     bool is_clicked(window::Message msg);
     void update_button();
+    void set_visibility(bool visible);
 };
 
 }

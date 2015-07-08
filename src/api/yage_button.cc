@@ -4,7 +4,7 @@ namespace yage {
     using namespace yage::api::yage;
     using yage::window::Message;
 
-    Button::Button() {
+    Button::Button() : priv_btn_() {
         x_ = 0;
         y_ = 0;
         height_ = 0;
@@ -14,13 +14,14 @@ namespace yage {
         clicked_image_ = NULL;
         is_focused_ = false;
         is_clicked_ = false;
+        is_updated_ = false;
+        priv_btn_.set_background_color(yage::draw::Color(0, 0, 0, 0));
+        is_visible_ = true;
     }
 
     Button::Button(int x, int y, int width, int height, Canvas &general_image, Canvas &focused_image, Canvas &clicked_image) {
         x_ = x;
         y_ = y;
-        focused_image_ = NULL;
-        clicked_image_ = NULL;
         general_image_ = new Canvas(general_image);
         focused_image_ = new Canvas(focused_image);
         clicked_image_ = new Canvas(clicked_image);
@@ -28,14 +29,13 @@ namespace yage {
         width_ = width;
         is_focused_ = false;
         is_clicked_ = false;
+        is_updated_ = false;
+        priv_btn_.set_background_color(yage::draw::Color(0, 0, 0, 0));
+        is_visible_ = true;
     }
 
     Button::~Button() {
-      yage::draw::Paint paint;
-      paint.set_viewport(yage::draw::Point(x_, y_),
-                         yage::draw::Point(x_ + width_, y_ + height_));
-      paint.set_background_color(yage::draw::Color(0, 0, 0, 0));
-      g_canvas_btn->clear_viewport(paint);
+        g_canvas_btn->clear_viewport(priv_btn_);
         if (general_image_) delete general_image_;
         if (focused_image_) delete focused_image_;
         if (clicked_image_) delete clicked_image_;
@@ -68,6 +68,8 @@ namespace yage {
     }
 
     bool Button::is_clicked(window::Message msg) {
+        if (is_visible_ == false)
+            return false;
         if (msg.type != msg.type_mouse) return false;
         if (msg.mouse.type == msg.mouse.type_move) {
             if (msg.mouse.x >= x_ && msg.mouse.x <= x_ + width_ &&
@@ -101,6 +103,19 @@ namespace yage {
     }
 
     void Button::update_button() {
+        if (is_visible_ == false) {
+            if (is_updated_ == true) {
+                g_canvas_btn->clear_viewport(priv_btn_);
+                is_updated_ = false;
+            }
+            return ;
+        }
+        if (is_updated_ == true) {
+            g_canvas_btn->clear_viewport(priv_btn_);
+        }
+        priv_btn_.set_viewport(yage::draw::Point(x_, y_),
+                               yage::draw::Point(x_ + width_, y_ + height_));
+        is_updated_ = true;
         Canvas *image = general_image_;
         if (is_focused_ && !is_clicked_) {
             if (focused_image_ != NULL)
@@ -126,6 +141,10 @@ namespace yage {
         paint.set_scale(xscale, yscale);
         g_canvas_btn->draw_canvas(*image, draw::Point(x_ / xscale, y_ / yscale), paint);
         update();
+    }
+
+    void Button::set_visibility(bool visible) {
+        is_visible_ = visible;
     }
 
 }
@@ -181,7 +200,7 @@ void yage_button_set_clicked_image(struct yage_button *button, struct yage_canva
     button_obj->set_clicked_image(*clicked_canvas);
 }
 
-bool yage_button_clicked(struct yage_button *button, struct yage_message *msg) {
+int yage_button_clicked(struct yage_button *button, struct yage_message *msg) {
     window::Message *msg_obj = reinterpret_cast<window::Message *>(msg);
     yage::Button *button_obj = reinterpret_cast<yage::Button *>(button);
     return button_obj->is_clicked(*msg_obj);
@@ -190,6 +209,11 @@ bool yage_button_clicked(struct yage_button *button, struct yage_message *msg) {
 void yage_button_update(struct yage_button *button) {
     yage::Button *button_obj = reinterpret_cast<yage::Button *>(button);
     button_obj->update_button();
+}
+
+void yage_button_set_visibility(struct yage_button *button, int is_visible) {
+    yage::Button *button_obj = reinterpret_cast<yage::Button *>(button);
+    button_obj->set_visibility(is_visible);
 }
 
 }  // extern "C"

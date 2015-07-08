@@ -2031,7 +2031,7 @@ void yage_button_set_clicked_image(struct yage_button *button, struct yage_canva
  * @param msg 从消息队列中获取的消息
  * @return 按钮是否被按下
  */
-bool yage_button_clicked(struct yage_button *button, struct yage_message *msg);
+int yage_button_clicked(struct yage_button *button, struct yage_message *msg);
 
 /**
  * @ingroup interact_button
@@ -2039,12 +2039,33 @@ bool yage_button_clicked(struct yage_button *button, struct yage_message *msg);
  * @~english
  * @brief Update the display status of the button.
  * @param button The button to update
+ * @return Whether the button is clicked.
+ * @remark Button should be update manually after changed the properties
  *
  * @~chinese
  * @brief 更新按钮的显示状态。
  * @param button 要更新的按钮
+ * @return 按钮是否被按下
+ * @remark 按钮在修改属性后需要进行手动更新。
  */
 void yage_button_update(struct yage_button *button);
+
+/**
+ * @ingroup interact_button
+ *
+ * @~english
+ * @brief Set the visibility of the button.
+ * @param button The button to set
+ * @param is_visible The visibility of the button. 0 means it's invisible, 1 means it's visible
+ * @remark The button will not be clicked when it's invisible.
+ *
+ * @~chinese
+ * @brief 设置按钮的可见性。
+ * @param button 要设置的按钮
+ * @param is_visible 按钮的可见性，0表示不可见，1表示可见
+ * @remark 按钮在不可见状态时不会被按下。
+ */
+void yage_button_set_visibility(struct yage_button *button, int is_visible);
 
 #ifdef __cplusplus
 }  // extern "C"
