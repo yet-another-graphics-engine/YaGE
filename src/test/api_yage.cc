@@ -48,7 +48,8 @@ void test_api_yage(void) {
   yage_canvas_delete(canvas);
 
   yage_set_background_color(yage_color_from_string("green"));
-
+  struct yage_player *player = yage_player_load_music("https://kirito.me/ignite.mp3");
+  yage_player_play(player);
   int val_int = yage_input_int("yage_input_int", NULL);
   double val_double = yage_input_double("yage_input_double", NULL);
   yage_set_font_color(yage_color_from_string("Cyan"));
@@ -71,7 +72,7 @@ void test_api_yage(void) {
   } else {
     yage_dlg_message(NULL, yage_dlg_file_open(NULL));;
   }
-
+  yage_player_pause(player);
   struct yage_canvas *btest1 = yage_canvas_load_image("../src/res/yage-open.svg");
   struct yage_canvas *btest2 = yage_canvas_load_image("../src/res/yage-save.svg");
   struct yage_canvas *btest3 = yage_canvas_load_image("../src/res/yage-remove.svg");
@@ -94,7 +95,7 @@ void test_api_yage(void) {
     if (buttontest1 && yage_button_clicked(buttontest1, &msg)) yage_button_delete(buttontest1), buttontest1 = NULL;
 
     if (msg.type != kYageMouse) continue;
-    if (msg.mouse.is_right) yage_clear();
+    if (msg.mouse.is_right) yage_clear(); yage_player_delete(player);
     if (msg.mouse.is_middle) yage_quit();
 
     if (!msg.mouse.is_left) continue;
