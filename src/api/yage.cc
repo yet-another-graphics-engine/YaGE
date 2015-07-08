@@ -235,6 +235,7 @@ void yage_draw_pixel(double x, double y, struct yage_color color) {
 void yage_canvas_draw_canvas(struct yage_canvas *dst, struct yage_canvas *src,
                              double x, double y,
                              double xscale, double yscale) {
+  if (xscale == 0 || yscale == 0) return ;
   draw::Paint paint;
   paint.set_scale(xscale, yscale);
 
