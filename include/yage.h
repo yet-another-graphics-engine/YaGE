@@ -14,22 +14,36 @@ extern "C" {
 
 /**
  * @~english
- * @defgroup draw_color Color
- * @brief Setting and using color.
+ * @defgroup system System
+ * @brief Program level functions.
  *
  * @~chinese
- * @defgroup draw_color 颜色
- * @brief 设置并使用颜色。
+ * @defgroup system 系统
+ * @brief 全程序级别的功能。
  */
 
 /**
  * @~english
- * @defgroup system System
- * @brief Program level control.
+ * @defgroup system_exec Execution
+ * @brief Control program's initialization, execution, and exit.
+ * @ingroup system
  *
  * @~chinese
- * @defgroup system 系统
- * @brief 全程序级别的控制。
+ * @defgroup system_exec 执行
+ * @brief 控制程序的初始化、执行和退出。
+ * @ingroup system
+ */
+
+/**
+ * @~english
+ * @defgroup system_util Utility
+ * @brief Tools like random number generator.
+ * @ingroup system
+ *
+ * @~chinese
+ * @defgroup system_util 实用工具
+ * @brief 随机数生成等工具。
+ * @ingroup system
  */
 
 /**
@@ -51,6 +65,18 @@ extern "C" {
  * @~chinese
  * @defgroup draw_shape 图形
  * @brief 画图形，可选填充或边框。
+ * @ingroup draw
+ */
+
+/**
+ * @~english
+ * @defgroup draw_color Color
+ * @brief Setting and using color.
+ * @ingroup draw
+ *
+ * @~chinese
+ * @defgroup draw_color 颜色
+ * @brief 设置并使用颜色。
  * @ingroup draw
  */
 
@@ -220,7 +246,7 @@ struct yage_color {
 struct yage_color yage_color_from_string(const char *color_str);
 
 /**
- * @ingroup system
+ * @ingroup system_exec
  *
  * @~english
  * @brief Pause execution of current function for some duration.
@@ -265,7 +291,7 @@ void yage_draw_set_auto_update(int mode);
 void yage_draw_update();
 
 /**
- * @ingroup system
+ * @ingroup system_exec
  *
  * @~english
  * @brief Initialize the drawing components and create a fix-sized window.
@@ -280,7 +306,7 @@ void yage_draw_update();
 void yage_init(int width, int height);
 
 /**
- * @ingroup system
+ * @ingroup system_exec
  *
  * @~english
  * @brief Close all windows and quit program.
@@ -2098,7 +2124,7 @@ void yage_button_update(struct yage_button *button);
 void yage_button_set_visibility(struct yage_button *button, int is_visible);
 
 /**
- * @ingroup util
+ * @ingroup system_util
  *
  * @~english
  * @brief Generate a random integer in [ begin, end )
@@ -2115,7 +2141,7 @@ void yage_button_set_visibility(struct yage_button *button, int is_visible);
 int yage_random_interval(int begin, int end);
 
 /**
- * @ingroup util
+ * @ingroup system_util
  *
  * @~english
  * @brief Generate a random real number between 0 and 1
