@@ -2067,6 +2067,36 @@ void yage_button_update(struct yage_button *button);
  */
 void yage_button_set_visibility(struct yage_button *button, int is_visible);
 
+/**
+ * @ingroup util
+ *
+ * @~english
+ * @brief Generate a random integer in [ begin, end )
+ * @param begin The lower endpoint of the interval
+ * @param end The upper endpoint of the interval
+ * @return A random integer in [ begin, end )
+ *
+ * @~chinese
+ * @brief 生成一个在 [ begin, end ) 中的随机整数。
+ * @param begin 区间的下边界
+ * @param end 区间的上边界
+ * @return 在 [ begin, end ) 中的随机整数
+ */
+int yage_random_interval(int begin, int end);
+
+/**
+ * @ingroup util
+ *
+ * @~english
+ * @brief Generate a random real number between 0 and 1
+ * @return A random real number between 0 and 1
+ *
+ * @~chinese
+ * @brief 生成一个0到1之间的随机实数
+ * @return 一个0到1之间的随机实数
+ */
+double yage_random_double();
+
 #ifdef __cplusplus
 }  // extern "C"
 #endif

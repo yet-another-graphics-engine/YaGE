@@ -88,18 +88,17 @@ void test_api_yage(void) {
 
   yage_button_update(buttontest);
   yage_button_update(buttontest1);
-
   yage_message msg;
   while (yage_get_message(&msg, 0)) {
     if (buttontest && yage_button_clicked(buttontest, &msg)) {
-      yage_button_set_position(buttontest, 400, 400);
+      yage_button_set_position(buttontest, yage_random_interval(0,540), yage_random_interval(0,380));
       yage_button_update(buttontest);
       yage_button_set_visibility(buttontest1,0);
       yage_button_update(buttontest1);
 
     }
     if (buttontest1 && yage_button_clicked(buttontest1, &msg)){
-      yage_button_set_size(buttontest1, 50, 50);
+      yage_button_set_size(buttontest1, yage_random_double() * 100 , yage_random_double() * 100);
       yage_button_update(buttontest1);
     }
 

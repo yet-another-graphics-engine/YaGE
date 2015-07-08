@@ -4,6 +4,8 @@
 #include "yage.h"
 #include <cstring>
 #include <cstdarg>
+#include <ctime>
+#include <cstdlib>
 #include <sstream>
 #include <algorithm>
 #include "../dialog/color_chooser_dlg.h"
@@ -180,6 +182,8 @@ void yage_init(int width, int height) {
   g_window->set_canvas(*g_canvas_bg);
   g_window->set_title(version_string);
   g_window->show();
+
+  srand((unsigned) time(NULL));
 }
 
 
@@ -788,6 +792,14 @@ int yage_input_scanf(const char *title, const char *message,
   va_end(args);
 #endif
   return ret_val;
+}
+
+int yage_random_interval(int begin, int end) {
+  return (rand() % (end-begin)) +begin;
+}
+
+double yage_random_double() {
+  return 1.0 * rand() / RAND_MAX;
 }
 
 }  // extern "C"
