@@ -140,7 +140,7 @@ namespace yage {
         if (raw_height > 0 && height_ > 0) yscale = 1.0 * height_ / raw_height;
         paint.set_scale(xscale, yscale);
         g_canvas_btn->draw_canvas(*image, draw::Point(x_ / xscale, y_ / yscale), paint);
-        update();
+        force_update();
     }
 
     void Button::set_visibility(bool visible) {

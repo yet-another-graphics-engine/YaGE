@@ -17,8 +17,9 @@ namespace yage {
   extern draw::Paint *g_paint;
   extern draw::Color g_fill_color;
   extern draw::Color g_border_color;
+  extern bool g_auto_update;
 
-    void update();
+  void force_update();
 }  // namespace yage
 }  // namespace api
 }  // namespace yage
