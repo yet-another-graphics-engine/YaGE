@@ -11,6 +11,7 @@
 #include "../dialog/file_chooser_dlg.h"
 #include "../dialog/message_dlg.h"
 #include "../dialog/input_dlg.h"
+#include "../audio/player.h"
 
 #ifdef _WIN32
 #define strdup(x) _strdup(x)
@@ -550,6 +551,40 @@ void yage_draw_animation(struct yage_animation *animation, double x, double y) {
 void yage_animation_delete(struct yage_animation *animation) {
   if (animation) {
     delete reinterpret_cast<Animation *>(animation);
+  }
+}
+
+struct yage_player *yage_player_load_music(const char *path) {
+  return reinterpret_cast<struct yage_player *>(yage::audio::Player::create_player(path));
+}
+
+void yage_player_play(struct yage_player *player) {
+  if (player) {
+    reinterpret_cast<yage::audio::Player *>(player)->play();
+  }
+}
+
+void yage_player_pause(struct yage_player *player) {
+  if (player) {
+    reinterpret_cast<yage::audio::Player *>(player)->pause();
+  }
+}
+void yage_player_stop(struct yage_player *player) {
+  if (player) {
+    reinterpret_cast<yage::audio::Player *>(player)->stop();
+  }
+}
+
+uint8_t yage_player_get_status(struct yage_player *player) {
+  if (player) {
+    return static_cast<uint8_t>(reinterpret_cast<yage::audio::Player *>(player)->is_playing());
+  }
+  return 0;
+}
+
+void yage_player_delete(struct yage_player *player) {
+  if (player) {
+    delete reinterpret_cast<yage::audio::Player *>(player);
   }
 }
 

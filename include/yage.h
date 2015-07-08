@@ -116,6 +116,16 @@ extern "C" {
 
 /**
  * @~english
+ * @defgroup music Music
+ * @brief Play the music.
+ *
+ * @~chinese
+ * @defgroup music 音乐
+ * @brief 播放音乐。
+ */
+
+/**
+ * @~english
  * @defgroup interact Interaction
  * @brief Interact with user inputs.
  *
@@ -386,6 +396,108 @@ void yage_draw_animation(struct yage_animation *animation, double x, double y);
  * @param animation 待删除的动态图
  */
 void yage_animation_delete(struct yage_animation *animation);
+
+/**
+ * @ingroup music
+ *
+ * @~english
+ * @brief Music player struct
+ *
+ * The struct is opaque, user can create a player using
+ * yage_player_load_music(), and use yage_player_play() to start playing,
+ * pause via yage_player_pause(), stop via yage_player_stop().
+ * Finally destroy player using yage_player_delete().
+ *
+ * @~chinese
+ * @brief 音乐播放器结构体
+ *
+ * 这是一个不包含细节的结构体，使用 yage_player_load_music() 创建播放器对象，使用
+ * yage_player_play() 开始播放，通过 yage_player_pause() 来暂停，最后通过
+ * yage_player_stop() 停止播放，接着，使用 yage_player_delete() 销毁对象。
+ */
+struct yage_player;
+
+/**
+ * @ingroup music
+ *
+ * @~english
+ * @brief Create a music player using the music file content inside path.
+ * @param path the path to load the music
+ * @return the new music player or NULL if failed
+ *
+ * @~chinese
+ * @brief 创建一个新的音乐播放器
+ * @param path 载入的音乐路径
+ * @return 新创建的播放器，如果创建失败，返回 NULL
+ */
+struct yage_player *yage_player_load_music(const char *path);
+
+/**
+ * @ingroup music
+ *
+ * @~english
+ * @brief Play the music in the player
+ * @param player the player to play
+ *
+ * @~chinese
+ * @brief 播放播放器中的音乐
+ * @param player  播放器对象
+ */
+void yage_player_play(struct yage_player *player);
+
+/**
+ * @ingroup music
+ *
+ * @~english
+ * @brief Pause the music in the player
+ * @param player the player to pause
+ *
+ * @~chinese
+ * @brief 暂停播放器中的音乐
+ * @param player  播放器对象
+ */
+void yage_player_pause(struct yage_player *player);
+
+/**
+ * @ingroup music
+ *
+ * @~english
+ * @brief Stop the music in the player
+ * @param player the player to stop
+ *
+ * @~chinese
+ * @brief 停止播放器中的音乐
+ * @param player  播放器对象
+ */
+void yage_player_stop(struct yage_player *player);
+
+/**
+ * @ingroup music
+ *
+ * @~english
+ * @brief Get if the player is playing music
+ * @param player the player
+ * @return 1 if playing, otherwise 0
+ *
+ * @~chinese
+ * @brief 获取播放器是否在播放中
+ * @param player  播放器对象
+ * @return 如果正在播放中，返回 1，否则，返回 0
+ */
+uint8_t yage_player_get_status(struct yage_player *player);
+
+/**
+ * @ingroup music
+ *
+ * @~english
+ * @brief Free an animated image that will no longer be used.
+ * @param player The player to free
+ *
+ * @~chinese
+ * @brief 删除不再使用的播放器。
+ * @param player 待删除的播放器
+ */
+void yage_player_delete(struct yage_player *player);
 
 /**
  * @ingroup draw
