@@ -100,7 +100,9 @@ void test_api_yage(void) {
 
     }
     if (buttontest1 && yage_button_clicked(buttontest1, &msg)){
-      yage_button_set_size(buttontest1, yage_random_double() * 100 , yage_random_double() * 100);
+      yage_button_set_size(buttontest1,
+                           static_cast<int>(yage_random_double() * 100),
+                           static_cast<int>(yage_random_double() * 100));
       yage_button_update(buttontest1);
     }
 
