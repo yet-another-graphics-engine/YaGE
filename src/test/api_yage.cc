@@ -4,8 +4,8 @@
 
 void test_api_yage(void) {
   const double kPi = 3.1415926;
-  yage_init(640, 480);
-  yage_set_title(NULL);
+  yage_window *win_default = yage_init(640, 480);
+  yage_window *win_create = yage_window_create(640, 280);
   yage_set_background_color(yage_color_from_string("red"));
 
   yage_circle(          60, 40, 20);
@@ -16,6 +16,7 @@ void test_api_yage(void) {
   color.r = 1, color.g = 0, color.b = 0, color.a = 1;
   yage_set_border_color(color);
 
+  yage_window_set_default(win_create);
   yage_ellipse(         360, 40, 20, 10);
   yage_ellipse_fill(    460, 40, 20, 10);
   yage_ellipse_border(  560, 40, 20, 10);
@@ -30,6 +31,7 @@ void test_api_yage(void) {
   color.r = 0, color.g = 1, color.b = 0, color.a = 1;
   yage_set_fill_color(color);
 
+  yage_window_set_default(win_default);
   yage_sector(          360, 140, 20, 0 * kPi / 3, 2 * kPi / 3);
   yage_sector_fill(     460, 140, 20, 2 * kPi / 3, 4 * kPi / 3);
   yage_sector_border(   560, 140, 20, 4 * kPi / 3, 6 * kPi / 3);

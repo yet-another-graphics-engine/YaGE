@@ -19,6 +19,7 @@ private:
     bool is_updated_;
     yage::draw::Paint priv_btn_;
     bool is_visible_;
+    yage_window *parent_;
 
 public:
     Button();

@@ -210,6 +210,16 @@ extern "C" {
 
 /**
  * @~english
+ * @defgroup window Window
+ * @brief Create, control and remove multi windows.
+ *
+ * @~chinese
+ * @defgroup window 窗口
+ * @brief 创建、控制并移除多窗口。
+ */
+
+/**
+ * @~english
  * @brief An object holding color information.
  * @ingroup draw_color
  *
@@ -264,16 +274,16 @@ void yage_sleep(double second);
  * @ingroup draw
  *
  * @~english
- * @brief Set whether the screen should automatically update when canvas changes.
+ * @brief Set whether windows should automatically update when canvas changes.
  * @param mode automatically update or not
  * @remark Default behavior is automatically update on changes.
  *         For performance related drawing, disable auto update and call
- *         yage_draw_update() when everything on screen is ready.
+ *         yage_draw_update() when everything on window is ready.
  *
  * @~chinese
- * @brief 设置当画布变动时，屏幕是否自动更新。
+ * @brief 设置当画布变动时，窗口是否自动更新。
  * @param mode 是否自动更新
- * @remark 默认行为是在变动时自动更新屏幕。对于高性能绘图情况，禁用自动更新，当画布内容绘制完全时，调用 yage_draw_update() 。
+ * @remark 默认行为是在变动时自动更新窗口。对于高性能绘图情况，禁用自动更新，当画布内容绘制完全时，调用 yage_draw_update() 。
  */
 void yage_draw_set_auto_update(int mode);
 
@@ -281,29 +291,107 @@ void yage_draw_set_auto_update(int mode);
  * @ingroup draw
  *
  * @~english
- * @brief Update the screen manually.
- * @remark When auto update is disabled by yage_draw_set_auto_update(FALSE), calling this function updates the screen. When auto update is enabled (by default), there's no need to call this function.
+ * @brief Update the default window manually.
+ * @remark When auto update is disabled by yage_draw_set_auto_update(FALSE), calling this function updates the default window. When auto update is enabled (by default), there's no need to call this function.
  *
  * @~chinese
- * @brief 手动更新屏幕。
- * @remark 当自动更新被 yage_draw_set_auto_update(FALSE) 所禁用时，调用本函数以更新屏幕。当自动更新启用时（默认情况），不需要调用本函数。
+ * @brief 手动更新默认窗口。
+ * @remark 当自动更新被 yage_draw_set_auto_update(FALSE) 所禁用时，调用本函数以更新默认窗口。当自动更新启用时（默认情况），不需要调用本函数。
  */
 void yage_draw_update();
+
+/**
+ * @ingroup window
+ *
+ * @~english
+ * @brief A struct representing a window.
+ *
+ * The struct is opaque, user can create
+ * a window by yage_window_create() and remove the window by yage_window_delete().
+ *
+ * @~chinese
+ * @brief 表示窗口的结构体。
+ *
+ * 这是一个不包含细节的结构体。可以通过 yage_window_create() 创建一个画布，通过 yage_window_delete() 来删除一个窗口。
+ */
+struct yage_window;
+
+/**
+ * @ingroup window
+ *
+ * @~english
+ * @brief Create and show a fix-sized window.
+ * @param width  the width of the window to create
+ * @param height the height of the window to create
+ * @return the new window
+ * @remark All drawings will take on the default window. Call yage_window_set_default() to draw on another window.
+ *
+ * @~chinese
+ * @brief 创建并显示一个新窗口。
+ * @param width  新窗口的宽度
+ * @param height 新窗口的高度
+ * @return 新创建的窗口
+ * @remark 全部的绘图都在默认窗口上进行。通过调用 yage_window_set_default() 在其他窗口上绘图。
+ */
+struct yage_window *yage_window_create(int width, int height);
+
+/**
+ * @ingroup window
+ *
+ * @~english
+ * @brief Remove the default window.
+ * @param new_default_window new default window after removal
+ *
+ * @~chinese
+ * @brief 移除默认窗口。
+ * @param new_default_window 移除后的默认窗口
+ */
+void yage_window_delete(struct yage_window *new_default_window);
+
+/**
+ * @ingroup window
+ *
+ * @~english
+ * @brief Set the title of the window.
+ * @param[in] title Title of the window. Pass `NULL` to use the default title
+ *
+ * @~chinese
+ * @brief 设置窗口标题。
+ * @param[in] title 窗口的标题。传入 `NULL` 以使用默认标题
+ */
+void yage_window_set_title(const char *title);
+
+/**
+ * @ingroup window
+ *
+ * @~english
+ * @brief Set the default window.
+ * @param default_window new default window
+ *
+ * @~chinese
+ * @brief 设置默认窗口。
+ * @param default_window 新的默认窗口
+ */
+void yage_window_set_default(struct yage_window *default_window);
 
 /**
  * @ingroup system_exec
  *
  * @~english
- * @brief Initialize the drawing components and create a fix-sized window.
+ * @brief Initialize the drawing components and create a fix-sized default window.
  * @param width  the width of the window to create
  * @param height the height of the window to create
+ * @return the new window
+ * @attention This function should be called only once before calling any other YaGE functions. Calling another time will result in undefined behavior, including but not limited to destroying the whole universe.
  *
  * @~chinese
- * @brief 初始化绘图组件，并创建一个指定大小的窗口。
+ * @brief 初始化绘图组件，并创建一个指定大小的默认窗口。
  * @param width  新窗口的宽度
  * @param height 新窗口的高度
+ * @return 新创建的窗口
+ * @attention 本函数应在调用任何 YaGE 函数前调用，并且只应被调用一次。多次调用将导致未定义的行为，包括但不限于毁灭整个宇宙。
  */
-void yage_init(int width, int height);
+struct yage_window *yage_init(int width, int height);
 
 /**
  * @ingroup system_exec
@@ -392,14 +480,14 @@ void yage_canvas_delete(struct yage_canvas *canvas);
  *
  * The struct is opaque, user can create an animated image using
  * yage_animation_load_image(), and use yage_draw_animation() to draw it
- * on default window. At last, use yage_animation_delete() to destroy.
+ * on the default window. At last, use yage_animation_delete() to destroy.
  *
  * @~chinese
  * @brief 表示动态图片的结构体。
  *
  * 这是一个不包含细节的结构体。可以通过 yage_animation_load_image() 或创建一个
- * 动态图，使用 yage_draw_animation() 将其画在屏幕上，最后通过 yage_canvas_delete()
- * 来释放动态图并从屏幕上移除。
+ * 动态图，使用 yage_draw_animation() 将其画在窗口上，最后通过 yage_canvas_delete()
+ * 来释放动态图并从窗口上移除。
  */
 struct yage_animation;
 
@@ -426,16 +514,16 @@ struct yage_animation *yage_animation_load_image(const char *path);
  * @ingroup draw_animation
  *
  * @~english
- * @brief Draw an animated image on screen at specified position.
+ * @brief Draw an animated image on the default window at specified position.
  * @param animation  the source animated imag
- * @param x          the X coordinate for the top-left corner of the source animated image on screen
- * @param y          the Y coordinate for the top-left corner of the source animated image on screen
+ * @param x          the X coordinate for the top-left corner of the source animated image on the default window
+ * @param y          the Y coordinate for the top-left corner of the source animated image on the default window
  *
  * @~chinese
- * @brief 在屏幕指定位置画出原始动态图的内容。
+ * @brief 在默认窗口指定位置画出原始动态图的内容。
  * @param animation  原始动态图
- * @param x          原始画布左上角在屏幕上的 X 坐标
- * @param y          原始画布左上角在屏幕上的 Y 坐标
+ * @param x          原始画布左上角在默认窗口上的 X 坐标
+ * @param y          原始画布左上角在默认窗口上的 Y 坐标
  */
 void yage_draw_animation(struct yage_animation *animation, double x, double y);
 
@@ -443,12 +531,11 @@ void yage_draw_animation(struct yage_animation *animation, double x, double y);
  * @ingroup draw_animation
  *
  * @~english
- * @brief Free an animated image that will not be used and
- * remove it from screen.
+ * @brief Free an animated image that will not be used and remove it from the default window.
  * @param animation The animated image to free
  *
  * @~chinese
- * @brief 删除不再使用的动态图，并将其从屏幕上移除。
+ * @brief 删除不再使用的动态图，并将其从默认窗口上移除。
  * @param animation 待删除的动态图
  */
 void yage_animation_delete(struct yage_animation *animation);
@@ -559,14 +646,14 @@ void yage_player_delete(struct yage_player *player);
  * @ingroup draw
  *
  * @~english
- * @brief Clean the screen.
+ * @brief Clean the default window.
  *
- * Fill the whole screen with background color.
+ * Fill the whole the default window with background color.
  *
  * @~chinese
- * @brief 清空屏幕内容。
+ * @brief 清空默认窗口内容。
  *
- * 将整个屏幕填充为背景色。
+ * 将整个默认窗口填充为背景色。
  * \see yage_set_background_color
  */
 void yage_clear(void);
@@ -645,18 +732,18 @@ void yage_canvas_draw_pixel(struct yage_canvas *canvas,
  * @ingroup draw_shape
  *
  * @~english
- * @brief Draw source canvas on screen at specified position with given scale.
+ * @brief Draw source canvas on the default window at specified position with given scale.
  * @param canvas  the source canvas
- * @param x       the X coordinate for the top-left corner of the source canvas on screen
- * @param y       the Y coordinate for the top-left corner of the source canvas on screen
+ * @param x       the X coordinate for the top-left corner of the source canvas on the default window
+ * @param y       the Y coordinate for the top-left corner of the source canvas on the default window
  * @param xscale  scale for X coordinate
  * @param yscale  scale for Y coordinate
  *
  * @~chinese
- * @brief 在屏幕指定位置缩放并画出原始画布的内容。
+ * @brief 在默认窗口指定位置缩放并画出原始画布的内容。
  * @param canvas  原始画布
- * @param x       原始画布左上角在屏幕上的 X 坐标
- * @param y       原始画布左上角在屏幕上的 Y 坐标
+ * @param x       原始画布左上角在默认窗口上的 X 坐标
+ * @param y       原始画布左上角在默认窗口上的 Y 坐标
  * @param xscale  X 坐标的缩放比例
  * @param yscale  Y 坐标的缩放比例
  */
@@ -667,7 +754,7 @@ void yage_draw_canvas(struct yage_canvas *canvas,
  * @ingroup draw_canvas_shape
  *
  * @~english
- * @brief Draw source canvas on screen at specified position with given scale.
+ * @brief Draw source canvas on the default window at specified position with given scale.
  * @param dst     the source canvas
  * @param src     the destination canvas
  * @param x       the X coordinate for the top-left corner of the source canvas on destination canvas
@@ -778,19 +865,6 @@ void yage_set_border_color(struct yage_color border_color);
  * @param thickness 新的边框粗细
  */
 void yage_set_border_thickness(double thickness);
-
-/**
- * @ingroup system
- *
- * @~english
- * @brief Set the title of the window
- * @param[in] title Title of the window. Pass `NULL` to use default title
- *
- * @~chinese
- * @brief 设置窗口标题
- * @param[in] title 窗口的标题。传入 `NULL` 以使用默认标题
- */
-void yage_set_title(const char *title);
 
 /**
  * @ingroup draw_shape
@@ -1683,7 +1757,7 @@ int  yage_get_key(void);
  *
  * @~english
  * @brief Show font chooser dialog and change font according to user input.
- * @param[in] title Title of the dialog. Pass `NULL` to use default title
+ * @param[in] title Title of the dialog. Pass `NULL` to use the default title
  * @return          Whether user changed font settings
  *
  * @~chinese
@@ -1698,7 +1772,7 @@ int  yage_dlg_font(const char *title);
  *
  * @~english
  * @brief Get color by showing a color chooser dialog.
- * @param[in] title Title of the dialog. Pass `NULL` to use default title
+ * @param[in] title Title of the dialog. Pass `NULL` to use the default title
  * @param[out] color Return location of the color
  * @return          Whether the color is set
  *
@@ -1715,7 +1789,7 @@ int  yage_dlg_color(const char *title, struct yage_color *color);
  *
  * @~english
  * @brief Get path by showing a file save dialog.
- * @param[in] title Title of the dialog. Pass `NULL` to use default title
+ * @param[in] title Title of the dialog. Pass `NULL` to use the default title
  * @return          Pointer to the path
  * @remark          Free returned pointer to path after use.
  *
@@ -1732,7 +1806,7 @@ char *yage_dlg_file_save(const char *title);
  *
  * @~english
  * @brief Get path by showing a file open dialog.
- * @param[in] title Title of the dialog. Pass `NULL` to use default title
+ * @param[in] title Title of the dialog. Pass `NULL` to use the default title
  * @return          Pointer to the path
  * @remark          Free returned pointer to path after use.
  *
@@ -1749,8 +1823,8 @@ char *yage_dlg_file_open(const char *title);
  *
  * @~english
  * @brief Show a message dialog.
- * @param[in] title Title of the dialog. Pass `NULL` to use default title
- * @param[in] message Content of the dialog. Pass `NULL` to use default content
+ * @param[in] title Title of the dialog. Pass `NULL` to use the default title
+ * @param[in] message Content of the dialog. Pass `NULL` to use the default content
  *
  * @~chinese
  * @brief 显示消息对话框。
@@ -1842,8 +1916,8 @@ enum yage_dlg_result_type {
  *
  * @~english
  * @brief Show a question dialog and get user's response.
- * @param[in] title Title of the dialog. Pass `NULL` to use default title
- * @param[in] message Content of the dialog. Pass `NULL` to use default content
+ * @param[in] title Title of the dialog. Pass `NULL` to use the default title
+ * @param[in] message Content of the dialog. Pass `NULL` to use the default content
  * @param icon      Icon in the dialog
  * @param button    Combinations of buttons in dialog
  * @return          User's response
@@ -1867,8 +1941,8 @@ yage_dlg_question(const char *title,
  *
  * @~english
  * @brief Get an integer by showing a input dialog.
- * @param[in] title Title of the dialog. Pass `NULL` to use default title
- * @param[in] message Content of the dialog. Pass `NULL` to use default content
+ * @param[in] title Title of the dialog. Pass `NULL` to use the default title
+ * @param[in] message Content of the dialog. Pass `NULL` to use the default content
  * @return          The integer input by user
  *
  * @~chinese
@@ -1884,8 +1958,8 @@ int yage_input_int(const char *title, const char *message);
  *
  * @~english
  * @brief Get a floating number by showing a input dialog.
- * @param[in] title Title of the dialog. Pass `NULL` to use default title
- * @param[in] message Content of the dialog. Pass `NULL` to use default content
+ * @param[in] title Title of the dialog. Pass `NULL` to use the default title
+ * @param[in] message Content of the dialog. Pass `NULL` to use the default content
  * @return          The floating number input by user
  *
  * @~chinese
@@ -1901,8 +1975,8 @@ double yage_input_double(const char *title, const char *message);
  *
  * @~english
  * @brief Get user's input in input dialog.
- * @param[in] title Title of the dialog. Pass `NULL` to use default title
- * @param[in] message Content of the dialog. Pass `NULL` to use default content
+ * @param[in] title Title of the dialog. Pass `NULL` to use the default title
+ * @param[in] message Content of the dialog. Pass `NULL` to use the default content
  * @return          Pointer to the string
  * @remark          Free returned pointer to path after use.
  *
@@ -1920,8 +1994,8 @@ char *yage_input_line(const char *title, const char *message);
  *
  * @~english
  * @brief Get user's input in input dialog and convert the format.
- * @param[in] title Title of the dialog. Pass `NULL` to use default title
- * @param[in] message Content of the dialog. Pass `NULL` to use default content
+ * @param[in] title Title of the dialog. Pass `NULL` to use the default title
+ * @param[in] message Content of the dialog. Pass `NULL` to use the default content
  * @param[in] format Format to convert the data, like `scanf`
  * @param[out] ...  Location of data to write
  * @return          Number of variables written

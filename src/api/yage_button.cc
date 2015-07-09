@@ -17,6 +17,7 @@ namespace yage {
         is_updated_ = false;
         priv_btn_.set_background_color(yage::draw::Color(0, 0, 0, 0));
         is_visible_ = true;
+        parent_ = g_window;
     }
 
     Button::Button(int x, int y, int width, int height, Canvas &general_image, Canvas &focused_image, Canvas &clicked_image) {
@@ -32,10 +33,11 @@ namespace yage {
         is_updated_ = false;
         priv_btn_.set_background_color(yage::draw::Color(0, 0, 0, 0));
         is_visible_ = true;
+        parent_ = g_window;
     }
 
     Button::~Button() {
-        g_canvas_btn->clear_viewport(priv_btn_);
+        parent_->canvas_btn->clear_viewport(priv_btn_);
         if (general_image_) delete general_image_;
         if (focused_image_) delete focused_image_;
         if (clicked_image_) delete clicked_image_;
@@ -105,13 +107,13 @@ namespace yage {
     void Button::update_button() {
         if (is_visible_ == false) {
             if (is_updated_ == true) {
-                g_canvas_btn->clear_viewport(priv_btn_);
+                parent_->canvas_btn->clear_viewport(priv_btn_);
                 is_updated_ = false;
             }
             return ;
         }
         if (is_updated_ == true) {
-            g_canvas_btn->clear_viewport(priv_btn_);
+            parent_->canvas_btn->clear_viewport(priv_btn_);
         }
         priv_btn_.set_viewport(yage::draw::Point(x_, y_),
                                yage::draw::Point(x_ + width_, y_ + height_));
@@ -139,8 +141,8 @@ namespace yage {
         if (raw_width > 0 && width_ > 0) xscale = 1.0 * width_ / raw_width;
         if (raw_height > 0 && height_ > 0) yscale = 1.0 * height_ / raw_height;
         paint.set_scale(xscale, yscale);
-        g_canvas_btn->draw_canvas(*image, draw::Point(x_ / xscale, y_ / yscale), paint);
-        force_update();
+        parent_->canvas_btn->draw_canvas(*image, draw::Point(x_ / xscale, y_ / yscale), paint);
+        force_update(parent_);
     }
 
     void Button::set_visibility(bool visible) {

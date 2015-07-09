@@ -3,23 +3,31 @@
 #include "../window/window.h"
 
 using namespace yage;
+
+struct yage_window {
+  window::Window *window;
+  draw::Canvas *canvas;
+  draw::Canvas *canvas_bg;
+  draw::Canvas *canvas_btn;
+};
+
 namespace yage {
 namespace api {
 namespace yage {
 
   const draw::Color kTransparentColor(0, 0, 0, 0);
   const size_t kMaxTextBuffer = 2048;
+  extern yage_window *g_window;
 
-  extern window::Window *g_window;
-  extern draw::Canvas *g_canvas_bg;
-  extern draw::Canvas *g_canvas;
-  extern draw::Canvas *g_canvas_btn;
-  extern draw::Paint *g_paint;
-  extern draw::Color g_fill_color;
-  extern draw::Color g_border_color;
-  extern bool g_auto_update;
+  inline struct yage_canvas *get_canvas_ext(draw::Canvas *canvas = g_window->canvas) {
+    return reinterpret_cast<yage_canvas *>(canvas);
+  }
 
-  void force_update();
+  inline draw::Canvas *get_canvas_int(yage_canvas *ext) {
+    return reinterpret_cast<draw::Canvas *>(ext);
+  }
+
+  void force_update(yage_window *window = g_window);
 }  // namespace yage
 }  // namespace api
 }  // namespace yage
