@@ -36,6 +36,7 @@ set(LIB_SOURCE_FILES
     util/encoding.cc
     window/message.cc
     window/window.cc
+    window/timer.cc
     util/runner.cc
     audio/player.cc
     dialog/message_dlg.cc
@@ -157,6 +158,7 @@ set(YAGE_TEST_SOURCE_FILES
     test/api_yage.cc
     test/api_bgi.cc
     test/api_yage_perf.cc
+    test/timer.cc
     )
 
 # Add YaGE test resource files
