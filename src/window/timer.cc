@@ -1,6 +1,7 @@
 #include "timer.h"
 #include "window.h"
 #include "message.h"
+#include <algorithm>
 
 namespace yage {
 namespace window {
