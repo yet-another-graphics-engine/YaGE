@@ -18,13 +18,15 @@ namespace yage {
 namespace window {
 
 class Window;
+class Timer;
 
 struct Message {
   enum {
     type_nop = 0,
     type_kbd,
     type_mouse,
-    type_window
+    type_window,
+    type_timer
   } type;
 
   Window *source;
@@ -67,6 +69,17 @@ struct Message {
         type_resize
       } type;
     } window;
+
+    struct {
+      Timer *timer;
+
+      enum {
+        type_running = 1,
+        type_finished
+      } type;
+
+      double seconds;
+    } timer;
   };
 };
 

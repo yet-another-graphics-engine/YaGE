@@ -14,6 +14,7 @@
 #include "../dialog/message_dlg.h"
 #include "../dialog/input_dlg.h"
 #include "../audio/player.h"
+#include "../window/timer.h"
 
 #ifdef _WIN32
 #define strdup(x) _strdup(x)
@@ -816,6 +817,30 @@ int yage_random_interval(int begin, int end) {
 
 double yage_random_double() {
   return 1.0 * rand() / RAND_MAX;
+}
+
+struct yage_timer *yage_timer_create(double seconds) {
+  return reinterpret_cast<struct yage_timer *>(new yage::window::Timer(seconds));
+}
+
+void yage_timer_pause(struct yage_timer *timer) {
+  reinterpret_cast<yage::window::Timer *>(timer)->pause();
+}
+
+void yage_timer_resume(struct yage_timer *timer) {
+  reinterpret_cast<yage::window::Timer *>(timer)->resume();
+}
+
+void yage_timer_stop(struct yage_timer *timer) {
+  reinterpret_cast<yage::window::Timer *>(timer)->stop();
+}
+
+double yage_timer_get_time_elapsed(struct yage_timer *timer) {
+  return reinterpret_cast<yage::window::Timer *>(timer)->get_time_elapsed();
+}
+
+void yage_timer_delete(struct yage_timer *timer) {
+  delete reinterpret_cast<yage::window::Timer *>(timer);
 }
 
 }  // extern "C"

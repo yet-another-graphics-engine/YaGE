@@ -36,13 +36,25 @@ extern "C" {
 
 /**
  * @~english
- * @defgroup system_util Utility
- * @brief Tools like random number generator.
+ * @defgroup random Random
+ * @brief Random number generator, etc.
  * @ingroup system
  *
  * @~chinese
- * @defgroup system_util 实用工具
+ * @defgroup random 随机数
  * @brief 随机数生成等工具。
+ * @ingroup system
+ */
+
+/**
+ * @~english
+ * @defgroup timer Timer
+ * @brief Timer based on message.
+ * @ingroup system
+ *
+ * @~chinese
+ * @defgroup timer 计时器
+ * @brief 基于消息的计时器。
  * @ingroup system
  */
 
@@ -1532,8 +1544,9 @@ enum yage_message_type {
                  ///< @~chinese 键盘消息，包括键盘的按下、释放。使用 `kbd` 成员来获取键盘数据
   kYageMouse,    ///< @~english Mouse message, such as pressing or releasing a button, or moving the cursor. Use `mouse` member to retrieve mouse data
                  ///< @~chinese 鼠标消息，包括按下或释放按键或移动光标。使用 `mouse` 成员来获取鼠标数据
-  kYageWindow    ///< @~english Window message, such as getting or losing focus. Use `window` member to retrieve window data
+  kYageWindow,    ///< @~english Window message, such as getting or losing focus. Use `window` member to retrieve window data
                  ///< @~chinese 窗口消息，包括获得或丢失焦点。使用 `window` 成员来获取鼠标数据
+  kYageTimer
 };
 
 /**
@@ -1572,6 +1585,22 @@ enum yage_message_window_type {
                          ///< @~chinese 窗口被销毁
   kYageWindowResize      ///< @~english Window has been resized
                          ///< @~chinese 窗口大小改变
+};
+
+/**
+ * @ingroup interact_msg
+ *
+ * @~english
+ * @brief Data type describing types of timer message.
+ *
+ * @~chinese
+ * @brief 描述计时器消息类型的数据类型。
+ */
+enum yage_message_timer_type {
+  kYageTimerRunning = 1, ///< @~english The timer is running
+                         ///< @~chinese 计时器正在运行
+  kYageTimerFinished     ///< @~english The timer has finished its job
+                         ///< @~chinese 计时器已经结束任务
 };
 
 /**
@@ -1645,6 +1674,19 @@ struct yage_message {
       enum yage_message_window_type type;   ///< \~english @brief Type of window message
                                             ///< \~chinese @brief 窗口消息的类型
     } window;
+
+    /**
+     * \~english @brief Object describing timer message
+     * \~chinese @brief 描述计时器消息的对象
+     */
+    struct {
+      struct yage_timer *timer;             ///< \~english @brief Pointer of timer structure
+                                            ///< \~chinese @brief 指向计时器结构体的指针
+      yage_message_timer_type type;         ///< \~english @brief Type of timer message
+                                            ///< \~chinese @brief 计时器消息类型
+      double seconds;                       ///< \~english @brief Seconds passed when the timer is active
+                                            ///< \~chinese @brief 计时器处于激活状态时经过的秒数
+    } timer;
   };
 };
 
@@ -2118,13 +2160,13 @@ void yage_button_update(struct yage_button *button);
  * @~chinese
  * @brief 设置按钮的可见性。
  * @param button 要设置的按钮
- * @param is_visible 按钮的可见性，0表示不可见，1表示可见
+ * @param is_visible 按钮的可见性，0 表示不可见，1 表示可见
  * @remark 按钮在不可见状态时不会被按下。
  */
 void yage_button_set_visibility(struct yage_button *button, int is_visible);
 
 /**
- * @ingroup system_util
+ * @ingroup random
  *
  * @~english
  * @brief Generate a random integer in [ begin, end )
@@ -2141,17 +2183,113 @@ void yage_button_set_visibility(struct yage_button *button, int is_visible);
 int yage_random_interval(int begin, int end);
 
 /**
- * @ingroup system_util
+ * @ingroup random
  *
  * @~english
  * @brief Generate a random real number between 0 and 1
  * @return A random real number between 0 and 1
  *
  * @~chinese
- * @brief 生成一个0到1之间的随机实数
- * @return 一个0到1之间的随机实数
+ * @brief 生成一个 0 到 1 之间的随机实数
+ * @return 一个 0 到 1 之间的随机实数
  */
 double yage_random_double();
+
+/**
+ * @ingroup timer
+ *
+ * @~english
+ * @brief Create a timer
+ * @param seconds Time for timer to wait. If you specify a number greater than
+ * 0, the timer will run until `seconds` seconds. Otherwise, if you specify a
+ * number less than or equal to 0, the timer will run forever.
+ * @return A timer created
+ * @remark The timer will send you message every 0.02 second since created with
+ * timer type `kYageTimerRunning`, at last, it will send you a message with
+ * timer type `kYageTimerFinished`.
+ *
+ * @~chinese
+ * @brief 创建计时器
+ * @param seconds 要求计时器等待的时间。如果你指定了一个大于 0 的数字，计时器就会运行
+ * `seconds` 秒，否则计时器会永远运行。
+ * @return 新创建的计时器
+ * @remark 计时器会每隔 0.02 秒向您发送计时器消息类型为 `kYageTimerRunning` 的消息，
+ * 在计时结束时，它将会给您发送计时器消息类型为 `kYageTimerFinished` 的消息。
+ */
+struct yage_timer *yage_timer_create(double seconds);
+
+/**
+ * @ingroup timer
+ *
+ * @~english
+ * @brief Get time that timer elapsed when it is active
+ * @param timer The timer to get time
+ * @return Seconds passed since timer is active
+ *
+ * @~chinese
+ * @brief 获取计时器实时时间
+ * @param timer 要获取时间的计时器
+ * @return 计时器实时时间，单位为秒
+ */
+double yage_timer_get_time_elapsed(struct yage_timer *timer);
+
+/**
+ * @ingroup timer
+ *
+ * @~english
+ * @brief Pause a timer
+ * @param timer The timer to pause
+ * @remark The timer will not send message to you since it has paused
+ *
+ * @~chinese
+ * @brief 暂停计时器
+ * @param timer 要暂停的计时器
+ * @remark 计时器在暂停时将不会再向您发送消息
+ */
+void yage_timer_pause(struct yage_timer *timer);
+
+/**
+ * @ingroup timer
+ *
+ * @~english
+ * @brief Resume a timer
+ * @param timer The timer to resume
+ * @remark We will send messages to you after resumed
+ *
+ * @~chinese
+ * @brief 继续运行计时器
+ * @param timer 要继续的计时器
+ * @remark 在计时器继续运行时，我们会向您发送消息
+ */
+void yage_timer_resume(struct yage_timer *timer);
+
+/**
+ * @ingroup timer
+ *
+ * @~english
+ * @brief Stop a timer
+ * @param timer The timer to stop
+ * @remark The timer will be reset with time 0, and paused
+ *
+ * @~chinese
+ * @brief 停止计时器
+ * @param timer 要停止的计时器
+ * @remark 计时器的时间将被置 0，同时将会被暂停
+ */
+void yage_timer_stop(struct yage_timer *timer);
+
+/**
+ * @ingroup timer
+ *
+ * @~english
+ * @brief Destroy the timer
+ * @param timer The timer to destroy
+ *
+ * @~chinese
+ * @brief 销毁计时器
+ * @param timer 要销毁的计时器
+ */
+void yage_timer_delete(struct yage_timer *timer);
 
 #ifdef __cplusplus
 }  // extern "C"
