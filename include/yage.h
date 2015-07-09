@@ -577,14 +577,13 @@ void yage_clear(void);
  * @~english
  * @brief Clean the whole canvas.
  * @param canvas    the canvas to clear
- *
- * Set the whole canvas to transparent.
- * @param canvas    被清空的画布
+ * @attention This function sets the whole canvas to transparent. To fill the canvas with background color, use yage_canvas_rectangle_fill().
  *
  * @~chinese
  * @brief 清空画布内容。
+ * @param canvas    被清空的画布
+ * @attention 本函数将整个画布设置为透明。如果需要填充为有背景颜色的画布，请使用 yage_canvas_rectangle_fill()。
  *
- * 将整个画布设置为透明。
  */
 void yage_canvas_clear(struct yage_canvas *canvas);
 
