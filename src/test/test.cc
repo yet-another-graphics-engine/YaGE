@@ -47,17 +47,16 @@ void test_show_usage() {
 
 test_iter_t test_match(const string &lazy_name) {
   test_iter_t test_iter = g_tests.end();
+  double match_percent = 0;
 
   for (test_iter_t i = g_tests.begin(); i != g_tests.end(); ++i) {
     if (!fuzzy_string_match(lazy_name, i->second)) continue;
-    if (test_iter != g_tests.end()) {
-      // multiple match
-      fprintf(stderr, "ERROR: multiple match of test.\n"
-                      "Candidates: test_%s() and test_%s()\n",
-                      test_iter->second.c_str(), i->second.c_str());
-      return g_tests.end();
+    double current_match_percent = static_cast<double>(lazy_name.size()) /
+                                   i->second.size();
+    if (current_match_percent > match_percent) {
+      test_iter = i;
+      match_percent = current_match_percent;
     }
-    test_iter = i;
   }
   return test_iter;
 }
