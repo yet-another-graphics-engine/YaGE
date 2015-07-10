@@ -24,7 +24,7 @@ private:
     HANDLE thread_handle_;   ///< Thread handle of player worker thread
     IWMPPlayer *player_;     ///< Windows Media Player Object instance
     IWMPControls *control_;  ///< Windows Media Player Control Object instance
-    bool send_message_(WPARAM message);
+    void send_message_(WPARAM message, void *info = NULL);
 
 public:
     WinPlayer(std::string url);
@@ -33,6 +33,7 @@ public:
     virtual void pause(void);
     virtual void stop(void);
     virtual bool is_playing(void);
+    virtual void seek(double seconds);
 };
 
 }

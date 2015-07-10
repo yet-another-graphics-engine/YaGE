@@ -14,7 +14,7 @@ static const UINT YAGE_PLAYER_MESSAGE = WM_USER + 0x233;
 /**
  * @brief Signal to send to player worker thread
  */
-enum YAGE_PLAY_SIGNAL {YAGE_PLAYER_UNKNOWN, YAGE_PLAYER_PLAY, YAGE_PLAYER_PAUSE, YAGE_PLAYER_STOP, YAGE_PLAYER_PLAYING, YAGE_PLAYER_FINALIZE};
+enum YAGE_PLAY_SIGNAL {YAGE_PLAYER_UNKNOWN, YAGE_PLAYER_PLAY, YAGE_PLAYER_PAUSE, YAGE_PLAYER_STOP, YAGE_PLAYER_PLAYING, YAGE_PLAYER_SEEK, YAGE_PLAYER_FINALIZE};
 
 /**
  * @brief Initial information for player worker thread
@@ -30,7 +30,7 @@ struct player_init_message {
  */
 struct player_callback_message {
     HANDLE event_;     ///< Event that waits for finish of operation process
-    bool *pbool_;      ///< (optional) Return value that player returns
+    void *pvoid_;      ///< (optional) Return value that player returns
 };
 
 /**
@@ -83,7 +83,7 @@ DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
                     case YAGE_PLAYER_PLAY:
                         hr = IWMPControls_play(controls);
                         assert(SUCCEEDED(hr));
-                        *cb_msg->pbool_ = SUCCEEDED(hr);
+                        *reinterpret_cast<bool *>(cb_msg->pvoid_) = SUCCEEDED(hr);
                         break;
 
                     case YAGE_PLAYER_PAUSE:
@@ -100,11 +100,15 @@ DWORD WINAPI WinPlayer::player_worker_(LPVOID lpParameter) {
                         WMPPlayState wmpps;
                         hr = IWMPPlayer_get_playState(player, &wmpps);
                         assert(SUCCEEDED(hr));
-                        *cb_msg->pbool_ = wmpps == wmppsPlaying;
+                        *reinterpret_cast<bool *>(cb_msg->pvoid_) = wmpps == wmppsPlaying;
                         break;
 
                     case YAGE_PLAYER_FINALIZE:
                         *pfinished = true;
+                        break;
+
+                    case YAGE_PLAYER_SEEK:
+                        hr = IWMPControls_put_currentPosition(controls, *reinterpret_cast<double *>(cb_msg->pvoid_));
                         break;
 
                     default:
@@ -153,15 +157,13 @@ WinPlayer::~WinPlayer() {
  * @param message The message to be sent to thread
  * @return Desired return value got from worker thread
  */
-bool WinPlayer::send_message_(WPARAM message) {
-    bool result;
+void WinPlayer::send_message_(WPARAM message, void *info) {
     player_callback_message msg;
     msg.event_ = CreateEventW(NULL, FALSE, FALSE, NULL);
-    msg.pbool_ = &result;
+    msg.pvoid_ = info;
     PostThreadMessageW(thread_id_, YAGE_PLAYER_MESSAGE, message, (LPARAM)&msg);
     WaitForSingleObject(msg.event_, INFINITE);
     CloseHandle(msg.event_);
-    return result;
 }
 
 /**
@@ -169,7 +171,9 @@ bool WinPlayer::send_message_(WPARAM message) {
  * @return The status if music plays normally
  */
 bool WinPlayer::play() {
-    return send_message_(YAGE_PLAYER_PLAY);
+    bool ret = false;
+    send_message_(YAGE_PLAYER_PLAY, &ret);
+    return ret;
 }
 
 /**
@@ -191,7 +195,13 @@ void WinPlayer::stop() {
  * @return The status if music is playing
  */
 bool WinPlayer::is_playing() {
-    return send_message_(YAGE_PLAYER_PLAYING);
+    bool ret = false;
+    send_message_(YAGE_PLAYER_PLAYING, &ret);
+    return ret;
+}
+
+void WinPlayer::seek(double seconds) {
+    send_message_(YAGE_PLAYER_SEEK, &seconds);
 }
 
 }

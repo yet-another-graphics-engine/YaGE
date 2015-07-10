@@ -24,6 +24,7 @@ public:
 	virtual void pause(void);
 	virtual void stop(void);
 	virtual bool is_playing(void);
+    virtual void seek(double seconds);
 };
 
 }

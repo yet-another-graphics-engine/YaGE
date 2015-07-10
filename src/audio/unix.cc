@@ -80,5 +80,8 @@ UnixPlayer::UnixPlayer(const std::string &url) : Player() {
   g_object_set(G_OBJECT(pipeline_), "uri", url_.c_str(), NULL);
 }
 
+void UnixPlayer::seek(double seconds) {
+}
+
 }
 }

@@ -4,14 +4,15 @@
 void test_audio(void) {
     using yage::audio::Player;
     std::cerr << "Playing test track" << std::endl;
-    Player *p = Player::create_player("file:///home/hugh/tmp/t.mp3");
-    p->play();
-    while(p->is_playing()) sleep_sec(1);
+    //Player *p = Player::create_player("file:///home/hugh/tmp/t.mp3");
+    //p->play();
+    //while(p->is_playing()) sleep_sec(1);
     std::cerr << "Test track stopped" << std::endl;
 
     std::cerr << "Load file IGNITE from Internet" << std::endl;
     Player *player = Player::create_player("https://kirito.me/ignite.mp3");
-    std::cerr << "Play IGNITE" << std::endl;
+    std::cerr << "Seek to 30 seconds and play IGNITE" << std::endl;
+    player->seek(30);
     player->play();
     sleep_sec(5);
 
@@ -31,9 +32,12 @@ void test_audio(void) {
 
     std::cerr << "Stop IGNITE" << std::endl;
     player->stop();
+
     std::cerr << "Play IGNITE" << std::endl;
     player->play();
     sleep_sec(3);
+    std::cerr << "Seek Date A Live to 1 minutes" << std::endl;
+    player2->seek(60.0);
 
     std::cerr << "Destroy music IGNITE object" << std::endl;
     delete player;

@@ -28,7 +28,10 @@ class Player {
          * @return The status if music is playung
          */
         virtual bool is_playing(void) = 0;
-
+        /**
+         * @brief Seek to specific position of music
+         */
+        virtual void seek(double seconds) = 0;
         /**
          * @brief Creates a new instance of Player (Factory method)
          * @param url The URL of music to be played

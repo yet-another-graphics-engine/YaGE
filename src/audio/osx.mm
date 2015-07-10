@@ -39,6 +39,10 @@ bool OSXPlayer::is_playing(void) {
     return player_.rate > 0 && !player_.error;
 }
 
+void OSXPlayer::seek(double seconds) {
+    [player_ seekToTime:CMTimeMakeWithSeconds(seconds, 1)];
+}
+
 }
 }
 

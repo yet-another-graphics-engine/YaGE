@@ -22,6 +22,7 @@ class OSXPlayer : public Player {
         virtual void pause();
         virtual void stop();
         virtual bool is_playing();
+        virtual void seek(double seconds);
 };
 
 }
