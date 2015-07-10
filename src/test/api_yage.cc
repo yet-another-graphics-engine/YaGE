@@ -112,10 +112,10 @@ void test_api_yage(void) {
       yage_button_set_visibility(buttontest1,1);
       yage_button_update(buttontest1);
     }
-    yage_player_delete(player);
     if (msg.mouse.is_middle) yage_quit();
 
     if (!msg.mouse.is_left) continue;
     yage_draw_pixel(msg.mouse.x, msg.mouse.y, color);
   }
+  yage_player_delete(player);
 }
