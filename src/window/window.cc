@@ -111,10 +111,6 @@ void Window::exec_create(Window *this_, int &width, int &height) {
   gtk_window_set_position(gtk_window_, GTK_WIN_POS_CENTER);
   gtk_window_set_resizable(gtk_window_, false);
 
-  GtkFixed *&gtk_container_ = this_->gtk_container_;
-  gtk_container_ = GTK_FIXED(gtk_fixed_new());
-  gtk_container_add(GTK_CONTAINER(gtk_window_), GTK_WIDGET(gtk_container_));
-
   if(width == -1 || height == -1)
     set_max_size(this_, width, height);
   else
@@ -146,7 +142,6 @@ void Window::exec_create(Window *this_, int &width, int &height) {
 
   //gtk_widget_set_size_request(gtk_draw_, width, height);
   gtk_widget_set_size_request(GTK_WIDGET(gtk_window_), width, height);
-  gtk_widget_set_size_request(GTK_WIDGET(gtk_draw_), width, height);
 
   gtk_widget_add_events(gtk_draw_, GDK_BUTTON_PRESS_MASK |
                                    GDK_BUTTON_RELEASE_MASK |
@@ -161,7 +156,7 @@ void Window::exec_create(Window *this_, int &width, int &height) {
                    G_CALLBACK(msg_draw_on_conf), this_);
   g_signal_connect(gtk_draw_, "draw",
                    G_CALLBACK(msg_draw_on_draw), this_);
-  gtk_fixed_put(GTK_FIXED(gtk_container_), gtk_draw_, 0, 0);
+  gtk_container_add(GTK_CONTAINER(gtk_window_), gtk_draw_);
 
   // Add window counter
   ++window_num;
@@ -326,26 +321,9 @@ void Window::set_canvas(Canvas &canvas) {
   cairo_surface_reference(cairo_surface_);
 }
 
-void Window::exec_redraw_animation(Window* this_, Animation &animation, Point &position) {
-  if (animation.is_valid()) {
-    gtk_fixed_put(this_->gtk_container_,
-                  GTK_WIDGET(animation.pro_get_image()),
-                  static_cast<int>(position.x),
-                  static_cast<int>(position.y));
-    gtk_widget_show(GTK_WIDGET(animation.pro_get_image()));
-    this_->update();
-  }
-}
-
-void Window::draw_animation(Animation &animation, Point &position) {
-  if (is_valid()) {
-    runner_call_ex(exec_redraw_animation, false, this, &animation, &position);
-  }
-}
-
 void Window::update() {
   if(is_valid())
-    runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_container_));
+    runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_draw_));
 }
 
 Window::~Window() {

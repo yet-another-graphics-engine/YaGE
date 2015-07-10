@@ -5,7 +5,6 @@
 #include "color.h"
 #include "paint.h"
 #include "shape.h"
-#include "animation.h"
 
 #include <cairo.h>
 #include <cairo-pdf.h>

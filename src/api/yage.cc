@@ -679,45 +679,6 @@ void yage_printfW(double x, double y, const wchar_t *format, ...) {
 }
 #endif // _WIN32
 
-struct yage_animation *yage_animation_load_image_utf8(const char *path){
-  Animation *animation = new Animation(path);
-  if (animation->is_valid()) {
-    return reinterpret_cast<struct yage_animation *>(animation);
-  } else {
-    return NULL;
-  }
-}
-
-struct yage_animation *yage_animation_load_image(const char *path) {
-  char *utf_8_path = yage::util::ansi_to_utf_8(path);
-  struct yage_animation *ret = yage_animation_load_image_utf8(utf_8_path);
-  yage::util::free_string(utf_8_path);
-  return ret;
-}
-
-#ifdef _WIN32
-struct yage_animation *yage_animation_load_imageW(const wchar_t *path) {
-  char *utf_8_path = yage::util::utf_16_to_utf_8(path);
-  struct yage_animation *ret = yage_animation_load_image_utf8(utf_8_path);
-  yage::util::free_string(utf_8_path);
-  return ret;
-}
-#endif // _WIN32
-
-void yage_draw_animation(struct yage_animation *animation, double x, double y) {
-  if (animation) {
-    Point pos(x, y);
-    g_window->window->draw_animation(*reinterpret_cast<Animation *>(animation), pos);
-  }
-}
-
-void yage_animation_delete(struct yage_animation *animation) {
-  if (animation) {
-    delete reinterpret_cast<Animation *>(animation);
-  }
-}
-
-// note that now player implementation of Win32 is ANSI-specific
 struct yage_player *yage_player_load_music(const char *path) {
   return reinterpret_cast<struct yage_player *>(yage::audio::Player::create_player(path));
 }
