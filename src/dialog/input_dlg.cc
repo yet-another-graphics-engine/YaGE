@@ -130,20 +130,20 @@ bool InputDlg::show(std::string &str)
 
 void InputDlg::set_message(const std::string &text)
 {
-  std::string utf_8_text = yage::util::convert_string(text);
-  runner_call(exec_set_message, this, const_cast<std::string*>(&utf_8_text));
+  //std::string utf_8_text = yage::util::convert_string(text);
+  runner_call(exec_set_message, this, const_cast<std::string*>(&text));
 }
 
 InputDlg::InputDlg(const std::string &title)
 {
-  std::string utf_8_title = yage::util::convert_string(title);
-  runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()), NULL);
+  //std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_create, this, const_cast<char *>(title.c_str()), NULL);
 }
 
 InputDlg::InputDlg(const std::string &title, yage::window::Window &window)
 {
-  std::string utf_8_title = yage::util::convert_string(title);
-  runner_call(exec_create, this, const_cast<char *>(utf_8_title.c_str()),
+  //std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_create, this, const_cast<char *>(title.c_str()),
               window.pro_get_gtk_window());
 }
 

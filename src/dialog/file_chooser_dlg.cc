@@ -6,14 +6,14 @@ namespace yage {
 namespace dialog {
 FileChooserDlg::FileChooserDlg(action_type action, const std::string &title)
 {
-  std::string utf_8_title = yage::util::convert_string(title);
-  runner_call(exec_create, this, &action, const_cast<char *>(utf_8_title.c_str()), NULL);
+  //std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_create, this, &action, const_cast<char *>(title.c_str()), NULL);
 }
 
 FileChooserDlg::FileChooserDlg(action_type action, const std::string &title, yage::window::Window &window)
 {
-  std::string utf_8_title = yage::util::convert_string(title);
-  runner_call(exec_create, this, &action, const_cast<char *>(utf_8_title.c_str()),
+  //std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_create, this, &action, const_cast<char *>(title.c_str()),
               window.pro_get_gtk_window());
 }
 
@@ -100,7 +100,7 @@ void FileChooserDlg::exec_show(FileChooserDlg *this_,
   }
 
   if (c_str) {
-    std_str = yage::util::convert_string(c_str);
+    std_str = c_str;
     ret = true;
   }
 }

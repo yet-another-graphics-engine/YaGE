@@ -133,7 +133,7 @@ void yage_draw_update() {
   force_update();
 }
 
-struct yage_color yage_color_from_string(const char *color_str) {
+struct yage_color yage_color_from_string_utf8(const char *color_str) {
   std::string s = color_str;
   std::transform(s.begin(), s.end(), s.begin(), ::tolower);
 
@@ -167,6 +167,22 @@ struct yage_color yage_color_from_string(const char *color_str) {
   return map[0].color;
 }
 
+struct yage_color yage_color_from_string(const char *color_str) {
+  char *utf_8_color_str = yage::util::ansi_to_utf_8(color_str);
+  struct yage_color ret = yage_color_from_string_utf8(utf_8_color_str);
+  yage::util::free_string(utf_8_color_str);
+  return ret;
+}
+
+#ifdef _WIN32
+struct yage_color yage_color_from_stringW(const wchar_t *color_str) {
+  char *utf_8_color_str = yage::util::utf_16_to_utf_8(color_str);
+  struct yage_color ret = yage_color_from_string_utf8(utf_8_color_str);
+  yage::util::free_string(utf_8_color_str);
+  return ret;
+}
+#endif //_WIN32
+
 struct yage_window *yage_window_create(int width, int height) {
   yage_window *window = new yage_window;
 
@@ -195,9 +211,23 @@ void yage_window_set_default(struct yage_window *default_window) {
   g_window = default_window;
 }
 
-void yage_window_set_title(const char *title) {
+void yage_window_set_title_utf8(const char *title) {
   g_window->window->set_title(title ? title : version_string);
 }
+
+void yage_window_set_title(const char *title) {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  yage_window_set_title_utf8(utf_8_title);
+  yage::util::free_string(utf_8_title);
+}
+
+#ifdef _WIN32
+void yage_window_set_titleW(const wchar_t *title) {
+  char *utf_8_title = yage::util::utf_16_to_utf_8(title);
+  yage_window_set_title_utf8(utf_8_title);
+  yage::util::free_string(utf_8_title);
+}
+#endif
 
 struct yage_window *yage_init(int width, int height) {
   if (g_paint) return NULL;  // already initialized
@@ -224,9 +254,25 @@ struct yage_canvas *yage_canvas_create(int width, int height) {
   return get_canvas_ext(new draw::Canvas(width, height));
 }
 
-struct yage_canvas *yage_canvas_load_image(const char *path) {
+struct yage_canvas *yage_canvas_load_image_utf8(const char *path) {
   return get_canvas_ext(new draw::Canvas(path));
 }
+
+struct yage_canvas *yage_canvas_load_image(const char *path) {
+  char *utf_8_path = yage::util::ansi_to_utf_8(path);
+  struct yage_canvas *ret = yage_canvas_load_image_utf8(utf_8_path);
+  yage::util::free_string(utf_8_path);
+  return ret;
+}
+
+#ifdef _WIN32
+struct yage_canvas *yage_canvas_load_imageW(const wchar_t *path) {
+  char *utf_8_path = yage::util::utf_16_to_utf_8(path);
+  struct yage_canvas *ret = yage_canvas_load_image_utf8(utf_8_path);
+  yage::util::free_string(utf_8_path);
+  return ret;
+}
+#endif // _WIN32
 
 void yage_canvas_delete(struct yage_canvas *canvas) {
   delete get_canvas_int(canvas);
@@ -280,12 +326,26 @@ void yage_draw_canvas(struct yage_canvas *canvas,
                                  x, y, xscale, yscale);
 }
 
-void yage_set_font(const char *family, int size, int bold, int italic) {
+void yage_set_font_utf8(const char *family, int size, int bold, int italic) {
   if (family)       g_paint->font.set_font_family(family);
   if (size > 0)     g_paint->font.set_size(size);
   if (bold >= 0)    g_paint->font.set_bold_status(bold ? true : false);
   if (italic >= 0)  g_paint->font.set_italic_status(italic ? true : false);
 }
+
+void yage_set_font(const char *family, int size, int bold, int italic) {
+  char *utf_8_family = yage::util::ansi_to_utf_8(family);
+  yage_set_font_utf8(utf_8_family, size, bold, italic);
+  yage::util::free_string(utf_8_family);
+}
+
+#ifdef _WIN32
+void yage_set_fontW(const wchar_t *family, int size, int bold, int italic) {
+  char *utf_8_family = yage::util::utf_16_to_utf_8(family);
+  yage_set_font_utf8(utf_8_family, size, bold, italic);
+  yage::util::free_string(utf_8_family);
+}
+#endif //_WIN32
 
 void yage_set_font_color(struct yage_color font_color) {
   g_paint->set_font_color(convert_color(font_color));
@@ -534,11 +594,40 @@ void yage_canvas_printf(struct yage_canvas *canvas,
 #endif
   va_end(args);
 
-  yage::draw::Text text(buf);
+  char *utf_8_buf = yage::util::ansi_to_utf_8(buf);
+  yage::draw::Text text(utf_8_buf);
+  yage::util::free_string(utf_8_buf);
   text.position = draw::Point(x, y);
   get_canvas_int(canvas)->draw_text(text, *g_paint);
   update();
 }
+
+#ifdef _WIN32
+void yage_canvas_printfW(struct yage_canvas *canvas,
+                        double x, double y, const wchar_t *format, ...) {
+  wchar_t buf[kMaxTextBuffer];
+
+  va_list args;
+  va_start(args, format);
+#ifdef _MSC_VER
+#if _MSC_VER > 1300
+  _vsnwprintf_s(buf, _countof(buf), sizeof(buf), format, args);
+#else
+  _vsnwprintf(buf, sizeof(buf), format, args);
+#endif
+#else
+  _vsnwprintf(buf, sizeof(buf), format, args);
+#endif
+  va_end(args);
+
+  char *utf_8_buf = yage::util::utf_16_to_utf_8(buf);
+  yage::draw::Text text(utf_8_buf);
+  yage::util::free_string(utf_8_buf);
+  text.position = draw::Point(x, y);
+  get_canvas_int(canvas)->draw_text(text, *g_paint);
+  update();
+}
+#endif
 
 void yage_printf(double x, double y, const char *format, ...) {
   char buf[kMaxTextBuffer];
@@ -556,13 +645,41 @@ void yage_printf(double x, double y, const char *format, ...) {
 #endif
   va_end(args);
 
-  yage::draw::Text text(buf);
+  char *utf_8_buf = yage::util::ansi_to_utf_8(buf);
+  yage::draw::Text text(utf_8_buf);
+  yage::util::free_string(utf_8_buf);
   text.position = draw::Point(x, y);
   g_window->canvas->draw_text(text, *g_paint);
   update();
 }
 
-struct yage_animation *yage_animation_load_image(const char *path){
+#ifdef _WIN32
+void yage_printfW(double x, double y, const wchar_t *format, ...) {
+  wchar_t buf[kMaxTextBuffer];
+
+  va_list args;
+  va_start(args, format);
+#ifdef _MSC_VER
+#if _MSC_VER > 1300
+  _vsnwprintf_s(buf, _countof(buf), sizeof(buf), format, args);
+#else
+  _vsnwprintf(buf, sizeof(buf), format, args);
+#endif
+#else
+  _vsnwprintf(buf, sizeof(buf), format, args);
+#endif
+  va_end(args);
+
+  char *utf_8_buf = yage::util::utf_16_to_utf_8(buf);
+  yage::draw::Text text(utf_8_buf);
+  yage::util::free_string(utf_8_buf);
+  text.position = draw::Point(x, y);
+  g_window->canvas->draw_text(text, *g_paint);
+  update();
+}
+#endif // _WIN32
+
+struct yage_animation *yage_animation_load_image_utf8(const char *path){
   Animation *animation = new Animation(path);
   if (animation->is_valid()) {
     return reinterpret_cast<struct yage_animation *>(animation);
@@ -570,6 +687,22 @@ struct yage_animation *yage_animation_load_image(const char *path){
     return NULL;
   }
 }
+
+struct yage_animation *yage_animation_load_image(const char *path) {
+  char *utf_8_path = yage::util::ansi_to_utf_8(path);
+  struct yage_animation *ret = yage_animation_load_image_utf8(utf_8_path);
+  yage::util::free_string(utf_8_path);
+  return ret;
+}
+
+#ifdef _WIN32
+struct yage_animation *yage_animation_load_imageW(const wchar_t *path) {
+  char *utf_8_path = yage::util::utf_16_to_utf_8(path);
+  struct yage_animation *ret = yage_animation_load_image_utf8(utf_8_path);
+  yage::util::free_string(utf_8_path);
+  return ret;
+}
+#endif // _WIN32
 
 void yage_draw_animation(struct yage_animation *animation, double x, double y) {
   if (animation) {
@@ -584,6 +717,7 @@ void yage_animation_delete(struct yage_animation *animation) {
   }
 }
 
+// note that now player implementation of Win32 is ANSI-specific
 struct yage_player *yage_player_load_music(const char *path) {
   return reinterpret_cast<struct yage_player *>(yage::audio::Player::create_player(path));
 }
@@ -632,13 +766,29 @@ int  yage_get_key(void) {
   return -1;
 }
 
-int  yage_dlg_font(const char *title) {
+int  yage_dlg_font_utf8(const char *title) {
   if (!title) title = "Choose Font";
   dialog::FontChooserDlg font_dlg(title, *g_window->window);
   return font_dlg.show(g_paint->font);
 }
 
-int  yage_dlg_color(const char *title, struct yage_color *color) {
+int yage_dlg_font(const char *title) {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  int ret = yage_dlg_font_utf8(utf_8_title);
+  yage::util::free_string(utf_8_title);
+  return ret;
+}
+
+#ifdef _WIN32
+int yage_dlg_fontW(const wchar_t *title) {
+  char *utf_8_title = yage::util::utf_16_to_utf_8(title);
+  int ret = yage_dlg_font_utf8(utf_8_title);
+  yage::util::free_string(utf_8_title);
+  return ret;
+}
+#endif
+
+int  yage_dlg_color_utf8(const char *title, struct yage_color *color) {
   if (!title) title = "Choose Color";
   dialog::ColorChooserDlg font_dlg(title, *g_window->window);
   draw::Color internal_coler;
@@ -651,7 +801,23 @@ int  yage_dlg_color(const char *title, struct yage_color *color) {
   return ret;
 }
 
-char *yage_dlg_file_save(const char *title) {
+int yage_dlg_color(const char *title, struct yage_color *color) {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  int ret = yage_dlg_color_utf8(utf_8_title, color);
+  yage::util::free_string(utf_8_title);
+  return ret;
+}
+
+#ifdef _WIN32
+int yage_dlg_colorW(const wchar_t *title, struct yage_color *color) {
+  char *utf_8_title = yage::util::utf_16_to_utf_8(title);
+  int ret = yage_dlg_color_utf8(utf_8_title, color);
+  yage::util::free_string(utf_8_title);
+  return ret;
+}
+#endif
+
+char *yage_dlg_file_save_utf8(const char *title) {
   if (!title) title = "Save File";
   dialog::FileChooserDlg fc_dlg(dialog::FileChooserDlg::action_type_save,
                                 title, *g_window->window);
@@ -660,7 +826,29 @@ char *yage_dlg_file_save(const char *title) {
   return strdup(path.c_str());
 }
 
-char *yage_dlg_file_open(const char *title) {
+char *yage_dlg_file_save(const char *title) {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  char *utf_8_ret = yage_dlg_file_save_utf8(utf_8_title);
+  yage::util::free_string(utf_8_title);
+  char *ret = yage::util::utf_8_to_ansi(utf_8_ret);
+  if (ret != utf_8_ret) {
+    free(utf_8_ret);
+  }
+  return ret;
+}
+
+#ifdef _WIN32
+wchar_t *yage_dlg_file_saveW(const wchar_t *title) {
+  char *utf_8_title = yage::util::utf_16_to_utf_8(title);
+  char *utf_8_ret = yage_dlg_file_save_utf8(utf_8_title);
+  yage::util::free_string(utf_8_title);
+  wchar_t *ret = yage::util::utf_8_to_utf_16(utf_8_ret);
+  free(utf_8_ret);
+  return ret;
+}
+#endif
+
+char *yage_dlg_file_open_utf8(const char *title) {
   if (!title) title = "Open File";
   dialog::FileChooserDlg fc_dlg(dialog::FileChooserDlg::action_type_open,
                                 title,
@@ -670,7 +858,29 @@ char *yage_dlg_file_open(const char *title) {
   return strdup(path.c_str());
 }
 
-void yage_dlg_message(const char *title, const char *message) {
+char *yage_dlg_file_open(const char *title) {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  char *utf_8_ret = yage_dlg_file_open_utf8(utf_8_title);
+  yage::util::free_string(utf_8_title);
+  char *ret = yage::util::utf_8_to_ansi(utf_8_ret);
+  if (ret != utf_8_ret) {
+    free(utf_8_ret);
+  }
+  return ret;
+}
+
+#ifdef _WIN32
+wchar_t *yage_dlg_file_openW(const wchar_t *title) {
+  char *utf_8_title = yage::util::utf_16_to_utf_8(title);
+  char *utf_8_ret = yage_dlg_file_open_utf8(utf_8_title);
+  yage::util::free_string(utf_8_title);
+  wchar_t *ret = yage::util::utf_8_to_utf_16(utf_8_ret);
+  free(utf_8_ret);
+  return ret;
+}
+#endif
+
+void yage_dlg_message_utf8(const char *title, const char *message) {
   using dialog::MessageDlg;
   MessageDlg msg_dlg(MessageDlg::button_type_ok,
                      MessageDlg::icon_type_none,
@@ -680,8 +890,26 @@ void yage_dlg_message(const char *title, const char *message) {
   msg_dlg.show();
 }
 
+void yage_dlg_message(const char *title, const char *message) {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  char *utf_8_message = yage::util::ansi_to_utf_8(message);
+  yage_dlg_message_utf8(utf_8_title, utf_8_message);
+  yage::util::free_string(utf_8_title);
+  yage::util::free_string(utf_8_message);
+}
+
+#ifdef _WIN32
+void yage_dlg_messageW(const wchar_t *title, const wchar_t *message) {
+  char *utf_8_title = yage::util::utf_16_to_utf_8(title);
+  char *utf_8_message = yage::util::utf_16_to_utf_8(message);
+  yage_dlg_message_utf8(utf_8_title, utf_8_message);
+  yage::util::free_string(utf_8_title);
+  yage::util::free_string(utf_8_message);
+}
+#endif
+
 yage_dlg_result_type
-yage_dlg_question(const char *title,
+yage_dlg_question_utf8(const char *title,
                   const char *message,
                   yage_dlg_icon_type icon,
                   yage_dlg_button_type button) {
@@ -695,7 +923,37 @@ yage_dlg_question(const char *title,
   return static_cast<yage_dlg_result_type>(msg_dlg.show());
 }
 
-int yage_input_int(const char *title, const char *message) {
+yage_dlg_result_type
+yage_dlg_question(const char *title, const char *message,
+                  yage_dlg_icon_type icon, yage_dlg_button_type button) {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  char *utf_8_message = yage::util::ansi_to_utf_8(message);
+  yage_dlg_result_type ret = yage_dlg_question_utf8(utf_8_title,
+                                                    utf_8_message,
+                                                    icon,
+                                                    button);
+  yage::util::free_string(utf_8_title);
+  yage::util::free_string(utf_8_message);
+  return ret;
+}
+
+#ifdef _WIN32
+yage_dlg_result_type
+yage_dlg_questionW(const wchar_t *title, const wchar_t *message,
+                   yage_dlg_icon_type icon, yage_dlg_button_type button) {
+  char *utf_8_title = yage::util::utf_16_to_utf_8(title);
+  char *utf_8_message = yage::util::utf_16_to_utf_8(message);
+  yage_dlg_result_type ret = yage_dlg_question_utf8(utf_8_title,
+                                                    utf_8_message,
+                                                    icon,
+                                                    button);
+  yage::util::free_string(utf_8_title);
+  yage::util::free_string(utf_8_message);
+  return ret;
+}
+#endif
+
+int yage_input_int_utf8(const char *title, const char *message) {
   if (!title) title = "Input An Integer";
   dialog::InputDlg dlg(title, *g_window->window);
   if (message) dlg.set_message(message);
@@ -709,7 +967,27 @@ int yage_input_int(const char *title, const char *message) {
   return ret;
 }
 
-double yage_input_double(const char *title, const char *message) {
+int yage_input_int(const char *title, const char *message) {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  char *utf_8_message = yage::util::ansi_to_utf_8(message);
+  int ret = yage_input_int_utf8(utf_8_title, utf_8_message);
+  yage::util::free_string(utf_8_title);
+  yage::util::free_string(utf_8_message);
+  return ret;
+}
+
+#ifdef _WIN32
+int yage_input_intW(const wchar_t *title, const wchar_t *message) {
+  char *utf_8_title = yage::util::utf_16_to_utf_8(title);
+  char *utf_8_message = yage::util::utf_16_to_utf_8(message);
+  int ret = yage_input_int_utf8(utf_8_title, utf_8_message);
+  yage::util::free_string(utf_8_title);
+  yage::util::free_string(utf_8_message);
+  return ret;
+}
+#endif
+
+double yage_input_double_utf8(const char *title, const char *message) {
   if (!title) title = "Input A Float Number";
   dialog::InputDlg dlg(title, *g_window->window);
   if (message) dlg.set_message(message);
@@ -723,7 +1001,27 @@ double yage_input_double(const char *title, const char *message) {
   return ret;
 }
 
-char *yage_input_line(const char *title, const char *message) {
+double yage_input_double(const char *title, const char *message) {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  char *utf_8_message = yage::util::ansi_to_utf_8(message);
+  double ret = yage_input_double_utf8(utf_8_title, utf_8_message);
+  yage::util::free_string(utf_8_title);
+  yage::util::free_string(utf_8_message);
+  return ret;
+}
+
+#ifdef _WIN32
+double yage_input_doubleW(const wchar_t *title, const wchar_t *message) {
+  char *utf_8_title = yage::util::utf_16_to_utf_8(title);
+  char *utf_8_message = yage::util::utf_16_to_utf_8(message);
+  double ret = yage_input_double_utf8(utf_8_title, utf_8_message);
+  yage::util::free_string(utf_8_title);
+  yage::util::free_string(utf_8_message);
+  return ret;
+}
+#endif
+
+char *yage_input_line_utf8(const char *title, const char *message) {
   if (!title) title = "Input Some Text";
   dialog::InputDlg dlg(title, *g_window->window);
   if (message) dlg.set_message(message);
@@ -732,6 +1030,30 @@ char *yage_input_line(const char *title, const char *message) {
   dlg.show(str);
   return strdup(str.c_str());
 }
+
+char *yage_input_line(const char *title, const char *message) {
+  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  char *utf_8_message = yage::util::ansi_to_utf_8(message);
+  char *utf_8_ret = yage_input_line_utf8(utf_8_title, utf_8_message);
+  yage::util::free_string(utf_8_title);
+  yage::util::free_string(utf_8_message);
+  char *ret = yage::util::utf_8_to_ansi(utf_8_ret);
+  yage::util::free_string(utf_8_ret);
+  return ret;
+}
+
+#ifdef _WIN32
+wchar_t *yage_input_lineW(const wchar_t *title, const wchar_t *message) {
+  char *utf_8_title = yage::util::utf_16_to_utf_8(title);
+  char *utf_8_message = yage::util::utf_16_to_utf_8(message);
+  char *utf_8_ret = yage_input_line_utf8(utf_8_title, utf_8_message);
+  yage::util::free_string(utf_8_title);
+  yage::util::free_string(utf_8_message);
+  wchar_t *ret = yage::util::utf_8_to_utf_16(utf_8_ret);
+  yage::util::free_string(utf_8_ret);
+  return ret;
+}
+#endif
 
 #if defined(_MSC_VER) && _MSC_VER < 1800
 #pragma optimize("", off) // Disable optimization of `yage_input_scanf` function. Enable optimization will cause program crash.
@@ -745,6 +1067,8 @@ int yage_input_scanf(const char *title, const char *message,
 
   std::string str;
   dlg.show(str);
+
+  char *ansi_str = yage::util::utf_8_to_ansi(str.c_str());
 
   int ret_val;
 #if defined(_MSC_VER) && _MSC_VER < 1800
@@ -791,7 +1115,7 @@ int yage_input_scanf(const char *title, const char *message,
    *     [Low]
    */
 
-  message = str.c_str();
+  message = ansi_str;
   char *args_low = (char *)&message;
   char *args_high = (char *)*((void **)&title - 2);
   size_t args_size = args_high - args_low;
@@ -814,7 +1138,7 @@ int yage_input_scanf(const char *title, const char *message,
 #else
   va_list args;
   va_start(args, format);
-  ret_val = vsscanf(str.c_str(), format, args);
+  ret_val = vsscanf(ansi_str, format, args);
   va_end(args);
 #endif
   return ret_val;

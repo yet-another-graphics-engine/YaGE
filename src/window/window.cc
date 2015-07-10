@@ -267,8 +267,8 @@ void Window::destroy() {
 }
 
 void Window::set_title(const std::string &title) {
-  std::string utf_8_title = yage::util::convert_string(title);
-  runner_call(exec_set_title, this, const_cast<char *>(utf_8_title.c_str()));
+  //std::string utf_8_title = yage::util::convert_string(title);
+  runner_call(exec_set_title, this, const_cast<char *>(title.c_str()));
 }
 
 void Window::set_resizable(bool resizable) {

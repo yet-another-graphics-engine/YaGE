@@ -68,6 +68,7 @@ std::string convert_string(const std::string& str)
 
 #ifdef _WIN32
 wchar_t *ansi_to_utf_16(const char* str) {
+	if (!str) return NULL;
 	int length;
 	wchar_t *result;
 	length = MultiByteToWideChar(CP_ACP, 0, str, -1, NULL, 0);
@@ -78,6 +79,7 @@ wchar_t *ansi_to_utf_16(const char* str) {
 }
 
 char *utf_16_to_ansi(const wchar_t *wstr) {
+	if (!wstr) return NULL;
 	char *result;
 	int length;
 	length = WideCharToMultiByte(CP_ACP, 0, wstr, -1, NULL, 0, NULL, NULL);
@@ -88,6 +90,7 @@ char *utf_16_to_ansi(const wchar_t *wstr) {
 }
 
 wchar_t *utf_8_to_utf_16(const char* str) {
+	if (!str) return NULL;
 	int length;
 	wchar_t *result;
 	length = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
@@ -98,6 +101,7 @@ wchar_t *utf_8_to_utf_16(const char* str) {
 }
 
 char *utf_16_to_utf_8(const wchar_t *wstr) {
+	if (!wstr) return NULL;
 	char *result;
 	int length;
 	length = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
@@ -109,6 +113,7 @@ char *utf_16_to_utf_8(const wchar_t *wstr) {
 #endif
 
 char *ansi_to_utf_8(const char *str) {
+	if (!str) return NULL;
 #ifdef _WIN32
 	wchar_t *wstr = ansi_to_utf_16(str);
 	char *result = utf_16_to_utf_8(wstr);
@@ -120,6 +125,7 @@ char *ansi_to_utf_8(const char *str) {
 }
 
 char *utf_8_to_ansi(const char *wstr) {
+	if (!wstr) return NULL;
 #ifdef _WIN32
 	wchar_t *str = utf_8_to_utf_16(wstr);
     char *result = utf_16_to_ansi(str);
@@ -132,7 +138,7 @@ char *utf_8_to_ansi(const char *wstr) {
 
 void free_string(char *str) {
 #ifdef _WIN32
-	delete str;
+	if (str) delete str;
 #else
 #endif
 }

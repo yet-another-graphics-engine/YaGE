@@ -15,8 +15,8 @@ Canvas::Canvas(int width, int height) : paint_() {
 
 Canvas::Canvas(const std::string &filename) : paint_() {
     GError *err = NULL;
-    std::string utf_8_filename = yage::util::convert_string(filename);
-    GdkPixbuf *buf = gdk_pixbuf_new_from_file(utf_8_filename.c_str(), &err);
+    //std::string utf_8_filename = yage::util::convert_string(filename);
+    GdkPixbuf *buf = gdk_pixbuf_new_from_file(filename.c_str(), &err);
     if (err) {
         fprintf(stderr, "%s\n", err->message);
         g_error_free(err);
@@ -282,8 +282,8 @@ void Canvas::clear_viewport(Paint &paint) {
 }
 
 void Canvas::save_PDF_file(const std::string &file_path) {
-    std::string file_path_utf8 = yage::util::convert_string(file_path);
-    cairo_surface_t *pdf_surface = cairo_pdf_surface_create(file_path_utf8.c_str(), width_, height_);
+    //std::string file_path_utf8 = yage::util::convert_string(file_path);
+    cairo_surface_t *pdf_surface = cairo_pdf_surface_create(file_path.c_str(), width_, height_);
     cairo_t* pdf_brush = cairo_create(pdf_surface);
     cairo_set_source_surface(pdf_brush, surface_, 0, 0);
     cairo_paint(pdf_brush);
@@ -292,8 +292,8 @@ void Canvas::save_PDF_file(const std::string &file_path) {
 }
 
 void Canvas::save_PNG_file(const std::string &file_path) {
-    std::string file_path_utf8 = yage::util::convert_string(file_path);
-    cairo_surface_write_to_png(surface_, file_path_utf8.c_str());
+    //std::string file_path_utf8 = yage::util::convert_string(file_path);
+    cairo_surface_write_to_png(surface_, file_path.c_str());
 }
 
 }  // namespace draw

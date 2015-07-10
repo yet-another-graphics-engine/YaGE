@@ -204,14 +204,14 @@ std::string Font::get_win32_font_family_eng_name(const std::string& font_family)
   SelectObject(hdc, oldhfont);
   DeleteObject(hfont);
   fail:
-  return yage::util::convert_string(font_family);
+  return font_family;
 }
 
 #endif // _WIN32
 
 std::string Font::get_font_family_yage_default() {
   #ifdef _WIN32
-  return yage::util::convert_string(get_win32_default_font_family());
+  return get_win32_default_font_family();
   #else
   return yage_default_font_;
   #endif // _WIN32
@@ -237,7 +237,7 @@ void Font::set_font_family(const std::string &family) {
   #ifdef _WIN32
   std::string utf_8_family = get_win32_font_family_eng_name(family);
   #else
-  std::string utf_8_family = yage::util::convert_string(family.c_str());
+  std::string utf_8_family = family;
   #endif // _WIN32
   pango_font_description_set_family(description_, utf_8_family.c_str());
 }

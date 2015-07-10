@@ -10,7 +10,7 @@ Text::Text(const std::string &text) {
 
 void Text::set_text(const std::string &text)
 {
-  text_ = convert_string(text);
+  text_ = text;
 }
 
 std::string Text::get_text()
