@@ -1755,7 +1755,7 @@ struct yage_message {
     struct {
       struct yage_timer *timer;             ///< \~english @brief Pointer of timer structure
                                             ///< \~chinese @brief 指向计时器结构体的指针
-      yage_message_timer_type type;         ///< \~english @brief Type of timer message
+      enum yage_message_timer_type type;    ///< \~english @brief Type of timer message
                                             ///< \~chinese @brief 计时器消息类型
       double seconds;                       ///< \~english @brief Seconds passed when the timer is active
                                             ///< \~chinese @brief 计时器处于激活状态时经过的秒数
