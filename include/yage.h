@@ -367,6 +367,19 @@ void yage_window_set_title(const char *title);
  * @ingroup window
  *
  * @~english
+ * @brief Set the icon of the window.
+ * @param[in] canvas Canvas to be the icon of window (Better to be a square)
+ *
+ * @~chinese
+ * @brief 设置窗口图标。
+ * @param[in] title 窗口图标画布（最好为正方形）
+ */
+void yage_window_set_icon(struct yage_canvas *canvas);
+
+/**
+ * @ingroup window
+ *
+ * @~english
  * @brief Set the default window.
  * @param default_window new default window
  *

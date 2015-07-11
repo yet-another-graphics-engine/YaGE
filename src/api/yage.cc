@@ -230,6 +230,15 @@ void yage_window_set_titleW(const wchar_t *title) {
 }
 #endif
 
+void yage_window_set_icon(struct yage_canvas *canvas) {
+  cairo_surface_t *suf = get_canvas_int(canvas)->pro_get_cairo_surface();
+  int width, height;
+  get_canvas_int(canvas)->get_size(width, height);
+  int sidelen = std::min(width, height);
+  GdkPixbuf *pixbuf = gdk_pixbuf_get_from_surface(suf, 0, 0, sidelen, sidelen);
+  gtk_window_set_icon(g_window->window->pro_get_gtk_window(), pixbuf);
+}
+
 struct yage_canvas *yage_window_get_canvas(struct yage_window *window) {
   if (!window) {
     window = g_window;
