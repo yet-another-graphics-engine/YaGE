@@ -154,24 +154,25 @@ writeitems:
     ${xml::InsertEndChild} $6 $5
 
 writecontents:
+    path::AnsiToUtf8 "$INSTDIR" ; UTF-8 string is saved into $8
     ; header
     ${xml::GotoPath} /Project/ItemDefinitionGroup/ClCompile/AdditionalIncludeDirectories $5
     ${xml::GetText} $6 $5
-    ${StrContains} $5 "$INSTDIR\include;" $6
+    ${StrContains} $5 "$8\include;" $6
     StrCmp $5 "" 0 +2
-    ${xml::SetText} "$INSTDIR\include;$6" $5
+    ${xml::SetText} "$8\include;$6" $5
     ; dynamic library TODO
     ${xml::GotoPath} /Project/ItemDefinitionGroup/Link/AdditionalLibraryDirectories $5
     ${xml::GetText} $6 $5
-    ${StrContains} $5 "$INSTDIR\lib;$INSTDIR\gtk3\lib" $6
+    ${StrContains} $5 "$8\lib;" $6
     StrCmp $5 "" 0 +2
-    ${xml::SetText} "$INSTDIR\lib;$INSTDIR\gtk3\lib;$6" $5
+    ${xml::SetText} "$8\lib;$6" $5
     ; static library
     ${xml::GotoPath} /Project/ItemDefinitionGroup/Lib/AdditionalLibraryDirectories $5
     ${xml::GetText} $6 $5
-    ${StrContains} $5 "$INSTDIR\lib;$INSTDIR\gtk3\lib" $6
+    ${StrContains} $5 "$8\lib;" $6
     StrCmp $5 "" 0 +2
-    ${xml::SetText} "$INSTDIR\lib;$INSTDIR\gtk3\lib;$6" $5
+    ${xml::SetText} "$8\lib;$6" $5
     ${xml::SaveFile} "" $5
 finishwritexml:
     ${xml::Unload}
