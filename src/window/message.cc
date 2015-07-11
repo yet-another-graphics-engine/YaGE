@@ -1,5 +1,6 @@
 #include "message.h"
 #include "../draw/canvas.h"
+#include "../draw/animation.h"
 #ifdef _MSC_VER
 #pragma warning(disable:4800)
 #endif
@@ -155,6 +156,7 @@ gboolean Window::msg_draw_on_draw(GtkWidget *widget, cairo_t *cairo, Window *sou
     cairo_set_source_rgb(cairo,1,1,1);
     cairo_paint(cairo);
   }
+  Animation::on_draw(*source, cairo);
   cairo_restore(cairo);
   return true;
 }

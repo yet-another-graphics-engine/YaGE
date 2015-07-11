@@ -44,6 +44,7 @@ set(LIB_SOURCE_FILES
     dialog/color_chooser_dlg.cc
     dialog/font_chooser_dlg.cc
     dialog/input_dlg.cc
+    draw/animation.cc
     draw/point.cc
     draw/color.cc
     draw/canvas.cc
@@ -150,6 +151,7 @@ set(YAGE_TEST_SOURCE_FILES
     test/draw_perf.cc
     test/draw_shape.cc
     test/draw_pic.cc
+    test/draw_anim.cc
     test/window_count.cc
     test/window_fix_size.cc
     test/window_msg.cc
