@@ -15,9 +15,6 @@ private:
     GtkWidget *widget;
     cairo_region_t *region;
   };
-  static const int kMinDelay = 33;         // max fps = 30
-  // Update frames expected_delay_time <= current_delay * kGreedyRate
-  static const double kGreedyRate = 1.2;
 
   yage::window::Window &window_;
   GdkPixbufAnimation *buf_;

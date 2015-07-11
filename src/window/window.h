@@ -62,7 +62,7 @@ void quit();
  * @see yage::draw::Canvas
  */
 class Window {
-  friend draw::Animation;
+  friend class draw::Animation;
 
 private:
   int window_width_;

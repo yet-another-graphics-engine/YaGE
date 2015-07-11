@@ -13,6 +13,11 @@ gboolean Animation::timeout_func(CallParam &param) {
 }
 
 void Animation::setup_timeout(Window &window) {
+  // Update frames expected_delay_time <= current_delay * kGreedyRate
+  static const double kGreedyRate = 1.2;
+  // max fps = 30
+  static const int kMinDelay = 33;
+
   List &list = window.anim_list_;
 
   // Get the most urgent update request
