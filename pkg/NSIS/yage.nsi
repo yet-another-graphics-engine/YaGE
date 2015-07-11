@@ -164,15 +164,15 @@ writecontents:
     ; dynamic library TODO
     ${xml::GotoPath} /Project/ItemDefinitionGroup/Link/AdditionalLibraryDirectories $5
     ${xml::GetText} $6 $5
-    ${StrContains} $5 "$8\lib;" $6
+    ${StrContains} $5 "$8\lib;$8\gtk3\lib" $6
     StrCmp $5 "" 0 +2
-    ${xml::SetText} "$8\lib;$6" $5
+    ${xml::SetText} "$8\lib;$8\gtk3\lib;$6" $5
     ; static library
     ${xml::GotoPath} /Project/ItemDefinitionGroup/Lib/AdditionalLibraryDirectories $5
     ${xml::GetText} $6 $5
-    ${StrContains} $5 "$8\lib;" $6
+    ${StrContains} $5 "$8\lib;$8\gtk3\lib" $6
     StrCmp $5 "" 0 +2
-    ${xml::SetText} "$8\lib;$6" $5
+    ${xml::SetText} "$8\lib;$8\gtk3\lib;$6" $5
     ${xml::SaveFile} "" $5
 finishwritexml:
     ${xml::Unload}
