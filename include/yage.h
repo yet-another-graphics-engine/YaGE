@@ -241,6 +241,61 @@ struct yage_color {
 };
 
 /**
+ * @ingroup window
+ *
+ * @~english
+ * @brief A struct representing a window.
+ *
+ * The struct is opaque, user can create
+ * a window by yage_window_create() and remove the window by yage_window_delete().
+ *
+ * @~chinese
+ * @brief 表示窗口的结构体。
+ *
+ * 这是一个不包含细节的结构体。可以通过 yage_window_create() 创建一个画布，通过 yage_window_delete() 来删除一个窗口。
+ */
+struct yage_window;
+
+/**
+ * @ingroup draw_canvas
+ *
+ * @~english
+ * @brief A struct representing a canvas.
+ *
+ * The struct is opaque, user can create
+ * a canvas by yage_canvas_create() or yage_canvas_load_image() and free the
+ * canvas by yage_canvas_delete().
+ *
+ * @~chinese
+ * @brief 表示画布的结构体。
+ *
+ * 这是一个不包含细节的结构体。可以通过 yage_canvas_create() 或
+ * yage_canvas_load_image() 创建一个画布，通过 yage_canvas_delete()
+ * 来释放一个画布。
+ */
+struct yage_canvas;
+
+/**
+ * @ingroup music
+ *
+ * @~english
+ * @brief Music player struct
+ *
+ * The struct is opaque, user can create a player using
+ * yage_player_load_music(), and use yage_player_play() to start playing,
+ * pause via yage_player_pause(), stop via yage_player_stop().
+ * Finally destroy player using yage_player_delete().
+ *
+ * @~chinese
+ * @brief 音乐播放器结构体
+ *
+ * 这是一个不包含细节的结构体，使用 yage_player_load_music() 创建播放器对象，使用
+ * yage_player_play() 开始播放，通过 yage_player_pause() 来暂停，最后通过
+ * yage_player_stop() 停止播放，接着，使用 yage_player_delete() 销毁对象。
+ */
+struct yage_player;
+
+/**
  * @ingroup draw_color
  *
  * @~english
@@ -301,22 +356,6 @@ void yage_draw_set_auto_update(int mode);
  * @remark 当自动更新被 yage_draw_set_auto_update(FALSE) 所禁用时，调用本函数以更新默认窗口。当自动更新启用时（默认情况），不需要调用本函数。
  */
 void yage_draw_update();
-
-/**
- * @ingroup window
- *
- * @~english
- * @brief A struct representing a window.
- *
- * The struct is opaque, user can create
- * a window by yage_window_create() and remove the window by yage_window_delete().
- *
- * @~chinese
- * @brief 表示窗口的结构体。
- *
- * 这是一个不包含细节的结构体。可以通过 yage_window_create() 创建一个画布，通过 yage_window_delete() 来删除一个窗口。
- */
-struct yage_window;
 
 /**
  * @ingroup window
@@ -440,25 +479,6 @@ void yage_quit(void);
  * @ingroup draw_canvas
  *
  * @~english
- * @brief A struct representing a canvas.
- *
- * The struct is opaque, user can create
- * a canvas by yage_canvas_create() or yage_canvas_load_image() and free the
- * canvas by yage_canvas_delete().
- *
- * @~chinese
- * @brief 表示画布的结构体。
- *
- * 这是一个不包含细节的结构体。可以通过 yage_canvas_create() 或
- * yage_canvas_load_image() 创建一个画布，通过 yage_canvas_delete()
- * 来释放一个画布。
- */
-struct yage_canvas;
-
-/**
- * @ingroup draw_canvas
- *
- * @~english
  * @brief Create a fix-sized canvas.
  * @param width  the width of the canvas to create
  * @param height the height of the canvas to create
@@ -528,26 +548,6 @@ struct yage_canvas *yage_canvas_from_canvas(struct yage_canvas *canvas,
  * @param canvas 待删除的画布
  */
 void yage_canvas_delete(struct yage_canvas *canvas);
-
-/**
- * @ingroup music
- *
- * @~english
- * @brief Music player struct
- *
- * The struct is opaque, user can create a player using
- * yage_player_load_music(), and use yage_player_play() to start playing,
- * pause via yage_player_pause(), stop via yage_player_stop().
- * Finally destroy player using yage_player_delete().
- *
- * @~chinese
- * @brief 音乐播放器结构体
- *
- * 这是一个不包含细节的结构体，使用 yage_player_load_music() 创建播放器对象，使用
- * yage_player_play() 开始播放，通过 yage_player_pause() 来暂停，最后通过
- * yage_player_stop() 停止播放，接着，使用 yage_player_delete() 销毁对象。
- */
-struct yage_player;
 
 /**
  * @ingroup music
