@@ -77,6 +77,7 @@ void test_api_yage(void) {
   yage_player_pause(player);
   struct yage_canvas *btest1 = yage_canvas_load_image("../src/res/yage-open.svg");
   struct yage_canvas *btest2 = yage_canvas_load_image("../src/res/yage-save.svg");
+  yage_window_set_icon(btest2);
   struct yage_canvas *btest3 = yage_canvas_load_image("../src/res/yage-remove.svg");
   struct yage_button *buttontest = yage_button_create_empty();
   yage_button_set_size(buttontest, 100, 100);
