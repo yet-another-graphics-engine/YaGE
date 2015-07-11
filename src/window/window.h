@@ -1,5 +1,6 @@
 #ifndef WINDOW_WINDOW_H_
 #define WINDOW_WINDOW_H_
+#include <list>
 #include <string>
 #include <gtk/gtk.h>
 #include <glib.h>
@@ -11,6 +12,7 @@ namespace yage {
 
 namespace draw {
   class Canvas;
+  class Animation;
 }
 
 namespace window {
@@ -60,6 +62,8 @@ void quit();
  * @see yage::draw::Canvas
  */
 class Window {
+  friend draw::Animation;
+
 private:
   int window_width_;
   int window_height_;
@@ -72,6 +76,9 @@ private:
   GtkWidget *gtk_draw_;
   GtkWindow *gtk_window_;
   cairo_surface_t *cairo_surface_;
+
+  typedef std::list<Animation *> AnimationList;
+  AnimationList anim_list_;
 
   static void set_max_size(Window *this_, int &width, int &height);
   /*Not allow to copy the window object*/

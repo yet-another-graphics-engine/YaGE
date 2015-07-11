@@ -16,9 +16,8 @@ void test_draw_shape(void)
   w.set_size(-1,-1);
   w.get_size(width,height);
   printf("window_width=%d, window_height=%d\n", width, height);
-  w.set_resizable(true);
   Canvas canvas(1024,576);
-  std::string pic_name = "";
+  w.set_canvas(canvas);
 
   Paint paint;
   paint.style = Paint::draw_style_stroke_fill;
@@ -62,7 +61,6 @@ void test_draw_shape(void)
   text.position = point;
   canvas.draw_text(text,paint);
 
-  w.set_canvas(canvas);
   w.update();
 
   Message msg;
