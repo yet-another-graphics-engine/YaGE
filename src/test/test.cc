@@ -131,5 +131,6 @@ void test_init(void) {
   TEST_ADD(api_bgi);
   TEST_ADD(api_yage_perf);
   TEST_ADD(timer);
+  TEST_ADD(api_yage_canvas_cut);
 }
 

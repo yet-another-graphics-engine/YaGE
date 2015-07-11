@@ -159,6 +159,7 @@ set(YAGE_TEST_SOURCE_FILES
     test/api_yage_perf.cc
     test/timer.cc
     test/api_yage_test_c_compiler.c
+    test/api_yage_canvas_cut.cc
     )
 
 # Add YaGE test resource files

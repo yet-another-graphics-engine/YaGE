@@ -5,6 +5,7 @@
 #include <cstring>
 #include <cstdarg>
 #include <ctime>
+#include <cmath>
 #include <cstdlib>
 #include <sstream>
 #include <algorithm>
@@ -229,6 +230,13 @@ void yage_window_set_titleW(const wchar_t *title) {
 }
 #endif
 
+struct yage_canvas *yage_window_get_canvas(struct yage_window *window) {
+  if (!window) {
+    window = g_window;
+  }
+  return get_canvas_ext(window->canvas_bg);
+}
+
 struct yage_window *yage_init(int width, int height) {
   if (g_paint) return NULL;  // already initialized
 
@@ -256,6 +264,23 @@ struct yage_canvas *yage_canvas_create(int width, int height) {
 
 struct yage_canvas *yage_canvas_load_image_utf8(const char *path) {
   return get_canvas_ext(new draw::Canvas(path));
+}
+
+struct yage_canvas *yage_canvas_from_canvas(struct yage_canvas *canvas,
+                                            double x1, double y1,
+                                            double x2, double y2) {
+  Canvas *ret = new Canvas(abs(static_cast<int>(x2 - x1)),
+                           abs(static_cast<int>(y2 - y1)));
+  cairo_surface_t *sur = get_canvas_int(canvas)->pro_get_cairo_surface();
+  cairo_t *brush = ret->pro_get_brush();
+  cairo_save(brush);
+
+  // poisonous cairo API sucks
+  cairo_set_source_surface(brush, sur, -std::min(x1, x2), -std::min(y1, y2));
+  cairo_paint(brush);
+
+  cairo_restore(brush);
+  return get_canvas_ext(ret);
 }
 
 struct yage_canvas *yage_canvas_load_image(const char *path) {

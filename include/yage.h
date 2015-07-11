@@ -377,6 +377,23 @@ void yage_window_set_title(const char *title);
 void yage_window_set_default(struct yage_window *default_window);
 
 /**
+ * @ingroup window
+ *
+ * @~english
+ * @brief Get bounded canvas of the window specified
+ * @param window The window to get canvas, pass `NULL` to use current default window
+ * @return The bounded canvas of the window
+ * @remark Get default window via saving return value of `yage_init`
+ *
+ * @~chinese
+ * @brief 获取指定窗口绑定的画布
+ * @param window 要获取画布的窗口，传入 `NULL` 使用当前默认窗口
+ * @return 窗口绑定的画布
+ * @remark 默认窗口为 `yage_init` 的返回值
+ */
+struct yage_canvas *yage_window_get_canvas(struct yage_window *window);
+
+/**
  * @ingroup system_exec
  *
  * @~english
@@ -458,6 +475,33 @@ struct yage_canvas *yage_canvas_create(int width, int height);
  * @remark 在使用完后通过 yage_canvas_delete() 删除画布。
  */
 struct yage_canvas *yage_canvas_load_image(const char *path);
+
+/**
+ * @ingroup draw_canvas
+ *
+ * @~english
+ * @brief Create a canvas using part of existing canvas.
+ * @param canvas    source canvas, pass `NULL` to use canvas bounded to current default window
+ * @param x1        the X coordinate of a point on one diagonal line.
+ * @param y1        the Y coordinate of the point on one diagonal line.
+ * @param x2        the X coordinate of another point on the same diagonal line.
+ * @param y2        the Y coordinate of the point on the same diagonal line.
+ * @return the new canvas created
+ * @remark Free the canvas by yage_canvas_delete() after use.
+ *
+ * @~chinese
+ * @brief 创建一个新画布，并将其内容设置为已有画布的一部分。
+ * @param canvas    源画布，传入 `NULL` 使用当前默认窗口的绑定的画布
+ * @param x1        矩形某条对角线上一点的 X 坐标
+ * @param y1        矩形某条对角线上一点的 Y 坐标
+ * @param x2        矩形同一条对角线上另一点的 X 坐标
+ * @param y2        矩形同一条对角线上另一点的 Y 坐标
+ * @return 新创建的画布
+ * @remark 在使用完后通过 yage_canvas_delete() 删除画布。
+ */
+struct yage_canvas *yage_canvas_from_canvas(struct yage_canvas *canvas,
+                                            double x1, double y1,
+                                            double x2, double y2);
 
 /**
  * @ingroup draw_canvas
