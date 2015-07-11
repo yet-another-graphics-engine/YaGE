@@ -421,7 +421,7 @@ void yage_window_set_title(const char *title);
  *
  * @~chinese
  * @brief 设置窗口图标。
- * @param[in] title 窗口图标画布（最好为正方形）
+ * @param[in] canvas 窗口图标画布（最好为正方形）
  */
 void yage_window_set_icon(struct yage_canvas *canvas);
 
