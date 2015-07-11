@@ -25,13 +25,10 @@ cp -r build-mingw/bin/ build-bin/build-mingw
 cp -r build-mingw/lib/ build-bin/build-mingw
 cp -r build-mingw/doc/ build-bin/
 
-if ! [ -f "/C/Program Files (x86)/NSIS/Plugins/path.dll" ] || [ "/C/Program Files (x86)/NSIS/Plugins/path.dll" -ot "pkg/NSIS/plugin/path.c" ]
-then
-    cd pkg/NSIS/plugin
-    make
-    cp path.dll "/C/Program Files (x86)/NSIS/Plugins/"
-    cd ../../..
-fi
+cd pkg/NSIS/plugin
+make
+cp path.dll "/C/Program Files (x86)/NSIS/Plugins/"
+cd ../../..
 
 echo Packing files
 tar czvf build-bin.tar.gz build-bin
