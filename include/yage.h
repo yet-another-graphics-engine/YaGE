@@ -142,6 +142,18 @@ extern "C" {
 
 /**
  * @~english
+ * @defgroup draw_animation Animation
+ * @brief A struct for representing animated image
+ * @ingroup draw
+ *
+ * @~chinese
+ * @defgroup draw_animation 动态图
+ * @brief 用来表示动态图的结构体。
+ * @ingroup draw
+ */
+
+/**
+ * @~english
  * @defgroup music Music
  * @brief Play the music.
  *
@@ -152,8 +164,6 @@ extern "C" {
 
 /**
  * @~english
-=======
->>>>>>> parent of 80d279c... Add animated image support, close #14
  * @defgroup interact Interaction
  * @brief Interact with user inputs.
  *
@@ -426,6 +436,25 @@ void yage_quit(void);
 struct yage_canvas;
 
 /**
+ * @ingroup draw_animation
+ *
+ * @~english
+ * @brief A struct representing a animated image.
+ *
+ * The struct is opaque, user can create an animated image using
+ * yage_animation_load_image(), and use yage_draw_animation() to draw it
+ * on default window. At last, use yage_animation_delete() to destroy.
+ *
+ * @~chinese
+ * @brief 表示动态图片的结构体。
+ *
+ * 这是一个不包含细节的结构体。可以通过 yage_animation_load_image() 或创建一个
+ * 动态图，使用 yage_draw_animation() 将其画在屏幕上，最后通过 yage_canvas_delete()
+ * 来释放动态图并从屏幕上移除。
+ */
+struct yage_animation;
+
+/**
  * @ingroup draw_canvas
  *
  * @~english
@@ -446,16 +475,18 @@ struct yage_canvas *yage_canvas_create(int width, int height);
  * @ingroup draw_canvas
  *
  * @~english
- * @brief Create a canvas and set the content to the specified image.
+ * @brief Create a canvas and set the content to the specified static image.
  * @param path the path to load the image
  * @return the new canvas
  * @remark Free the canvas by yage_canvas_delete() after use.
+ * Use yage_animation_load_image() to create an animated image.
  *
  * @~chinese
- * @brief 创建一个新画布，并将其内容设置为图片。
+ * @brief 创建一个新画布，并将其内容设置为一静态图片。
  * @param path 载入的图片路径
  * @return 新创建的画布
  * @remark 在使用完后通过 yage_canvas_delete() 删除画布。
+ * 使用 yage_animation_load_image() 来创建动态图。
  */
 struct yage_canvas *yage_canvas_load_image(const char *path);
 
@@ -573,6 +604,45 @@ uint8_t yage_player_get_status(struct yage_player *player);
  * @param player 待删除的播放器
  */
 void yage_player_delete(struct yage_player *player);
+
+/**
+ * @ingroup draw_animation
+ *
+ * @~english
+ * @brief Create an animated image using the content inside path, add draw it on the window.
+ * @param path       the path to load the image
+ * @param window     the window to draw animated image, pass `NULL` to bind current default window
+ * @param x          the X coordinate for the top-left corner of the source animated image on screen
+ * @param y          the Y coordinate for the top-left corner of the source animated image on screen
+ * @return the new animated image or NULL if failed
+ * @remark Free the canvas by yage_animation_delete() after use.
+ * Use yage_canvas_load_image() to create a static image.
+ *
+ * @~chinese
+ * @brief 创建一个新动态图，并将其画到窗口上。
+ * @param path       载入的动态图路径
+ * @param window     要画动态图的窗口，传入 `NULL` 来绑定当前默认窗口
+ * @param x          动态图左上角在屏幕上的 X 坐标
+ * @param y          动态图左上角在屏幕上的 Y 坐标
+ * @return 新创建的动态图，如果创建失败，返回 NULL
+ * @remark 在使用完后通过 yage_animation_delete() 删除。
+ * 使用 yage_canvas_load_image() 创建静态图片。
+ */
+struct yage_animation *yage_animation_load_image(const char *path, struct yage_window *window, double x, double y);
+
+/**
+ * @ingroup draw_animation
+ *
+ * @~english
+ * @brief Free an animated image that will not be used and
+ * remove it from screen.
+ * @param animation The canvas to free
+ *
+ * @~chinese
+ * @brief 删除不再使用的动态图，并将其从屏幕上移除。
+ * @param animation 待删除的动态图
+ */
+void yage_animation_delete(struct yage_animation *animation);
 
 /**
  * @ingroup draw

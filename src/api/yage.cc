@@ -14,6 +14,7 @@
 #include "../dialog/message_dlg.h"
 #include "../dialog/input_dlg.h"
 #include "../audio/player.h"
+#include "../draw/animation.h"
 #include "../window/timer.h"
 
 #ifdef _WIN32
@@ -249,6 +250,26 @@ struct yage_window *yage_init(int width, int height) {
 void yage_quit(void) {
   window::quit();
 }
+
+struct yage_animation *yage_animation_load_image_utf8(const char *path, struct yage_window *window, double x, double y) {
+  return reinterpret_cast<yage_animation *>(new yage::draw::Animation(*window->window, x, y, path));
+}
+
+struct yage_animation *yage_animation_load_image(const char *path, struct yage_window *window, double x, double y) {
+  char *utf_8_path = yage::util::ansi_to_utf_8(path);
+  struct yage_animation *ret = yage_animation_load_image_utf8(utf_8_path, window, x, y);
+  free(utf_8_path);
+  return ret;
+}
+
+#ifdef _WIN32
+struct yage_animation *yage_animation_load_imageW(const wchar_t *path, struct yage_window *window, double x, double y) {
+  char *utf_8_path = yage::util::utf_16_to_utf_8(path);
+  struct yage_animation *ret = yage_animation_load_image_utf8(utf_8_path, window, x, y);
+  free(utf_8_path);
+  return ret;
+}
+#endif
 
 struct yage_canvas *yage_canvas_create(int width, int height) {
   return get_canvas_ext(new draw::Canvas(width, height));
