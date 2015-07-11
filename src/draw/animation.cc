@@ -39,8 +39,8 @@ void Animation::setup_timeout(Window &window) {
     if (cur_delay > threshold_delay) continue;
 
     cairo_rectangle_int_t rect;
-    rect.x      = anim.x_,
-    rect.y      = anim.y_;
+    rect.x      = static_cast<int>(anim.x_),
+    rect.y      = static_cast<int>(anim.y_),
     rect.width  = anim.width_;
     rect.height = anim.height_;
     cairo_region_union_rectangle(region, &rect);
