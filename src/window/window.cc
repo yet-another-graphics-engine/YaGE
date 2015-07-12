@@ -167,8 +167,13 @@ void Window::exec_show(Window *this_) {
   gtk_widget_show_all(GTK_WIDGET(this_->gtk_window_));
 }
 
-void Window::exec_redraw(GtkWidget *gtk_draw) {
-  gtk_widget_queue_draw(gtk_draw);
+void Window::exec_redraw(GtkWidget *gtk_draw, cairo_region_t *region) {
+  if (region) {
+    gtk_widget_queue_draw_region(gtk_draw, region);
+    cairo_region_destroy(region);
+  } else {
+    gtk_widget_queue_draw(gtk_draw);
+  }
 }
 
 void Window::exec_hide(Window *this_) {
@@ -322,9 +327,9 @@ void Window::set_canvas(Canvas &canvas) {
   cairo_surface_reference(cairo_surface_);
 }
 
-void Window::update() {
+void Window::update(cairo_region_t *region) {
   if(is_valid())
-    runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_draw_));
+    runner_call_ex(exec_redraw, false, GTK_WIDGET(this->gtk_draw_), region);
 }
 
 Window::~Window() {

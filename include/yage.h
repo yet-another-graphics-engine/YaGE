@@ -368,6 +368,27 @@ void yage_draw_set_auto_update(int mode);
 void yage_draw_update();
 
 /**
+ * @ingroup draw
+ *
+ * @~english
+ * @brief Update the canvas and buttons in default window manually, only to specified area.
+ * @param x X coordinate of the left-top point of the area
+ * @param y Y coordinate of the left-top point of the area
+ * @param width width of the area
+ * @param height height of the area
+ * @remark When auto update is disabled by yage_draw_set_auto_update(FALSE), calling this function updates the default window. When auto update is enabled (by default), there's no need to call this function.
+ *
+ * @~chinese
+ * @param x 更新区域左上角在窗口上的 X 坐标
+ * @param y 更新区域左上角在窗口布上的 Y 坐标
+ * @param width 区域的宽
+ * @param height 区域的高
+ * @brief 手动更新默认窗口指定部分的画布和按钮。
+ * @remark 当自动更新被 yage_draw_set_auto_update(FALSE) 所禁用时，调用本函数以更新默认窗口。当自动更新启用时（默认情况），不需要调用本函数。
+ */
+void yage_draw_update_area(double x, double y, double width, double height);
+
+/**
  * @ingroup window
  *
  * @~english

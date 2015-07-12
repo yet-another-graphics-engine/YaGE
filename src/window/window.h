@@ -87,7 +87,7 @@ private:
   static void exec_create(Window *this_, int &width, int &height);
   static void exec_show(Window *this_);
   static void exec_hide(Window *this_);
-  static void exec_redraw(GtkWidget *gtk_draw);
+  static void exec_redraw(GtkWidget *gtk_draw, cairo_region_t *region);
   static void exec_destroy(Window *this_);
   static void exec_set_title(Window *this_, char *title);
   static void exec_set_resizable(Window *this_, bool &resizable);
@@ -228,7 +228,7 @@ public:
    * @note If the window doesn't bind any canvas,it will be filled by white color.
    * @attention The process of the interface updating is asynchronous.
    */
-  void update();
+  void update(cairo_region_t *region = NULL);
 
   /**
    * @brief (Pro)Gets the pointer of the GTK drawing area included in the window.

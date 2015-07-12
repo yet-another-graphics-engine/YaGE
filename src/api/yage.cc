@@ -61,6 +61,21 @@ namespace yage {
     window->window->update();
   }
 
+  void force_update(yage_window *window,
+                    int x, int y, int width, int height) {
+    window->canvas_bg->clear_all(*g_paint);
+    window->canvas_bg->draw_canvas(*g_window->canvas, draw::Point(0, 0));
+    window->canvas_bg->draw_canvas(*g_window->canvas_btn, draw::Point(0, 0));
+
+    cairo_rectangle_int_t rect;
+    rect.x      = x;
+    rect.y      = y;
+    rect.width  = width;
+    rect.height = height;
+    cairo_region_t *region = cairo_region_create_rectangle(&rect);
+    window->window->update(region);
+  }
+
   inline void draw_circle(draw::Canvas &canvas, double x, double y, double r) {
     draw::Circle circle;
     circle.center = draw::Point(x, y);
@@ -130,6 +145,10 @@ void yage_draw_set_auto_update(int mode) {
 
 void yage_draw_update() {
   force_update();
+}
+
+void yage_draw_update_area(double x, double y, double width, double height) {
+  force_update(g_window, x, y ,width, height);
 }
 
 struct yage_color yage_color_from_string_utf8(const char *color_str) {
