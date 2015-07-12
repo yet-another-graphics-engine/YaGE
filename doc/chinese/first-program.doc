@@ -1,6 +1,20 @@
 /**
 @page first-program 第一个程序
 
+首先，打开你喜欢的 IDE，创建一个新项目，敲下这些代码：
 
+@code{.c}
+#include <yage.h>                      // 使用 YaGE 库
+
+int main(void) {
+  yage_init(800, 600);               // 初始化环境并创建窗口
+  yage_circle(300, 300, 200);        // 以 (300, 300) 为圆心，以 200 为半径画一个圆
+  yage_get_key();                    // 等待用户按键
+  yage_quit();                       // 结束库的使用
+  return 0;
+}
+@endcode
+
+这很简单吧，我们已经完成了我们第一个程序。
 
 */

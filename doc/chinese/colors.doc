@@ -1,0 +1,53 @@
+/**
+@page colors 色彩
+
+前面只有黑、白、灰的世界已经让人厌倦了吧，那我们来进入彩色的世界吧。
+
+计算机的颜色遵循自然界中的三原色原理。每一种颜色都是由 <span style="color: red">红</span>、<span style="color: green">绿</span>、<span style="color: blue">蓝</span> 三种颜色混合而成。
+
+在 YaGE 中，颜色是由 `yage_color` 结构体表示的。
+
+@code{.c}
+struct yage_color {
+  double r; // 红色，区间为 0.0 至 1.0
+  double g; // 绿色，区间为 0.0 至 1.0
+  double b; // 蓝色，区间为 0.0 至 1.0
+  double a; // 透明度，区间为 0.0（透明）至 1.0（不透明）
+}
+@endcode
+
+所有的颜色，都可以通过这个结构体表示出来。例如：
+
+红色：`r = 1.0, g = 0.0, b = 0.0, a = 1.0`
+
+紫色：`r = 1.0, g = 0.0, b = 1.0, a = 1.0`
+
+黄色：`r = 1.0, g = 1.0, b = 0.0, a = 1.0`
+
+那么，你可能注意到了，yage_color 结构体中还存在一个成员叫做透明度，那么这是怎么一回事呢？
+
+在图像的覆盖绘制中，有时为了较好的现实效果，给较靠上层的元素一些透明度，下面的元素也就可以显示的出来了。
+
+最后，我们来尝试一下吧。
+
+@code{.c}
+#include <yage.h>
+
+int main(void) {
+  yage_init(800, 600);
+  struct yage_color red = yage_color_from_string("red");  // 一些常用颜色可以通过 yage_color_from_string 来获得
+  yage_set_background_color(red);                         // 设置屏幕背景色为黑色
+  struct yage_color yellow = {1.0, 1.0, 0.0, 0.5};        // 半透明的鲜黄色
+  struct yage_color blue = {0.0, 0.0, 0.7, 1.0};          // 不透明的浅蓝色
+  yage_set_border_color(blue);                            // 设置图形边框颜色
+  yage_set_fill_color(yellow);                            // 设置图形填充颜色
+  yage_circle(300, 200, 100);                             // 画一个圆形
+  yage_set_font_color(yage_color_from_string("white"));   // 设置文字输出颜色为白色
+  // 最后，以 (200, 0) 为左上角，在屏幕上输出文字
+  yage_printf(200, 0, "%s %lf = %d + %f", "YaGE color is wonderful!", 2.0, 1, 1.0f);
+  yage_get_key();
+  yage_quit();
+  return 0;
+}
+@endcode
+*/

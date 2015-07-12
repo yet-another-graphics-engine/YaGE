@@ -1,0 +1,40 @@
+/**
+@page coordinate 坐标系统
+
+在中学数学中，我们对平面直角坐标系都有了比较深入的了解。
+
+其实，屏幕就相当于一个平面直角坐标系。屏幕上的每一个像素都对应着一个坐标。
+
+就像这样，
+
+0 → x
+
+↓
+y
+
+例如，在这个浏览器窗口上，你的鼠标坐标是 @htmlonly<span id="mouse-coordinate" style="color: gray"></span><script>
+$("#doc-content").mousemove(function(event) {
+  $("#mouse-coordinate").text("(" + event.clientX + ", " + event.clientY + ")");
+});
+</script>@endhtmlonly。
+
+YaGE 的坐标系统也与其类似，左上角为坐标原点，x 轴正方向为右，y 轴正方向为下。
+
+那么，我们再画几个图形吧。
+
+@code{.c}
+#include <yage.h>                     // 使用 YaGE 库
+
+int main(void) {
+  yage_init(800, 600);                // 初始化环境并创建窗口
+  yage_circle(100, 100, 50);          // 以 (300, 300) 为圆心，以 200 为半径画一个圆
+  yage_rectangle(300, 200, 600, 400); // 以 (300, 200), (600, 400) 为对角线，平行于 x, y 轴，画一个矩形
+  double points[] = {50, 300, 200, 400, 250, 200};
+  yage_poly(3, points);               // 画一个以 (50, 300), (200, 400), (250, 200) 为顶点的三角形
+  yage_get_key();                     // 等待用户按键
+  yage_quit();                        // 结束库的使用
+  return 0;
+}
+@endcode
+
+*/

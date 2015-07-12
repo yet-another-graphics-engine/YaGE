@@ -5,5 +5,7 @@
 
 1. @subpage install 部分，描述了 YaGE 在各个操作系统和集成开发环境下的安装和配置。
 2. @subpage first-program 部分，分分钟之内，带你编写第一个 YaGE 程序。
+3. @subpage coordinate 部分，带你了解 YaGE 最基本的一部分，坐标系统。
+4. @subpage colors 部分，让你知道在 YaGE 中颜色是如何表示的。
 
 */
