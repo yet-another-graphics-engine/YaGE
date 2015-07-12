@@ -148,7 +148,9 @@ void yage_draw_update() {
 }
 
 void yage_draw_update_area(double x, double y, double width, double height) {
-  force_update(g_window, x, y ,width, height);
+  force_update(g_window,
+               static_cast<int>(x),     static_cast<int>(y),
+               static_cast<int>(width), static_cast<int>(height));
 }
 
 struct yage_color yage_color_from_string_utf8(const char *color_str) {

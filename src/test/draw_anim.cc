@@ -30,8 +30,8 @@ void test_draw_anim(void) {
   while (yage::window::poll(msg)) {
     if (msg.type != msg.type_mouse) continue;
     if (msg.mouse.type != msg.mouse.type_press) continue;
-    int x = msg.mouse.x / kSizeX;
-    int y = msg.mouse.y / kSizeY;
+    int x = static_cast<int>(msg.mouse.x / kSizeX);
+    int y = static_cast<int>(msg.mouse.y / kSizeY);
     if (anim[x][y]) {
       delete anim[x][y];
       anim[x][y] = NULL;

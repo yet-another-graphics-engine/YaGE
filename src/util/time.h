@@ -1,12 +1,12 @@
 #include <gtk/gtk.h>
-#include <stdint.h>
+#include "../../include/yage/stdint.h"
 
 namespace yage {
 namespace util {
 namespace time {
 
 inline uint32_t get_timestamp() {
-  return g_get_monotonic_time() / 1000;
+  return static_cast<int>(g_get_monotonic_time() / 1000);
 }
 
 }  // namespace runner

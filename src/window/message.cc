@@ -32,7 +32,7 @@ void Window::msg_window_on_destroy(GtkWidget *widget, Window *source)
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_window;
-  msg.time = g_get_monotonic_time() / 1000;
+  msg.time = util::time::get_timestamp();
   msg.window.type = msg.window.type_destroy;
   msg_push_queue(msg);
 }

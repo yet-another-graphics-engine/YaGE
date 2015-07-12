@@ -41,7 +41,7 @@ void init();
  * @return Returns false when there are no window left, thus no messages can be
  *  generated. Returns true when new message can arrive in the future.
  */
-bool poll(Message &msg, uint64_t timeout = UINT64_MAX);
+bool poll(Message &msg, uint64_t timeout = G_MAXUINT64);
 
 /**
  * @brief Closes all windows and exit the program.
