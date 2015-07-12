@@ -1835,14 +1835,15 @@ struct yage_message {
  * @~english
  * @brief Get a message from message queue.
  * @param[out] msg  Return location to message
- * @param wait_ms   Maximium wait time if no message is available
+ * @param wait_ms   Maximium wait time if no message is available, in
+ *                  millisecend (1 / 1000 s)
  * @return          Whether the message queue is availiable.
  *                  When all windows are closed, the return value is `FALSE`
  *
  * @~chinese
  * @brief 从消息队列中拉取一条消息。
  * @param[out] msg  消息的返回地址
- * @param wait_ms   队列中没有消息时，最长的等待时间
+ * @param wait_ms   队列中没有消息时，最长的等待时间，以毫秒（1 / 1000 s）记
  * @return          消息队列是否可用。当全部窗口已经关闭时，返回值为 `FALSE`
  */
 int  yage_get_message(struct yage_message *msg, int wait_ms);

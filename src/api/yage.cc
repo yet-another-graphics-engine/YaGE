@@ -765,8 +765,9 @@ void yage_player_delete(struct yage_player *player) {
 }
 
 int yage_get_message(struct yage_message *msg, int wait_ms) {
-  // FIXME: add wait_ms support
-  return window::poll(*reinterpret_cast<window::Message *>(msg));
+  uint64_t timeout = wait_ms < 0 ? G_MAXUINT64 : wait_ms * 1000;
+  int ret = window::poll(*reinterpret_cast<window::Message *>(msg), timeout);
+  return ret;
 }
 
 int  yage_get_key(void) {
@@ -1119,7 +1120,6 @@ int yage_input_scanf(const char *title, const char *message,
    *     return_address(by `call xxx`)
    *     saved_caller_ebp(by `push ebp`)
    *     local_vars
-         copied_call_local_vars
    *     copied_caller_local_vars       copied but not used
    *     copied_...                     \
    *     copied_format                  | used by sscanf

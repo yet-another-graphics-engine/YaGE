@@ -53,11 +53,12 @@ void init() {
 #endif  // _WIN32
 }
 
-bool poll(Message &msg, bool block) {
+bool poll(Message &msg, guint64 timeout) {
   if (window_num == 0) return false;
 
-  gpointer pmsg = block ? g_async_queue_pop(msg_queue)
-                        : g_async_queue_try_pop(msg_queue);
+  gpointer pmsg = (timeout == G_MAXUINT64) ?
+                  g_async_queue_pop(msg_queue) :
+                  g_async_queue_timeout_pop(msg_queue, timeout);
 
   if (pmsg == NULL) {
     msg.type = msg.type_nop;

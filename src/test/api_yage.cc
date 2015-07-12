@@ -1,6 +1,7 @@
 #include "../../include/yage.h"
 #include <cmath>
 #include <cstdlib>
+#include <cstdio>
 
 void test_api_yage(void) {
   const double kPi = 3.1415926;
@@ -92,7 +93,8 @@ void test_api_yage(void) {
   yage_button_update(buttontest);
   yage_button_update(buttontest1);
   yage_message msg;
-  while (yage_get_message(&msg, 0)) {
+  while (yage_get_message(&msg, -1)) {
+    fprintf(stderr, "msg ");
     if (buttontest && yage_button_clicked(buttontest, &msg)) {
       yage_button_set_position(buttontest, yage_random_interval(0,540), yage_random_interval(0,380));
       yage_button_update(buttontest);
