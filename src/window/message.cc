@@ -1,4 +1,5 @@
 #include "message.h"
+#include "../util/time.h"
 #include "../draw/canvas.h"
 #include "../draw/animation.h"
 #ifdef _MSC_VER
@@ -31,6 +32,7 @@ void Window::msg_window_on_destroy(GtkWidget *widget, Window *source)
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_window;
+  msg.time = g_get_monotonic_time() / 1000;
   msg.window.type = msg.window.type_destroy;
   msg_push_queue(msg);
 }
@@ -40,6 +42,7 @@ gboolean Window::msg_window_on_focus(GtkWidget *widget, GdkEvent *event, Window 
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_window;
+  msg.time = util::time::get_timestamp();
 
   msg.window.type = event->focus_change.in ?
                     msg.window.type_enter :
@@ -62,6 +65,7 @@ gboolean Window::msg_window_on_key(GtkWidget *widget, GdkEvent *event, Window *s
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_kbd;
+  msg.time = event->key.time;
 
   msg.kbd.is_press = (event->key.type == GDK_KEY_PRESS);
   msg.kbd.keyval = event->key.keyval;
@@ -89,6 +93,7 @@ gboolean Window::msg_draw_on_button(GtkWidget *widget, GdkEvent *event, Window *
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_mouse;
+  msg.time = event->button.time;
   msg.mouse.type = (event->any.type == GDK_BUTTON_PRESS ?
                                       msg.mouse.type_press :
                                       msg.mouse.type_release);
@@ -114,6 +119,7 @@ gboolean Window::msg_draw_on_motion(GtkWidget *widget, GdkEvent *event, Window *
   msg.source = source;
   msg.type = msg.type_mouse;
   msg.mouse.type = msg.mouse.type_move;
+  msg.time = event->motion.time;
 
   msg.mouse.x = event->motion.x;
   msg.mouse.y = event->motion.y;
@@ -135,6 +141,7 @@ gboolean Window::msg_draw_on_conf(GtkWidget *widget, GdkEventConfigure *event, W
   Message &msg = *(new Message);
   msg.source = source;
   msg.type = msg.type_window;
+  msg.time = util::time::get_timestamp();
   msg.window.type = msg.window.type_resize;
   msg_push_queue(msg);
   //g_print("on_draw_resize\n");

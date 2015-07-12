@@ -15,7 +15,10 @@ void test_window_msg()
   w.show();
 
   Message msg;
+
   while (yage::window::poll(msg)) {
+    fprintf(stderr, "[%x] ", msg.time);
+
     switch (msg.type) {
       P_NAME(type_nop);
       P_STOP();

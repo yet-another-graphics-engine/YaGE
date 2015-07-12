@@ -30,6 +30,7 @@ struct Message {
   } type;
 
   Window *source;
+  uint32_t time;
 
   union {
     struct {

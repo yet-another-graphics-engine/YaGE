@@ -17,6 +17,7 @@
 #include "../audio/player.h"
 #include "../draw/animation.h"
 #include "../window/timer.h"
+#include "../util/time.h"
 
 #ifdef _WIN32
 #define strdup(x) _strdup(x)
@@ -1162,6 +1163,10 @@ int yage_random_interval(int begin, int end) {
 
 double yage_random_double() {
   return 1.0 * rand() / RAND_MAX;
+}
+
+uint32_t yage_timer_now() {
+  return util::time::get_timestamp();
 }
 
 struct yage_timer *yage_timer_create(double seconds) {

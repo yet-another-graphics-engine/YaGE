@@ -1758,6 +1758,9 @@ struct yage_message {
   void *source;                             ///< \~english @brief Pointer to internal C++ Window object
                                             ///< \~chinese @brief 指向内部的 C++ 窗口对象的指针
 
+  uint32_t time;                            ///< \~english @brief Timestamp at the moment the event occurred
+                                            ///< \~chinese @brief 事件发生时的时间戳
+
   union {
     /**
      * \~english @brief Object describing keyboard message
@@ -2335,6 +2338,21 @@ int yage_random_interval(int begin, int end);
  * @return 一个 0 到 1 之间的随机实数
  */
 double yage_random_double();
+
+/**
+ * @ingroup timer
+ *
+ * @~english
+ * @brief Get a timestamp of current time.
+ * @return the timestamp
+ * @remark The timestamp increses 1 every millisecend (1 / 1000 s).
+ *
+ * @~chinese
+ * @brief 获得当前时间的时间戳。
+ * @return 时间戳
+ * @remark 时间戳每毫秒（ 1 / 1000 s）增加 1 。
+ */
+uint32_t yage_timer_now();
 
 /**
  * @ingroup timer
