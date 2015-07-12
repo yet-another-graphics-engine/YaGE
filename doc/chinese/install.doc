@@ -1,0 +1,32 @@
+/**
+@page install 安装
+
+@section install-intro 介绍
+
+YaGE 支持主流的操作系统和集成开发环境。根据不同的环境，请选择性阅读自己需要的部分。
+
+对于使用 Microsoft Windows 下的初学者，我们推荐使用最新的 Microsoft Visual Studio。如果不方便购买或安装，推荐使用自由软件 Dev-C++。
+
+@section Microsoft Visual Studio
+
+请下载并运行 YaGE 的全自动安装程序。一切准备就绪，你可以准备 @ref first-program "编写第一个程序" 了！
+
+@attention 在安装结束后，应该可以直接编译运行程序。如果不能正常运行，提示“找不到”某些文件，请登出并重新登录账户。如果你觉得麻烦，也可以重新启动计算机。
+
+@section install-dev Dev-C++
+FIXME
+
+@section install-cb Code::Blocks
+FIXME
+
+@section install-mingw MinGW
+FIXME
+
+@section install-osx Mac OS X
+FIXME
+
+@section install-linux GNU / Linux
+FIXME
+
+
+*/

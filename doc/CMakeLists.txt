@@ -24,7 +24,15 @@ if(BUILD_DOCUMENTATION)
 
     # user
     foreach(doxy_lang ${doxy_langs})
-        set(doxy_src "${PROJECT_SOURCE_DIR}/include/yage.h ${CMAKE_CURRENT_SOURCE_DIR}/${doxy_lang}/")
+    	# add header
+        set(doxy_src "${PROJECT_SOURCE_DIR}/include/yage.h")
+	# add docs
+    	set(src_dir "${CMAKE_CURRENT_SOURCE_DIR}/${doxy_lang}")
+	set(doxy_src "${doxy_src} ${src_dir}/mainpage.doc")
+	set(doxy_src "${doxy_src} ${src_dir}/tutorial.doc")
+	set(doxy_src "${doxy_src} ${src_dir}/install.doc")
+	set(doxy_src "${doxy_src} ${src_dir}/first-program.doc")
+
         set(doxy_file_out ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.user-${doxy_lang})
         set(doxy_out_dir ${CMAKE_CURRENT_BINARY_DIR}/${doxy_lang}/)
 
