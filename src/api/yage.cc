@@ -60,10 +60,6 @@ namespace yage {
     window->window->update();
   }
 
-  inline void update() {
-    if (g_auto_update) force_update();
-  }
-
   inline void draw_circle(draw::Canvas &canvas, double x, double y, double r) {
     draw::Circle circle;
     circle.center = draw::Point(x, y);

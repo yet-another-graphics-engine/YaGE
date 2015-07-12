@@ -358,11 +358,11 @@ void yage_draw_set_auto_update(int mode);
  * @ingroup draw
  *
  * @~english
- * @brief Update the default window manually.
+ * @brief Update the canvas and buttons in default window manually.
  * @remark When auto update is disabled by yage_draw_set_auto_update(FALSE), calling this function updates the default window. When auto update is enabled (by default), there's no need to call this function.
  *
  * @~chinese
- * @brief 手动更新默认窗口。
+ * @brief 手动更新默认窗口的画布和按钮。
  * @remark 当自动更新被 yage_draw_set_auto_update(FALSE) 所禁用时，调用本函数以更新默认窗口。当自动更新启用时（默认情况），不需要调用本函数。
  */
 void yage_draw_update();
@@ -2277,13 +2277,14 @@ int yage_button_clicked(struct yage_button *button, struct yage_message *msg);
  * @brief Update the display status of the button.
  * @param button The button to update
  * @return Whether the button is clicked.
- * @remark Button should be update manually after changed the properties
+ * @remark Button should be update manually after created or changed the
+ *         properties.
  *
  * @~chinese
  * @brief 更新按钮的显示状态。
  * @param button 要更新的按钮
  * @return 按钮是否被按下
- * @remark 按钮在修改属性后需要进行手动更新。
+ * @remark 按钮在创建及修改属性后需要进行手动更新。
  */
 void yage_button_update(struct yage_button *button);
 
