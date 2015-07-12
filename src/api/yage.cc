@@ -787,7 +787,7 @@ void yage_player_delete(struct yage_player *player) {
 }
 
 int yage_get_message(struct yage_message *msg, int wait_ms) {
-  uint64_t timeout = wait_ms < 0 ? G_MAXUINT64 : wait_ms * 1000;
+  guint64 timeout = wait_ms < 0 ? G_MAXUINT64 : wait_ms * 1000;
   int ret = window::poll(*reinterpret_cast<window::Message *>(msg), timeout);
   return ret;
 }

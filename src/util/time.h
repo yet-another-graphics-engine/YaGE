@@ -1,5 +1,13 @@
 #include <gtk/gtk.h>
+#ifndef _MSC_VER
+#include <stdint.h>
+#else
+#if _MSC_VER < 1600
 #include "../../include/yage/stdint.h"
+#else
+#include <stdint.h>
+#endif
+#endif
 
 namespace yage {
 namespace util {
