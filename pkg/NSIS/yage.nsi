@@ -32,7 +32,7 @@ InstallDir "$PROGRAMFILES\YaGE"
 
 ; Installer
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "../../LICENSE"
+!insertmacro MUI_PAGE_LICENSE "../../doc/lgpl.txt"
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
@@ -63,7 +63,7 @@ VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "0.1.0.0"
 Section "install" ;Installation info
     SetOutPath "$INSTDIR"
     File /r ..\..\include
-    File /oname=license.txt ..\..\LICENSE
+    File /oname=license.txt ..\..\doc\lgpl.txt
     File /r ..\..\build-bin\doc
     CreateShortcut "$DESKTOP\YaGE English documentation.lnk" "$INSTDIR\doc\english\modules.html"
     CreateShortcut "$DESKTOP\YaGE Chinese documentation.lnk" "$INSTDIR\doc\chinese\modules.html"
