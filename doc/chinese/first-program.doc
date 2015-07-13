@@ -4,7 +4,7 @@
 首先，打开你喜欢的 IDE，创建一个新项目，敲下这些代码：
 
 @code{.c}
-#include <yage.h>                      // 使用 YaGE 库
+#include <yage.h>                    // 使用 YaGE 库
 
 int main(void) {
   yage_init(800, 600);               // 初始化环境并创建窗口

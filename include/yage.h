@@ -1704,9 +1704,10 @@ enum yage_message_type {
                  ///< @~chinese 键盘消息，包括键盘的按下、释放。使用 `kbd` 成员来获取键盘数据
   kYageMouse,    ///< @~english Mouse message, such as pressing or releasing a button, or moving the cursor. Use `mouse` member to retrieve mouse data
                  ///< @~chinese 鼠标消息，包括按下或释放按键或移动光标。使用 `mouse` 成员来获取鼠标数据
-  kYageWindow,    ///< @~english Window message, such as getting or losing focus. Use `window` member to retrieve window data
+  kYageWindow,   ///< @~english Window message, such as getting or losing focus. Use `window` member to retrieve window data
                  ///< @~chinese 窗口消息，包括获得或丢失焦点。使用 `window` 成员来获取鼠标数据
-  kYageTimer
+  kYageTimer     ///< @~english Timer message, such as timer is running or finished. Use `timer` member to retrieve timer data
+                 ///< @~chinese 计时器消息，包括计时器正在计时和停止计时，使用 `timer` 成员获取计时器数据
 };
 
 /**

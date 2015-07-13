@@ -1,0 +1,132 @@
+/**
+@page interactive 用户交互
+
+用户交互是一个 GUI 应用程序很重要的一部分。
+
+那么，用户交互是什么呢？用户用鼠标点击了屏幕了某一区域，或者按下了回车键，等等。
+
+这就是一些常见的用户操作，然后我们就要对这些操作有所回应。比如，播放器，打开浏览器，或者关机。这整个的过程就叫做用户交互。
+
+我们先来写一个最简单的示例吧。
+
+@code{.c}
+#include <yage.h>
+
+int main(void) {
+  yage_init(800, 600);
+  struct yage_message msg;                         // 创建结构体，用来保存程序接受的消息
+  while (yage_get_message(&msg, -1)) {             // 不断地获取消息
+    if (msg.type != kYageMouse) {
+      continue;                                    // 如果当前消息类型不是鼠标类型则跳过这条消息，开始处理下一条
+    }
+    if (msg.mouse.type == kYageMouseRelease) {     // 判断是否为鼠标弹起
+      if (msg.mouse.is_left) {                     // 判断是否是鼠标左键在点击
+        yage_circle(msg.mouse.x, msg.mouse.y, 10); // 在鼠标点击处画一个圆
+      }
+      if (msg.mouse.is_right) {                    // 判断是否是鼠标右键在点击
+        yage_quit();                               // 退出程序
+      }
+    }
+  }
+}
+@endcode
+
+运行之后，在我们左键点击时，以左键按下的坐标为圆心，我们画了一个又一个的圆。在按下右键后，程序立即退出。
+
+我们就这样完成了第一个带有用户交互功能的程序。
+
+@section interactive-message 消息探幽
+
+接下来，我们对上面的程序进行剖析，首先，有的人可能就会有疑问了，为什么我们要用这样一个 `while` 循环体来获取一些“消息”，那么，再深入一些，到底什么是消息呢？
+
+YaGE 为了让我们获得用户的操作等信息，提供了一种让我们获得这些信息的方法，这些信息也称作<strong>消息</strong>。
+
+用户在使用软件的时候大多都不断地进行操作。因此，我们需要不断地来获取这些消息。用 `while` 循环即是常见的一种方法，这个循环也叫做<strong>消息循环</strong>。我们利用消息循环从不断产生消息的<strong>消息队列</strong>中获取消息。
+
+@section interactive-next 下一步
+
+与上面相似，我们来写一个与键盘交互的程序吧。这个程序用键盘 wasd 键控制一个小球移动，按 q 退出。
+
+@code{.c}
+#include <yage.h>
+
+int main(void) {
+  yage_init(800, 600);
+  int left_pressing = 0;
+  int right_pressing = 0;
+  int up_pressing = 0;
+  int down_pressing = 0;
+  int x = 400;
+  int y = 300;
+  const int r = 50;
+  const int move_distance = 20;
+  yage_circle(x, y, r);
+  struct yage_message msg;
+  while (yage_get_message(&msg, -1)) {
+    if (msg.type != kYageKbd) {
+      continue;                           // 如果当前消息类型不是键盘类型则跳过，开始处理下一条消息
+    }
+    yage_clear();                         // 在作画前先清屏
+
+    if (msg.kbd.keyval == 'w') {          // 判断是否为 w 键的消息
+      if (msg.kbd.is_press) {             // 如果按下 (YaGE 只在按键按下、弹起瞬间给用户发送消息)
+        up_pressing = 1;                  // 记录 w 键为已按下 (在长按时，YaGE 不会给用户发消息)
+      } else {                            // 如果弹起
+        up_pressing = 0;                  // 记录 w 键为已弹起
+      }
+    } else if (msg.kbd.keyval == 'a') {   // 判断 a 键
+      if (msg.kbd.is_press) {
+        left_pressing = 1;
+      } else {
+        left_pressing = 0;
+      }
+    } else if (msg.kbd.keyval == 's') {   // 判断 s 键
+      if (msg.kbd.is_press) {
+        down_pressing = 1;
+      } else {
+        down_pressing = 0;
+      }
+    } else if (msg.kbd.keyval == 'd') {   // 判断 d 键
+      if (msg.kbd.is_press) {
+        right_pressing = 1;
+      } else {
+        right_pressing = 0;
+      }
+    } else if (msg.kbd.keyval == 'q') {   // 判断 q 键
+      yage_quit();
+    } else {
+      yage_printf(0, 0, "%lu", msg.kbd.keyval); // 其他按键，直接将其按键码输出在屏幕上
+    }
+
+    if (up_pressing) {
+      y -= move_distance;                 // 移动圆的圆心坐标
+    }
+    if (left_pressing) {
+      x -= move_distance;
+    }
+    if (down_pressing) {
+      y += move_distance;
+    }
+    if (right_pressing) {
+      x += move_distance;
+    }
+    yage_circle(x, y, r);                 // 将圆画在屏幕上
+  }
+  yage_quit();
+}
+@endcode
+
+这段代码将在屏幕上显示一个小球，用 wasd 键可以进行移动，按 q 退出。
+
+有些人会有疑问，我们为什么要维护这样一个 xxx_pressing 的变量，直接判断键盘消息不就好吗。
+
+我们来仔细想一想，首先，一个按键消息只和一个按键有关，如果用户同时按了多个按键，我们只能知道最后按下按键的移动方向。与此同时的其他按键将被无视掉。
+
+另外，我们会发现，YaGE 只有在按键按下或弹起的时候才给用户发送按键已按下的消息。如果长按，在过程中根本无法接收到消息。
+
+因此，我们采取了这样的解决方案。在用户按下按键后将其标记为已按下，弹起后则恢复为未按下状态。
+
+<strong>同样的，鼠标消息也遵循这个规则。</strong>
+
+就这样，对于用户交互部分的消息处理我们就大体有了一定的了解。
+*/
