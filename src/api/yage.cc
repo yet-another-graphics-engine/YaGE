@@ -1101,7 +1101,8 @@ int yage_input_scanf(const char *title, const char *message,
   if (message) dlg.set_message(message);
 
   std::string str;
-  dlg.show(str);
+  bool ret = dlg.show(str);
+  if (!ret) return -1;
 
   char *ansi_str = yage::util::utf_8_to_ansi(str.c_str());
 
