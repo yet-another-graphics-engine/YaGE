@@ -31,7 +31,7 @@ public:
     void set_focused_image(Canvas &image);
     void set_clicked_image(Canvas &image);
     bool is_clicked(window::Message msg);
-    void update_button();
+    void update_button(bool is_force_update);
     void set_visibility(bool visible);
 };
 
