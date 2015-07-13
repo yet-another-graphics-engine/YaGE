@@ -78,33 +78,33 @@ namespace yage {
                 msg.mouse.y >= y_ && msg.mouse.y <= y_ + height_) {
                 if (!is_focused_) {
                     is_focused_ = true;
-                    update_button();
+                    update_button(true);
                 }
             } else {
                 if (is_focused_) {
                     is_focused_ = false;
-                    update_button();
+                    update_button(true);
                 }
             }
         } else if (is_focused_ && msg.mouse.type == msg.mouse.type_press) {
             if (msg.mouse.is_left) {
                 if (!is_clicked_) {
                     is_clicked_ = true;
-                    update_button();
+                    update_button(true);
                 }
             }
             return false;
         } else if (is_clicked_ && msg.mouse.type == msg.mouse.type_release) {
             if (msg.mouse.is_left) {
                 is_clicked_ = false;
-                update_button();
+                update_button(true);
                 if (is_focused_) return true;
             }
         }
         return false;
     }
 
-    void Button::update_button() {
+    void Button::update_button(bool is_force_update) {
         if (is_visible_ == false) {
             if (is_updated_ == true) {
                 parent_->canvas_btn->clear_viewport(priv_btn_);
@@ -142,7 +142,10 @@ namespace yage {
         if (raw_height > 0 && height_ > 0) yscale = 1.0 * height_ / raw_height;
         paint.set_scale(xscale, yscale);
         parent_->canvas_btn->draw_canvas(*image, draw::Point(x_ / xscale, y_ / yscale), paint);
-        update(parent_);
+        if (is_force_update)
+            force_update(parent_);
+        else
+            update(parent_);
     }
 
     void Button::set_visibility(bool visible) {
@@ -210,7 +213,7 @@ int yage_button_clicked(struct yage_button *button, struct yage_message *msg) {
 
 void yage_button_update(struct yage_button *button) {
     yage::Button *button_obj = reinterpret_cast<yage::Button *>(button);
-    button_obj->update_button();
+    button_obj->update_button(0);
 }
 
 void yage_button_set_visibility(struct yage_button *button, int is_visible) {
