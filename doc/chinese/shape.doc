@@ -91,14 +91,45 @@ int main(void) {
 }
 @endcode
 
-@section shape-control 绘图控制
+@section shape-text 文字
 
-绘制的图形，除了受 @ref colors 的控制，还可以通过 `yage_set_border_thickness()` 控制边框的粗细。
+在 YaGE 中，在窗口上输出文字变得前所未有地简单。`yage_printf()` 类似于我们熟知的 `printf`，只是在参数的最开始添加了输出文字的 X 和 Y 坐标罢了。
 
-在需要修改屏幕内容时，可以通过 `yage_clear()` 清除屏幕内容。
+YaGE 还支持设置字体、字形和字号。只需要调用 `yage_set_font()`：
 
 @code{.c}
-#include <yage.h>                             // 使用 YaGE 库
+#include <yage.h>
+
+int main(void) {
+  yage_init(640, 480);
+
+  // 设置字体
+  yage_set_font("宋体",     // 字体
+                16,         // 字号
+                1,          // 使用粗体
+                1);         // 使用斜体
+
+  // 在窗口的左上角打印文字
+  yage_printf(0, 0, "哈哈！");
+
+  yage_get_key();
+  return 0;
+}
+@endcode
+
+@section shape-control 绘图控制
+
+在 @ref colors 中，我们已经修改了各类颜色。在此汇总颜色相关的控制接口：
+
+1. 通过 `yage_set_border_color()` 控制边框的颜色
+2. 通过 `yage_set_fill_color()` 控制填充的颜色
+2. 通过 `yage_set_font_color()` 控制填充的颜色
+3. 通过 `yage_set_background_color()` 控制整个窗口背景的颜色
+
+另外，在需要修改屏幕内容时，可以通过 `yage_clear()` 清除屏幕内容。绘制带有边框的图形时，可以通过 `yage_set_border_thickness()` 控制边框的粗细。
+
+@code{.c}
+#include <yage.h>
 
 int main(void) {
   // 初始化 640 * 480 的窗口
