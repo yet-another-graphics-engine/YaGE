@@ -2132,6 +2132,7 @@ char *yage_input_line(const char *title, const char *message);
  * @param[in] format Format to convert the data, like `scanf`
  * @param[out] ...  Location of data to write
  * @return          Number of variables written
+ * @remark  If the user closed the dialog or pressed the "Cancel" button, the return value will be `-1`.
  *
  * @~chinese
  * @brief 获取并按照格式转换用户在输入对话框中的输入。
@@ -2140,6 +2141,7 @@ char *yage_input_line(const char *title, const char *message);
  * @param[in] format 转换的格式，如同 `scanf`
  * @param[out] ...  待写入的变量地址
  * @return          写入的变量数量
+ * @remark 当用户关闭了对话框，或是按下了“取消”按钮，函数将返回 `-1` 。
  */
 int yage_input_scanf(const char *title, const char *message, const char *format, ...);
 
