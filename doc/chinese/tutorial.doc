@@ -7,6 +7,8 @@
 2. @subpage first-program 部分，分分钟之内，带你编写第一个 YaGE 程序。
 3. @subpage coordinate 部分，带你了解 YaGE 最基本的一部分，坐标系统。
 4. @subpage colors 部分，让你知道在 YaGE 中颜色是如何表示的。
+5. @subpage shape 部分，带你绘制 YaGE 所支持的丰富的图形种类。
 6. @subpage interactive 部分，和用户进行交互式操作。
+7. @subpage canvas 部分，让你在窗口外的画布上画图，并将画布在窗口上显示。
 
 */
