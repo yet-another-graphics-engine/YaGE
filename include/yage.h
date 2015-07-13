@@ -309,14 +309,14 @@ struct yage_player;
  * @ingroup draw_color
  *
  * @~english
- * @brief Get yage_color from a string.
- * @param color_str a string, in English, descripting the color
+ * @brief Get yage_color from a string or a hex code like #00FF00.
+ * @param color_str a string, in English or hex code, descripting the color
  * @return a struct representing the color
  * @remark If no suitable color is found, black color is returned.
  *
  * @~chinese
- * @brief 通过字符串获得 yage_color 结构体。
- * @param color_str 描述颜色的英文字符串
+ * @brief 通过字符串或十六进制颜色代码（如 #00FF00 ）获得 yage_color 结构体。
+ * @param color_str 描述颜色的英文字符串或颜色代码
  * @return 颜色信息结构体
  * @remark 如果没有找到合适的颜色信息，返回黑色。
  */

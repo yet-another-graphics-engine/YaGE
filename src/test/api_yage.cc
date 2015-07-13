@@ -7,7 +7,7 @@ void test_api_yage(void) {
   const double kPi = 3.1415926;
   yage_window *win_default = yage_init(640, 480);
   yage_window *win_create = yage_window_create(640, 280);
-  yage_set_background_color(yage_color_from_string("red"));
+  yage_set_background_color(yage_color_from_string("#FF0000"));
 
   yage_circle(          60, 40, 20);
   yage_circle_fill(     160, 40, 20);

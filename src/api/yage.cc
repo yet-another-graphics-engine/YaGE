@@ -156,7 +156,22 @@ void yage_draw_update_area(double x, double y, double width, double height) {
 struct yage_color yage_color_from_string_utf8(const char *color_str) {
   std::string s = color_str;
   std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+  if (s[0] == '#' && (s.length() == 7 || s.length() == 9))
+  {
+    int color_arr[4];
+    color_arr[3] = 255;
+    for(unsigned int i = 1; i < s.length(); i+=2)
+    {
+      std::istringstream stream(s.substr(i,2));
+      stream >> std::hex >> color_arr[ (i - 1) / 2 ];
+    }
+    struct yage_color color_struct = {1.0 * color_arr[0] / 255,
+                                      1.0 * color_arr[1] / 255,
+                                      1.0 * color_arr[2] / 255,
+                                      1.0 * color_arr[3] / 255 };
+    return color_struct;
 
+  }
   static const struct mapper {
     const char* name;
     yage_color color;
