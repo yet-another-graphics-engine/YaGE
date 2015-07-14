@@ -61,8 +61,7 @@ namespace yage {
     window->window->update();
   }
 
-  void force_update(yage_window *window,
-                    int x, int y, int width, int height) {
+  void force_update(int x, int y, int width, int height, yage_window *window) {
     window->canvas_bg->clear_all(*g_paint);
     window->canvas_bg->draw_canvas(*g_window->canvas, draw::Point(0, 0));
     window->canvas_bg->draw_canvas(*g_window->canvas_btn, draw::Point(0, 0));
@@ -148,9 +147,9 @@ void yage_draw_update() {
 }
 
 void yage_draw_update_area(double x, double y, double width, double height) {
-  force_update(g_window,
-               static_cast<int>(x),     static_cast<int>(y),
-               static_cast<int>(width), static_cast<int>(height));
+  force_update(static_cast<int>(x),     static_cast<int>(y),
+               static_cast<int>(width), static_cast<int>(height),
+               g_window);
 }
 
 struct yage_color yage_color_from_string_utf8(const char *color_str) {

@@ -29,6 +29,7 @@ namespace yage {
   }
 
   void force_update(yage_window *window = g_window);
+  void force_update(int x, int y, int width, int height, yage_window *window = g_window);
 
   inline void update(yage_window *window = g_window) {
     if (g_auto_update) force_update(window);

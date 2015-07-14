@@ -143,7 +143,7 @@ namespace yage {
         paint.set_scale(xscale, yscale);
         parent_->canvas_btn->draw_canvas(*image, draw::Point(x_ / xscale, y_ / yscale), paint);
         if (is_force_update)
-            force_update(parent_);
+            force_update(x_, y_, width_, height_, parent_);
         else
             update(parent_);
     }
