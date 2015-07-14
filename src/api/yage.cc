@@ -301,6 +301,9 @@ void yage_quit(void) {
 }
 
 struct yage_animation *yage_animation_load_image_utf8(const char *path, struct yage_window *window, double x, double y) {
+  if (window == NULL) {
+    window = g_window;
+  }
   return reinterpret_cast<yage_animation *>(new yage::draw::Animation(*window->window, x, y, path));
 }
 
