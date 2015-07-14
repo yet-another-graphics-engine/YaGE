@@ -1,0 +1,156 @@
+/**
+@page shape 图形
+
+@section shape-basic 基本图形
+在 @ref coordinate 的介绍中，我们已经画出了圆形、矩形和三角形。YaGE 支持多种图形的绘制，请看下面的示例：
+
+@code{.c}
+#include <yage.h>                             // 使用 YaGE 库
+
+int main(void) {
+  const double kPi = 3.1415926;               // YaGE 的角度使用弧度制度
+  yage_init(640, 480);                        // 初始化 640 * 480 的窗口
+
+  // 在不同的位置画圆形，半径为 20
+  yage_circle(          60, 40, 20);          // 画圆的边框并填充
+  yage_circle_fill(     160, 40, 20);         // 填充圆的内部
+  yage_circle_border(   260, 40, 20);         // 只画圆的边框
+
+  // 在不同的位置画椭圆，其中 X 轴的半径为 20，Y 轴的半径为 10
+  yage_ellipse(         360, 40, 20, 10);     // 画椭圆的边框并填充
+  yage_ellipse_fill(    460, 40, 20, 10);     // 填充圆的内部
+  yage_ellipse_border(  560, 40, 20, 10);     // 只画圆的边框
+
+  // 给出四个点的坐标，就可以在不同的位置画矩形
+  yage_rectangle(       40, 100, 60, 140);    // 画矩形的边框并填充
+  yage_rectangle_fill(  140, 100, 160, 140);  // 填矩形的内部
+  yage_rectangle_border(240, 100, 260, 140);  // 只画矩形的边框
+
+  // 指定不同的起始和终止圆心角，画扇形。
+  yage_sector(          360, 140, 20, 0 * kPi / 3, 2 * kPi / 3);
+  yage_sector_fill(     460, 140, 20, 2 * kPi / 3, 4 * kPi / 3);
+  yage_sector_border(   560, 140, 20, 4 * kPi / 3, 6 * kPi / 3);
+
+  // 画多边形，需要：
+  // 1. 定义一个数组，依次存放每个点的 X 和 Y 坐标
+  // 2. 把坐标数组和点的数量传递给多边形函数
+  const int num_points = 5;                     // 画一个五边形
+  // 由于每个点有 X 和 Y 两个坐标，我们需要定义 2 倍于点的个数的数组
+  double points[num_points * 2] = {50, 180,     // 第一个点：(50, 180)
+                                   70, 200,     // 第二个点：(70, 200)
+                                   60, 220,     // 第三个点：(60, 220)
+                                   40, 220,     // 第四个点：(40, 220)
+                                   30, 200};    // 第五个点：(30, 200)
+  yage_poly(num_points, points);
+
+  // 填充一个五边形，不画边框
+  double points_fill[num_points * 2] = {150, 180, 170, 200, 160,
+                                        220, 140, 220, 130, 200};
+  yage_poly_fill(num_points, points_fill);
+
+  // 画一个五边形的边框
+  double points_border[num_points * 2] = {250, 180, 270, 200, 260,
+                                          220, 240, 220, 230, 200};
+  yage_poly_border(num_points, points_border);
+
+  // 等待用户输入按一个键，然后退出
+  yage_get_key();
+  return 0;
+}
+@endcode
+
+不难发现，YaGE 的绘图接口命名是非常直观和有规律的。后面是 _border 就是画边框，是 _fill 就是填充，什么都不加就是既画边框又填充。
+
+@section shape-other 其他图形
+
+除了刚刚介绍的绘图，YaGE 还支持另一些图形的绘制，虽然在命名方法上和其他函数有一定区别：
+
+1. 画弧
+2. 画直线
+3. 画像素，对应到屏幕上的每一个点
+
+@code{.c}
+#include <yage.h>                             // 使用 YaGE 库
+
+int main(void) {
+  const double kPi = 3.1415926;               // YaGE 的角度使用弧度制度
+  yage_init(640, 480);                        // 初始化 640 * 480 的窗口
+
+  // 画弧，半径为 20，角度从 0 到 2 / 3 * Pi
+  yage_arc_border(60, 40, 20, 0 * kPi / 3, 2 * kPi / 3);
+
+  // 画线，从 (160, 40) 到 (180, 60)
+  yage_line_border(160, 40, 180, 60);
+
+  // 画像素，在 (200, 200) 处画一个红点（仔细看哦！）
+  yage_draw_pixel(200, 200, yage_color_from_string("red"));
+
+  // 等待用户输入按一个键，然后退出
+  yage_get_key();
+  return 0;
+}
+@endcode
+
+@section shape-text 文字
+
+在 YaGE 中，在窗口上输出文字变得前所未有地简单。`yage_printf()` 类似于我们熟知的 `printf`，只是在参数的最开始添加了输出文字的 X 和 Y 坐标罢了。
+
+YaGE 还支持设置字体、字形和字号。只需要调用 `yage_set_font()`：
+
+@code{.c}
+#include <yage.h>
+
+int main(void) {
+  yage_init(640, 480);
+
+  // 设置字体
+  yage_set_font("宋体",     // 字体
+                16,         // 字号
+                1,          // 使用粗体
+                1);         // 使用斜体
+
+  // 在窗口的左上角打印文字
+  yage_printf(0, 0, "哈哈！");
+
+  yage_get_key();
+  return 0;
+}
+@endcode
+
+@section shape-control 绘图控制
+
+在 @ref colors 中，我们已经修改了各类颜色。在此汇总颜色相关的控制接口：
+
+1. 通过 `yage_set_border_color()` 控制边框的颜色
+2. 通过 `yage_set_fill_color()` 控制填充的颜色
+2. 通过 `yage_set_font_color()` 控制填充的颜色
+3. 通过 `yage_set_background_color()` 控制整个窗口背景的颜色
+
+另外，在需要修改屏幕内容时，可以通过 `yage_clear()` 清除屏幕内容。绘制带有边框的图形时，可以通过 `yage_set_border_thickness()` 控制边框的粗细。
+
+@code{.c}
+#include <yage.h>
+
+int main(void) {
+  // 初始化 640 * 480 的窗口
+  yage_init(640, 480);
+
+  int thickness;
+  for (thickness = 10; thickness > 0; --thickness) {
+    // 清除原先画的内容
+    yage_clear();
+
+    // 设置边框粗细
+    yage_set_border_thickness(thickness * 2);
+
+    // 画新的矩形
+    yage_rectangle_border(40, 100, 160, 140);
+
+    // 当用户按下键盘后，切换到下一个粗细
+    yage_get_key();
+  }
+  return 0;
+}
+@endcode
+
+*/

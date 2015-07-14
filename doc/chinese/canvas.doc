@@ -1,0 +1,100 @@
+/**
+@page canvas 画布
+
+@section canvas-intro 什么是画布
+
+想象这样的一种情况，美术馆有很多的珍藏的画作，但是每次展览，只有一部分在展厅里呈现，其他画作则保管在仓库里，定期维护。
+
+在 @ref shape 部分里，我们一起探索了在窗口上绘图的方法。类似于美术馆的情况，很多时候我们并不希望直接在窗口上画图（直接把画作挂在展厅），而是“偷偷”地画图（修补、维护不展出的画作），等到需要的时候，再把图像呈现出来（将仓库里的化作展出）。
+
+在这里，我们引入“画布”的概念。画布是独立与窗口的画图区域，可以直接在画布上画图，正如在窗口上画图一样；也可以把画布上的内容“贴”在窗口上。
+
+@section 创建与使用画布
+
+在使用画布前，要先使用 `yage_canvas_create()` 创建它。`yage_canvas_create()` 返回了一个类型为 `struct yage_canvas *`的指针，指向新创建的画布。
+
+之后的画图非常类似于 @ref shape 部分，只不过多了 `canvas`。例如 `yage_rectangle()` 是在窗口上画矩形，`yage_canvas_rectangle()` 则是在画布上画矩形。另外，`yage_canvas_rectangle()` 比 `yage_rectangle()` 在最开始多了一个参数，这个参数用来标识用来画图的画布。
+
+为了在屏幕上呈现一个画布，我们使用 `yage_draw_canvas()` 将画布“贴”在窗口上。
+
+最后，当不再使用画布时，推荐使用 `yage_canvas_delete()` 释放画布所占用的资源。
+
+虽然听起来挺麻烦，但做起来还是比较简单的：
+
+@code{.c}
+#include <yage.h>                     // 使用 YaGE 库
+
+int main(void) {
+  yage_init(800, 600);                // 初始化环境并创建窗口
+
+  // 创建一个大小为 60 * 60 的画布，保存在变量 `canvas` 中
+  struct yage_canvas *canvas = yage_canvas_create(60, 60);
+
+  // 在画布上画图
+  yage_canvas_rectangle_fill(canvas, 0, 0, 45, 45);
+  yage_canvas_rectangle_fill(canvas, 15, 15, 60, 60);
+
+  // 将画布“贴”在窗口的左上角，不要缩放
+  yage_draw_canvas(canvas, 0, 0, 1, 1);
+
+  // 将画布“贴”在窗口上，缩放为原先大小的一半
+  yage_draw_canvas(canvas, 100, 0, 0.5, 0.5);
+
+  // 释放不再使用的画布
+  yage_canvas_delete(canvas);
+
+  // 等待用户按任意键退出
+  yage_get_key();
+  return 0;
+}
+@endcode
+
+@section 高级画布控制
+
+YaGE 支持从图片中载入画布，即 `yage_canvas_load_image()` 函数。从图片中载入画布，相当于以图片的大小创建一个新画布，并读取图片作为画布的初始内容。除了初始的内容不一样，其他方面和普通的画布完全相同。可以随意地在画布内作图、在窗口上贴图等。
+
+还有一些比较罕见的用法，例如获取画布的高度和宽度、将裁剪后的画布作为新画布。我们将通过这些高级控制功能，实现一个简易的图片裁剪工具：把图像等分成四块，把左上角的那一块在屏幕上显示出来。
+
+@code{.c}
+#include <yage.h>
+
+int main(void) {
+  // 定义窗口的大小
+  const int kWidth = 640;
+  const int kHeight = 480;
+  yage_init(kWidth, kHeight);
+
+  // 通过打开文件对话框，获得需要裁剪的图片的路径
+  char *path = yage_dlg_file_open("请选择要裁剪的图片文件");
+  if (path == NULL) return 0;
+
+  // 从图片中读取画布
+  struct yage_canvas *image = yage_canvas_load_image(path);
+
+  // 获得图片的宽度和高度
+  int image_width, image_height;
+  yage_canvas_get_size(image, &image_width, &image_height);
+
+  // 从原始图片的 (0, 0) 到原图的中心点，创建裁剪后的画布
+  int center_x = image_width / 2;
+  int center_y = image_height / 2;
+  struct yage_canvas *cut = yage_canvas_from_canvas(image, 0, 0, center_x, center_y);
+
+  // 为了占满屏幕，计算 X 轴和 Y 轴所需的缩放比例，并将画布“贴”在窗口
+  double x_scale = (double)center_x / kWidth;
+  double y_scale = (double)center_x / kWidth;
+  yage_draw_canvas(cut, 0, 0, x_scale, y_scale);
+
+  // 等待用户按任意键退出
+  yage_get_key();
+
+  // 释放不再使用的画布和资源
+  yage_canvas_delete(cut);
+  yage_canvas_delete(image);
+  free(path);
+
+  return 0;
+}
+@endcode
+
+*/
