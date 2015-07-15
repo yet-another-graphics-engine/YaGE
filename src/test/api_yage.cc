@@ -1,4 +1,4 @@
-#include "../../include/yage.h"
+﻿#include "../../include/yage.h"
 #include <cmath>
 #include <cstdlib>
 #include <cstdio>
@@ -64,7 +64,7 @@ void test_api_yage(void) {
   yage_dlg_color(NULL, &color);
   yage_set_font_color(color);
   char val_str[64];
-  int num_scanned = yage_input_scanf(NULL, "Enter [str][num]", "%s %d", val_str, &val_int);
+  int num_scanned = yage_input_scanf(NULL, "Enter [str][num] 阿嗄", "%s %d", val_str, &val_int);
   yage_set_font("Microsoft YaHei", 10, true, true);
   yage_printf(240, 240, "num_scanned = %d, str = %s, num = %d", num_scanned, val_str, val_int);
 
