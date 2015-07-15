@@ -2054,7 +2054,7 @@ enum yage_dlg_result_type {
  * @param[in] message Content of the dialog. Pass `NULL` to use the default content
  * @param icon      Icon in the dialog
  * @param button    Combinations of buttons in dialog
- * @return          User's response
+ * @return          User's response, see also @ref yage_dlg_result_type
  *
  * @~chinese
  * @brief 显示询问对话框，并读取用户的选择。
@@ -2062,7 +2062,7 @@ enum yage_dlg_result_type {
  * @param[in] message 对话框的内容。传入 `NULL` 以使用默认内容
  * @param icon      对话框的图标
  * @param button    对话框的按钮
- * @return          用户的选择
+ * @return          用户的选择，参见 @ref yage_dlg_result_type
  */
 enum yage_dlg_result_type
 yage_dlg_question(const char *title,
@@ -2077,13 +2077,13 @@ yage_dlg_question(const char *title,
  * @brief Get an integer by showing a input dialog.
  * @param[in] title Title of the dialog. Pass `NULL` to use the default title
  * @param[in] message Content of the dialog. Pass `NULL` to use the default content
- * @return          The integer input by user
+ * @return          The integer input by user. If the user cancelled the input, return `INT_MIN`
  *
  * @~chinese
  * @brief 通过显示输入对话框，获取一个整数。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @param[in] message 对话框的内容。传入 `NULL` 以使用默认内容
- * @return          用户输入的整数
+ * @return          用户输入的整数。当用户取消输入时，返回 `INT_MIN`
  */
 int yage_input_int(const char *title, const char *message);
 
@@ -2094,13 +2094,13 @@ int yage_input_int(const char *title, const char *message);
  * @brief Get a floating number by showing a input dialog.
  * @param[in] title Title of the dialog. Pass `NULL` to use the default title
  * @param[in] message Content of the dialog. Pass `NULL` to use the default content
- * @return          The floating number input by user
+ * @return    The floating number input by user. If the user cancelled the input, return `NAN`(not a number)
  *
  * @~chinese
  * @brief 通过显示输入对话框，获取一个浮点数。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @param[in] message 对话框的内容。传入 `NULL` 以使用默认内容
- * @return          用户输入的浮点数
+ * @return    用户输入的浮点数。当用户取消输入时，返回 `NAN`（“Not a number”，“不是数字”）
  */
 double yage_input_double(const char *title, const char *message);
 
@@ -2111,14 +2111,14 @@ double yage_input_double(const char *title, const char *message);
  * @brief Get user's input in input dialog.
  * @param[in] title Title of the dialog. Pass `NULL` to use the default title
  * @param[in] message Content of the dialog. Pass `NULL` to use the default content
- * @return          Pointer to the string
+ * @return          Pointer to the string. If the user cancelled the input, return `NULL`
  * @remark          Free returned pointer to path after use.
  *
  * @~chinese
  * @brief 获取用户在输入对话框中的输入。
  * @param[in] title 对话框的标题。传入 `NULL` 以使用默认标题
  * @param[in] message 对话框的内容。传入 `NULL` 以使用默认内容
- * @return          指向用户输入内容的指针
+ * @return          指向用户输入内容的指针。当用户取消输入时，返回 `NULL`
  * @remark          在使用完毕后，释放返回的指针所指向的内存。
  */
 char *yage_input_line(const char *title, const char *message);

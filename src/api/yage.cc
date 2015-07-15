@@ -1011,12 +1011,15 @@ int yage_input_int_utf8(const char *title, const char *message) {
   if (message) dlg.set_message(message);
 
   std::string str;
-  dlg.show(str);
-
+  if (dlg.show(str)) {
   int ret;
   std::stringstream stream(str);
-  stream >> ret;
-  return ret;
+    if (stream >> ret) {
+      return ret;
+    }
+  }
+
+  return INT_MIN;
 }
 
 int yage_input_int(const char *title, const char *message) {
@@ -1045,12 +1048,15 @@ double yage_input_double_utf8(const char *title, const char *message) {
   if (message) dlg.set_message(message);
 
   std::string str;
-  dlg.show(str);
+  if (dlg.show(str)) {
+    double ret;
+    std::stringstream stream(str);
+    if (stream >> ret) {
+      return ret;
+    }
+  }
 
-  double ret;
-  std::stringstream stream(str);
-  stream >> ret;
-  return ret;
+  return NAN;
 }
 
 double yage_input_double(const char *title, const char *message) {
@@ -1079,7 +1085,7 @@ char *yage_input_line_utf8(const char *title, const char *message) {
   if (message) dlg.set_message(message);
 
   std::string str;
-  dlg.show(str);
+  if (!dlg.show(str)) return NULL;
   return strdup(str.c_str());
 }
 

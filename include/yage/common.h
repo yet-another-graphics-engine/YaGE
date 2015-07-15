@@ -72,14 +72,24 @@
 
 
 #ifndef _MSC_VER
+
 #include <stdint.h>
-#else
+
+#else  // ifndef _MSC_VER
+
 #if _MSC_VER < 1600
 #include "stdint.h"
-#else
+#else  // if _MSC_VER < 1600
 #include <stdint.h>
-#endif
-#endif
+#endif  // if _MSC_VER < 1600
+
+#ifndef NAN
+// NAN solution from http://tdistler.com/
+static const unsigned long __nan[2] = {0xffffffff, 0x7fffffff};
+#define NAN (*(const float *) __nan)
+#endif  // ifndef NAN
+
+#endif  // ifndef _MSC_VER
 
 #include "msvc.h"
 
