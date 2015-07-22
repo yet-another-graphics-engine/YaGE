@@ -1,17 +1,26 @@
 version: 1.0.{build}
+
 cache:
 - C:\GTK
 - C:\Program Files (x86)\NSIS
 - C:\Doxygen
+
 environment:
   ftpinfo:
     secure: Dy4cv6w20/AfqUS85nVN4A==
+
+skip_commits:
+  message: /\[av skip\]/
+
 #init:
 #- ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 before_build:
 - cd C:\projects\yage && pkg\AppVeyor\avconfig.cmd
+
 build_script:
 - cd C:\projects\yage && pkg\AppVeyor\avbuilder.cmd
 - 'echo Build finished'
+
 #on_finish:
 #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
