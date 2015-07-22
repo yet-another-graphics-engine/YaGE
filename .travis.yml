@@ -5,13 +5,15 @@ compiler:
   - clang
 
 before_install:
-  - if [ $TRAVIS_OS_NAME == linux ]; then sudo add-apt-repository ppa:smspillaz/cmake-master -y && sudo apt-get update -qq && sudo apt-get install cmake-data cmake ; cmake --version && sudo apt-get install -qq libgtk-3-dev pkg-config libgstreamer0.10-dev; fi
+  - if [ $TRAVIS_OS_NAME == linux ]; then sudo add-apt-repository ppa:smspillaz/cmake-master -y && sudo apt-get update -qq && sudo apt-get install cmake-data cmake ; cmake --version && sudo apt-get install -qq libgtk-3-dev pkg-config libgstreamer0.10-dev rpm; fi
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install gtk+3 cairo; fi
   - mkdir build
   - cd build
   - cmake ..
 
-script: make
+script:
+  - make
+  - if [ $TRAVIS_OS_NAME == linux ]; then make package ; fi
 
 os:
  - linux
