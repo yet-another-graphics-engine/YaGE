@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
 configure_file (
-  "${PROJECT_SOURCE_DIR}/src/version.cc"
+  "${PROJECT_SOURCE_DIR}/src/version.cc.in"
   "${PROJECT_BINARY_DIR}/src/version.cc"
 )
 
