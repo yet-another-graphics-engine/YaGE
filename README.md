@@ -8,9 +8,9 @@ YaGE is a cross-platform graphics library based on Cairo / GTK+.
 
 ## Status
 
-Windows static library: [![Build status](https://img.shields.io/appveyor/ci/xdqi/yage.svg)](https://ci.appveyor.com/project/xdqi/yage)
-
-Linux static library: [![Build Status](https://img.shields.io/travis/yet-another-graphics-engine/YaGE.svg)](https://travis-ci.org/yet-another-graphics-engine/YaGE)
+|Windows|Linux|OS X|
+|------|-------|----|
+|[![Build status](https://img.shields.io/appveyor/ci/xdqi/yage.svg)](https://ci.appveyor.com/project/xdqi/yage)|[![Build Status](https://img.shields.io/travis/yet-another-graphics-engine/YaGE.svg)](https://travis-ci.org/yet-another-graphics-engine/YaGE)|[![Build Status](https://img.shields.io/jenkins/s/https/ci.kirito.me/YaGE.svg)](https://ci.kirito.me/job/YaGE/)|
 
 ## License
 
