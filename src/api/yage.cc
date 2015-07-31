@@ -1119,9 +1119,14 @@ wchar_t *yage_input_lineW(const wchar_t *title, const wchar_t *message) {
 
 int yage_input_scanf(const char *title, const char *message,
                      const char *format, ...) {
-  char *utf_8_title = yage::util::ansi_to_utf_8(title);
+  char *real_title;
+  if (title) {
+    real_title = const_cast<char *>(title);
+  } else {
+    real_title = const_cast<char *>("Input Some Text");
+  }
+  char *utf_8_title = yage::util::ansi_to_utf_8(real_title);
   char *utf_8_message = yage::util::ansi_to_utf_8(message);
-  if (!utf_8_title) utf_8_title = const_cast<char *>("Input Some Text");
   dialog::InputDlg dlg(utf_8_title, *g_window->window);
   if (utf_8_message) dlg.set_message(utf_8_message);
   yage::util::free_string(utf_8_title);
