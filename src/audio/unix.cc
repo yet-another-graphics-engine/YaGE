@@ -81,6 +81,10 @@ UnixPlayer::UnixPlayer(const std::string &url) : Player() {
 }
 
 void UnixPlayer::seek(double seconds) {
+  guint64 nanosec = static_cast<guint64>(seconds * GST_SECOND);
+  gst_element_seek_simple(pipeline_, GST_FORMAT_TIME,
+                          static_cast<GstSeekFlags>(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT),
+                          nanosec);
 }
 
 }
