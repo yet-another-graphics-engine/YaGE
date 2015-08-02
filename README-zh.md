@@ -14,6 +14,22 @@ YaGE 是一套基于 Cairo / GTK+ 的跨平台图形库。
 
 [![LGPL v3](https://www.gnu.org/graphics/lgplv3-147x51.png)](https://www.gnu.org/licenses/)
 
+## 安装
+
+### Arch Linux
+
+```
+yaourt -S yage
+```
+或者手动安装 AUR 上的 `yage` 包
+
+### Mac OS X 上使用 Homebrew
+
+```
+brew tap yet-another-graphics-engine/yage
+brew install --HEAD yage
+```
+
 ## 编译方法
 
 ### Microsoft Windows

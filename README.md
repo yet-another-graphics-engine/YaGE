@@ -16,6 +16,22 @@ YaGE is a cross-platform graphics library based on Cairo / GTK+.
 
 [![LGPL v3](https://www.gnu.org/graphics/lgplv3-147x51.png)](https://www.gnu.org/licenses/)
 
+## Installation
+
+### Arch Linux
+
+```
+yaourt -S yage
+```
+or you can install `yage` from AUR manually.
+
+### Mac OS X via Homebrew
+
+```
+brew tap yet-another-graphics-engine/yage
+brew install --HEAD yage
+```
+
 ## Build
 
 ### Microsoft Windows
