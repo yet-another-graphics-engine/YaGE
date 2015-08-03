@@ -18,6 +18,15 @@ YaGE is a cross-platform graphics library based on Cairo / GTK+.
 
 ## Installation
 
+### Ubuntu and its derivatives
+
+```
+sudo apt-get install software-properties-common  # or python-software-properties for Ubuntu 12.04
+sudo add-apt-repository ppa:qxd/yage
+sudo apt-get update
+sudo apt-get install yage
+```
+
 ### Arch Linux
 
 ```

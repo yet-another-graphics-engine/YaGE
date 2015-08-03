@@ -16,6 +16,15 @@ YaGE 是一套基于 Cairo / GTK+ 的跨平台图形库。
 
 ## 安装
 
+### Ubuntu 及其衍生发行版
+
+```
+sudo apt-get install software-properties-common  # 或者 python-software-properties (使用 Ubuntu 12.04)
+sudo add-apt-repository ppa:qxd/yage
+sudo apt-get update
+sudo apt-get install yage
+```
+
 ### Arch Linux
 
 ```
