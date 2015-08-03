@@ -1,0 +1,16 @@
+Source: yage
+Section: libdevel
+Priority: extra
+Maintainer: Xiaodong Qi <qxd@bupt.edu.cn>
+Build-Depends: debhelper (>= 7.0.50~), cdbs, cmake, pkg-config, libgstreamer0.10-dev, libgtk-3-dev
+Standards-Version: 3.9.4
+Vcs-Git: https://github.com/yet-another-graphics-engine/YaGE.git
+Vcs-Browser: https://github.com/yet-another-graphics-engine/YaGE
+
+Package: yage
+Architecture: any
+Depends: libgstreamer0.10-dev, libgtk-3-dev, ${shlibs:Depends}, ${misc:Depends}
+Description: Yet another Graphics Engine
+ Yet another Graphics Engine is a graphics library aiming to C/C++ learners.
+
+

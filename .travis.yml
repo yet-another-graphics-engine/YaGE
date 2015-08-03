@@ -10,7 +10,7 @@ install:
   - sudo apt-get install cmake-data cmake
   - cmake --version
   - sudo apt-get install -qq libgtk-3-dev pkg-config libgstreamer0.10-dev
-  - if [ $CC == gcc ]; then sudo apt-get install -qq rpm; fi
+  - if [ $CC == gcc ]; then sudo apt-get install -qq rpm devscripts cdbs; fi
 
 before_script:
   - mkdir build
@@ -19,10 +19,11 @@ before_script:
 
 script:
   - cmake --build .
-  - if [ $CC == gcc ]; then cmake --build . --target package; fi
+  - if [ $CC == gcc ]; then cmake --build . --target package; cd ..; fi
 
 after_script:
-  - if [ $CC == gcc ]; then cd ../pkg/Travis/aur; bash ./aur.sh; fi
+  - if [ $CC == gcc ]; then cd pkg/Travis/ppa; bash ./ppa.sh; cd ../../..; fi
+  - if [ $CC == gcc ]; then cd pkg/Travis/aur; bash ./aur.sh; cd ../../..; fi
 
 env:
   global:

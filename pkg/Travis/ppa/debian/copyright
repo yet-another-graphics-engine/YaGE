@@ -1,0 +1,5 @@
+Format: http://dep.debian.net/deps/dep5
+
+Files: *
+Copyright: 2015 YaGE developers
+License: LGPL-3
