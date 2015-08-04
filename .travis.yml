@@ -24,8 +24,10 @@ script:
 after_script:
   - if [ $CC == gcc ]; then cd pkg/Travis/ppa; bash ./ppa.sh; cd ../../..; fi
   - if [ $CC == gcc ]; then cd pkg/Travis/aur; bash ./aur.sh; cd ../../..; fi
+  - if [ $CC == gcc ]; then cd pkg/Travis/rpm; bash ./rpm.sh; cd ../../..; fi
 
 env:
   global:
     - secure: "YgNOfsmQb/s4tFXjFPLsau1SQGdKhHh3MuN1m981ravCXSCrlYd+f6bl6BimVLsfKravguAzhPiihFjJQeme6UPAxnTYMkpXh5wPN58sgLWavFooK4k2y7pT8CLov6eahXk3hPRtCnbhyWj4kSvFAKPqPNR7s3xu+BrbuUcgPeQ="
-
+    - secure: "Tl6kwTRm+x83QtHQQGmetMDypeVJY0dBC8RfOEwmlr86ZtDfsrDmVlGRpP/To8IypY5pXvQQQmTmiDLoJyx7jRQ9R9i49sUsNy6Hama30rvTK4MZ62l+bmqU25vn7O+z6lOr06RLEszfKM4mTt6Rp07cEMS1bG5HG5Ez0NsfYYw="
+    - secure: "J7zBzTbP4y62mdHtwYccGs0x7Dkuc8MoWnpao2gtCPnHZbQfGlMiZADd47CBa2+0muaJ/4jqmkAoBjPqjf99ddkwiItfW19N8Qz1Aiyos2ZUg82HhNCM9i+RtR+YRyIN0DAt8eqF+KSePLa5NdsOh7o4SwMVoUyAaROCzlpekj0="
