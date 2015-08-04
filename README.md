@@ -27,6 +27,10 @@ sudo apt-get update
 sudo apt-get install yage
 ```
 
+### Fedora, RHEL 7 and its derivatives
+
+Follow instructions [here](https://copr.fedoraproject.org/coprs/xdqi/YaGE/)
+
 ### Arch Linux
 
 ```
