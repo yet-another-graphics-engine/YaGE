@@ -4,10 +4,15 @@ cache:
 - C:\GTK
 - C:\Program Files (x86)\NSIS
 - C:\Doxygen
+- C:\QINIU
 
 environment:
   ftpinfo:
     secure: Dy4cv6w20/AfqUS85nVN4A==
+  bintray_token:
+    secure: bWzBkULvLWMx9AXBGZFFIMo4WFw0TnY6jr+XmcSPe5Vb+88VDb1S00durNQG1sbN
+  qiniu_credential:
+    secure: Z0GX9gY7+stsvaateZkS3orTPyNRCS0cDIKW1WaM0we2g60/quDVilQSFIqIjy3N
 
 skip_commits:
   message: /\[av skip\]/

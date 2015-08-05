@@ -13,7 +13,7 @@ set builddir2=build-vc11
 set builddir3=build-vc10
 set builddir4=build-vc9
 
-set PATH=C:\GTK\bin;C:\Doxygen;%PATH%
+set PATH=C:\GTK\bin;C:\Doxygen;C:\QINIU;%PATH%
 
 set buildno=1
 :build
@@ -43,6 +43,8 @@ echo Building NSIS installer for YaGE
 
 "C:\Program Files (x86)\NSIS\makensis.exe" /V3 pkg\NSIS\yage.nsi
 
-echo Uploading to server
+echo Uploading to private server
 curl -T build-bin.tar.gz -u %ftpinfo%:%ftpinfo% ftp://kirito.me:21212/build-%RANDOM%.tar.gz
 curl -T pkg\NSIS\yageinst.exe -u %ftpinfo%:%ftpinfo% ftp://kirito.me:21212/yageinst-%RANDOM%.exe
+
+C:\MinGW\msys\1.0\bin\sh.exe --login %cd%\pkg\AppVeyor\avupload.sh

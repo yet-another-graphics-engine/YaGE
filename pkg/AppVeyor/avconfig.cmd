@@ -14,7 +14,7 @@ if not exist C:\GTK (
 
 if not exist "C:\Program Files (x86)\NSIS" (
     echo "Installing NSIS ..."
-    choco install nsis -version 2.46.0.20150406
+    choco install nsis -version 2.46.0.20150406 -y
     echo "Installing XML Plugin for NSIS"
     curl -O http://nsis.sourceforge.net/mediawiki/images/5/55/Xml.zip
     7z x Xml.zip
@@ -32,6 +32,14 @@ if not exist "C:\Doxygen" (
     curl -O http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.10.windows.x64.bin.zip
     7z x doxygen-1.8.10.windows.x64.bin.zip
     copy doxygen.exe C:\Doxygen
+)
+
+if not exist "C:\QINIU" (
+    md C:\QINIU
+    echo "Installing Qiniu development tools"
+    curl -O -L http://devtools.qiniu.io/qiniu-devtools-windows_amd64-current.zip
+    7z x qiniu-devtools-windows_amd64-current.zip
+    copy qrsctl.exe C:\QINIU
 )
 
 :: echo "Preparing Cygwin packages ..."
