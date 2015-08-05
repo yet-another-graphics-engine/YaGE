@@ -18,6 +18,10 @@ YaGE is a cross-platform graphics library based on Cairo / GTK+.
 
 ## Installation
 
+### Microsoft Windows (for Visual Studio only)
+
+Download latest installer [here](https://dl.kirito.me/) and install.
+
 ### Ubuntu and its derivatives
 
 ```

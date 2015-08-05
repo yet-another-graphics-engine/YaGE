@@ -16,6 +16,10 @@ YaGE 是一套基于 Cairo / GTK+ 的跨平台图形库。
 
 ## 安装
 
+### Microsoft Windows (暂仅支持 Visual Studio)
+
+在[这里](https://dl.kirito.me/)下载安装包然后安装
+
 ### Ubuntu 及其衍生发行版
 
 ```
@@ -27,7 +31,7 @@ sudo apt-get install yage
 
 ### Fedora, RHEL 7 及其衍生版
 
-请按照[这里](https://copr.fedoraproject.org/coprs/xdqi/YaGE/) 的指示安装
+请按照[这里](https://copr.fedoraproject.org/coprs/xdqi/YaGE/)的指示安装
 
 ### Arch Linux
 
