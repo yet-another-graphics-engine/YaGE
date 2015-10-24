@@ -3,11 +3,13 @@ setlocal enabledelayedexpansion
 rem This script runs on AppVeyor builder for building YaGE
 
 rem Variables used for iteration
+set generator0="Visual Studio 14 2015"
 set generator1="Visual Studio 12 2013"
 set generator2="Visual Studio 11 2012"
 set generator3="Visual Studio 10 2010"
 set generator4="Visual Studio 9 2008"
 
+set builddir0=build-vc14
 set builddir1=build-vc12
 set builddir2=build-vc11
 set builddir3=build-vc10
@@ -15,7 +17,7 @@ set builddir4=build-vc9
 
 set PATH=C:\GTK\bin;C:\Doxygen;C:\QINIU;%PATH%
 
-set buildno=1
+set buildno=0
 :build
 if %buildno% leq 4 (
     set /a buildno+=1
