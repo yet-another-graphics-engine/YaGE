@@ -57,6 +57,12 @@
 #    else
 #        pragma comment(lib, "yagevc14.lib")
 #    endif
+#elif _MSC_VER == 1910 // Visual C++ 2017
+#    ifdef _DEBUG
+#        pragma comment(lib, "yagevc15d.lib")
+#    else
+#        pragma comment(lib, "yagevc15.lib")
+#    endif
 #endif
 
 #else
